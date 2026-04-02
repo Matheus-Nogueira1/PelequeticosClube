@@ -1,0 +1,53 @@
+TÍTULO DO PROJETO
+Oblívio – Jogo RPG 2D Medieval com Sistema Narrativo e Progressão
+RESUMO
+Este trabalho tem como objetivo o desenvolvimento de um jogo digital 2D no estilo RPG, ambientado em um universo medieval fictício, inspirado na obra “Oblívio”. O projeto busca criar uma experiência imersiva baseada em narrativa, exploração e tomada de decisões, onde o jogador interage com o mundo e evolui seu personagem ao longo da jornada.
+A proposta surge a partir da observação da crescente demanda por jogos independentes com forte foco narrativo e mecânicas diferenciadas, além do interesse em aplicar conceitos de desenvolvimento de sistemas em um projeto prático e criativo.
+O jogo contará com sistemas como progressão de personagem, combate, exploração de cenários, interação com NPCs e múltiplos caminhos narrativos, proporcionando uma experiência dinâmica ao jogador.
+Palavras-chave: RPG, jogo 2D, narrativa, desenvolvimento de sistemas, game design.
+ABSTRACT
+This project aims to develop a 2D RPG game set in a fictional medieval universe inspired by “Oblívio”. The project focuses on creating an immersive experience based on storytelling, exploration, and decision-making, where the player interacts with the world and evolves their character throughout the journey.
+The proposal emerges from the growing demand for indie games focused on narrative depth and innovative mechanics, as well as the intention to apply system development concepts in a practical and creative project.
+The game will include systems such as character progression, combat mechanics, scenario exploration, NPC interaction, and branching narratives.
+Keywords: RPG, 2D game, storytelling, system development, game design.
+INTRODUÇÃO
+Este trabalho tem como tema o desenvolvimento de um jogo digital no estilo RPG 2D, com ambientação medieval e foco em narrativa interativa. O projeto “Oblívio” foi idealizado com o objetivo de proporcionar uma experiência imersiva ao jogador, utilizando elementos como escolhas morais, progressão de personagem e exploração de mundo.
+Atualmente, observa-se que muitos jogos populares priorizam gráficos avançados e mecânicas repetitivas, deixando de lado aspectos como profundidade narrativa e impacto das decisões do jogador. Nesse contexto, surge a proposta de desenvolver um jogo que valorize a história, a atmosfera e a liberdade de escolha.
+O principal objetivo deste trabalho é aplicar conhecimentos adquiridos no curso de Desenvolvimento de Sistemas na criação de um jogo funcional, ao mesmo tempo em que se explora o potencial criativo e técnico da área de desenvolvimento de jogos.
+DESENVOLVIMENTO
+A indústria de jogos digitais tem apresentado crescimento significativo nos últimos anos, especialmente no segmento de jogos independentes (indie), que se destacam pela inovação e abordagem criativa.
+Diferente de grandes produções, jogos indie costumam focar em narrativa, estética diferenciada e mecânicas únicas. Nesse sentido, o projeto “Oblívio” busca seguir essa linha, oferecendo uma experiência mais profunda e reflexiva ao jogador.
+O jogo será desenvolvido no estilo 2D pixel art, com inspiração em títulos que valorizam narrativa e atmosfera. O sistema contará com movimentação livre, interações com personagens não jogáveis (NPCs), combates estratégicos e um sistema de escolhas que impactam diretamente o desenrolar da história.
+Além disso, o projeto também visa demonstrar na prática a aplicação de conceitos como lógica de programação, estrutura de sistemas, organização de código e desenvolvimento orientado a projetos.
+2.1 Recursos Utilizados
+Para o desenvolvimento do jogo, serão utilizadas ferramentas e tecnologias voltadas à criação de jogos digitais, incluindo:
+Linguagem de Programação: (ex: C#, JavaScript ou outra que vocês escolherem)
+Engine de Jogo: (Unity, Godot ou similar)
+Arte: Pixel Art para personagens, cenários e interface
+Áudio: Efeitos sonoros e trilha sonora ambiente
+2.1.1 Sistema de Jogo
+O jogo contará com os seguintes sistemas principais:
+Sistema de movimentação: controle do personagem no mapa
+Sistema de combate: baseado em ações e estratégia
+Sistema de progressão: evolução de atributos e habilidades
+Sistema de inventário: gerenciamento de itens
+Sistema de diálogo: interação com NPCs com múltiplas escolhas
+Sistema de narrativa: decisões que afetam o final do jogo
+2.2 Metodologia
+Este projeto utiliza uma abordagem prática e descritiva, com foco no desenvolvimento incremental do jogo.
+Inicialmente, foi realizada a definição do conceito, história e mecânicas principais. Em seguida, iniciou-se a prototipação do sistema básico, incluindo movimentação e interação.
+O desenvolvimento será dividido em etapas:
+Planejamento do jogo
+Criação da narrativa e personagens
+Desenvolvimento das mecânicas principais
+Implementação visual (pixel art)
+Testes e ajustes
+Essa metodologia permite melhor organização do projeto e facilita a identificação de erros durante o desenvolvimento.
+RESULTADOS E DISCUSSÕES
+Com o desenvolvimento do projeto, espera-se obter um jogo funcional que demonstre, na prática, a aplicação dos conhecimentos adquiridos ao longo do curso.
+Além disso, o projeto permitirá explorar aspectos importantes do desenvolvimento de jogos, como design de gameplay, balanceamento de mecânicas e construção narrativa.
+Os testes realizados durante o desenvolvimento serão essenciais para avaliar a experiência do usuário, identificando pontos de melhoria tanto na jogabilidade quanto na narrativa.
+CONSIDERAÇÕES FINAIS
+Ao final deste projeto, espera-se ter desenvolvido um jogo completo e funcional, capaz de proporcionar uma experiência imersiva ao jogador.
+O projeto “Oblívio” representa não apenas a aplicação técnica dos conhecimentos de desenvolvimento de sistemas, mas também a exploração criativa no campo dos jogos digitais.
+Como trabalhos futuros, é possível expandir o jogo com novos conteúdos, mecânicas adicionais, melhorias gráficas e até mesmo sua publicação em plataformas digitais.
