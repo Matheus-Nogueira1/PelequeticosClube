@@ -21,8 +21,8 @@ O jogo será desenvolvido no estilo 2D pixel art, com inspiração em títulos q
 Além disso, o projeto também visa demonstrar na prática a aplicação de conceitos como lógica de programação, estrutura de sistemas, organização de código e desenvolvimento orientado a projetos.
 2.1 Recursos Utilizados
 Para o desenvolvimento do jogo, serão utilizadas ferramentas e tecnologias voltadas à criação de jogos digitais, incluindo:
-Linguagem de Programação: (ex: C#, JavaScript ou outra que vocês escolherem)
-Engine de Jogo: (Unity, Godot ou similar)
+Linguagem de Programação: (Python, GDscript)
+Engine de Jogo: (Godot)
 Arte: Pixel Art para personagens, cenários e interface
 Áudio: Efeitos sonoros e trilha sonora ambiente
 2.1.1 Sistema de Jogo
