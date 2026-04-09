@@ -101,17 +101,18 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ij6vw"]
-size = Vector2(1.6393437, 5.06329)
+size = Vector2(1.6393442, 5.0632896)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=2129393194]
 input_pickable = true
 script = ExtResource("1_ij6vw")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1493194244]
-position = Vector2(18, 14)
+texture_filter = 1
+position = Vector2(600, 333)
+scale = Vector2(36.3125, 36.3125)
 sprite_frames = SubResource("SpriteFrames_ebjds")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D" unique_id=538735764]
-position = Vector2(-1.9073486e-06, 0)
-scale = Vector2(9.760001, -3.1600008)
+scale = Vector2(9.76, -3.1600006)
 shape = SubResource("RectangleShape2D_ij6vw")

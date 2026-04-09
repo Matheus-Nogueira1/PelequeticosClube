@@ -19,15 +19,15 @@ func rodar_e_mostrar_face(lado: int) -> void:
 	dado_sprite.frame = lado - 1
 	# Exemplo de teste de Conhecimento com D6
 	var resultado_conhecimento = rolar_teste_conhecimento_d6(false)
-	print("Teste de Conhecimento D6:", resultado_conhecimento)
+	#print("Teste de Conhecimento D6:", resultado_conhecimento)
 
 	var resultado_conhecimento_especializado = rolar_teste_conhecimento_d6(true)
-	#print("Teste de Conhecimento Especializado D6:", resultado_conhecimento_especializado)
+	print("Teste de Conhecimento Especializado D6:", resultado_conhecimento_especializado)
 
 	# Exemplo de ataque de Combate com D6 arriscando 3 regiões
 	var regioes = ["Torso", "Braço Direito", "Perna Esquerda"]
 	var resultado_combate = rolar_teste_combate_d6(regioes, 3, 2, 1)
-	#print("Teste de Combate D6:", resultado_combate)
+	print("Teste de Combate D6:", resultado_combate)
 
 func rolar_teste_conhecimento_d6(especializado: bool = false) -> Dictionary:
 	# Rola 1D6 para um Teste de Conhecimento.
