@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://doi8apjlshnau"]
+
+[ext_resource type="Script" uid="uid://bc7ekladnrv0v" path="res://scripts/rolagem-dados-d6.gd" id="1_toyeg"]
+
+[node name="Rolar" type="Node2D" unique_id=1423112095]
+script = ExtResource("1_toyeg")
