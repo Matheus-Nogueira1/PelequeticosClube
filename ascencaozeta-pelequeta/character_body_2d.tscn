@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dy7718ubsy8b6" path="res://six sided die.png" id="1_f50pn"]
 [ext_resource type="Script" uid="uid://bc7ekladnrv0v" path="res://scripts/rolagem-dados-d6.gd" id="1_ij6vw"]
+[ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/click-dado-d6.gd" id="3_ghijl"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ij6vw"]
 atlas = ExtResource("1_f50pn")
@@ -112,7 +113,9 @@ texture_filter = 1
 position = Vector2(600, 333)
 scale = Vector2(36.3125, 36.3125)
 sprite_frames = SubResource("SpriteFrames_ebjds")
+script = ExtResource("3_ghijl")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatedSprite2D" unique_id=538735764]
-scale = Vector2(9.76, -3.1600006)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=538735764]
+position = Vector2(600, 333)
+scale = Vector2(354.41, -114.74752)
 shape = SubResource("RectangleShape2D_ij6vw")

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://doi8apjlshnau"]
+
+[ext_resource type="FontFile" uid="uid://d07vpj0lfm57h" path="res://monogram-extended.ttf" id="2_awq73"]
+[ext_resource type="Script" uid="uid://ci8sfp72i0jvr" path="res://scripts/seletor-corpo.gd" id="2_nee8l"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_nee8l"]
+font = ExtResource("2_awq73")
+font_size = 50
+
+[node name="Seletor-corpo" type="Node2D" unique_id=1423112095]
+script = ExtResource("2_nee8l")
+
+[node name="Label" type="Label" parent="." unique_id=1515528612]
+offset_left = 28.0
+offset_top = 7.0
+offset_right = 1132.3479
+offset_bottom = 642.0
+text = "Regiões selecionadas: 3
+(↑ ↓ para ajustar)
+(→ confirmar | ← cancelar)"
+label_settings = SubResource("LabelSettings_nee8l")
+horizontal_alignment = 1
+vertical_alignment = 1
