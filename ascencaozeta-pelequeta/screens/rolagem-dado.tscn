@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cckmocpmkwsuy"]
 
-[ext_resource type="Script" uid="uid://bc7ekladnrv0v" path="res://scripts/rolagens-dados-d6.gd" id="1_qnuan"]
+[ext_resource type="Script" path="res://scripts/rolagens-dados-d6.gd" id="1_qnuan"]
 [ext_resource type="Texture2D" uid="uid://dy7718ubsy8b6" path="res://assets/six sided die.png" id="2_1yoky"]
-[ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/click-dados-d6.gd" id="3_kvjsq"]
+[ext_resource type="Script" path="res://scripts/click-dados-d6.gd" id="3_kvjsq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ij6vw"]
 atlas = ExtResource("2_1yoky")
