@@ -11,8 +11,12 @@ config_version=5
 [application]
 
 config/name="PelequinhoDados"
-run/main_scene="uid://cckmocpmkwsuy"
+run/main_scene="uid://c5sihykxqh5xb"
 config/features=PackedStringArray("4.6", "GL Compatibility")
+
+[autoload]
+
+Dialogos="*uid://btw5b6vlkuhxx"
 
 [physics]
 
