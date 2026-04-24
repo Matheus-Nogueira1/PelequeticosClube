@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ptf62uq2kbbb" path="res://scripts/caixa-dialogo.gd" id="1_oaadf"]
 [ext_resource type="LabelSettings" uid="uid://ch5kik1mpjmso" path="res://new_label_settings.tres" id="2_hr3nd"]
-[ext_resource type="FontFile" uid="uid://d07vpj0lfm57h" path="res://fonts/monogram-extended.ttf" id="3_d66od"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="3_d66od"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_hr3nd"]
 font = ExtResource("3_d66od")
