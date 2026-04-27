@@ -110,3 +110,4 @@ func fechar_dialogo() -> void:
 	visible = false
 	falas.clear()
 	indice_atual = 0
+	get_tree().change_scene_to_file("res://scenes/player.tscn")
