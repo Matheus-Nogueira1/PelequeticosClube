@@ -500,5 +500,6 @@ scale = Vector2(4, 4)
 script = ExtResource("1_qhqgy")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=275653830]
+position = Vector2(143.5, 81.75)
 sprite_frames = SubResource("SpriteFrames_2w11d")
 animation = &"walk_right"

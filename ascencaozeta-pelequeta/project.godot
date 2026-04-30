@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="Ascencaozeta Pelequeta"
-run/main_scene="uid://c07otdsq1smel"
+run/main_scene="uid://dqh2hqtr10ioe"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
 
