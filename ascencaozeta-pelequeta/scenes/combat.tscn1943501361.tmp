@@ -90,7 +90,7 @@ script = ExtResource("5_8we11")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
+script = ExtResource("6_hrcy2")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/LogPanel" unique_id=1241593587]
 layout_mode = 2
-script = ExtResource("6_hrcy2")
