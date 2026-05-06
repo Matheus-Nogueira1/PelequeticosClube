@@ -121,7 +121,7 @@ Jogador clica botão
   │  └─ Próximo turno
   │
   └─ PASSAR
-     └─ Próximo turno
+	 └─ Próximo turno
 
   ↓ _verificar_fim_combate()
 Alguém morreu?
@@ -138,10 +138,10 @@ Alguém morreu?
 ActionPanel → (signal) → CombatManager
 RegionalSelector → (signal) → CombatManager
 EnemyPanel → (signal) → CombatManager
-     ↓
+	 ↓
 CombatManager → (method) → PartyPanel.atualizar()
-            → (method) → EnemyPanel.atualizar()
-            → (method) → CombatLog.registrar()
+			→ (method) → EnemyPanel.atualizar()
+			→ (method) → CombatLog.registrar()
 ```
 
 ### Estrutura de Nós
@@ -171,49 +171,49 @@ Todos esses já têm estrutura pronta, só precisam de código:
 ```gdscript
 # Em CombatManager.gd
 var pontos_acao_por_tipo = {
-    ActionType.ACAO_REGULAR: [DEFINIR],
-    ActionType.MOVIMENTO: [DEFINIR],
-    ActionType.EXTRA: [DEFINIR],
-    ActionType.COMPLETA: [DEFINIR]
+	ActionType.ACAO_REGULAR: [DEFINIR],
+	ActionType.MOVIMENTO: [DEFINIR],
+	ActionType.EXTRA: [DEFINIR],
+	ActionType.COMPLETA: [DEFINIR]
 }
 
 func _consumir_pontos_acao(combatente, tipo) -> bool:
-    # Pronto para implementar
+	# Pronto para implementar
 ```
 
 ### 2. Menus de Ações
 ```gdscript
 # Em ActionPanel.gd
 func mostrar_menu_pericias(combatente) -> void:
-    # Pronto para implementar
+	# Pronto para implementar
 
 func mostrar_menu_habilidades(combatente) -> void:
-    # Pronto para implementar
+	# Pronto para implementar
 
 func mostrar_menu_itens(combatente) -> void:
-    # Pronto para implementar
+	# Pronto para implementar
 ```
 
 ### 3. IA de Inimigos
 ```gdscript
 # Em CombatManager.gd
 func _executar_turno_inimigo() -> void:
-    # Pronto para implementar
+	# Pronto para implementar
 ```
 
 ### 4. Efeitos Visuais
 ```gdscript
 # Em Battlefield (ou novo script)
 func animar_ataque(atacante_pos, alvo_pos, regiao) -> void:
-    # Pronto para implementar
+	# Pronto para implementar
 ```
 
 ### 5. Fim de Combate
 ```gdscript
 # Em CombatManager.gd
 func _finalizar_combate(resultado: String) -> void:
-    # Já emite sinal, só conectar a tela de resultado
-    combate_finalizado.emit(resultado)
+	# Já emite sinal, só conectar a tela de resultado
+	combate_finalizado.emit(resultado)
 ```
 
 ---

@@ -6,6 +6,7 @@ signal acao_atacar
 signal acao_pericia
 signal acao_habilidade
 signal acao_item
+signal turno_passado
 
 # Referências aos botões
 @onready var vbox = VBoxContainer.new()
@@ -143,10 +144,9 @@ func _on_item_pressionado() -> void:
 	acao_item.emit()
 
 func _on_passar_turno() -> void:
-	"""Callback do botão PASSAR - não desabilita"""
+	"""Callback do botão PASSAR TURNO - finaliza o turno"""
 	print("[ActionPanel] Turno passado")
-	# Aqui a lógica de passar turno será adicionada
-	# junto com o sistema de custos de ação
+	turno_passado.emit()
 
 # ============================================================================
 # MENUS ESPECÍFICOS (Stubs para implementação futura)

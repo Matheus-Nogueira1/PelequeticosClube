@@ -7,45 +7,45 @@ Control (%Root)
 ├── script: CombatManager.gd
 │
 └── MarginContainer
-    └── VBoxContainer (MainLayout)
-        │
-        ├── [1] TopBar (PanelContainer) [40px height]
-        │   └── HBoxContainer (TopBarLayout)
-        │       │
-        │       ├── [2] PartyPanel (PanelContainer) [180px width]
-        │       │   ├── script: party_panel.gd
-        │       │   ├── unique_name: %PartyPanel
-        │       │   └── Contém: Personagens + HP + Estresse + Status
-        │       │
-        │       ├── [3] Battlefield (Control) [3x flex ratio]
-        │       │   ├── unique_name: %Battlefield
-        │       │   └── Grid visual de combate
-        │       │
-        │       ├── [4] EnemyPanel (PanelContainer) [180px width]
-        │       │   ├── script: enemy_panel.gd
-        │       │   ├── unique_name: %EnemyPanel
-        │       │   └── Contém: Inimigos + HP + Seletor
-        │       │
-        │       └── [5] VBoxContainer (RightPanel)
-        │           │
-        │           ├── RegionalPanel (PanelContainer) [250px, 2x flex ratio]
-        │           │   ├── script: regional_selector.gd
-        │           │   ├── unique_name: %RegionalPanel
-        │           │   ├── Inicialmente: HIDDEN (hide())
-        │           │   └── Contém: 5 botões de regiões + confirmar/cancelar
-        │           │
-        │           └── ActionPanel (PanelContainer) [flex]
-        │               ├── script: action_panel.gd
-        │               ├── unique_name: %ActionPanel
-        │               └── Contém: 4 botões de ação + passar turno
-        │
-        └── [6] LogPanel (PanelContainer) [120px height]
-            ├── script: combat_log.gd
-            ├── unique_name: %LogPanel
-            ├── type: RichTextLabel
-            ├── bbcode_enabled: true
-            ├── scroll_following: true
-            └── Contém: Histórico colorido de eventos
+	└── VBoxContainer (MainLayout)
+		│
+		├── [1] TopBar (PanelContainer) [40px height]
+		│   └── HBoxContainer (TopBarLayout)
+		│       │
+		│       ├── [2] PartyPanel (PanelContainer) [180px width]
+		│       │   ├── script: party_panel.gd
+		│       │   ├── unique_name: %PartyPanel
+		│       │   └── Contém: Personagens + HP + Estresse + Status
+		│       │
+		│       ├── [3] Battlefield (Control) [3x flex ratio]
+		│       │   ├── unique_name: %Battlefield
+		│       │   └── Grid visual de combate
+		│       │
+		│       ├── [4] EnemyPanel (PanelContainer) [180px width]
+		│       │   ├── script: enemy_panel.gd
+		│       │   ├── unique_name: %EnemyPanel
+		│       │   └── Contém: Inimigos + HP + Seletor
+		│       │
+		│       └── [5] VBoxContainer (RightPanel)
+		│           │
+		│           ├── RegionalPanel (PanelContainer) [250px, 2x flex ratio]
+		│           │   ├── script: regional_selector.gd
+		│           │   ├── unique_name: %RegionalPanel
+		│           │   ├── Inicialmente: HIDDEN (hide())
+		│           │   └── Contém: 5 botões de regiões + confirmar/cancelar
+		│           │
+		│           └── ActionPanel (PanelContainer) [flex]
+		│               ├── script: action_panel.gd
+		│               ├── unique_name: %ActionPanel
+		│               └── Contém: 4 botões de ação + passar turno
+		│
+		└── [6] LogPanel (PanelContainer) [120px height]
+			├── script: combat_log.gd
+			├── unique_name: %LogPanel
+			├── type: RichTextLabel
+			├── bbcode_enabled: true
+			├── scroll_following: true
+			└── Contém: Histórico colorido de eventos
 ```
 
 ---
@@ -197,9 +197,9 @@ START
   │   └─ END
   │
   └─→ VITORIA
-      ├─ Log: "⚠️ COMBATE FINALIZADO: Vitória"
-      ├─ Emitir: combate_finalizado("Vitória")
-      └─ END
+	  ├─ Log: "⚠️ COMBATE FINALIZADO: Vitória"
+	  ├─ Emitir: combate_finalizado("Vitória")
+	  └─ END
 ```
 
 ---
@@ -244,17 +244,17 @@ Resultados D6:
   
   # Estresse por região (CRÍTICO PARA OBLIVIO)
   "estresse_por_regiao": {
-    "Torso": int,              # 0
-    "Braço Direito": int,      # 0
-    "Braço Esquerdo": int,     # 0
-    "Perna Direita": int,      # 0
-    "Perna Esquerda": int      # 0
+	"Torso": int,              # 0
+	"Braço Direito": int,      # 0
+	"Braço Esquerdo": int,     # 0
+	"Perna Direita": int,      # 0
+	"Perna Esquerda": int      # 0
   },
   
   # Status ativos
   "status": [{                 # []
-    "nome": String,            # "Defesa Reforçada"
-    "duracao": int             # 1
+	"nome": String,            # "Defesa Reforçada"
+	"duracao": int             # 1
   }],
   
   # Turno (calculado)
@@ -270,18 +270,18 @@ Resultados D6:
 CombatManager
   │
   └─→ Dialogos (Autoload)
-      ├─ Dialogos.personagem_jogador
-      │  └─ Dados do personagem
-      │
-      └─ Dialogos.[outros dados]
+	  ├─ Dialogos.personagem_jogador
+	  │  └─ Dados do personagem
+	  │
+	  └─ Dialogos.[outros dados]
 ```
 
 Acesso em CombatManager:
 ```gdscript
 func _inicializar_combate() -> void:
-    var nome = Dialogos.personagem_jogador["nome"]
-    var saude = Dialogos.personagem_jogador["vida"]
-    # etc...
+	var nome = Dialogos.personagem_jogador["nome"]
+	var saude = Dialogos.personagem_jogador["vida"]
+	# etc...
 ```
 
 ---
@@ -290,69 +290,69 @@ func _inicializar_combate() -> void:
 
 ```mermaid
 graph TD
-    A["Cena Combat Carregada"] --> B["CombatManager._ready()"]
-    B --> C["_conectar_sinais_paineis()"]
-    C --> D["_inicializar_combate()"]
-    
-    D --> E["_setup_exemplo<br/>Carregar dados"]
-    E --> F["_calcular_iniciativa<br/>Rolar D6"]
-    F --> G["Ordenar por iniciativa"]
-    G --> H["Emitir: combate_iniciado"]
-    H --> I["_avancar_turno"]
-    
-    I --> J["Encontrar combatente vivo"]
-    J --> K{"Tipo = jogador?"}
-    
-    K -->|Sim| L["ActionPanel.ativar_para"]
-    K -->|Não| M["IA: _executar_turno_inimigo"]
-    
-    L --> N["Aguardando clique em botão"]
-    N --> O{"Qual ação?"}
-    
-    O -->|Atacar| P["_iniciar_ataque<br/>RegionalPanel.ativar"]
-    O -->|Perícia| Q["_iniciar_pericia<br/>mostrar_menu"]
-    O -->|Habilidade| R["_iniciar_habilidade<br/>mostrar_menu"]
-    O -->|Item| S["_iniciar_item<br/>mostrar_menu"]
-    O -->|Passar| T["_avancar_turno"]
-    
-    P --> U["Jogador seleciona regiões"]
-    U --> V["EnemyPanel.ativar_seletor_alvo"]
-    V --> W["Jogador clica inimigo"]
-    W --> X["_processar_ataque"]
-    
-    X --> Y["Rolar D6<br/>Avaliar resultado"]
-    Y --> Z["Calcular dano"]
-    Z --> AA["Aplicar ao alvo"]
-    AA --> AB["CombatLog.registrar_ataque"]
-    AB --> AC["Emitir: estado_atualizado"]
-    AC --> AD["Atualizar painéis"]
-    AD --> AE{"Alvo morreu?"}
-    
-    AE -->|Sim| AF["_derrotar_combatente"]
-    AE -->|Não| AG["_verificar_fim_combate"]
-    
-    AF --> AH["_verificar_fim_combate"]
-    
-    AH --> AI{"Alguém venceu?"}
-    AI -->|Derrota| AJ["combate_finalizado<br/>Derrota"]
-    AI -->|Vitória| AK["combate_finalizado<br/>Vitória"]
-    AI -->|Não| T
-    
-    M --> AL["Executa turno<br/>await timeout"]
-    AL --> AG
-    
-    T --> I
-    
-    AJ --> AM["END - Derrota"]
-    AK --> AN["END - Vitória"]
-    
-    Q --> AO["[Stub - implementar]"]
-    R --> AP["[Stub - implementar]"]
-    S --> AQ["[Stub - implementar]"]
-    
-    AO --> T
-    AP --> T
-    AQ --> T
+	A["Cena Combat Carregada"] --> B["CombatManager._ready()"]
+	B --> C["_conectar_sinais_paineis()"]
+	C --> D["_inicializar_combate()"]
+	
+	D --> E["_setup_exemplo<br/>Carregar dados"]
+	E --> F["_calcular_iniciativa<br/>Rolar D6"]
+	F --> G["Ordenar por iniciativa"]
+	G --> H["Emitir: combate_iniciado"]
+	H --> I["_avancar_turno"]
+	
+	I --> J["Encontrar combatente vivo"]
+	J --> K{"Tipo = jogador?"}
+	
+	K -->|Sim| L["ActionPanel.ativar_para"]
+	K -->|Não| M["IA: _executar_turno_inimigo"]
+	
+	L --> N["Aguardando clique em botão"]
+	N --> O{"Qual ação?"}
+	
+	O -->|Atacar| P["_iniciar_ataque<br/>RegionalPanel.ativar"]
+	O -->|Perícia| Q["_iniciar_pericia<br/>mostrar_menu"]
+	O -->|Habilidade| R["_iniciar_habilidade<br/>mostrar_menu"]
+	O -->|Item| S["_iniciar_item<br/>mostrar_menu"]
+	O -->|Passar| T["_avancar_turno"]
+	
+	P --> U["Jogador seleciona regiões"]
+	U --> V["EnemyPanel.ativar_seletor_alvo"]
+	V --> W["Jogador clica inimigo"]
+	W --> X["_processar_ataque"]
+	
+	X --> Y["Rolar D6<br/>Avaliar resultado"]
+	Y --> Z["Calcular dano"]
+	Z --> AA["Aplicar ao alvo"]
+	AA --> AB["CombatLog.registrar_ataque"]
+	AB --> AC["Emitir: estado_atualizado"]
+	AC --> AD["Atualizar painéis"]
+	AD --> AE{"Alvo morreu?"}
+	
+	AE -->|Sim| AF["_derrotar_combatente"]
+	AE -->|Não| AG["_verificar_fim_combate"]
+	
+	AF --> AH["_verificar_fim_combate"]
+	
+	AH --> AI{"Alguém venceu?"}
+	AI -->|Derrota| AJ["combate_finalizado<br/>Derrota"]
+	AI -->|Vitória| AK["combate_finalizado<br/>Vitória"]
+	AI -->|Não| T
+	
+	M --> AL["Executa turno<br/>await timeout"]
+	AL --> AG
+	
+	T --> I
+	
+	AJ --> AM["END - Derrota"]
+	AK --> AN["END - Vitória"]
+	
+	Q --> AO["[Stub - implementar]"]
+	R --> AP["[Stub - implementar]"]
+	S --> AQ["[Stub - implementar]"]
+	
+	AO --> T
+	AP --> T
+	AQ --> T
 ```
 
 ---

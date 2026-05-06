@@ -25,22 +25,29 @@ func _ready() -> void:
 
 func _criar_layout() -> void:
 	"""Cria o layout do painel de inimigos"""
-	vbox.add_theme_constant_override("separation", 4)
+	vbox.add_theme_constant_override("separation", 2)
+	vbox.mouse_filter = Control.MOUSE_FILTER_PASS
 	add_child(vbox)
 	
 	# Título
 	label_titulo.text = "Inimigos"
 	label_titulo.add_theme_font_size_override("font_size", 14)
+	label_titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vbox.add_child(label_titulo)
 	
 	# Container de scroll para lista
 	scroll_container.custom_minimum_size = Vector2(0, 200)
 	scroll_container.clip_contents = true
+	scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	lista_inimigos.add_theme_constant_override("separation", 2)
+	lista_inimigos.mouse_filter = Control.MOUSE_FILTER_PASS
 	scroll_container.add_child(lista_inimigos)
 	
 	vbox.add_child(scroll_container)
+	
+	# Começar desativado
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 # ============================================================================
 # GERENCIAMENTO DE INIMIGOS
@@ -88,6 +95,7 @@ func _criar_botao_inimigo(inimigo: Dictionary) -> void:
 	botao.text = _formatar_texto_inimigo(inimigo)
 	botao.custom_minimum_size = Vector2(0, 36)
 	botao.toggle_mode = true
+	botao.mouse_filter = Control.MOUSE_FILTER_STOP
 	botao.pressed.connect(_on_botao_inimigo_pressionado.bind(inimigo))
 	
 	lista_inimigos.add_child(botao)
@@ -128,19 +136,23 @@ func _criar_barra_saude(atual: int, maximo: int) -> String:
 func ativar_seletor_alvo() -> void:
 	"""Ativa o modo de seleção de alvo"""
 	modo_seletor_ativo = true
+	mouse_filter = Control.MOUSE_FILTER_STOP
 	
 	# Destacar todos os botões como selecionáveis
 	for botao in botoes_inimigos.values():
 		botao.disabled = false
 		botao.toggle_mode = true
+		botao.mouse_filter = Control.MOUSE_FILTER_STOP
 
 func desativar_seletor_alvo() -> void:
 	"""Desativa o modo de seleção de alvo"""
 	modo_seletor_ativo = false
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Desmarcar todos
 	for botao in botoes_inimigos.values():
 		botao.button_pressed = false
+		botao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 func _on_botao_inimigo_pressionado(inimigo: Dictionary) -> void:
 	"""Chamado quando um botão de inimigo é pressionado"""
@@ -148,7 +160,7 @@ func _on_botao_inimigo_pressionado(inimigo: Dictionary) -> void:
 		return
 	
 	# Desselecionar inimigo anterior
-	if not inimigo_selecionado_atual.is_empty():
+	if inimigo_selecionado_atual.has("nome"):
 		var botao_anterior = botoes_inimigos.get(inimigo_selecionado_atual["nome"])
 		if botao_anterior:
 			botao_anterior.button_pressed = false

@@ -153,7 +153,7 @@ func indicar_personagem_ativo(personagem: Dictionary) -> void:
 		var style = StyleBoxFlat.new()
 		style.bg_color = Color.YELLOW.darkened(0.5)
 		style.border_color = Color.YELLOW
-		style.set_border_enabled_all(true)
+
 		style.set_border_width_all(2)
 		card.add_theme_stylebox_override("panel", style)
 

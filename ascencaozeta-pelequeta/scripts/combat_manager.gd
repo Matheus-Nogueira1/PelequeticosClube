@@ -15,6 +15,7 @@ signal turno_finalizado(combatente: Dictionary)
 signal combate_iniciado
 signal combate_finalizado(vencedor: String)
 signal estado_atualizado
+signal turno_passado
 
 # Painéis da cena
 @onready var party_panel = %PartyPanel
@@ -137,6 +138,7 @@ func _conectar_sinais_paineis() -> void:
 		action_panel.acao_pericia.connect(_iniciar_pericia)
 		action_panel.acao_habilidade.connect(_iniciar_habilidade)
 		action_panel.acao_item.connect(_iniciar_item)
+		action_panel.turno_passado.connect(_on_turno_passado)
 	
 	if regional_selector:
 		regional_selector.regiao_selecionada.connect(_on_regiao_selecionada)
@@ -157,7 +159,7 @@ func _avancar_turno() -> void:
 	
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
-	alvo_selecionado.clear()
+	# Não limpar alvo_selecionado aqui - será limpo apenas quando mudar de turno de verdade
 	
 	# Procurar próximo combatente vivo
 	var combatente_proxximo = _encontrar_proximo_combatente()
@@ -172,11 +174,16 @@ func _avancar_turno() -> void:
 	# Ativar painel de ações se for personagem jogador
 	if combatente_ativo["tipo"] == "jogador":
 		action_panel.ativar_para(combatente_ativo)
+		party_panel.indicar_personagem_ativo(combatente_ativo)
+		enemy_panel.desativar_seletor_alvo()
 		log_panel.registrar_evento(
 			"🎯 Turno de %s!" % combatente_ativo["nome"],
 			"turno"
 		)
+		# Limpar seleções apenas ao iniciar turno do jogador
+		alvo_selecionado.clear()
 	else:
+		party_panel.remover_destaque_turno()
 		# TODO: IA para inimigos
 		await get_tree().create_timer(1.5).timeout
 		_executar_turno_inimigo()
@@ -294,10 +301,23 @@ func _on_selecao_cancelada() -> void:
 	regional_selector.desativar()
 	action_panel.habilitar_acoes()
 
+func _on_turno_passado() -> void:
+	"""Chamado quando o jogador clica em PASSAR TURNO"""
+	if not combatente_ativo.is_empty() and combatente_ativo["tipo"] == "jogador":
+		log_panel.registrar_evento("Turno passado.", "info")
+		action_panel.desabilitar_acoes()
+		turno_finalizado.emit(combatente_ativo)
+		await get_tree().create_timer(1.0).timeout
+		_avancar_turno()
+
 func _on_inimigo_selecionado(inimigo: Dictionary) -> void:
 	"""Chamado quando jogador seleciona um inimigo"""
 	if regioes_selecionadas.is_empty():
 		log_panel.registrar_evento("Nenhuma região selecionada! Confirme antes de selecionar alvo.", "aviso")
+		return
+	
+	if not inimigo.has("nome"):
+		log_panel.registrar_evento("Inimigo inválido selecionado!", "aviso")
 		return
 	
 	alvo_selecionado = inimigo
@@ -339,17 +359,20 @@ func _processar_ataque(atacante: Dictionary, alvo: Dictionary, regioes: Array[St
 		for regiao in regioes:
 			alvo["estresse_por_regiao"][regiao] += resultado_simulado["estresse_gerado"]
 	
-	# Atualizar painéis visuais
+	# Sincronizar atualização nos painéis
+	enemy_panel.atualizar_inimigo(alvo)
+	enemy_panel.desativar_seletor_alvo()
 	estado_atualizado.emit()
 	
 	# Verificar se alvo morreu
 	if alvo["saude_atual"] <= 0:
 		_derrotar_combatente(alvo)
 	else:
-		# Finalizar turno
-		turno_finalizado.emit(combatente_ativo)
-		await get_tree().create_timer(1.5).timeout
-		_avancar_turno()
+		# Permitir próxima ação ou finalizar turno
+		acao_em_progresso = false
+		regioes_selecionadas.clear()
+		action_panel.habilitar_acoes()
+		log_panel.registrar_evento("Ação pronta. Escolha a próxima ação ou passe o turno.", "info")
 
 func _avaliar_categoria_resultado(dado: int) -> String:
 	"""Categoriza o resultado do dado conforme OBLIVIO"""
@@ -377,6 +400,13 @@ func _derrotar_combatente(combatente: Dictionary) -> void:
 	)
 	
 	combatente["saude_atual"] = 0
+	
+	# Sincronizar remoção nos painéis
+	if combatente["tipo"] == "inimigo":
+		enemy_panel.remover_inimigo(combatente)
+	else:
+		party_panel.remover_personagem(combatente)
+	
 	estado_atualizado.emit()
 	
 	# Verificar se combate acabou
@@ -391,6 +421,11 @@ func _verificar_fim_combate() -> void:
 		_finalizar_combate("Derrota")
 	elif inimigos_vivos.is_empty():
 		_finalizar_combate("Vitória")
+	else:
+		# Continuar combate normalmente - próxima ação ou próximo turno
+		if combatente_ativo["tipo"] == "jogador":
+			action_panel.habilitar_acoes()
+			log_panel.registrar_evento("Escolha a próxima ação ou passe o turno.", "info")
 
 func _finalizar_combate(resultado: String) -> void:
 	"""Encerra o combate e retorna ao menu/mapa"""
