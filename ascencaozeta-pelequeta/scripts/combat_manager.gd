@@ -54,6 +54,9 @@ func _inicializar_combate() -> void:
 	# Por enquanto, vou usar estrutura de exemplo
 	_setup_exemplo()
 	
+	# VALIDAR todos os combatentes
+	_validar_combatentes()
+	
 	# Preencher UI dos painéis
 	if enemy_panel:
 		enemy_panel.atualizar_todos(combatentes_inimigo)
@@ -73,6 +76,38 @@ func _inicializar_combate() -> void:
 	
 	# Começar primeiro turno
 	_avancar_turno()
+
+func _validar_combatentes() -> void:
+	"""Valida se todos os combatentes têm os dados necessários"""
+	var campos_obrigatorios = [
+		"nome", "tipo", "saude_maxima", "saude_atual",
+		"defesa_base", "dano_arma", "atributo_dano",
+		"estresse_por_regiao", "status", "iniciativa"
+	]
+	
+	var todos_combatentes = combatentes_jogador + combatentes_inimigo
+	
+	for combatente in todos_combatentes:
+		for campo in campos_obrigatorios:
+			if not combatente.has(campo):
+				print("[CombatManager] AVISO: Combatente '%s' sem campo '%s'" % [
+					combatente.get("nome", "Desconhecido"), campo
+				])
+				# Adicionar valor padrão
+				match campo:
+					"nome": combatente["nome"] = "Desconhecido"
+					"tipo": combatente["tipo"] = "neutro"
+					"saude_maxima": combatente["saude_maxima"] = 10
+					"saude_atual": combatente["saude_atual"] = 10
+					"defesa_base": combatente["defesa_base"] = 1
+					"dano_arma": combatente["dano_arma"] = 1
+					"atributo_dano": combatente["atributo_dano"] = 0
+					"estresse_por_regiao": combatente["estresse_por_regiao"] = {
+						"Torso": 0, "Braço Direito": 0, "Braço Esquerdo": 0,
+						"Perna Direita": 0, "Perna Esquerda": 0
+					}
+					"status": combatente["status"] = []
+					"iniciativa": combatente["iniciativa"] = 0
 
 func _setup_exemplo() -> void:
 	"""Setup temporário com dados de exemplo"""
@@ -197,8 +232,8 @@ func _encontrar_proximo_combatente() -> Dictionary:
 		indice_turno_atual = (indice_turno_atual + 1) % ordem_turno.size()
 		var combatente = ordem_turno[indice_turno_atual]
 		
-		# Verificar se está vivo
-		if combatente["saude_atual"] > 0:
+		# Verificar se está vivo (validar existência de saude_atual)
+		if combatente.has("saude_atual") and combatente["saude_atual"] > 0:
 			return combatente
 		
 		tentativas += 1
@@ -333,6 +368,20 @@ func _on_inimigo_selecionado(inimigo: Dictionary) -> void:
 
 func _processar_ataque(atacante: Dictionary, alvo: Dictionary, regioes: Array[String]) -> void:
 	"""Executa a lógica de ataque: rola dados, calcula dano, aplica efeitos"""
+	
+	# Validar combatentes
+	if not atacante.has("nome") or not atacante.has("saude_atual"):
+		log_panel.registrar_evento("Atacante inválido!", "aviso")
+		return
+	
+	if not alvo.has("nome") or not alvo.has("saude_atual"):
+		log_panel.registrar_evento("Alvo inválido!", "aviso")
+		return
+	
+	if regioes.is_empty():
+		log_panel.registrar_evento("Nenhuma região selecionada!", "aviso")
+		return
+	
 	print("[CombatManager] Ataque de %s contra %s nas regiões: %s" % [
 		atacante["nome"], alvo["nome"], ", ".join(regioes)
 	])
@@ -352,12 +401,14 @@ func _processar_ataque(atacante: Dictionary, alvo: Dictionary, regioes: Array[St
 	log_panel.registrar_ataque(resultado_simulado)
 	
 	# Aplicar dano ao alvo
-	alvo["saude_atual"] = max(0, alvo["saude_atual"] - resultado_simulado["dano_aplicado"])
+	if alvo.has("saude_atual"):
+		alvo["saude_atual"] = max(0, alvo["saude_atual"] - resultado_simulado["dano_aplicado"])
 	
 	# Aplicar estresse ao alvo
-	if resultado_simulado["estresse_gerado"] > 0:
+	if resultado_simulado["estresse_gerado"] > 0 and alvo.has("estresse_por_regiao"):
 		for regiao in regioes:
-			alvo["estresse_por_regiao"][regiao] += resultado_simulado["estresse_gerado"]
+			if regiao in alvo["estresse_por_regiao"]:
+				alvo["estresse_por_regiao"][regiao] += resultado_simulado["estresse_gerado"]
 	
 	# Sincronizar atualização nos painéis
 	enemy_panel.atualizar_inimigo(alvo)
@@ -365,7 +416,7 @@ func _processar_ataque(atacante: Dictionary, alvo: Dictionary, regioes: Array[St
 	estado_atualizado.emit()
 	
 	# Verificar se alvo morreu
-	if alvo["saude_atual"] <= 0:
+	if alvo.has("saude_atual") and alvo["saude_atual"] <= 0:
 		_derrotar_combatente(alvo)
 	else:
 		# Permitir próxima ação ou finalizar turno
@@ -394,18 +445,26 @@ func _avaliar_categoria_resultado(dado: int) -> String:
 
 func _derrotar_combatente(combatente: Dictionary) -> void:
 	"""Remove combatente derrotado e verifica fim de combate"""
+	
+	# Validar combatente
+	if not combatente.has("nome"):
+		log_panel.registrar_evento("Combatente inválido foi derrotado!", "aviso")
+		return
+	
 	log_panel.registrar_evento(
 		"⚠️  %s foi derrotado!" % combatente["nome"],
 		"critico"
 	)
 	
-	combatente["saude_atual"] = 0
+	if combatente.has("saude_atual"):
+		combatente["saude_atual"] = 0
 	
 	# Sincronizar remoção nos painéis
-	if combatente["tipo"] == "inimigo":
-		enemy_panel.remover_inimigo(combatente)
-	else:
-		party_panel.remover_personagem(combatente)
+	if combatente.has("tipo"):
+		if combatente["tipo"] == "inimigo":
+			enemy_panel.remover_inimigo(combatente)
+		else:
+			party_panel.remover_personagem(combatente)
 	
 	estado_atualizado.emit()
 	
@@ -414,8 +473,12 @@ func _derrotar_combatente(combatente: Dictionary) -> void:
 
 func _verificar_fim_combate() -> void:
 	"""Verifica se um dos lados foi completamente derrotado"""
-	var jogadores_vivos = combatentes_jogador.filter(func(c): return c["saude_atual"] > 0)
-	var inimigos_vivos = combatentes_inimigo.filter(func(c): return c["saude_atual"] > 0)
+	var jogadores_vivos = combatentes_jogador.filter(
+		func(c): return c.has("saude_atual") and c["saude_atual"] > 0
+	)
+	var inimigos_vivos = combatentes_inimigo.filter(
+		func(c): return c.has("saude_atual") and c["saude_atual"] > 0
+	)
 	
 	if jogadores_vivos.is_empty():
 		_finalizar_combate("Derrota")
@@ -423,7 +486,7 @@ func _verificar_fim_combate() -> void:
 		_finalizar_combate("Vitória")
 	else:
 		# Continuar combate normalmente - próxima ação ou próximo turno
-		if combatente_ativo["tipo"] == "jogador":
+		if combatente_ativo.has("tipo") and combatente_ativo["tipo"] == "jogador":
 			action_panel.habilitar_acoes()
 			log_panel.registrar_evento("Escolha a próxima ação ou passe o turno.", "info")
 

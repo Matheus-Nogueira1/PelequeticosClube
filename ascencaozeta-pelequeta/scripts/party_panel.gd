@@ -76,6 +76,17 @@ func limpar_personagens() -> void:
 
 func _criar_card_personagem(personagem: Dictionary) -> void:
 	"""Cria um card visual para um personagem"""
+	# Validar dados
+	if not personagem.has("nome"):
+		print("[PartyPanel] ERRO: Personagem sem nome")
+		return
+	if not personagem.has("saude_atual") or not personagem.has("saude_maxima"):
+		print("[PartyPanel] ERRO: Personagem '%s' sem dados de saúde" % personagem["nome"])
+		return
+	if not personagem.has("estresse_por_regiao"):
+		print("[PartyPanel] ERRO: Personagem '%s' sem dados de estresse" % personagem["nome"])
+		return
+	
 	var card = PanelContainer.new()
 	card.custom_minimum_size = Vector2(0, 60)
 	
@@ -91,7 +102,8 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 	
 	# HP
 	var label_hp = Label.new()
-	label_hp.text = "HP: %d/%d" % [personagem["saude_atual"], personagem["saude_maxima"]]
+	var hp_text = "HP: %d/%d" % [personagem["saude_atual"], personagem["saude_maxima"]]
+	label_hp.text = hp_text
 	label_hp.add_theme_font_size_override("font_size", 10)
 	vbox_card.add_child(label_hp)
 	
@@ -115,8 +127,14 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 		"label_hp": label_hp,
 		"label_estresse": label_estresse,
 		"atualizar": func(p: Dictionary):
+			# Validar antes de atualizar
+			if not p.has("nome") or not p.has("saude_atual") or not p.has("saude_maxima"):
+				print("[PartyPanel] ERRO: Dados inválidos ao atualizar personagem")
+				return
+			
 			label_nome.text = p["nome"]
-			label_hp.text = "HP: %d/%d" % [p["saude_atual"], p["saude_maxima"]]
+			var hp_str = "HP: %d/%d" % [p["saude_atual"], p["saude_maxima"]]
+			label_hp.text = hp_str
 			
 			var est = _calcular_estresse_total(p)
 			label_estresse.text = "Estresse: %d" % est

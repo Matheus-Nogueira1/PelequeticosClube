@@ -103,6 +103,9 @@ func _criar_botao_inimigo(inimigo: Dictionary) -> void:
 
 func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
 	"""Formata o texto que aparece no botão do inimigo"""
+	if not inimigo.has("saude_atual") or not inimigo.has("saude_maxima"):
+		return "%s [DADOS INVÁLIDOS]" % inimigo.get("nome", "Desconhecido")
+	
 	var saude = inimigo["saude_atual"]
 	var saude_max = inimigo["saude_maxima"]
 	var barra_saude = _criar_barra_saude(saude, saude_max)

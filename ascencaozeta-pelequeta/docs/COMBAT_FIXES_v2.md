@@ -27,9 +27,9 @@ party_panel.remover_destaque_turno()
 
 # Em _derrotar_combatente():
 if combatente["tipo"] == "inimigo":
-    enemy_panel.remover_inimigo(combatente)
+	enemy_panel.remover_inimigo(combatente)
 else:
-    party_panel.remover_personagem(combatente)
+	party_panel.remover_personagem(combatente)
 ```
 
 ---
@@ -44,11 +44,11 @@ else:
 ```gdscript
 # Em _processar_ataque():
 else:
-    # Permitir próxima ação ou finalizar turno
-    acao_em_progresso = false
-    regioes_selecionadas.clear()
-    action_panel.habilitar_acoes()  # ← RE-ATIVA BOTÕES
-    log_panel.registrar_evento("Ação pronta. Escolha próxima ação...", "info")
+	# Permitir próxima ação ou finalizar turno
+	acao_em_progresso = false
+	regioes_selecionadas.clear()
+	action_panel.habilitar_acoes()  # ← RE-ATIVA BOTÕES
+	log_panel.registrar_evento("Ação pronta. Escolha próxima ação...", "info")
 ```
 
 ---
@@ -68,18 +68,18 @@ signal turno_passado
 signal turno_passado
 
 func _on_passar_turno() -> void:
-    turno_passado.emit()
+	turno_passado.emit()
 
 # Em CombatManager._conectar_sinais_paineis():
 action_panel.turno_passado.connect(_on_turno_passado)
 
 # Novo callback:
 func _on_turno_passado() -> void:
-    log_panel.registrar_evento("Turno passado.", "info")
-    action_panel.desabilitar_acoes()
-    turno_finalizado.emit(combatente_ativo)
-    await get_tree().create_timer(1.0).timeout
-    _avancar_turno()
+	log_panel.registrar_evento("Turno passado.", "info")
+	action_panel.desabilitar_acoes()
+	turno_finalizado.emit(combatente_ativo)
+	await get_tree().create_timer(1.0).timeout
+	_avancar_turno()
 ```
 
 ---
@@ -100,8 +100,8 @@ TopBar (PanelContainer)
 Estrutura Depois:
 TopBar (PanelContainer)
 └── VBoxContainer
-    ├── HBoxContainer (PartyPanel, Battlefield, EnemyPanel)
-    └── HBoxContainer2 (RegionalPanel, ActionPanel) ✅
+	├── HBoxContainer (PartyPanel, Battlefield, EnemyPanel)
+	└── HBoxContainer2 (RegionalPanel, ActionPanel) ✅
 ```
 
 ---
@@ -220,10 +220,10 @@ Ação pronta. Escolha a próxima ação ou passe o turno.
 ```gdscript
 # Estrutura pronta:
 enum ActionType {
-    ACAO_REGULAR,    # 1 PA
-    MOVIMENTO,       # 1 PA
-    EXTRA,           # Extra se houver PA
-    COMPLETA         # Consome tudo
+	ACAO_REGULAR,    # 1 PA
+	MOVIMENTO,       # 1 PA
+	EXTRA,           # Extra se houver PA
+	COMPLETA         # Consome tudo
 }
 
 # Implementar:
@@ -255,35 +255,35 @@ func restaurar_pontos_acao()
 ### Combatente
 ```gdscript
 {
-    "nome": "Guerreiro",
-    "tipo": "jogador" | "inimigo",
-    "saude_maxima": 15,
-    "saude_atual": 15,
-    "defesa_base": 2,
-    "dano_arma": 2,
-    "atributo_dano": 1,
-    "estresse_por_regiao": {
-        "Torso": 0,
-        "Braço Direito": 0,
-        "Braço Esquerdo": 0,
-        "Perna Direita": 0,
-        "Perna Esquerda": 0
-    },
-    "status": [],
-    "iniciativa": 0
+	"nome": "Guerreiro",
+	"tipo": "jogador" | "inimigo",
+	"saude_maxima": 15,
+	"saude_atual": 15,
+	"defesa_base": 2,
+	"dano_arma": 2,
+	"atributo_dano": 1,
+	"estresse_por_regiao": {
+		"Torso": 0,
+		"Braço Direito": 0,
+		"Braço Esquerdo": 0,
+		"Perna Direita": 0,
+		"Perna Esquerda": 0
+	},
+	"status": [],
+	"iniciativa": 0
 }
 ```
 
 ### Resultado de Ataque
 ```gdscript
 {
-    "atacante": "Guerreiro",
-    "alvo": "Goblin",
-    "regiao": "Torso",
-    "dado": 5,
-    "categoria": "Sucesso Regular",
-    "dano_aplicado": 2,
-    "estresse_gerado": 1
+	"atacante": "Guerreiro",
+	"alvo": "Goblin",
+	"regiao": "Torso",
+	"dado": 5,
+	"categoria": "Sucesso Regular",
+	"dano_aplicado": 2,
+	"estresse_gerado": 1
 }
 ```
 
