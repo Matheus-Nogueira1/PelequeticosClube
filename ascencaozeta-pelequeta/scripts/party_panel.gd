@@ -80,9 +80,6 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 	if not personagem.has("nome"):
 		print("[PartyPanel] ERRO: Personagem sem nome")
 		return
-	if not personagem.has("saude_atual") or not personagem.has("saude_maxima"):
-		print("[PartyPanel] ERRO: Personagem '%s' sem dados de saúde" % personagem["nome"])
-		return
 	if not personagem.has("estresse_por_regiao"):
 		print("[PartyPanel] ERRO: Personagem '%s' sem dados de estresse" % personagem["nome"])
 		return
@@ -94,57 +91,66 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 	vbox_card.add_theme_constant_override("separation", 2)
 	card.add_child(vbox_card)
 	
-	# Nome
+	# Nome (com status)
 	var label_nome = Label.new()
-	label_nome.text = personagem["nome"]
+	var status_text = personagem["nome"]
+	if personagem.has("status") and not personagem["status"].is_empty():
+		status_text += " [%s]" % ", ".join(personagem["status"])
+	label_nome.text = status_text
 	label_nome.add_theme_font_size_override("font_size", 12)
 	vbox_card.add_child(label_nome)
 	
-	# HP
-	var label_hp = Label.new()
-	var hp_text = "HP: %d/%d" % [personagem["saude_atual"], personagem["saude_maxima"]]
-	label_hp.text = hp_text
-	label_hp.add_theme_font_size_override("font_size", 10)
-	vbox_card.add_child(label_hp)
-	
-	# Estresse
-	var estresse_total = _calcular_estresse_total(personagem)
+	# ESTRESSE TOTAL (métrica principal em OBLIVIO)
 	var label_estresse = Label.new()
-	label_estresse.text = "Estresse: %d" % estresse_total
 	label_estresse.add_theme_font_size_override("font_size", 10)
-	
-	# Colorir estresse conforme valor
-	if estresse_total >= 12:
-		label_estresse.add_theme_color_override("font_color", Color.RED)
-	elif estresse_total >= 8:
-		label_estresse.add_theme_color_override("font_color", Color.YELLOW)
-	
 	vbox_card.add_child(label_estresse)
 	
 	# Armazenar referência para atualizar depois
 	var card_wrapper = {
 		"node": card,
-		"label_hp": label_hp,
+		"label_nome": label_nome,
 		"label_estresse": label_estresse,
 		"atualizar": func(p: Dictionary):
 			# Validar antes de atualizar
-			if not p.has("nome") or not p.has("saude_atual") or not p.has("saude_maxima"):
+			if not p.has("nome") or not p.has("estresse_por_regiao"):
 				print("[PartyPanel] ERRO: Dados inválidos ao atualizar personagem")
 				return
 			
-			label_nome.text = p["nome"]
-			var hp_str = "HP: %d/%d" % [p["saude_atual"], p["saude_maxima"]]
-			label_hp.text = hp_str
+			# Atualizar nome e status
+			if p.has("status") and not p["status"].is_empty():
+				status_text += " [%s]" % ", ".join(p["status"])
+			label_nome.text = status_text
 			
-			var est = _calcular_estresse_total(p)
-			label_estresse.text = "Estresse: %d" % est
+			# Calcular estresse total
+			var estresse_total = 0
+			var limite_total = 0
+			var regioes_esgotadas = 0
 			
-			if est >= 12:
+			for regiao_est in p["estresse_por_regiao"].values():
+				estresse_total += regiao_est["atual"]
+				limite_total += regiao_est["limite"]
+				if regiao_est["atual"] >= regiao_est["limite"]:
+					regioes_esgotadas += 1
+			
+			# Mostrar estresse total
+			var est_str = "Estresse: %d/%d" % [estresse_total, limite_total]
+			
+			# Mostrar se tem regiões esgotadas (fadiga)
+			if regioes_esgotadas > 0:
+				est_str += " (%d regiões esgotadas)" % regioes_esgotadas
+			
+			# Colorir baseado em fadiga
+			if regioes_esgotadas >= 5:  # Todas esgotadas = desmaiado
 				label_estresse.add_theme_color_override("font_color", Color.RED)
-			elif est >= 8:
+				est_str += " [DESMAIADO]"
+			elif regioes_esgotadas >= 3:
 				label_estresse.add_theme_color_override("font_color", Color.YELLOW)
+			elif float(estresse_total) / float(limite_total) > 0.7:
+				label_estresse.add_theme_color_override("font_color", Color.ORANGE)
 			else:
 				label_estresse.remove_theme_color_override("font_color")
+			
+			label_estresse.text = est_str
 	}
 	
 	lista_personagens.add_child(card)
@@ -197,13 +203,6 @@ func atualizar_todos(personagens_novos: Array[Dictionary]) -> void:
 # ============================================================================
 # UTILIDADES
 # ============================================================================
-
-func _calcular_estresse_total(personagem: Dictionary) -> int:
-	"""Calcula o estresse total de um personagem"""
-	var total = 0
-	for valor in personagem["estresse_por_regiao"].values():
-		total += valor
-	return total
 
 func obter_personagem_ativo() -> Dictionary:
 	"""Retorna o personagem ativo"""

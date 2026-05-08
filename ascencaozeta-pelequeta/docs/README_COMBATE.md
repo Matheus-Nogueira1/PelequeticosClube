@@ -274,7 +274,7 @@ combat_manager.gd (PRINCIPAL)
 │   └── combat_log.gd
 │
 └── Usa dados de:
-    └── rolagens-dados-d6.gd (para D6 no futuro)
+	└── rolagens-dados-d6.gd (para D6 no futuro)
 ```
 
 ---

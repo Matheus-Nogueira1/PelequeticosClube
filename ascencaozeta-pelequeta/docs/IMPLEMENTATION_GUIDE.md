@@ -41,18 +41,18 @@ Abra `scenes/combat.tscn` e confirme a estrutura:
 ```
 Control (CombatManager)
 └── MarginContainer
-    └── VBoxContainer
-        ├── TopBar (PanelContainer)
-        │   └── VBoxContainer                   ← IMPORTANTE!
-        │       ├── HBoxContainer (Linha 1)
-        │       │   ├── PartyPanel (PartyPanel.gd)
-        │       │   ├── Battlefield
-        │       │   └── EnemyPanel (EnemyPanel.gd)
-        │       └── HBoxContainer2 (Linha 2)
-        │           ├── RegionalPanel (RegionalSelector.gd)
-        │           └── ActionPanel (ActionPanel.gd)
-        └── LogPanel (PanelContainer)
-            └── RichTextLabel (CombatLog.gd)
+	└── VBoxContainer
+		├── TopBar (PanelContainer)
+		│   └── VBoxContainer                   ← IMPORTANTE!
+		│       ├── HBoxContainer (Linha 1)
+		│       │   ├── PartyPanel (PartyPanel.gd)
+		│       │   ├── Battlefield
+		│       │   └── EnemyPanel (EnemyPanel.gd)
+		│       └── HBoxContainer2 (Linha 2)
+		│           ├── RegionalPanel (RegionalSelector.gd)
+		│           └── ActionPanel (ActionPanel.gd)
+		└── LogPanel (PanelContainer)
+			└── RichTextLabel (CombatLog.gd)
 ```
 
 **Verificação:**
@@ -139,22 +139,22 @@ Selecione as regiões de ataque...
 
 ```gdscript
 {
-    "nome": "Guerreiro",
-    "tipo": "jogador",           # ou "inimigo"
-    "saude_maxima": 15,
-    "saude_atual": 15,           # ← Muda com ataque
-    "defesa_base": 2,
-    "dano_arma": 2,
-    "atributo_dano": 1,
-    "estresse_por_regiao": {     # Estresse por região
-        "Torso": 0,              # ← Muda com ataque
-        "Braço Direito": 0,
-        "Braço Esquerdo": 0,
-        "Perna Direita": 0,
-        "Perna Esquerda": 0
-    },
-    "status": [],
-    "iniciativa": 4              # D6 calculado no início
+	"nome": "Guerreiro",
+	"tipo": "jogador",           # ou "inimigo"
+	"saude_maxima": 15,
+	"saude_atual": 15,           # ← Muda com ataque
+	"defesa_base": 2,
+	"dano_arma": 2,
+	"atributo_dano": 1,
+	"estresse_por_regiao": {     # Estresse por região
+		"Torso": 0,              # ← Muda com ataque
+		"Braço Direito": 0,
+		"Braço Esquerdo": 0,
+		"Perna Direita": 0,
+		"Perna Esquerda": 0
+	},
+	"status": [],
+	"iniciativa": 4              # D6 calculado no início
 }
 ```
 
@@ -162,13 +162,13 @@ Selecione as regiões de ataque...
 
 ```gdscript
 {
-    "atacante": "Guerreiro",
-    "alvo": "Goblin",
-    "regiao": "Torso",           # Uma das 5 regiões
-    "dado": 5,                   # D6
-    "categoria": "Sucesso Regular",  # Baseado no dado
-    "dano_aplicado": 2,          # Fixo por enquanto
-    "estresse_gerado": 1         # Fixo por enquanto
+	"atacante": "Guerreiro",
+	"alvo": "Goblin",
+	"regiao": "Torso",           # Uma das 5 regiões
+	"dado": 5,                   # D6
+	"categoria": "Sucesso Regular",  # Baseado no dado
+	"dano_aplicado": 2,          # Fixo por enquanto
+	"estresse_gerado": 1         # Fixo por enquanto
 }
 ```
 
@@ -180,49 +180,49 @@ Edite `scripts/combat_manager.gd`, função `_setup_exemplo()`:
 
 ```gdscript
 func _setup_exemplo() -> void:
-    # JOGADORES
-    combatentes_jogador = [
-        {
-            "nome": "Seu Herói",          # ← Mude aqui
-            "tipo": "jogador",
-            "saude_maxima": 20,           # ← HP maior
-            "saude_atual": 20,
-            "defesa_base": 2,
-            "dano_arma": 3,               # ← Dano maior
-            "atributo_dano": 1,
-            "estresse_por_regiao": {
-                "Torso": 0,
-                "Braço Direito": 0,
-                "Braço Esquerdo": 0,
-                "Perna Direita": 0,
-                "Perna Esquerda": 0
-            },
-            "status": [],
-            "iniciativa": 0
-        }
-    ]
-    
-    # INIMIGOS
-    combatentes_inimigo = [
-        {
-            "nome": "Chefe Goblin",       # ← Mude aqui
-            "tipo": "inimigo",
-            "saude_maxima": 15,           # ← HP do chefe
-            "saude_atual": 15,
-            "defesa_base": 2,
-            "dano_arma": 2,
-            "atributo_dano": 1,
-            "estresse_por_regiao": {
-                "Torso": 0,
-                "Braço Direito": 0,
-                "Braço Esquerdo": 0,
-                "Perna Direita": 0,
-                "Perna Esquerda": 0
-            },
-            "status": [],
-            "iniciativa": 0
-        }
-    ]
+	# JOGADORES
+	combatentes_jogador = [
+		{
+			"nome": "Seu Herói",          # ← Mude aqui
+			"tipo": "jogador",
+			"saude_maxima": 20,           # ← HP maior
+			"saude_atual": 20,
+			"defesa_base": 2,
+			"dano_arma": 3,               # ← Dano maior
+			"atributo_dano": 1,
+			"estresse_por_regiao": {
+				"Torso": 0,
+				"Braço Direito": 0,
+				"Braço Esquerdo": 0,
+				"Perna Direita": 0,
+				"Perna Esquerda": 0
+			},
+			"status": [],
+			"iniciativa": 0
+		}
+	]
+	
+	# INIMIGOS
+	combatentes_inimigo = [
+		{
+			"nome": "Chefe Goblin",       # ← Mude aqui
+			"tipo": "inimigo",
+			"saude_maxima": 15,           # ← HP do chefe
+			"saude_atual": 15,
+			"defesa_base": 2,
+			"dano_arma": 2,
+			"atributo_dano": 1,
+			"estresse_por_regiao": {
+				"Torso": 0,
+				"Braço Direito": 0,
+				"Braço Esquerdo": 0,
+				"Perna Direita": 0,
+				"Perna Esquerda": 0
+			},
+			"status": [],
+			"iniciativa": 0
+		}
+	]
 ```
 
 ---
@@ -233,14 +233,14 @@ Para 2 jogadores vs 3 inimigos:
 
 ```gdscript
 combatentes_jogador = [
-    { "nome": "Guerreiro", ... },
-    { "nome": "Mago", ... }
+	{ "nome": "Guerreiro", ... },
+	{ "nome": "Mago", ... }
 ]
 
 combatentes_inimigo = [
-    { "nome": "Goblin 1", ... },
-    { "nome": "Goblin 2", ... },
-    { "nome": "Chefe Goblin", ... }
+	{ "nome": "Goblin 1", ... },
+	{ "nome": "Goblin 2", ... },
+	{ "nome": "Chefe Goblin", ... }
 ]
 ```
 
@@ -260,8 +260,8 @@ combatentes_inimigo = [
    ├─ combatente_ativo = próximo
    ├─ turno_iniciado.emit()
    └─ Se jogador:
-      └─ action_panel.ativar_para()
-      
+	  └─ action_panel.ativar_para()
+	  
 3. Jogador clica ação (ex: ATACAR)
    ├─ _iniciar_ataque()
    ├─ regional_selector.ativar_para_ataque()
@@ -287,13 +287,13 @@ combatentes_inimigo = [
    ├─ enemy_panel.atualizar_inimigo()
    ├─ action_panel.habilitar_acoes()  ← Permite próxima ação
    └─ Se alvo morreu:
-      └─ _derrotar_combatente()
-      
+	  └─ _derrotar_combatente()
+	  
 8. Jogador clica PASSAR TURNO
    ├─ action_panel.turno_passado.emit()
    └─ _on_turno_passado()
-      ├─ turno_finalizado.emit()
-      └─ _avancar_turno()  ← Volta ao passo 2
+	  ├─ turno_finalizado.emit()
+	  └─ _avancar_turno()  ← Volta ao passo 2
 ```
 
 ---
@@ -353,10 +353,10 @@ Edite `combat_manager.gd`:
 ```gdscript
 # Adicionar ao enum
 enum ActionType {
-    ACAO_REGULAR,    # 1 PA
-    MOVIMENTO,       # 1 PA
-    EXTRA,           # 2 PA
-    COMPLETA         # 3+ PA
+	ACAO_REGULAR,    # 1 PA
+	MOVIMENTO,       # 1 PA
+	EXTRA,           # 2 PA
+	COMPLETA         # 3+ PA
 }
 
 # No combatente, adicionar:
@@ -365,23 +365,23 @@ combatente["pontos_acao_maximos"] = 3
 
 # Função nova:
 func consumir_pontos_acao(tipo: ActionType) -> bool:
-    var custo = 1  # Padrão
-    match tipo:
-        ActionType.ACAO_REGULAR: custo = 1
-        ActionType.MOVIMENTO: custo = 1
-        ActionType.EXTRA: custo = 2
-        ActionType.COMPLETA: custo = 3
-    
-    if combatente_ativo["pontos_acao_atuais"] >= custo:
-        combatente_ativo["pontos_acao_atuais"] -= custo
-        return true
-    else:
-        log_panel.registrar_evento("PA insuficiente!", "aviso")
-        return false
+	var custo = 1  # Padrão
+	match tipo:
+		ActionType.ACAO_REGULAR: custo = 1
+		ActionType.MOVIMENTO: custo = 1
+		ActionType.EXTRA: custo = 2
+		ActionType.COMPLETA: custo = 3
+	
+	if combatente_ativo["pontos_acao_atuais"] >= custo:
+		combatente_ativo["pontos_acao_atuais"] -= custo
+		return true
+	else:
+		log_panel.registrar_evento("PA insuficiente!", "aviso")
+		return false
 
 # Em _iniciar_ataque(), adicionar:
 if not consumir_pontos_acao(ActionType.ACAO_REGULAR):
-    return
+	return
 ```
 
 ### 2️⃣ **Implementar Perícias** - 1 hora
@@ -395,19 +395,19 @@ if not consumir_pontos_acao(ActionType.ACAO_REGULAR):
 
 ```gdscript
 func _executar_turno_inimigo() -> void:
-    var inimigos_vivos = combatentes_inimigo.filter(func(i): return i["saude_atual"] > 0)
-    if inimigos_vivos.is_empty():
-        _avancar_turno()
-        return
-    
-    # Escolher alvo aleatório
-    var alvo = combatentes_jogador.filter(func(j): return j["saude_atual"] > 0).pick_random()
-    
-    # Escolher região aleatória
-    var regiao = ["Torso", "Braço Direito", "Braço Esquerdo", "Perna Direita", "Perna Esquerda"].pick_random()
-    
-    # Atacar
-    _processar_ataque(combatente_ativo, alvo, [regiao])
+	var inimigos_vivos = combatentes_inimigo.filter(func(i): return i["saude_atual"] > 0)
+	if inimigos_vivos.is_empty():
+		_avancar_turno()
+		return
+	
+	# Escolher alvo aleatório
+	var alvo = combatentes_jogador.filter(func(j): return j["saude_atual"] > 0).pick_random()
+	
+	# Escolher região aleatória
+	var regiao = ["Torso", "Braço Direito", "Braço Esquerdo", "Perna Direita", "Perna Esquerda"].pick_random()
+	
+	# Atacar
+	_processar_ataque(combatente_ativo, alvo, [regiao])
 ```
 
 ---

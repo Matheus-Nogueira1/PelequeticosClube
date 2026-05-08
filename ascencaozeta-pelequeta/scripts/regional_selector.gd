@@ -58,7 +58,7 @@ func _criar_layout() -> void:
 	vbox.add_child(grid_regioes)
 	
 	# Label informativo (mostra estresse)
-	label_info.text = "Clique para selecionar (max 3)"
+	label_info.text = "Clique para selecionar"
 	label_info.add_theme_font_size_override("font_size", 10)
 	vbox.add_child(label_info)
 	
@@ -100,19 +100,11 @@ func ativar_para_ataque() -> void:
 	"""Ativa o seletor para modo de ataque"""
 	modo = "selecionar_ataque"
 	label_titulo.text = "Selecione Regiões de Ataque"
-	label_info.text = "Clique para selecionar (1-3 regiões)"
+	label_info.text = "Clique para selecionar"
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	show()
 	_resetar_selecao()
 
-func ativar_para_defesa() -> void:
-	"""Ativa o seletor para modo de defesa"""
-	modo = "selecionar_defesa"
-	label_titulo.text = "Selecione Regiões em Defesa"
-	label_info.text = "Clique para proteger (1-3 regiões)"
-	mouse_filter = Control.MOUSE_FILTER_STOP
-	show()
-	_resetar_selecao()
 
 func desativar() -> void:
 	"""Desativa o seletor"""
@@ -133,13 +125,6 @@ func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
 	# Alternância da seleção
 	selecionadas[indice] = !selecionadas[indice]
 	
-	# Verificar limite de 3 regiões
-	var quantidade_selecionadas = selecionadas.count(true)
-	if quantidade_selecionadas > 3:
-		selecionadas[indice] = false
-		botoes_regiao[indice].button_pressed = false
-		label_info.text = "[MÁXIMO 3 REGIÕES!] Desselecione uma."
-		return
 	
 	# Atualizar visual do botão
 	_atualizar_visual_botao(indice)
@@ -203,7 +188,7 @@ func _atualizar_info_label() -> void:
 			texto_regioes.append(regioes[i])
 	
 	var texto = ", ".join(texto_regioes) if texto_regioes.size() > 0 else "nenhuma"
-	label_info.text = "[%d/3] - Selecionadas: %s" % [quantidade, texto]
+	label_info.text = "[%d/5] - Selecionadas: %s" % [quantidade, texto]
 
 func _resetar_selecao() -> void:
 	"""Reseta toda a seleção"""
@@ -215,7 +200,7 @@ func _resetar_selecao() -> void:
 		botao.remove_theme_color_override("font_color")
 		botao.remove_theme_color_override("font_focus_color")
 	
-	label_info.text = "Clique para selecionar (1-3 regiões)"
+	label_info.text = "Clique para selecionar"
 
 # ============================================================================
 # UTILIDADES

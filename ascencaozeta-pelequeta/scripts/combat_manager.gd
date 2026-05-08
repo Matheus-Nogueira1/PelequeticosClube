@@ -10,8 +10,8 @@ enum ActionType {
 }
 
 # Sinais para comunicação entre painéis
-signal turno_iniciado(combatente: Dictionary)
-signal turno_finalizado(combatente: Dictionary)
+signal turno_iniciado(combatente: CombatenteData)
+signal turno_finalizado(combatente: CombatenteData)
 signal combate_iniciado
 signal combate_finalizado(vencedor: String)
 signal estado_atualizado
@@ -26,11 +26,11 @@ signal turno_passado
 @onready var log_panel: CombatLog = $MarginContainer/VBoxContainer/LogPanel/RichTextLabel
 
 # Estado do combate
-var combatentes_jogador: Array[Dictionary] = []
-var combatentes_inimigo: Array[Dictionary] = []
-var ordem_turno: Array[Dictionary] = []
+var combatentes_jogador: Array[CombatenteData] = []
+var combatentes_inimigo: Array[CombatenteData] = []
+var ordem_turno: Array[CombatenteData] = []
 var indice_turno_atual: int = 0
-var combatente_ativo: Dictionary = {}
+var combatente_ativo: CombatenteData = null
 var combate_ativo: bool = false
 
 # Estado da ação atual
@@ -69,7 +69,7 @@ func _inicializar_combate() -> void:
 	_calcular_iniciativa()
 	
 	# Ordenar by iniciativa
-	ordem_turno.sort_custom(func(a, b): return a["iniciativa"] > b["iniciativa"])
+	ordem_turno.sort_custom(func(a, b): return a.iniciativa > b.iniciativa)
 	
 	combate_ativo = true
 	combate_iniciado.emit()
@@ -110,59 +110,34 @@ func _validar_combatentes() -> void:
 					"iniciativa": combatente["iniciativa"] = 0
 
 func _setup_exemplo() -> void:
-	"""Setup temporário com dados de exemplo"""
-	combatentes_jogador = [
-		{
-			"nome": "Guerreiro",
-			"tipo": "jogador",
-			"saude_maxima": 15,
-			"saude_atual": 15,
-			"defesa_base": 2,
-			"dano_arma": 2,
-			"atributo_dano": 1,
-			"estresse_por_regiao": {
-				"Torso": 0,
-				"Braço Direito": 0,
-				"Braço Esquerdo": 0,
-				"Perna Direita": 0,
-				"Perna Esquerda": 0
-			},
-			"status": [],
-			"iniciativa": 0
-		}
-	]
+	"""Setup temporário com dados de exemplo usando CombatenteData"""
 	
+	# Criar jogador
+	var guerreiro = CombatenteData.new("Guerreiro", "jogador")
+	guerreiro.atributo_carne = 3
+	guerreiro.atributo_forca = 3
+	guerreiro.atributo_agilidade = 2
+	guerreiro.atributo_vontade = 2
+	guerreiro.dano_arma = 2
+	guerreiro.defesa_base = 2
+	
+	combatentes_jogador = [guerreiro]
+	
+	# Criar inimigos usando templates
 	combatentes_inimigo = [
-		{
-			"nome": "Goblin",
-			"tipo": "inimigo",
-			"saude_maxima": 8,
-			"saude_atual": 8,
-			"defesa_base": 1,
-			"dano_arma": 1,
-			"atributo_dano": 0,
-			"estresse_por_regiao": {
-				"Torso": 0,
-				"Braço Direito": 0,
-				"Braço Esquerdo": 0,
-				"Perna Direita": 0,
-				"Perna Esquerda": 0
-			},
-			"status": [],
-			"iniciativa": 0
-		}
+		InimigoData.criar_carcaca()
 	]
 	
 	# Unificar array de combatentes
 	var todos = combatentes_jogador + combatentes_inimigo
-	ordem_turno = todos.duplicate(true)
+	ordem_turno = todos.duplicate()
 
 func _calcular_iniciativa() -> void:
 	"""Cada combatente rola D6 para determinar ordem de turno"""
 	for combatente in ordem_turno:
-		combatente["iniciativa"] = randi_range(1, 6)
+		combatente.iniciativa = randi_range(1, 6)
 		log_panel.registrar_evento(
-			"%s rolou iniciativa: %d" % [combatente["nome"], combatente["iniciativa"]],
+			"%s rolou iniciativa: %d" % [combatente.nome, combatente.iniciativa],
 			"info"
 		)
 
@@ -207,12 +182,12 @@ func _avancar_turno() -> void:
 	turno_iniciado.emit(combatente_ativo)
 	
 	# Ativar painel de ações se for personagem jogador
-	if combatente_ativo["tipo"] == "jogador":
-		action_panel.ativar_para(combatente_ativo)
-		party_panel.indicar_personagem_ativo(combatente_ativo)
+	if combatente_ativo.tipo == "jogador":
+		action_panel.ativar_para(combatente_ativo.para_dictionary())
+		party_panel.indicar_personagem_ativo(combatente_ativo.para_dictionary())
 		enemy_panel.desativar_seletor_alvo()
 		log_panel.registrar_evento(
-			"🎯 Turno de %s!" % combatente_ativo["nome"],
+			"🎯 Turno de %s!" % combatente_ativo.nome,
 			"turno"
 		)
 		# Limpar seleções apenas ao iniciar turno do jogador
@@ -223,7 +198,7 @@ func _avancar_turno() -> void:
 		await get_tree().create_timer(1.5).timeout
 		_executar_turno_inimigo()
 
-func _encontrar_proximo_combatente() -> Dictionary:
+func _encontrar_proximo_combatente() -> CombatenteData:
 	"""Encontra o próximo combatente vivo na ordem"""
 	var tentativas = 0
 	var max_tentativas = ordem_turno.size() * 2
@@ -232,17 +207,17 @@ func _encontrar_proximo_combatente() -> Dictionary:
 		indice_turno_atual = (indice_turno_atual + 1) % ordem_turno.size()
 		var combatente = ordem_turno[indice_turno_atual]
 		
-		# Verificar se está vivo (validar existência de saude_atual)
-		if combatente.has("saude_atual") and combatente["saude_atual"] > 0:
+		# Verificar se está vivo (não morto e não desmaiado permanentemente)
+		if not combatente.morto and combatente.esta_consciente():
 			return combatente
 		
 		tentativas += 1
 	
-	return {}
+	return null
 
 func _executar_turno_inimigo() -> void:
 	"""Executa turno automático do inimigo (placeholder)"""
-	print("[CombatManager] Turno do inimigo: %s" % combatente_ativo["nome"])
+	print("[CombatManager] Turno do inimigo: %s" % combatente_ativo.nome)
 	
 	# TODO: Implementar IA
 	# Por enquanto, passa o turno
@@ -256,7 +231,7 @@ func _executar_turno_inimigo() -> void:
 
 func _iniciar_ataque() -> void:
 	"""Inicia sequência de ataque: seleciona regiões → seleciona alvo → rola dados"""
-	if acao_em_progresso or combatente_ativo["tipo"] != "jogador":
+	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
 	
 	acao_em_progresso = true
@@ -269,36 +244,36 @@ func _iniciar_ataque() -> void:
 
 func _iniciar_pericia() -> void:
 	"""Inicia uso de perícia"""
-	if acao_em_progresso or combatente_ativo["tipo"] != "jogador":
+	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
 	
 	acao_em_progresso = true
 	log_panel.registrar_evento("Menu de perícias aberto...", "acao")
 	
 	# TODO: Mostrar menu de perícias disponíveis
-	action_panel.mostrar_menu_pericias(combatente_ativo)
+	action_panel.mostrar_menu_pericias(combatente_ativo.para_dictionary())
 
 func _iniciar_habilidade() -> void:
 	"""Inicia uso de habilidade especial"""
-	if acao_em_progresso or combatente_ativo["tipo"] != "jogador":
+	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
 	
 	acao_em_progresso = true
 	log_panel.registrar_evento("Menu de habilidades aberto...", "acao")
 	
 	# TODO: Mostrar menu de habilidades disponíveis
-	action_panel.mostrar_menu_habilidades(combatente_ativo)
+	action_panel.mostrar_menu_habilidades(combatente_ativo.para_dictionary())
 
 func _iniciar_item() -> void:
 	"""Inicia uso de item"""
-	if acao_em_progresso or combatente_ativo["tipo"] != "jogador":
+	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
 	
 	acao_em_progresso = true
 	log_panel.registrar_evento("Menu de itens aberto...", "acao")
 	
 	# TODO: Mostrar inventário
-	action_panel.mostrar_menu_itens(combatente_ativo)
+	action_panel.mostrar_menu_itens(combatente_ativo.para_dictionary())
 
 # ============================================================================
 # CALLBACKS DE SELEÇÃO
@@ -338,59 +313,57 @@ func _on_selecao_cancelada() -> void:
 
 func _on_turno_passado() -> void:
 	"""Chamado quando o jogador clica em PASSAR TURNO"""
-	if not combatente_ativo.is_empty() and combatente_ativo["tipo"] == "jogador":
+	if combatente_ativo and combatente_ativo.tipo == "jogador":
 		log_panel.registrar_evento("Turno passado.", "info")
 		action_panel.desabilitar_acoes()
 		turno_finalizado.emit(combatente_ativo)
 		await get_tree().create_timer(1.0).timeout
 		_avancar_turno()
 
-func _on_inimigo_selecionado(inimigo: Dictionary) -> void:
+func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 	"""Chamado quando jogador seleciona um inimigo"""
 	if regioes_selecionadas.is_empty():
 		log_panel.registrar_evento("Nenhuma região selecionada! Confirme antes de selecionar alvo.", "aviso")
 		return
 	
-	if not inimigo.has("nome"):
+	if not inimigo_dict.has("nome"):
 		log_panel.registrar_evento("Inimigo inválido selecionado!", "aviso")
 		return
 	
-	alvo_selecionado = inimigo
-	log_panel.registrar_evento("Alvo selecionado: %s" % inimigo["nome"], "info")
+	# Encontrar o CombatenteData correspondente
+	var alvo = null
+	for inimigo in combatentes_inimigo:
+		if inimigo.nome == inimigo_dict["nome"]:
+			alvo = inimigo
+			break
+	
+	if not alvo:
+		log_panel.registrar_evento("Inimigo não encontrado!", "aviso")
+		return
+	
+	alvo_selecionado = alvo.para_dictionary()
+	log_panel.registrar_evento("Alvo selecionado: %s" % alvo.nome, "info")
 	regional_selector.desativar()
 	
 	# Proceder com ataque
-	_processar_ataque(combatente_ativo, alvo_selecionado, regioes_selecionadas)
+	_processar_ataque(combatente_ativo, alvo, regioes_selecionadas)
 
 # ============================================================================
 # PROCESSAMENTO DE ATAQUE
 # ============================================================================
 
-func _processar_ataque(atacante: Dictionary, alvo: Dictionary, regioes: Array[String]) -> void:
+func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: Array[String]) -> void:
 	"""Executa a lógica de ataque: rola dados, calcula dano, aplica efeitos"""
 	
-	# Validar combatentes
-	if not atacante.has("nome") or not atacante.has("saude_atual"):
-		log_panel.registrar_evento("Atacante inválido!", "aviso")
-		return
-	
-	if not alvo.has("nome") or not alvo.has("saude_atual"):
-		log_panel.registrar_evento("Alvo inválido!", "aviso")
-		return
-	
-	if regioes.is_empty():
-		log_panel.registrar_evento("Nenhuma região selecionada!", "aviso")
-		return
-	
 	print("[CombatManager] Ataque de %s contra %s nas regiões: %s" % [
-		atacante["nome"], alvo["nome"], ", ".join(regioes)
+		atacante.nome, alvo.nome, ", ".join(regioes)
 	])
 	
 	# TODO: Implementar sistema de rolagem D6
 	# Por enquanto, simulamos um resultado
 	var resultado_simulado = {
-		"atacante": atacante["nome"],
-		"alvo": alvo["nome"],
+		"atacante": atacante.nome,
+		"alvo": alvo.nome,
 		"regiao": regioes[0],
 		"dado": randi_range(1, 6),
 		"categoria": _avaliar_categoria_resultado(randi_range(1, 6)),
@@ -400,23 +373,20 @@ func _processar_ataque(atacante: Dictionary, alvo: Dictionary, regioes: Array[St
 	
 	log_panel.registrar_ataque(resultado_simulado)
 	
-	# Aplicar dano ao alvo
-	if alvo.has("saude_atual"):
-		alvo["saude_atual"] = max(0, alvo["saude_atual"] - resultado_simulado["dano_aplicado"])
+	# Aplicar estresse ao alvo usando o método da classe
+	for regiao in regioes:
+		alvo.aplicar_estresse(regiao, resultado_simulado["estresse_gerado"])
 	
-	# Aplicar estresse ao alvo
-	if resultado_simulado["estresse_gerado"] > 0 and alvo.has("estresse_por_regiao"):
-		for regiao in regioes:
-			if regiao in alvo["estresse_por_regiao"]:
-				alvo["estresse_por_regiao"][regiao] += resultado_simulado["estresse_gerado"]
+	# Verificar se alvo desmaiou ou morreu
+	var desmaiou = alvo.verificar_desmaio()
 	
 	# Sincronizar atualização nos painéis
-	enemy_panel.atualizar_inimigo(alvo)
+	enemy_panel.atualizar_inimigo(alvo.para_dictionary())
 	enemy_panel.desativar_seletor_alvo()
 	estado_atualizado.emit()
 	
 	# Verificar se alvo morreu
-	if alvo.has("saude_atual") and alvo["saude_atual"] <= 0:
+	if alvo.morto:
 		_derrotar_combatente(alvo)
 	else:
 		# Permitir próxima ação ou finalizar turno
@@ -443,28 +413,19 @@ func _avaliar_categoria_resultado(dado: int) -> String:
 # SISTEMA DE COMBATENTES
 # ============================================================================
 
-func _derrotar_combatente(combatente: Dictionary) -> void:
+func _derrotar_combatente(combatente: CombatenteData) -> void:
 	"""Remove combatente derrotado e verifica fim de combate"""
 	
-	# Validar combatente
-	if not combatente.has("nome"):
-		log_panel.registrar_evento("Combatente inválido foi derrotado!", "aviso")
-		return
-	
 	log_panel.registrar_evento(
-		"⚠️  %s foi derrotado!" % combatente["nome"],
+		"⚠️  %s foi derrotado!" % combatente.nome,
 		"critico"
 	)
 	
-	if combatente.has("saude_atual"):
-		combatente["saude_atual"] = 0
-	
 	# Sincronizar remoção nos painéis
-	if combatente.has("tipo"):
-		if combatente["tipo"] == "inimigo":
-			enemy_panel.remover_inimigo(combatente)
-		else:
-			party_panel.remover_personagem(combatente)
+	if combatente.tipo == "inimigo":
+		enemy_panel.remover_inimigo(combatente.para_dictionary())
+	else:
+		party_panel.remover_personagem(combatente.para_dictionary())
 	
 	estado_atualizado.emit()
 	
@@ -474,10 +435,10 @@ func _derrotar_combatente(combatente: Dictionary) -> void:
 func _verificar_fim_combate() -> void:
 	"""Verifica se um dos lados foi completamente derrotado"""
 	var jogadores_vivos = combatentes_jogador.filter(
-		func(c): return c.has("saude_atual") and c["saude_atual"] > 0
+		func(c): return not c.morto and c.esta_consciente()
 	)
 	var inimigos_vivos = combatentes_inimigo.filter(
-		func(c): return c.has("saude_atual") and c["saude_atual"] > 0
+		func(c): return not c.morto and c.esta_consciente()
 	)
 	
 	if jogadores_vivos.is_empty():
@@ -486,7 +447,7 @@ func _verificar_fim_combate() -> void:
 		_finalizar_combate("Vitória")
 	else:
 		# Continuar combate normalmente - próxima ação ou próximo turno
-		if combatente_ativo.has("tipo") and combatente_ativo["tipo"] == "jogador":
+		if combatente_ativo.tipo == "jogador":
 			action_panel.habilitar_acoes()
 			log_panel.registrar_evento("Escolha a próxima ação ou passe o turno.", "info")
 

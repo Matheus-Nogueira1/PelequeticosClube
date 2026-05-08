@@ -50,8 +50,8 @@ signal acao_item
 ```gdscript
 # No callback do botão
 func _on_atacar_pressionado() -> void:
-    desabilitar_acoes()
-    acao_atacar.emit()  # ← CombatManager recebe isto
+	desabilitar_acoes()
+	acao_atacar.emit()  # ← CombatManager recebe isto
 ```
 
 **Conectar em CombatManager:**
@@ -73,16 +73,16 @@ signal selecao_cancelada
 ```gdscript
 # Quando jogador clica em uma região
 func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
-    selecionadas[indice] = !selecionadas[indice]
-    regiao_selecionada.emit(nome_regiao, indice)  # ← CombatManager recebe
-    
+	selecionadas[indice] = !selecionadas[indice]
+	regiao_selecionada.emit(nome_regiao, indice)  # ← CombatManager recebe
+	
 # Quando confirma seleção
 func _on_confirmar() -> void:
-    selecao_confirmada.emit(regioes_finais)  # ← [Future use]
-    
+	selecao_confirmada.emit(regioes_finais)  # ← [Future use]
+	
 # Quando cancela
 func _on_cancelar() -> void:
-    selecao_cancelada.emit()  # ← [Future use]
+	selecao_cancelada.emit()  # ← [Future use]
 ```
 
 **Conectar em CombatManager:**
@@ -103,8 +103,8 @@ signal inimigo_deseleccionado
 ```gdscript
 # Quando jogador clica em um inimigo
 func _on_botao_inimigo_pressionado(inimigo: Dictionary) -> void:
-    inimigo_selecionado_atual = inimigo
-    inimigo_selecionado.emit(inimigo)  # ← CombatManager recebe
+	inimigo_selecionado_atual = inimigo
+	inimigo_selecionado.emit(inimigo)  # ← CombatManager recebe
 ```
 
 **Conectar em CombatManager:**
@@ -129,26 +129,26 @@ signal estado_atualizado
 ```gdscript
 # Início do combate
 func _inicializar_combate() -> void:
-    # ...
-    combate_iniciado.emit()  # ← UI atualiza
+	# ...
+	combate_iniciado.emit()  # ← UI atualiza
 
 # Quando novo turno começa
 func _avancar_turno() -> void:
-    # ...
-    turno_iniciado.emit(combatente_ativo)  # ← ActionPanel se ativa
+	# ...
+	turno_iniciado.emit(combatente_ativo)  # ← ActionPanel se ativa
 
 # Quando turno termina
 func turno_finalizado() -> void:
-    turno_finalizado.emit(combatente_ativo)  # ← Próximo turno
+	turno_finalizado.emit(combatente_ativo)  # ← Próximo turno
 
 # Quando estado muda
 func _processar_ataque(...) -> void:
-    # ... aplicar dano, estresse ...
-    estado_atualizado.emit()  # ← Painéis se atualizam
+	# ... aplicar dano, estresse ...
+	estado_atualizado.emit()  # ← Painéis se atualizam
 
 # Fim do combate
 func _finalizar_combate(resultado: String) -> void:
-    combate_finalizado.emit(resultado)  # ← Mostrar resultado
+	combate_finalizado.emit(resultado)  # ← Mostrar resultado
 ```
 
 ---
@@ -161,25 +161,25 @@ func _finalizar_combate(resultado: String) -> void:
 
 2. CombatManager recebe acao_atacar
    └─→ CombatManager._iniciar_ataque()
-       └─→ regional_selector.ativar_para_ataque()
+	   └─→ regional_selector.ativar_para_ataque()
 
 3. Jogador seleciona 1-3 regiões
    └─→ RegionalSelector emite: regiao_selecionada(nome, indice)
-       └─→ CombatManager._on_regiao_selecionada()
+	   └─→ CombatManager._on_regiao_selecionada()
 
 4. CombatManager habilita seletor de alvo
    └─→ enemy_panel.ativar_seletor_alvo()
 
 5. Jogador clica em um inimigo
    └─→ EnemyPanel emite: inimigo_selecionado(inimigo)
-       └─→ CombatManager._on_inimigo_selecionado()
+	   └─→ CombatManager._on_inimigo_selecionado()
 
 6. CombatManager processa ataque
    └─→ CombatManager._processar_ataque(atacante, alvo, regioes)
-       ├─→ Rola dados D6
-       ├─→ CombatLog.registrar_ataque(resultado)
-       ├─→ Aplica dano/estresse
-       └─→ CombatManager emite: estado_atualizado
+	   ├─→ Rola dados D6
+	   ├─→ CombatLog.registrar_ataque(resultado)
+	   ├─→ Aplica dano/estresse
+	   └─→ CombatManager emite: estado_atualizado
 
 7. Estado atualiza painéis
    ├─→ PartyPanel.atualizar_personagem(alvo)
@@ -188,8 +188,8 @@ func _finalizar_combate(resultado: String) -> void:
 
 8. Turno finaliza
    └─→ CombatManager._avancar_turno()
-       └─→ CombatManager emite: turno_iniciado(proximo_combatente)
-           └─→ ActionPanel se ativa para novo personagem
+	   └─→ CombatManager emite: turno_iniciado(proximo_combatente)
+		   └─→ ActionPanel se ativa para novo personagem
 ```
 
 ---
@@ -225,8 +225,8 @@ signal meu_novo_sinal(parametro: String)
 
 ```gdscript
 func alguma_funcao() -> void:
-    # ... fazer algo ...
-    meu_novo_sinal.emit("valor")
+	# ... fazer algo ...
+	meu_novo_sinal.emit("valor")
 ```
 
 ### 3. Conecte em CombatManager._conectar_sinais_paineis()
@@ -235,8 +235,8 @@ func alguma_funcao() -> void:
 novo_script.meu_novo_sinal.connect(_on_meu_novo_sinal)
 
 func _on_meu_novo_sinal(parametro: String) -> void:
-    print("Recebi: " + parametro)
-    # ... tratar sinal ...
+	print("Recebi: " + parametro)
+	# ... tratar sinal ...
 ```
 
 ---
@@ -246,24 +246,24 @@ func _on_meu_novo_sinal(parametro: String) -> void:
 ```gdscript
 # Adicione no _ready() do CombatManager para verificar conexões
 func _debug_sinais() -> void:
-    print("=== SINAIS CONECTADOS ===")
-    
-    if action_panel:
-        print("✓ ActionPanel sinais:", [
-            "acao_atacar" if action_panel.is_connected("acao_atacar", Callable(self, "_iniciar_ataque")) else "✗ acao_atacar"
-        ])
-    
-    if regional_selector:
-        print("✓ RegionalSelector sinais:", [
-            "regiao_selecionada" if regional_selector.is_connected("regiao_selecionada", Callable(self, "_on_regiao_selecionada")) else "✗ regiao_selecionada"
-        ])
-    
-    if enemy_panel:
-        print("✓ EnemyPanel sinais:", [
-            "inimigo_selecionado" if enemy_panel.is_connected("inimigo_selecionado", Callable(self, "_on_inimigo_selecionado")) else "✗ inimigo_selecionado"
-        ])
-    
-    print("=== FIM DEBUG ===")
+	print("=== SINAIS CONECTADOS ===")
+	
+	if action_panel:
+		print("✓ ActionPanel sinais:", [
+			"acao_atacar" if action_panel.is_connected("acao_atacar", Callable(self, "_iniciar_ataque")) else "✗ acao_atacar"
+		])
+	
+	if regional_selector:
+		print("✓ RegionalSelector sinais:", [
+			"regiao_selecionada" if regional_selector.is_connected("regiao_selecionada", Callable(self, "_on_regiao_selecionada")) else "✗ regiao_selecionada"
+		])
+	
+	if enemy_panel:
+		print("✓ EnemyPanel sinais:", [
+			"inimigo_selecionado" if enemy_panel.is_connected("inimigo_selecionado", Callable(self, "_on_inimigo_selecionado")) else "✗ inimigo_selecionado"
+		])
+	
+	print("=== FIM DEBUG ===")
 
 # Chamar em _ready():
 _debug_sinais()
