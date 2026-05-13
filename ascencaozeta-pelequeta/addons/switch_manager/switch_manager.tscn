@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://8bjgw40uftjv"]
+
+[ext_resource type="Script" path="res://SwitchManager/switch_manager.gd" id="1_e6pde"]
+
+[node name="SwitchManager" type="Node"]
+script = ExtResource("1_e6pde")
