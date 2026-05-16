@@ -102,9 +102,13 @@ Banco de dados de habilidades especiais
 
 ---
 
-## 🔄 Como Migrar do Sistema Antigo
+---
 
-### Antes (Dicionário):
+## 📚 Documentação Relacionada
+
+- [ATRIBUTOS_OBLIVIO.md](ATRIBUTOS_OBLIVIO.md) - Sistema de Atributos Fixos e Mutáveis
+- [STATUS_COMBATE.md](STATUS_COMBATE.md) - Status e Progresso da Tela de Combate
+- [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md) - Guia de Implementação
 ```gdscript
 # Sistema antigo com HP total
 var combatentes_jogador = [

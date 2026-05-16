@@ -90,14 +90,14 @@ func _validar_combatentes() -> void:
 	for combatente in todos_combatentes:
 		for campo in campos_obrigatorios:
 			if not combatente.has(campo):
+				var nome_combo = combatente["nome"] if combatente.has("nome") else "Desconhecido"
 				print("[CombatManager] AVISO: Combatente '%s' sem campo '%s'" % [
-					combatente.get("nome", "Desconhecido"), campo
+					nome_combo, campo
 				])
 				# Adicionar valor padrão
 				match campo:
 					"nome": combatente["nome"] = "Desconhecido"
 					"tipo": combatente["tipo"] = "neutro"
-					"saude_maxima": combatente["saude_maxima"] = 10
 					"saude_atual": combatente["saude_atual"] = 10
 					"defesa_base": combatente["defesa_base"] = 1
 					"dano_arma": combatente["dano_arma"] = 1

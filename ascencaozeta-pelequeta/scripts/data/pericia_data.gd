@@ -1,194 +1,126 @@
-## Banco de dados de perícias OBLIVIO
-## Cada perícia é vinculada a um atributo
+## Sistema de Conhecimentos OBLIVIO RPG
+## 10 Conhecimentos com testes D6 + atributo base + treino
+## Zona de Acerto: 1=crítico falha, 2-3=falha normal, 4-5=sucesso, 6=sucesso extremo
 
 class_name PericiaData
 extends RefCounted
 
-## Definição de uma perícia
-class Pericia:
-	var nome: String
-	var descricao: String
-	var atributo_base: String  # forca, inteligencia, agilidade, vontade, vitalidade
-	var dificuldade_padrao: int = 0  # 0 para teste normal, maior = mais difícil
-	
-	func _init(p_nome: String, p_descricao: String, p_atributo: String, p_dif: int = 0):
-		nome = p_nome
-		descricao = p_descricao
-		atributo_base = p_atributo
-		dificuldade_padrao = p_dif
+## Mapa de Conhecimentos OBLIVIO para seus atributos base
+const CONHECIMENTOS_ATRIBUTOS = {
+	"Bandidagem": "fuga",       # Delitos, furtividade de crimes
+	"Duelo": "forca",           # Estratégia marcial, brechas em defesa
+	"Emocional": "determinacao", # Autocontrole, gestão de sentimentos
+	"Esforço": "carne",         # Físico desgastante, resistência corporal
+	"Místico": "mente",         # Sobrenatural, artes arcanas, seres outros
+	"Mundo": "mente",           # Natureza, animais, sobrevivência
+	"Rastro": "fuga",           # Percepção, detalhes ocultos, sensoriais
+	"Reflexos": "fuga",         # Esquiva, corporais rápidos, movimento
+	"Saber": "mente",           # Memória, estudos, conhecimento geral
+	"Social": "determinacao"    # Persuasão, manipulação emocional, charisma
+}
 
-## Banco de todas as perícias
-var pericias: Dictionary = {}
+## Descrições dos 10 Conhecimentos OBLIVIO
+const CONHECIMENTOS_DESCRICOES = {
+	"Bandidagem": "Cometer delitos, furto, invasão, se esgueirar de guardas",
+	"Duelo": "Estratégia de combate, identificar brechas na defesa, vantagens táticas",
+	"Emocional": "Controlar raiva, lágrimas, manter calma, enfrentar medos",
+	"Esforço": "Ações cansativas, manter fôlego, empurrar pesado, resistir venenos",
+	"Místico": "Fenômenos sobrenaturais, runas arcanas, seres de outra realidade",
+	"Mundo": "Natureza, animais selvagens, pontos cardeais, plantas venenosas",
+	"Rastro": "Percepção aguçada, encontrar coisas, ler lábios, farejar pistas",
+	"Reflexos": "Esquivar-se, acertar alvo em movimento, manter equilíbrio",
+	"Saber": "Memória de estudos, hobby favorito, conversa em mesa de bar",
+	"Social": "Persuadir, mentir, convencer, acalmar emoções alheias"
+}
 
-func _init() -> void:
-	_inicializar_pericias()
-
-func _inicializar_pericias() -> void:
-	"""Define todas as perícias OBLIVIO disponíveis"""
-	
-	# Perícias de FORÇA
-	pericias["Ataque com Espada"] = Pericia.new(
-		"Ataque com Espada",
-		"Atacar com uma espada ou arma branca similar",
-		"forca"
-	)
-	
-	pericias["Ataque Desarmado"] = Pericia.new(
-		"Ataque Desarmado",
-		"Lutar sem armas, usando puñhos ou técnicas marciais",
-		"forca"
-	)
-	
-	pericias["Escalar"] = Pericia.new(
-		"Escalar",
-		"Subir superfícies verticais ou difíceis",
-		"forca"
-	)
-	
-	# Perícias de INTELIGÊNCIA
-	pericias["Conhecimento Geral"] = Pericia.new(
-		"Conhecimento Geral",
-		"Saber sobre história, cultura e fatos gerais",
-		"inteligencia"
-	)
-	
-	pericias["Investigação"] = Pericia.new(
-		"Investigação",
-		"Examinar cenas, buscar pistas e indícios",
-		"inteligencia"
-	)
-	
-	pericias["Ofício"] = Pericia.new(
-		"Ofício",
-		"Criar, reparar ou usar ferramentas especializadas",
-		"inteligencia"
-	)
-	
-	# Perícias de AGILIDADE
-	pericias["Esquiva"] = Pericia.new(
-		"Esquiva",
-		"Desviar de ataques ou efeitos danosos",
-		"agilidade"
-	)
-	
-	pericias["Furtividade"] = Pericia.new(
-		"Furtividade",
-		"Mover-se silenciosamente ou esconder-se",
-		"agilidade"
-	)
-	
-	pericias["Acrobacia"] = Pericia.new(
-		"Acrobacia",
-		"Mover-se graciosamente, fazer flips ou outras manobras",
-		"agilidade"
-	)
-	
-	# Perícias de VONTADE
-	pericias["Intimidação"] = Pericia.new(
-		"Intimidação",
-		"Assustar ou forçar com presença intimidadora",
-		"vontade"
-	)
-	
-	pericias["Resistência Mental"] = Pericia.new(
-		"Resistência Mental",
-		"Resistir a manipulação psicológica ou estresse",
-		"vontade"
-	)
-	
-	pericias["Liderança"] = Pericia.new(
-		"Liderança",
-		"Inspirar e guiar aliados",
-		"vontade"
-	)
-	
-	# Perícias de VITALIDADE
-	pericias["Resistência"] = Pericia.new(
-		"Resistência",
-		"Suportar privação, fadiga ou dor",
-		"vitalidade"
-	)
-	
-	pericias["Medicina"] = Pericia.new(
-		"Medicina",
-		"Tratar ferimentos e doenças",
-		"vitalidade"
-	)
-	
-	pericias["Recuperação"] = Pericia.new(
-		"Recuperação",
-		"Recuperar-se de efeitos negativos mais rapidamente",
-		"vitalidade"
-	)
-
-## Obtém uma perícia pelo nome
-func get_pericia(nome: String) -> Pericia:
-	if pericias.has(nome):
-		return pericias[nome]
-	return null
-
-## Lista todas as perícias de um atributo
-func pericias_por_atributo(atributo: String) -> Array:
-	var lista = []
-	for nome in pericias:
-		if pericias[nome].atributo_base == atributo:
-			lista.append(pericias[nome])
-	return lista
-
-## Testa uma perícia (rola D6 + atributo + treino vs dificuldade)
-func testar_pericia(combatente: CombatenteData, nome_pericia: String, dificuldade: int = 0) -> Dictionary:
-	var pericia = get_pericia(nome_pericia)
-	
-	if pericia == null:
+## Testa um Conhecimento OBLIVIO (D6 + atributo base + treino + especialização)
+func testar_conhecimento(combatente: CombatenteData, conhecimento: String, dificuldade: int = 0) -> Dictionary:
+	# Validar conhecimento
+	if not CONHECIMENTOS_ATRIBUTOS.has(conhecimento):
 		return {
 			"sucesso": false,
-			"resultado": 0,
-			"dificuldade": dificuldade,
-			"erro": "Perícia não encontrada: %s" % nome_pericia
+			"conhecimento": conhecimento,
+			"personagem": combatente.nome,
+			"erro": "Conhecimento não existe: %s" % conhecimento
 		}
 	
-	# Obter atributo
+	# Obter valor do atributo base
+	var atributo_nome = CONHECIMENTOS_ATRIBUTOS[conhecimento]
 	var attr_valor = 1
-	match pericia.atributo_base:
+	match atributo_nome:
+		"carne": attr_valor = combatente.atributo_carne
 		"forca": attr_valor = combatente.atributo_forca
-		"inteligencia": attr_valor = combatente.atributo_inteligencia
-		"agilidade": attr_valor = combatente.atributo_agilidade
-		"vontade": attr_valor = combatente.atributo_vontade
-		"vitalidade": attr_valor = combatente.atributo_vitalidade
+		"mente": attr_valor = combatente.atributo_mente
+		"fuga": attr_valor = combatente.atributo_fuga
+		"determinacao": attr_valor = combatente.atributo_determinacao
 	
-	# Obter nível de treino (0 se não tem)
-	var treino = combatente.pericias.get(nome_pericia, 0)
+	# Obter nível de treino
+	var treino = combatente.obter_treino_conhecimento(conhecimento)
+	
+	# Bonus de especialização
+	var bonus_especializacao = 0
+	if combatente.tem_especializacao(conhecimento):
+		bonus_especializacao = 2
 	
 	# Rolar D6
 	var dado = randi_range(1, 6)
-	var resultado = dado + attr_valor + treino
+	var total = dado + attr_valor + treino + bonus_especializacao
 	
-	# Dificuldade (padrão = 0, mais alto = mais difícil)
-	var dif_final = pericia.dificuldade_padrao + dificuldade
-	var sucesso = resultado > dif_final
+	# ZONA DE ACERTO OBLIVIO 2.2:
+	# 1 = Falha Crítica (algo extremamente ruim acontece)
+	# 2-3 = Falha Regular (não acontece como esperado)
+	# 4-5 = Sucesso Regular (o que era esperado acontece)
+	# 6 = Sucesso Extremo (algo adicional favorável acontece)
 	
-	# Categorizar resultado
-	var categoria = "Regular"
-	if resultado == 6:
-		categoria = "Crítico"
-	elif resultado == 1:
-		categoria = "Falha"
+	var resultado: String
+	var sucesso: bool
+	
+	match dado:
+		1:
+			resultado = "Falha Crítica"
+			sucesso = false
+		2, 3:
+			resultado = "Falha"
+			sucesso = false
+		4, 5:
+			resultado = "Sucesso"
+			sucesso = true
+		6:
+			resultado = "Sucesso Extremo"
+			sucesso = true
 	
 	return {
-		"sucesso": sucesso,
+		"conhecimento": conhecimento,
+		"personagem": combatente.nome,
 		"dado": dado,
-		"atributo": attr_valor,
+		"atributo_base": atributo_nome,
+		"atributo_valor": attr_valor,
 		"treino": treino,
+		"especializado": combatente.tem_especializacao(conhecimento),
+		"bonus_especializacao": bonus_especializacao,
+		"total": total,
 		"resultado": resultado,
-		"dificuldade": dif_final,
-		"categoria": categoria,
-		"pericia": nome_pericia,
-		"personagem": combatente.nome
+		"sucesso": sucesso,
+		"dificuldade": dificuldade
 	}
 
-## Retorna todas as perícias disponíveis
-func get_todas_pericias() -> Array:
-	var lista = []
-	for nome in pericias:
-		lista.append(pericias[nome])
+## Retorna lista de todos os Conhecimentos disponíveis
+func obter_conhecimentos() -> Array[String]:
+	var lista: Array[String] = []
+	for conhecimento in CONHECIMENTOS_ATRIBUTOS.keys():
+		lista.append(conhecimento)
 	return lista
+
+## Retorna os conhecimentos agrupados por atributo base
+func conhecimentos_por_atributo(atributo: String) -> Array[String]:
+	var lista: Array[String] = []
+	for conhecimento in CONHECIMENTOS_ATRIBUTOS:
+		if CONHECIMENTOS_ATRIBUTOS[conhecimento] == atributo:
+			lista.append(conhecimento)
+	return lista
+
+## Retorna descrição de um conhecimento
+func obter_descricao(conhecimento: String) -> String:
+	if CONHECIMENTOS_DESCRICOES.has(conhecimento):
+		return CONHECIMENTOS_DESCRICOES[conhecimento]
+	return "Conhecimento desconhecido"

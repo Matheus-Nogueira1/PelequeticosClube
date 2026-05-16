@@ -4,50 +4,87 @@ Bem-vindo à documentação do projeto! Aqui você encontrará guias, referênci
 
 ---
 
-## 📑 Índice de Documentação
+## ⭐ COMECE AQUI
+
+**[SUMARIO_EXECUTIVO.md](SUMARIO_EXECUTIVO.md)** - Visão geral do projeto (60% completo)
+- Status atual do desenvolvimento
+- Erros corrigidos
+- Próximas prioridades
+- Estatísticas de progresso
+
+---
+
+## 📑 Índice Organizado
+
+### 🎯 Sistema de Atributos OBLIVIO 2.2
+- [**ATRIBUTOS_OBLIVIO.md**](ATRIBUTOS_OBLIVIO.md) - ⭐ **NOVO!**
+  - Atributos Fixos (Carne, Força, Mente, Fuga, Determinação)
+  - Atributos Mutáveis (Fôlego, Dano, Coragem, Proteção, Velocidade)
+  - Sistema de Perícias (10 perícias OBLIVIO)
+  - Fórmulas matemáticas e exemplos
+  - Implementação em GDScript
 
 ### 🎮 Sistema de Combate
-- [**OBLIVIO_REFERENCE.md**](../scripts/OBLIVIO_REFERENCE.md) - Referência completa do sistema OBLIVIO
+- [**STATUS_COMBATE.md**](STATUS_COMBATE.md) - ⭐ **NOVO!**
+  - Checklist de funcionalidades
+  - ✅ Implementado (60% do sistema)
+  - 🔶 Parcial (Dano, Habilidades)
+  - 🔴 Não feito (Movimento, Itens)
+
+- [**OBLIVIO_REFERENCE.md**](OBLIVIO_REFERENCE.md)
   - Características do sistema D6 brasileiro
   - 5 regiões corporais
   - Categorias de ações
   - Sistema de estresse psicológico
 
-- [**IMPLEMENTATION_GUIDE.md**](../scripts/IMPLEMENTATION_GUIDE.md) - Guia de implementação técnica
+- [**IMPLEMENTATION_GUIDE.md**](IMPLEMENTATION_GUIDE.md)
   - Arquitetura de componentes
   - Fluxo de turno
   - Sistema de sinais (signals)
   - Estrutura de dados de combatentes
 
-- [**COMBAT_FIXES_v2.md**](../scripts/COMBAT_FIXES_v2.md) - Histórico de correções
-  - Bugs encontrados e resolvidos
-  - Padrões de solução
-  - Validação de dados
+- [**REFACTORING_OBLIVIO.md**](REFACTORING_OBLIVIO.md) - ⭐ **ATUALIZADO!**
+  - Refatoração HP → Estresse por Região
+  - Integração de CombatenteData
+  - Compatibilidade com UI Panels
 
 ### 🛡️ Melhorias e Padrões
-- [**DEFENSIVE_IMPROVEMENTS.md**](../scripts/DEFENSIVE_IMPROVEMENTS.md) - Padrões defensivos de código
+- [**DEFENSIVE_IMPROVEMENTS.md**](DEFENSIVE_IMPROVEMENTS.md)
+  - Padrões defensivos de código
   - Validação de dicionários
   - Tratamento de erros
-  - Autorecuperação
-  - Checklist de implementação
 
-### 📋 Documentação Geral
-- [**INDEX_COMPLETE.md**](../scripts/INDEX_COMPLETE.md) - Índice completo de scripts e estruturas
+### 📋 Documentação Histórica
+- [**COMBAT_FIXES_v2.md**](COMBAT_FIXES_v2.md)
+  - Bugs encontrados e resolvidos
+  - Padrões de solução
+
+- [**INDEX_COMPLETE.md**](INDEX_COMPLETE.md)
+  - Índice completo de scripts
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Guia de Leitura Recomendado
 
-### 1️⃣ Entender o Sistema
-Leia primeiro: [OBLIVIO_REFERENCE.md](../scripts/OBLIVIO_REFERENCE.md)
+### Para Iniciantes (Primeira Vez)
+1. [SUMARIO_EXECUTIVO.md](SUMARIO_EXECUTIVO.md) - 10 min
+2. [ATRIBUTOS_OBLIVIO.md](ATRIBUTOS_OBLIVIO.md) - 15 min  
+3. [STATUS_COMBATE.md](STATUS_COMBATE.md) - 15 min
+4. **Explore:** `scripts/combat_manager.gd` - 10 min
 
-### 2️⃣ Implementação Técnica
-Depois: [IMPLEMENTATION_GUIDE.md](../scripts/IMPLEMENTATION_GUIDE.md)
+**Total: ~50 minutos**
 
-### 3️⃣ Padrões de Código
-Para manutenção: [DEFENSIVE_IMPROVEMENTS.md](../scripts/DEFENSIVE_IMPROVEMENTS.md)
+### Para Implementadores (Novo Feature)
+1. [STATUS_COMBATE.md](STATUS_COMBATE.md) - saber o que falta
+2. [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md) - padrões
+3. [ATRIBUTOS_OBLIVIO.md](ATRIBUTOS_OBLIVIO.md) - referência
+4. **Explore:** `scripts/data/` como exemplos
 
-### 4️⃣ Debugging
+### Para Debugadores (Tem um Bug)
+1. [SUMARIO_EXECUTIVO.md](SUMARIO_EXECUTIVO.md) - erros recentes
+2. [STATUS_COMBATE.md](STATUS_COMBATE.md) - contexto
+3. [COMBAT_FIXES_v2.md](COMBAT_FIXES_v2.md) - bugs similares
+4. [DEFENSIVE_IMPROVEMENTS.md](DEFENSIVE_IMPROVEMENTS.md) - padrões
 Se encontrar problemas: [COMBAT_FIXES_v2.md](../scripts/COMBAT_FIXES_v2.md)
 
 ---

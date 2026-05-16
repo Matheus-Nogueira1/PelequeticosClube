@@ -61,15 +61,23 @@ func registrar_ataque(dados: Dictionary) -> void:
 	)
 	
 	# Dano (se houver)
-	if dados.get("dano_aplicado", 0) > 0:
+	var dano_aplicado = 0
+	if dados.has("dano_aplicado"):
+		dano_aplicado = dados["dano_aplicado"]
+	
+	if dano_aplicado > 0:
 		linhas.append(
-			"  [color=red]→ DANO: %d[/color]" % dados["dano_aplicado"]
+			"  [color=red]→ DANO: %d[/color]" % dano_aplicado
 		)
 	
 	# Estresse (se houver)
-	if dados.get("estresse_gerado", 0) > 0:
+	var estresse_gerado = 0
+	if dados.has("estresse_gerado"):
+		estresse_gerado = dados["estresse_gerado"]
+	
+	if estresse_gerado > 0:
 		linhas.append(
-			"  [color=mediumpurple]→ ESTRESSE: +%d[/color]" % dados["estresse_gerado"]
+			"  [color=mediumpurple]→ ESTRESSE: +%d[/color]" % estresse_gerado
 		)
 	
 	# Adicionar todas as linhas

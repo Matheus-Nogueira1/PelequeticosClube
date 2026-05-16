@@ -12,20 +12,24 @@ const REGIOES = ["Torso", "Braço Direito", "Braço Esquerdo", "Perna Direita", 
 var nome: String
 var tipo: String  # "jogador", "inimigo", "npc"
 
-## Atributos fixos OBLIVIO (5 pilares)
-var atributo_carne: int = 1      # Define limite base de estresse representa a sua saúde, vigor e integridade física;
-var atributo_forca: int = 1	    # Representa a sua potência muscular e capacidadede danificar;
-var atributo_mente: int = 1		# Representa a sua aptidão e resiliência intelectual;
-var atributo_fuga: int = 1		# Representa a sua agilidade e velocidade de reação;
-var atributo_determinacao: int = 1		# Representa a sua resiliência e inteligência emocional;
+## Atributos Fixos OBLIVIO (5 pilares)
+var atributo_carne: int = 1              # Saúde, vigor e integridade física
+var atributo_forca: int = 1              # Potência muscular e capacidade de danificar
+var atributo_mente: int = 1              # Aptidão e resiliência intelectual
+var atributo_fuga: int = 1               # Agilidade e velocidade de reação
+var atributo_determinacao: int = 1       # Resiliência e inteligência emocional
 
-## Atributos Mutáveis é derivado de dois Atributos Fixos específicos, e para calculá-lo basta somar os valores dos Atributos Fixos correspondentes, dividir por 2 e arredondar para baixo.
-
-var atributo_folego: int = 1		# Representa a sua capacidade de recuperação durante momentos de ação;
-var atributo_dano: int = 1      	# Representa a intensidade com que você machuca alguma coisa;
-var atributo_coragem: int = 1		# Representa até que ponto você consegue se manter firme;
-var atributo_protecao: int = 1		# Representa o quão difícil é te acertar com um ataque;
-var atributo_velocidade: int = 1		# Representa o quão rápido consegue se mover;
+## Atributos Mutáveis (derivados dos Fixos: (fixo1 + fixo2) / 2, arredondado para baixo)
+## - Fôlego = (Carne + Determinação) / 2
+## - Dano = (Força + Carne) / 2
+## - Coragem = (Determinação + Mente) / 2
+## - Proteção = (Carne + Fuga) / 2
+## - Velocidade = (Fuga + Determinação) / 2
+var atributo_folego: int = 1             # Capacidade de recuperação durante ação
+var atributo_dano: int = 1               # Intensidade de dano
+var atributo_coragem: int = 1            # Firmeza e resiliência emocional
+var atributo_protecao: int = 1           # Dificuldade de ser acertado
+var atributo_velocidade: int = 1         # Velocidade de movimento
 
 
 ## Dados de combate
@@ -49,18 +53,24 @@ var estresse_por_regiao: Dictionary = {
 var pontos_acao_atuais: int = 3
 var pontos_acao_maximos: int = 3
 
-## Pericias conhecidas
-var pericias: Dictionary = { "Bandidagem": 1 # É usado para cometer delitos ou fazer o seu melhor para não te pegarem enquanto os comete; 
-, "Duelo": 1 # É usado para testar seus conhecimentos marciais e identificar brechas ou vantagens em um combate	
-, "Emocional": 1 # É usado para testar as suas emoções e definir o quão bem você consegue lidar com elas;
-, "Esforço": 1 # É usado para realizar ações físicas desgastantes, como manter o fôlego, empurrar algo pesado, resistir a venenos…;
-, "Místico": 1 # É usado para saber de temas não-mundanos, como artes ritualísticas, religiosas, místicas…;
-, "Mundo": 1 # É usado para saber sobre o mundo natural, a terra, o que habita nela e como sobreviver;
-, "Rastro": 1 # É usado para testar seus sentidos e a sua capacidade de perceber detalhes ocultos no ambiente;
-, "Reflexos": 1 # É usado para testar a sua agilidade enquanto se esquiva ou acerta  alguma coisa;
-, "Saber": 1 # É usado para testar diferentes conhecimentos adquiridos através de estudo, educação ou conversas;
-, "Social": 1 # É usado para influenciar emoções alheias e alterar a percepção que outras pessoas têm sobre você; 
-}  # {"nome": nivel}
+## CONHECIMENTOS (Perícias OBLIVIO)
+## Nível de treino em cada um dos 10 Conhecimentos (sem máximo)
+var conhecimentos_treino: Dictionary = { 
+	"Bandidagem": 0,    # Delitos, furtividade de crimes
+	"Duelo": 0,         # Estratégia marcial, brechas em defesa
+	"Emocional": 0,     # Autocontrole, gestão de sentimentos
+	"Esforço": 0,       # Físico desgastante, resistência corporal
+	"Místico": 0,       # Sobrenatural, artes arcanas, seres outros
+	"Mundo": 0,         # Natureza, animais, sobrevivência
+	"Rastro": 0,        # Percepção, detalhes ocultos, sensoriais
+	"Reflexos": 0,      # Esquiva, corporais rápidos, movimento
+	"Saber": 0,         # Memória, estudos, conhecimento geral
+	"Social": 0         # Persuasão, manipulação emocional, charisma
+}
+
+## Conhecimentos Especializados (persona tem 3 + Mente/2 especializados)
+## Ao testar especializado, soma +2 ao resultado
+var conhecimentos_especializados: Array[String] = []
 
 
 ## Habilidades especiais
@@ -75,6 +85,52 @@ var inventario: Array[String] = []
 func _init(p_nome: String, p_tipo: String) -> void:
 	nome = p_nome
 	tipo = p_tipo
+	_calcular_atributos_mutaveis()
+
+## Calcula todos os Atributos Mutáveis baseado nos Atributos Fixos
+func _calcular_atributos_mutaveis() -> void:
+	atributo_folego = (atributo_carne + atributo_determinacao) / 2
+	atributo_dano = (atributo_forca + atributo_carne) / 2
+	atributo_coragem = (atributo_determinacao + atributo_mente) / 2
+	atributo_protecao = (atributo_carne + atributo_fuga) / 2
+	atributo_velocidade = (atributo_fuga + atributo_determinacao) / 2
+
+## Atualiza atributo fixo e recalcula os mutáveis
+func atualizar_atributo_fixo(atributo: String, valor: int) -> void:
+	match atributo.to_lower():
+		"carne": atributo_carne = valor
+		"forca": atributo_forca = valor
+		"mente": atributo_mente = valor
+		"fuga": atributo_fuga = valor
+		"determinacao": atributo_determinacao = valor
+	_calcular_atributos_mutaveis()
+
+## ===== CONHECIMENTOS (PERÍCIAS OBLIVIO) =====
+
+## Verifica se um Conhecimento é especializado
+func tem_especializacao(conhecimento: String) -> bool:
+	return conhecimento in conhecimentos_especializados
+
+## Adiciona especialização a um conhecimento
+func adicionar_especializacao(conhecimento: String) -> void:
+	if conhecimento in conhecimentos_treino and not tem_especializacao(conhecimento):
+		conhecimentos_especializados.append(conhecimento)
+
+## Remove especialização de um conhecimento
+func remover_especializacao(conhecimento: String) -> void:
+	if tem_especializacao(conhecimento):
+		conhecimentos_especializados.erase(conhecimento)
+
+## Retorna nível de treino em um conhecimento
+func obter_treino_conhecimento(conhecimento: String) -> int:
+	if conhecimentos_treino.has(conhecimento):
+		return conhecimentos_treino[conhecimento]
+	return 0
+
+## Aumenta nível de treino em um conhecimento
+func aumentar_treino_conhecimento(conhecimento: String, quantidade: int = 1) -> void:
+	if conhecimentos_treino.has(conhecimento):
+		conhecimentos_treino[conhecimento] += quantidade
 
 ## ===== VERIFICAÇÃO DE STATUS =====
 
@@ -213,7 +269,15 @@ func para_dictionary() -> Dictionary:
 
 ## Cria a partir de um Dictionary
 static func de_dictionary(dados: Dictionary) -> CombatenteData:
-	var combatente = CombatenteData.new(dados.get("nome", "Desconhecido"), dados.get("tipo", "npc"))
+	var nome = "Desconhecido"
+	if dados.has("nome"):
+		nome = dados["nome"]
+	
+	var tipo = "npc"
+	if dados.has("tipo"):
+		tipo = dados["tipo"]
+	
+	var combatente = CombatenteData.new(nome, tipo)
 	
 	if dados.has("atributo_carne"):
 		combatente.atributo_carne = dados["atributo_carne"]
@@ -251,8 +315,10 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 	if dados.has("pontos_acao_maximos"):
 		combatente.pontos_acao_maximos = dados["pontos_acao_maximos"]
 	
-	if dados.has("pericias"):
-		combatente.pericias = dados["pericias"]
+	if dados.has("conhecimentos_treino"):
+		combatente.conhecimentos_treino = dados["conhecimentos_treino"]
+	if dados.has("conhecimentos_especializados"):
+		combatente.conhecimentos_especializados = dados["conhecimentos_especializados"]
 	if dados.has("habilidades"):
 		combatente.habilidades = dados["habilidades"]
 	if dados.has("inventario"):
