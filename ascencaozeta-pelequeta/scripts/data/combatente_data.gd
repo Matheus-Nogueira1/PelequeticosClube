@@ -79,6 +79,18 @@ var habilidades: Array[String] = []
 ## Itens
 var inventario: Array[String] = []
 
+## Sistema de Fardos (Dark Souls curses) - Aplicados quando Torso atinge limite
+var fardos: Array = []                           # Array de Fardo aplicados
+var regioes_perdidas: Array[String] = []       # Membros perdidos por Guilhotina
+var numero_desmaios_total: int = 0             # Total de vezes que atingiu limite de Torso
+var limite_estresse_maximo_reducao: int = 0    # Redução permanente por Mal das Pernas
+
+## Flags de efeitos de Fardos
+var tem_covardia: bool = false                  # -2x Coragem em testes
+var tem_fragilidade: bool = false              # +1D6 dano recebido
+var tem_ataque_cardiaco: bool = false          # Risco de morte em próxima vez
+var morto: bool = false                         # Flag de morte permanente
+
 
 ## ===== MÉTODOS =====
 
@@ -229,17 +241,46 @@ func consumir_pontos_acao(custo: int) -> bool:
 		return true
 	return false
 
-## ===== DESMAIOS =====
+## ===== DESMAIOS E FARDOS =====
 
-## Verifica se personagem desmaiou e trata
+## Processa quando Torso atinge limite de estresse (Dark Souls Curse System)
+func processar_limite_torso() -> Dictionary:
+	"""
+	Quando Torso atinge limite:
+	1. Ganha um Fardo (maldição)
+	2. Fica desmaiado (TODAS regiões esgotadas = Torso em limite)
+	3. Pode ser revivido por habilidades
+	
+	Retorna informações sobre o Fardo aplicado
+	"""
+	numero_desmaios_total += 1
+	
+	# Sorteia novo Fardo
+	var novo_fardo = FardoData.sortear_fardo(numero_desmaios_total)
+	var resultado_fardo = FardoData.aplicar_fardo(self, novo_fardo)
+	
+	# NÃO reseta Torso - fica em limite para manter desmaiado
+	# Torso permanece em {"atual": limite, "limite": limite}
+	
+	return {
+		"numero_desmaio": numero_desmaios_total,
+		"fardo_aplicado": novo_fardo.nome,
+		"resultado_fardo": resultado_fardo,
+		"mensagem": "Desmaio #%d - %s! %s" % [numero_desmaios_total, novo_fardo.nome, resultado_fardo.get("mensagem", "")]
+	}
+
+## Revive um combatente (reduz 1 ponto de Torso para acordar)
+func reviver() -> void:
+	"""Revive o combatente desmaiado removendo 1 Torso (pode agir novamente)"""
+	var torso = estresse_por_regiao["Torso"]
+	torso["atual"] = max(0, torso["atual"] - 1)
+
+## Verifica se personagem está desmaiado (TODAS regiões no limite)
 func verificar_desmaio() -> bool:
-	if esta_desmaiado():
-		morto = true
-		print("[CombatenteData] %s morreu!" % nome)
-		return true
-	return false
+	"""Apenas verifica, sem aplicar Fardo (use processar_limite_torso() para isso)"""
+	return esta_desmaiado()
 
-## ===== COMPATIBILIDADE COM DICTIONÁRIO =====
+## ===== COMPATIBILIDADE COM DICIONÁRIO =====
 
 ## Converte para Dictionary para compatibilidade
 func para_dictionary() -> Dictionary:
@@ -260,10 +301,13 @@ func para_dictionary() -> Dictionary:
 		"estresse_por_regiao": estresse_por_regiao,
 		"pontos_acao_atuais": pontos_acao_atuais,
 		"pontos_acao_maximos": pontos_acao_maximos,
-		"pericias": pericias,
+		"conhecimentos_treino": conhecimentos_treino,
+		"conhecimentos_especializados": conhecimentos_especializados,
 		"habilidades": habilidades,
 		"inventario": inventario,
-		"desmaios": desmaios,
+		"fardos": fardos,
+		"regioes_perdidas": regioes_perdidas,
+		"numero_desmaios_total": numero_desmaios_total,
 		"morto": morto
 	}
 
@@ -323,9 +367,10 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 		combatente.habilidades = dados["habilidades"]
 	if dados.has("inventario"):
 		combatente.inventario = dados["inventario"]
-	
-	if dados.has("desmaios"):
-		combatente.desmaios = dados["desmaios"]
+	if dados.has("numero_desmaios_total"):
+		combatente.numero_desmaios_total = dados["numero_desmaios_total"]
+	if dados.has("regioes_perdidas"):
+		combatente.regioes_perdidas = dados["regioes_perdidas"]
 	if dados.has("morto"):
 		combatente.morto = dados["morto"]
 	

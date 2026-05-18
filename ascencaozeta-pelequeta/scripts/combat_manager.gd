@@ -377,23 +377,30 @@ func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: 
 	for regiao in regioes:
 		alvo.aplicar_estresse(regiao, resultado_simulado["estresse_gerado"])
 	
-	# Verificar se alvo desmaiou ou morreu
-	var desmaiou = alvo.verificar_desmaio()
+	# Verificar se Torso atingiu o limite de estresse (sistema de Fardos Dark Souls)
+	var torso_stress = alvo.estresse_por_regiao["Torso"]
+	if torso_stress["atual"] >= torso_stress["limite"]:
+		# Processar Fardo Dark Souls - Ganha maldição + desmaio
+		var resultado_fardo = alvo.processar_limite_torso()
+		log_panel.registrar_evento(resultado_fardo["mensagem"], "alerta")
+		log_panel.registrar_evento(resultado_fardo["resultado_fardo"]["mensagem"], "evento")
+		log_panel.registrar_evento("%s foi desmaiad@!" % alvo.nome, "status")
+		
+		# Verificar se todos os combatentes de um lado estão desmaiados
+		_verificar_fim_combate()
+		if not combate_ativo:
+			return  # Combate já finalizou
 	
 	# Sincronizar atualização nos painéis
 	enemy_panel.atualizar_inimigo(alvo.para_dictionary())
 	enemy_panel.desativar_seletor_alvo()
 	estado_atualizado.emit()
 	
-	# Verificar se alvo morreu
-	if alvo.morto:
-		_derrotar_combatente(alvo)
-	else:
-		# Permitir próxima ação ou finalizar turno
-		acao_em_progresso = false
-		regioes_selecionadas.clear()
-		action_panel.habilitar_acoes()
-		log_panel.registrar_evento("Ação pronta. Escolha a próxima ação ou passe o turno.", "info")
+	# Permitir próxima ação ou finalizar turno
+	acao_em_progresso = false
+	regioes_selecionadas.clear()
+	action_panel.habilitar_acoes()
+	log_panel.registrar_evento("Ação pronta. Escolha a próxima ação ou passe o turno.", "info")
 
 func _avaliar_categoria_resultado(dado: int) -> String:
 	"""Categoriza o resultado do dado conforme OBLIVIO"""

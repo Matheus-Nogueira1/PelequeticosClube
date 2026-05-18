@@ -6,7 +6,7 @@ class_name InimigoData
 extends RefCounted
 
 ## Template de inimigo
-static func carcaca() -> CombatenteData:
+static func criar_carcaca() -> CombatenteData:
 	"""A Carcaça - Criatura não-morta
 	
 	Dano: 3
@@ -105,10 +105,10 @@ static func inimigos_por_dificuldade(dificuldade: String) -> Array[CombatenteDat
 		"normal":
 			inimigos.append(orc_guerreiro())
 		"dificil":
-			inimigos.append(carcaca())
+			inimigos.append(criar_carcaca())
 			inimigos.append(orc_guerreiro())
 		"muito_dificil":
-			inimigos.append(carcaca())
+			inimigos.append(criar_carcaca())
 			inimigos.append(orc_guerreiro())
 			inimigos.append(orc_guerreiro())
 	
