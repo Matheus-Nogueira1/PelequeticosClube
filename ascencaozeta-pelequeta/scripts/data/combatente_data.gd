@@ -85,6 +85,11 @@ var regioes_perdidas: Array[String] = []       # Membros perdidos por Guilhotina
 var numero_desmaios_total: int = 0             # Total de vezes que atingiu limite de Torso
 var limite_estresse_maximo_reducao: int = 0    # Redução permanente por Mal das Pernas
 
+## Sistema de Próteses - Permitem manter regiões após dano severo
+## Chave = nome da região, Valor = Protese object
+var proteses: Dictionary = {}                   # Próteses por região
+var habilidade_sobrecarga_ativa: bool = false  # Ir Além - permite arriscar múltiplas vezes mesma região
+
 ## Flags de efeitos de Fardos
 var tem_covardia: bool = false                  # -2x Coragem em testes
 var tem_fragilidade: bool = false              # +1D6 dano recebido
@@ -375,3 +380,32 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 		combatente.morto = dados["morto"]
 	
 	return combatente
+
+## ===== SISTEMA DE PRÓTESES =====
+
+## Adiciona uma prótese ao combatente
+func adicionar_protese(protese: ProteseData.Protese) -> void:
+	proteses[protese.regiao_representada] = protese
+
+## Obtém uma prótese por região
+func obter_protese(regiao: String) -> ProteseData.Protese:
+	if proteses.has(regiao):
+		return proteses[regiao]
+	return null
+
+## Verifica se região tem prótese
+func tem_protese(regiao: String) -> bool:
+	return proteses.has(regiao) and not proteses[regiao].destruida
+
+## Aplica estresse à prótese (retorna excedente)
+func aplicar_estresse_protese(regiao: String, quantidade: int) -> int:
+	var protese = obter_protese(regiao)
+	if protese:
+		return protese.sofrer_estresse(quantidade)
+	return quantidade
+
+## Recupera estresse da prótese
+func recuperar_protese(regiao: String, quantidade: int) -> void:
+	var protese = obter_protese(regiao)
+	if protese:
+		protese.recuperar_estresse(quantidade)

@@ -51,14 +51,14 @@ static func criar_mob() -> CombatenteData:
 	## - Repartir dor (em desenvolvimento)
 	mob.habilidades = [
 		"Escudo humano"  ## Habilidade Principal
-	]
+	] as Array[String]
 	
 	## ITENS INICIAIS
 	# TODO: Adicionar itens iniciais
 	mob.inventario = [
 		"TACO GIGANTE",
 		"VESTIMENTA PESADA",
-	]
+	] as Array[String]
 	
 	return mob
 
@@ -77,12 +77,17 @@ static func criar_escolhido() -> CombatenteData:
 	escolhido._calcular_atributos_mutaveis()
 	
 	## LIMITE DE ESTRESSE - Quem Cuida: 15 + Carne
-	## Distribuído por região: Torso(3), Braço D(3), Braço E(3), Perna D(3), Perna E(3)
+	## Distribuído por região: Torso(3), Braço D(5-prótese), Braço E(3), Perna D(3), Perna E(3)
 	escolhido.estresse_por_regiao["Torso"]["limite"] = 3
-	escolhido.estresse_por_regiao["Braço Direito"]["limite"] = 5 # Escolhido possui uma protese.
+	escolhido.estresse_por_regiao["Braço Direito"]["limite"] = 5 # Braço direito é prótese, tem limite aumentado
 	escolhido.estresse_por_regiao["Braço Esquerdo"]["limite"] = 3
-	escolhido.estresse_por_regiao["Perna Direita"]["limite"] = 2
-	escolhido.estresse_por_regiao["Perna Esquerda"]["limite"] = 2
+	escolhido.estresse_por_regiao["Perna Direita"]["limite"] = 3
+	escolhido.estresse_por_regiao["Perna Esquerda"]["limite"] = 3
+	
+	## PRÓTESES - Escolhido possui prótese no Braço Direito
+	var protese_braco = ProteseData.criar_protese("Prótese Mecânica", "Braço Direito")
+	escolhido.adicionar_protese(protese_braco)
+	## Prótese tem limite de 5 pontos estresse
 	
 	## CONHECIMENTOS (Perícias) - TREINO INICIAL
 	# Mago especializado em magia e conhecimento
@@ -108,13 +113,16 @@ static func criar_escolhido() -> CombatenteData:
 	## Habilidade Principal (todos têm desde o início):
 	## - Ajudar os Necessitados: Escolha até 2 pessoas adjacentes para curar em vez do atributo de mente
 	##
+	## Habilidade Especial: Ir Além (Sobrecarga)
+	## - Permite arriscar múltiplas vezes uma única região em Testes de Combate
+	##
 	## Habilidades Únicas (ganham ao completar missões/aventuras):
 	## - Abrir feridas (em desenvolvimento)
 	## - Bálsamo (em desenvolvimento)
 	## - Última Esperança (em desenvolvimento)
 	escolhido.habilidades = [
 		"Ajudar os necessitados"  ## Habilidade Principal
-	]
+	] as Array[String]
 	
 	## ITENS INICIAIS
 	# TODO: Adicionar itens iniciais
@@ -122,7 +130,7 @@ static func criar_escolhido() -> CombatenteData:
 		# "Disparo Medio",
 		# "Anel de Astora",
 		# "Frasco Estus",
-	]
+	] as Array[String]
 	
 	return escolhido
 
@@ -141,12 +149,15 @@ static func criar_JP() -> CombatenteData:
 	JP._calcular_atributos_mutaveis()
 	
 	## LIMITE DE ESTRESSE - Quem Manda: 10 + Carne
-	## Distribuído por região: Torso(3), Braço D(2), Braço E(2), Perna D(2), Perna E(2)
+	## Distribuído por região: Torso(3), Braço D(0-SEM MEMBRO), Braço E(3), Perna D(2), Perna E(2)
 	JP.estresse_por_regiao["Torso"]["limite"] = 3
 	JP.estresse_por_regiao["Braço Direito"]["limite"] = 0 # JP não possui o Braço direito.
 	JP.estresse_por_regiao["Braço Esquerdo"]["limite"] = 3
 	JP.estresse_por_regiao["Perna Direita"]["limite"] = 2
 	JP.estresse_por_regiao["Perna Esquerda"]["limite"] = 2
+	
+	## REGIÕES PERDIDAS - JP não tem o Braço Direito (perdido, não pode ser recuperado)
+	JP.regioes_perdidas.append("Braço Direito")
 	
 	## CONHECIMENTOS (Perícias) - TREINO INICIAL
 	# JP especializado em furtividade e esperteza
@@ -175,7 +186,9 @@ static func criar_JP() -> CombatenteData:
 	## - Instrução Decisiva (em desenvolvimento)
 	JP.habilidades = [
 		"Dar uma mãozinha"  ## Habilidade Principal
-	]
+	] as Array[String]
+	## Ativa a habilidade Sobrecarga (Ir Além) - JP pode arriscar múltiplas vezes a mesma região
+	JP.habilidade_sobrecarga_ativa = true
 	
 	## ITENS INICIAIS
 	# TODO: Adicionar itens iniciais
@@ -183,7 +196,7 @@ static func criar_JP() -> CombatenteData:
 		# "Disparo Longo",
 		# "Bomba de fumaça",
 		# "Fonte de luz",
-	]
+	] as Array[String]
 	
 	return JP
 

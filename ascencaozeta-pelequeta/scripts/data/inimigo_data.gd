@@ -19,9 +19,9 @@ static func criar_carcaca() -> CombatenteData:
 	# Atributos OBLIVIO (Carne em vez de Vitalidade!)
 	carcaca.atributo_carne = 2       # Define limite base de estresse
 	carcaca.atributo_forca = 3       # Dano
-	carcaca.atributo_agilidade = 2   # Velocidade
-	carcaca.atributo_vontade = 2     # Resistência psicológica
-	carcaca.atributo_inteligencia = 1
+	carcaca.atributo_fuga = 2        # Velocidade
+	carcaca.atributo_determinacao = 2    # Resistência psicológica
+	carcaca.atributo_mente = 1
 	
 	# Combate
 	carcaca.dano_arma = 3
@@ -37,7 +37,7 @@ static func criar_carcaca() -> CombatenteData:
 		"Perna Esquerda": {"atual": 0, "limite": 2}
 	}
 	
-	carcaca.status = ["Não-morta", "Visão Escura"]
+	carcaca.status = ["Não-morta", "Visão Escura"] as Array[String]
 	
 	return carcaca
 
@@ -51,9 +51,9 @@ static func goblin() -> CombatenteData:
 	
 	goblin.atributo_carne = 1
 	goblin.atributo_forca = 1
-	goblin.atributo_agilidade = 2
-	goblin.atributo_vontade = 1
-	goblin.atributo_inteligencia = 2
+	goblin.atributo_fuga = 2
+	goblin.atributo_determinacao = 1
+	goblin.atributo_mente = 2
 	
 	goblin.dano_arma = 1
 	goblin.defesa_base = 1
@@ -78,9 +78,9 @@ static func orc_guerreiro() -> CombatenteData:
 	
 	orc.atributo_carne = 2
 	orc.atributo_forca = 3
-	orc.atributo_agilidade = 1
-	orc.atributo_vontade = 2
-	orc.atributo_inteligencia = 1
+	orc.atributo_fuga = 1
+	orc.atributo_determinacao = 2
+	orc.atributo_mente = 1
 	
 	orc.dano_arma = 3
 	orc.defesa_base = 2

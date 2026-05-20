@@ -100,16 +100,23 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 	label_nome.add_theme_font_size_override("font_size", 12)
 	vbox_card.add_child(label_nome)
 	
-	# ESTRESSE TOTAL (métrica principal em OBLIVIO)
-	var label_estresse = Label.new()
-	label_estresse.add_theme_font_size_override("font_size", 10)
-	vbox_card.add_child(label_estresse)
+	# ESTRESSE POR REGIÃO (OBLIVIO display)
+	var label_regioes = Label.new()
+	label_regioes.add_theme_font_size_override("font_size", 9)
+	vbox_card.add_child(label_regioes)
+	
+	# INDICADORES DE PRÓTESE E REGIÕES PERDIDAS
+	var label_status_especial = Label.new()
+	label_status_especial.add_theme_font_size_override("font_size", 9)
+	label_status_especial.add_theme_color_override("font_color", Color.LIGHT_CYAN)
+	vbox_card.add_child(label_status_especial)
 	
 	# Armazenar referência para atualizar depois
 	var card_wrapper = {
 		"node": card,
 		"label_nome": label_nome,
-		"label_estresse": label_estresse,
+		"label_regioes": label_regioes,
+		"label_status_especial": label_status_especial,
 		"atualizar": func(p: Dictionary):
 			# Validar antes de atualizar
 			if not p.has("nome") or not p.has("estresse_por_regiao"):
@@ -121,36 +128,67 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 				status_text += " [%s]" % ", ".join(p["status"])
 			label_nome.text = status_text
 			
-			# Calcular estresse total
+			# Construir display de regiões com estresse
+			var regioes_text = ""
+			var regioes_esgotadas = 0
 			var estresse_total = 0
 			var limite_total = 0
-			var regioes_esgotadas = 0
 			
-			for regiao_est in p["estresse_por_regiao"].values():
-				estresse_total += regiao_est["atual"]
-				limite_total += regiao_est["limite"]
-				if regiao_est["atual"] >= regiao_est["limite"]:
-					regioes_esgotadas += 1
+			var ordem_regioes = ["Torso", "Braço Direito", "Braço Esquerdo", "Perna Direita", "Perna Esquerda"]
+			for regiao in ordem_regioes:
+				if p["estresse_por_regiao"].has(regiao):
+					var reg_data = p["estresse_por_regiao"][regiao]
+					var est_atual = reg_data["atual"]
+					var est_limite = reg_data["limite"]
+					
+					estresse_total += est_atual
+					limite_total += est_limite
+					
+					# Mostrar região com cores
+					var regiao_display = "%s [%d/%d]" % [regiao.substr(0, 3), est_atual, est_limite]
+					
+					# Colorir se esgotado ou perdido
+					if est_limite == 0:
+						regiao_display += " (PERDIDO)"
+					elif est_atual >= est_limite:
+						regioes_esgotadas += 1
+						regiao_display = "[color=red]%s[/color]" % regiao_display
+					elif float(est_atual) / float(est_limite) > 0.7:
+						regiao_display = "[color=orange]%s[/color]" % regiao_display
+					
+					regioes_text += regiao_display + " "
 			
-			# Mostrar estresse total
-			var est_str = "Estresse: %d/%d" % [estresse_total, limite_total]
+			label_regioes.text = regioes_text
 			
-			# Mostrar se tem regiões esgotadas (fadiga)
-			if regioes_esgotadas > 0:
-				est_str += " (%d regiões esgotadas)" % regioes_esgotadas
+			# Mostrar status especial (Sobrecarga, Próteses)
+			var status_especial = ""
+			if p.has("habilidade_sobrecarga_ativa") and p["habilidade_sobrecarga_ativa"]:
+				status_especial += "⚡SOBRECARGA "
+			if p.has("proteses") and not p["proteses"].is_empty():
+				status_especial += "[PR: %s]" % ", ".join(p["proteses"].keys())
+			if p.has("regioes_perdidas") and not p["regioes_perdidas"].is_empty():
+				status_especial += " [PERDIDO: %s]" % ", ".join(p["regioes_perdidas"])
 			
-			# Colorir baseado em fadiga
-			if regioes_esgotadas >= 5:  # Todas esgotadas = desmaiado
-				label_estresse.add_theme_color_override("font_color", Color.RED)
-				est_str += " [DESMAIADO]"
-			elif regioes_esgotadas >= 3:
-				label_estresse.add_theme_color_override("font_color", Color.YELLOW)
-			elif float(estresse_total) / float(limite_total) > 0.7:
-				label_estresse.add_theme_color_override("font_color", Color.ORANGE)
-			else:
-				label_estresse.remove_theme_color_override("font_color")
+			label_status_especial.text = status_especial
 			
-			label_estresse.text = est_str
+			# PRÓTESES E REGIÕES PERDIDAS
+			var status_especial_text = ""
+			
+			# Próteses
+			if p.has("proteses") and not p["proteses"].is_empty():
+				for regiao in p["proteses"].keys():
+					status_especial_text += "[PR: %s] " % regiao
+			
+			# Regiões perdidas
+			if p.has("regioes_perdidas") and not p["regioes_perdidas"].is_empty():
+				for regiao_perdida in p["regioes_perdidas"]:
+					status_especial_text += "[PERDIDO: %s] " % regiao_perdida
+			
+			# Sobrecarga
+			if p.has("habilidade_sobrecarga_ativa") and p["habilidade_sobrecarga_ativa"]:
+				status_especial_text += "⚡SOBRECARGA"
+			
+			label_status_especial.text = status_especial_text.strip_edges()
 	}
 	
 	lista_personagens.add_child(card)

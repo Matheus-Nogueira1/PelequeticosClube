@@ -54,14 +54,17 @@ func _inicializar_combate() -> void:
 	# Por enquanto, vou usar estrutura de exemplo
 	_setup_exemplo()
 	
-	# VALIDAR todos os combatentes
-	_validar_combatentes()
-	
 	# Preencher UI dos painéis
 	if enemy_panel:
-		enemy_panel.atualizar_todos(combatentes_inimigo)
+		var inimigos_dict: Array[Dictionary] = []
+		for combatente in combatentes_inimigo:
+			inimigos_dict.append(combatente.para_dictionary())
+		enemy_panel.atualizar_todos(inimigos_dict)
 	if party_panel:
-		party_panel.atualizar_todos(combatentes_jogador)
+		var jogadores_dict: Array[Dictionary] = []
+		for combatente in combatentes_jogador:
+			jogadores_dict.append(combatente.para_dictionary())
+		party_panel.atualizar_todos(jogadores_dict)
 	if regional_selector:
 		regional_selector.desativar()
 	
@@ -77,51 +80,15 @@ func _inicializar_combate() -> void:
 	# Começar primeiro turno
 	_avancar_turno()
 
-func _validar_combatentes() -> void:
-	"""Valida se todos os combatentes têm os dados necessários"""
-	var campos_obrigatorios = [
-		"nome", "tipo", "saude_maxima", "saude_atual",
-		"defesa_base", "dano_arma", "atributo_dano",
-		"estresse_por_regiao", "status", "iniciativa"
-	]
-	
-	var todos_combatentes = combatentes_jogador + combatentes_inimigo
-	
-	for combatente in todos_combatentes:
-		for campo in campos_obrigatorios:
-			if not combatente.has(campo):
-				var nome_combo = combatente["nome"] if combatente.has("nome") else "Desconhecido"
-				print("[CombatManager] AVISO: Combatente '%s' sem campo '%s'" % [
-					nome_combo, campo
-				])
-				# Adicionar valor padrão
-				match campo:
-					"nome": combatente["nome"] = "Desconhecido"
-					"tipo": combatente["tipo"] = "neutro"
-					"saude_atual": combatente["saude_atual"] = 10
-					"defesa_base": combatente["defesa_base"] = 1
-					"dano_arma": combatente["dano_arma"] = 1
-					"atributo_dano": combatente["atributo_dano"] = 0
-					"estresse_por_regiao": combatente["estresse_por_regiao"] = {
-						"Torso": 0, "Braço Direito": 0, "Braço Esquerdo": 0,
-						"Perna Direita": 0, "Perna Esquerda": 0
-					}
-					"status": combatente["status"] = []
-					"iniciativa": combatente["iniciativa"] = 0
-
 func _setup_exemplo() -> void:
 	"""Setup temporário com dados de exemplo usando CombatenteData"""
 	
-	# Criar jogador
-	var guerreiro = CombatenteData.new("Guerreiro", "jogador")
-	guerreiro.atributo_carne = 3
-	guerreiro.atributo_forca = 3
-	guerreiro.atributo_agilidade = 2
-	guerreiro.atributo_vontade = 2
-	guerreiro.dano_arma = 2
-	guerreiro.defesa_base = 2
+	# Criar os 3 personagens principais
+	var mob = PersonagensData.criar_mob()
+	var escolhido = PersonagensData.criar_escolhido()
+	var jp = PersonagensData.criar_JP()
 	
-	combatentes_jogador = [guerreiro]
+	combatentes_jogador = [mob, escolhido, jp]
 	
 	# Criar inimigos usando templates
 	combatentes_inimigo = [
@@ -183,7 +150,7 @@ func _avancar_turno() -> void:
 	
 	# Ativar painel de ações se for personagem jogador
 	if combatente_ativo.tipo == "jogador":
-		action_panel.ativar_para(combatente_ativo.para_dictionary())
+		action_panel.ativar_para(combatente_ativo.para_dictionary(), combatente_ativo)
 		party_panel.indicar_personagem_ativo(combatente_ativo.para_dictionary())
 		enemy_panel.desativar_seletor_alvo()
 		log_panel.registrar_evento(
@@ -238,8 +205,8 @@ func _iniciar_ataque() -> void:
 	action_panel.desabilitar_acoes()
 	log_panel.registrar_evento("Selecione as regiões de ataque...", "acao")
 	
-	# Ativar seletor de corpo
-	regional_selector.ativar_para_ataque()
+	# Ativar seletor de corpo com validação de Próteses/Regiões Perdidas/Sobrecarga
+	regional_selector.ativar_para_ataque(combatente_ativo)
 	regional_selector.modo = "selecionar_ataque"
 
 func _iniciar_pericia() -> void:

@@ -6,6 +6,9 @@ signal regiao_selecionada(nome_regiao: String, indice: int)
 signal selecao_confirmada(regioes: Array[String])
 signal selecao_cancelada
 
+# Referência ao combatente ativo (para validar próteses e regiões perdidas)
+var combatente_ativo: CombatenteData = null
+
 # Array de regiões do corpo
 var regioes: Array[String] = [
 	"Torso",
@@ -19,6 +22,7 @@ var regioes: Array[String] = [
 var selecionadas: Array[bool] = [false, false, false, false, false]
 var regioes_finais: Array[String] = []
 var modo: String = "desativado"  # desativado, selecionar_ataque, selecionar_defesa
+var permite_multiplas_mesma_regiao: bool = false  # Sobrecarga ativa
 
 # UI
 @onready var vbox = VBoxContainer.new()
@@ -96,14 +100,65 @@ func _criar_botao_regiao(nome: String, indice: int) -> Button:
 # ATIVAÇÃO/DESATIVAÇÃO
 # ============================================================================
 
-func ativar_para_ataque() -> void:
+func ativar_para_ataque(combatente: CombatenteData) -> void:
 	"""Ativa o seletor para modo de ataque"""
+	combatente_ativo = combatente
 	modo = "selecionar_ataque"
 	label_titulo.text = "Selecione Regiões de Ataque"
 	label_info.text = "Clique para selecionar"
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	show()
 	_resetar_selecao()
+	
+	# Ativar Sobrecarga se o combatente tem a habilidade
+	permite_multiplas_mesma_regiao = combatente.habilidade_sobrecarga_ativa
+	
+	# Atualizar visual dos botões (desabilitar regiões perdidas/próteses destruídas)
+	_atualizar_estado_botoes()
+
+
+## ===== VALIDAÇÃO DE REGIÕES =====
+
+func _pode_arriscar_regiao(regiao: String) -> bool:
+	"""Valida se uma região pode ser arriscada em combate"""
+	if combatente_ativo == null:
+		return false
+	
+	# Verifica se é uma região perdida
+	if regiao in combatente_ativo.regioes_perdidas:
+		return false
+	
+	# Se tem prótese, verifica se não foi destruída
+	if combatente_ativo.proteses.has(regiao):
+		var protese = combatente_ativo.proteses[regiao]
+		return not protese.destruida
+	
+	return true
+
+func _atualizar_estado_botoes() -> void:
+	"""Atualiza o estado visual dos botões (habilitado/desabilitado)"""
+	for i in range(regioes.size()):
+		var regiao = regioes[i]
+		var botao = botoes_regiao[i]
+		var pode_arriscar = _pode_arriscar_regiao(regiao)
+		
+		if not pode_arriscar:
+			botao.disabled = true
+			if regiao in combatente_ativo.regioes_perdidas:
+				botao.text = regioes[i] + " (PERDIDO)"
+				botao.add_theme_color_override("font_disabled_color", Color.RED)
+			elif combatente_ativo.proteses.has(regiao) and combatente_ativo.proteses[regiao].destruida:
+				botao.text = regioes[i] + " (PRÓTESE DESTRUÍDA)"
+				botao.add_theme_color_override("font_disabled_color", Color.DARK_RED)
+		else:
+			botao.disabled = false
+			# Se tem prótese, mostrar indicador
+			if combatente_ativo.proteses.has(regiao):
+				botao.text = regioes[i] + " [PR]"
+				botao.add_theme_color_override("font_disabled_color", Color.YELLOW)
+			else:
+				botao.text = regioes[i]
+				botao.remove_theme_color_override("font_disabled_color")
 
 
 func desativar() -> void:
@@ -122,9 +177,20 @@ func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
 	if modo == "desativado":
 		return
 	
-	# Alternância da seleção
-	selecionadas[indice] = !selecionadas[indice]
+	# Validar se pode arriscar a região
+	if not _pode_arriscar_regiao(nome_regiao):
+		label_info.text = "Essa região não pode ser arriscada!"
+		return
 	
+	# Se Sobrecarga está ativo, permite múltiplas seleções da mesma região
+	# Senão, apenas uma seleção por botão (toggle normal)
+	if not permite_multiplas_mesma_regiao:
+		# Modo normal: toggle
+		selecionadas[indice] = !selecionadas[indice]
+	else:
+		# Modo Sobrecarga: pode selecionar múltiplas vezes
+		# Implementar contagem de vezes selecionada (TODO: expandir para array com contagem)
+		selecionadas[indice] = !selecionadas[indice]
 	
 	# Atualizar visual do botão
 	_atualizar_visual_botao(indice)

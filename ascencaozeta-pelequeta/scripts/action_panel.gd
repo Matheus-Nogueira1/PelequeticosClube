@@ -15,11 +15,17 @@ var botao_pericia: Button
 var botao_habilidade: Button
 var botao_item: Button
 
+# Menus popup
+var menu_pericias: PopupMenu
+var menu_habilidades: PopupMenu
+
 var combatente_ativo: Dictionary = {}
+var combatente_ref: CombatenteData = null
 var acoes_habilitadas: bool = false
 
 func _ready() -> void:
 	_criar_layout()
+	_criar_menus_popup()
 	desabilitar_acoes()
 
 # ============================================================================
@@ -85,13 +91,24 @@ func _criar_botao(texto: String, tooltip_text: String, callback: Callable) -> Bu
 	btn.custom_minimum_size = Vector2(0, 32)
 	return btn
 
+func _criar_menus_popup() -> void:
+	"""Cria os PopupMenus para perícias e habilidades"""
+	menu_pericias = PopupMenu.new()
+	add_child(menu_pericias)
+	menu_pericias.index_pressed.connect(_on_pericia_selecionada)
+	
+	menu_habilidades = PopupMenu.new()
+	add_child(menu_habilidades)
+	menu_habilidades.index_pressed.connect(_on_habilidade_selecionada)
+
 # ============================================================================
 # ATIVAÇÃO/DESATIVAÇÃO
 # ============================================================================
 
-func ativar_para(combatente: Dictionary) -> void:
+func ativar_para(combatente: Dictionary, ref_combatente: CombatenteData = null) -> void:
 	"""Ativa o painel de ações para um combatente específico"""
 	combatente_ativo = combatente
+	combatente_ref = ref_combatente
 	show()
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	habilitar_acoes()
@@ -154,22 +171,116 @@ func _on_passar_turno() -> void:
 
 func mostrar_menu_pericias(combatente: Dictionary) -> void:
 	"""Mostra menu de perícias disponíveis"""
+	if combatente_ref == null:
+		print("[ActionPanel] Combatente não possui referência")
+		return
+	
+	menu_pericias.clear()
+	
+	# Preencher menu com perícias treinadas (nível > 0)
+	var index = 0
+	for pericia in combatente_ref.conhecimentos_treino.keys():
+		var nivel = combatente_ref.conhecimentos_treino[pericia]
+		if nivel > 0:
+			menu_pericias.add_item("%s (Nível %d)" % [pericia, nivel], index)
+			index += 1
+	
+	if index == 0:
+		menu_pericias.add_item("[Nenhuma perícia treinada]", 0)
+		menu_pericias.set_item_disabled(0, true)
+	
+	# Exibir menu centralizado
+	menu_pericias.popup_centered_ratio(0.3)
 	print("[ActionPanel] Menu de perícias para %s" % combatente["nome"])
-	# TODO: Criar menu de seleção de perícias
-	# TODO: Exibir custo de ação de cada perícia
-	# TODO: Retornar perícia selecionada ao CombatManager
 
 func mostrar_menu_habilidades(combatente: Dictionary) -> void:
-	"""Mostra menu de habilidades disponíveis"""
+	"""Mostra menu de habilidades disponíveis, separadas por tipo"""
+	if combatente_ref == null:
+		print("[ActionPanel] Combatente não possui referência")
+		return
+	
+	menu_habilidades.clear()
+	
+	# Preencher menu com habilidades classificadas
+	var index = 0
+	
+	# PRINCIPAL
+	var habilidades_principal = HabilidadeData.obter_habilidades_por_tipo(
+		combatente_ref.habilidades,
+		HabilidadeData.TipoHabilidade.PRINCIPAL
+	)
+	if habilidades_principal.size() > 0:
+		menu_habilidades.add_item("[HABILIDADE PRINCIPAL]", index)
+		menu_habilidades.set_item_disabled(index, true)
+		index += 1
+		for hab in habilidades_principal:
+			menu_habilidades.add_item("  %s" % hab, index)
+			index += 1
+		menu_habilidades.add_separator()
+		index += 1
+	
+	# ÚNICA
+	var habilidades_unica = HabilidadeData.obter_habilidades_por_tipo(
+		combatente_ref.habilidades,
+		HabilidadeData.TipoHabilidade.UNICA
+	)
+	if habilidades_unica.size() > 0:
+		menu_habilidades.add_item("[HABILIDADES ÚNICAS]", index)
+		menu_habilidades.set_item_disabled(index, true)
+		index += 1
+		for hab in habilidades_unica:
+			menu_habilidades.add_item("  %s" % hab, index)
+			index += 1
+		menu_habilidades.add_separator()
+		index += 1
+	
+	# GERAL
+	var habilidades_geral = HabilidadeData.obter_habilidades_por_tipo(
+		combatente_ref.habilidades,
+		HabilidadeData.TipoHabilidade.GERAL
+	)
+	if habilidades_geral.size() > 0:
+		menu_habilidades.add_item("[HABILIDADES GERAIS]", index)
+		menu_habilidades.set_item_disabled(index, true)
+		index += 1
+		for hab in habilidades_geral:
+			menu_habilidades.add_item("  %s" % hab, index)
+			index += 1
+	
+	# Sobrecarga (Ir Além) especial
+	if combatente_ref.habilidade_sobrecarga_ativa:
+		menu_habilidades.add_separator()
+		menu_habilidades.add_item("⚡ SOBRECARGA (Ir Além)", index)
+		index += 1
+	
+	if index == 0:
+		menu_habilidades.add_item("[Nenhuma habilidade disponível]", 0)
+		menu_habilidades.set_item_disabled(0, true)
+	
+	# Exibir menu centralizado
+	menu_habilidades.popup_centered_ratio(0.35)
 	print("[ActionPanel] Menu de habilidades para %s" % combatente["nome"])
-	# TODO: Criar menu de seleção de habilidades
-	# TODO: Exibir custo de ação de cada habilidade
-	# TODO: Retornar habilidade selecionada ao CombatManager
 
 func mostrar_menu_itens(combatente: Dictionary) -> void:
 	"""Mostra menu de itens do inventário"""
+	if combatente_ref == null:
+		print("[ActionPanel] Combatente não possui referência")
+		return
+	
 	print("[ActionPanel] Menu de itens para %s" % combatente["nome"])
 	# TODO: Criar menu de seleção de itens
 	# TODO: Exibir custo de ação de cada item
 	# TODO: Mostrar quantidade disponível
 	# TODO: Retornar item selecionado ao CombatManager
+
+func _on_pericia_selecionada(index: int) -> void:
+	"""Callback quando uma perícia é selecionada"""
+	var pericia_nome = menu_pericias.get_item_text(index)
+	print("[ActionPanel] Perícia selecionada: %s" % pericia_nome)
+	habilitar_acoes()
+
+func _on_habilidade_selecionada(index: int) -> void:
+	"""Callback quando uma habilidade é selecionada"""
+	var habilidade_nome = menu_habilidades.get_item_text(index).strip_edges()
+	print("[ActionPanel] Habilidade selecionada: %s" % habilidade_nome)
+	habilitar_acoes()

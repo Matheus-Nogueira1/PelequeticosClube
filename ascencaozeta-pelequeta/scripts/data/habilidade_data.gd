@@ -283,3 +283,16 @@ func get_todas_habilidades() -> Array:
 	for nome in habilidades:
 		lista.append(habilidades[nome])
 	return lista
+
+## Filtra habilidades pelo tipo (PRINCIPAL, UNICA, GERAL)
+static func obter_habilidades_por_tipo(habilidades_array: Array[String], tipo: int) -> Array[String]:
+	"""Retorna array de nomes de habilidades que pertencem ao tipo especificado"""
+	var resultado: Array[String] = []
+	var db = HabilidadeData.new()
+	
+	for nome_hab in habilidades_array:
+		var hab = db.get_habilidade(nome_hab)
+		if hab and hab.tipo_habilidade == tipo:
+			resultado.append(nome_hab)
+	
+	return resultado
