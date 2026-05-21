@@ -50,8 +50,9 @@ func atualizar_personagem(personagem: Dictionary) -> void:
 	"""Atualiza o visual de um personagem"""
 	var chave = personagem["nome"]
 	if chave in cards_personagens:
-		var card = cards_personagens[chave]
-		card.atualizar(personagem)
+		var card_wrapper = cards_personagens[chave]
+		if card_wrapper.has("atualizar"):
+			card_wrapper["atualizar"].call(personagem)
 
 func remover_personagem(personagem: Dictionary) -> void:
 	"""Remove um personagem do painel (derrotado)"""
@@ -170,25 +171,6 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 				status_especial += " [PERDIDO: %s]" % ", ".join(p["regioes_perdidas"])
 			
 			label_status_especial.text = status_especial
-			
-			# PRÓTESES E REGIÕES PERDIDAS
-			var status_especial_text = ""
-			
-			# Próteses
-			if p.has("proteses") and not p["proteses"].is_empty():
-				for regiao in p["proteses"].keys():
-					status_especial_text += "[PR: %s] " % regiao
-			
-			# Regiões perdidas
-			if p.has("regioes_perdidas") and not p["regioes_perdidas"].is_empty():
-				for regiao_perdida in p["regioes_perdidas"]:
-					status_especial_text += "[PERDIDO: %s] " % regiao_perdida
-			
-			# Sobrecarga
-			if p.has("habilidade_sobrecarga_ativa") and p["habilidade_sobrecarga_ativa"]:
-				status_especial_text += "⚡SOBRECARGA"
-			
-			label_status_especial.text = status_especial_text.strip_edges()
 	}
 	
 	lista_personagens.add_child(card)

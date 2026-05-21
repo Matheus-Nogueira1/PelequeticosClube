@@ -1,6 +1,9 @@
 extends Node
 class_name CombatManager
 
+# Importações
+const RolagemDadosD6 = preload("res://scripts/rolagens-dados-d6.gd")
+
 # Tipos de ações conforme OBLIVIO
 enum ActionType {
 	ACAO_REGULAR,    # Ação simples (atacar, perícia básica)
@@ -320,54 +323,53 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 # ============================================================================
 
 func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: Array[String]) -> void:
-	"""Executa a lógica de ataque: rola dados, calcula dano, aplica efeitos"""
+	"""Executa a lógica de ataque: rola dados D6, calcula dano, aplica efeitos (mesma lógica do seletor)"""
 	
-	print("[CombatManager] Ataque de %s contra %s nas regiões: %s" % [
-		atacante.nome, alvo.nome, ", ".join(regioes)
-	])
+	# Usar RolagemDadosD6 para teste de combate (como no seletor-corpo.gd)
+	var rolagem = RolagemDadosD6.new()
+	var resultado_combate = rolagem.rolar_teste_combate_d6(
+		regioes,
+		2,  # protecao_alvo (padrão)
+		2,  # dano_arma (padrão)
+		atacante.atributo_dano
+	)
 	
-	# TODO: Implementar sistema de rolagem D6
-	# Por enquanto, simulamos um resultado
-	var resultado_simulado = {
-		"atacante": atacante.nome,
-		"alvo": alvo.nome,
-		"regiao": regioes[0],
-		"dado": randi_range(1, 6),
-		"categoria": _avaliar_categoria_resultado(randi_range(1, 6)),
-		"dano_aplicado": 2,
-		"estresse_gerado": 1
-	}
-	
-	log_panel.registrar_ataque(resultado_simulado)
-	
-	# Aplicar estresse ao alvo usando o método da classe
-	for regiao in regioes:
-		alvo.aplicar_estresse(regiao, resultado_simulado["estresse_gerado"])
-	
-	# Verificar se Torso atingiu o limite de estresse (sistema de Fardos Dark Souls)
-	var torso_stress = alvo.estresse_por_regiao["Torso"]
-	if torso_stress["atual"] >= torso_stress["limite"]:
-		# Processar Fardo Dark Souls - Ganha maldição + desmaio
-		var resultado_fardo = alvo.processar_limite_torso()
-		log_panel.registrar_evento(resultado_fardo["mensagem"], "alerta")
-		log_panel.registrar_evento(resultado_fardo["resultado_fardo"]["mensagem"], "evento")
-		log_panel.registrar_evento("%s foi desmaiad@!" % alvo.nome, "status")
+	# Log detalhado de cada região
+	for res_regiao in resultado_combate["resultados_por_regiao"]:
+		var mensagem = "Região: %s → D6: %d (%s)" % [
+			res_regiao["regiao"],
+			res_regiao["dado"],
+			res_regiao["categoria"]
+		]
+		log_panel.registrar_evento(mensagem, "ataque")
 		
-		# Verificar se todos os combatentes de um lado estão desmaiados
-		_verificar_fim_combate()
-		if not combate_ativo:
-			return  # Combate já finalizou
+		# Aplicar estresse à região apenas se falhar
+		if res_regiao["categoria"] in ["Falha Regular", "Falha Crítica"]:
+			var estresse_gerado = 2 if res_regiao["categoria"] == "Falha Crítica" else 1
+			alvo.aplicar_estresse(res_regiao["regiao"], estresse_gerado)
+			log_panel.registrar_evento("%s sofre %d de estresse em %s" % [
+				alvo.nome, estresse_gerado, res_regiao["regiao"]
+			], "dano")
 	
-	# Sincronizar atualização nos painéis
-	enemy_panel.atualizar_inimigo(alvo.para_dictionary())
-	enemy_panel.desativar_seletor_alvo()
-	estado_atualizado.emit()
+	# Resumo do ataque
+	log_panel.registrar_evento("Sucessos: %d | Falhas: %d (simples: %d, críticas: %d)" % [
+		resultado_combate["total_sucessos"],
+		resultado_combate["falhas_regulares"] + resultado_combate["falhas_criticas"],
+		resultado_combate["falhas_regulares"],
+		resultado_combate["falhas_criticas"]
+	], "info")
 	
-	# Permitir próxima ação ou finalizar turno
+	# Atualizar painéis
+	party_panel.atualizar_personagem(atacante.para_dictionary())
+	var inimigos_atualizado: Array[Dictionary] = []
+	inimigos_atualizado.append(alvo.para_dictionary())
+	enemy_panel.atualizar_todos(inimigos_atualizado)
+	
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
+	enemy_panel.desativar_seletor_alvo()
 	action_panel.habilitar_acoes()
-	log_panel.registrar_evento("Ação pronta. Escolha a próxima ação ou passe o turno.", "info")
+	_avancar_turno()
 
 func _avaliar_categoria_resultado(dado: int) -> String:
 	"""Categoriza o resultado do dado conforme OBLIVIO"""
