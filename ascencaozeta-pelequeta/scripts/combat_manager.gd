@@ -334,7 +334,7 @@ func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: 
 		atacante.atributo_dano
 	)
 	
-	# Log detalhado de cada região
+	# Log detalhado de cada região - aplicar efeitos
 	for res_regiao in resultado_combate["resultados_por_regiao"]:
 		var mensagem = "Região: %s → D6: %d (%s)" % [
 			res_regiao["regiao"],
@@ -343,11 +343,19 @@ func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: 
 		]
 		log_panel.registrar_evento(mensagem, "ataque")
 		
-		# Aplicar estresse à região apenas se falhar
+		# FALHA: Apenas o atacante sofre (arriscou e perdeu)
 		if res_regiao["categoria"] in ["Falha Regular", "Falha Crítica"]:
 			var estresse_gerado = 2 if res_regiao["categoria"] == "Falha Crítica" else 1
+			atacante.aplicar_estresse(res_regiao["regiao"], estresse_gerado)
+			log_panel.registrar_evento("%s sofre %d de estresse em %s (ataque falhou)" % [
+				atacante.nome, estresse_gerado, res_regiao["regiao"]
+			], "aviso")
+		
+		# SUCESSO: Alvo sofre estresse (defesa falhou)
+		elif res_regiao["categoria"] in ["Sucesso Regular", "Sucesso Extremo"]:
+			var estresse_gerado = 1 if res_regiao["categoria"] == "Sucesso Regular" else 2
 			alvo.aplicar_estresse(res_regiao["regiao"], estresse_gerado)
-			log_panel.registrar_evento("%s sofre %d de estresse em %s" % [
+			log_panel.registrar_evento("%s sofre %d de estresse em %s (defesa falhou)" % [
 				alvo.nome, estresse_gerado, res_regiao["regiao"]
 			], "dano")
 	
@@ -359,8 +367,9 @@ func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: 
 		resultado_combate["falhas_criticas"]
 	], "info")
 	
-	# Atualizar painéis
+	# Atualizar painéis (tanto atacante quanto alvo)
 	party_panel.atualizar_personagem(atacante.para_dictionary())
+	party_panel.atualizar_personagem(alvo.para_dictionary())
 	var inimigos_atualizado: Array[Dictionary] = []
 	inimigos_atualizado.append(alvo.para_dictionary())
 	enemy_panel.atualizar_todos(inimigos_atualizado)

@@ -105,18 +105,23 @@ func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
 	"""Formata o texto que aparece no botão do inimigo"""
 	var nome = inimigo["nome"] if inimigo.has("nome") else "Desconhecido"
 	
-	if not inimigo.has("saude_atual") or not inimigo.has("saude_maxima"):
+	if not inimigo.has("estresse_por_regiao"):
 		return "%s [DADOS INVÁLIDOS]" % nome
 	
-	var saude = inimigo["saude_atual"]
-	var saude_max = inimigo["saude_maxima"]
-	var barra_saude = _criar_barra_saude(saude, saude_max)
+	# Calcular estresse total
+	var estresse_total = 0
+	var limite_total = 0
+	for regiao_data in inimigo["estresse_por_regiao"].values():
+		estresse_total += regiao_data["atual"]
+		limite_total += regiao_data["limite"]
 	
-	return "%s  HP: %d/%d  [%s]" % [
-		inimigo["nome"],
-		saude,
-		saude_max,
-		barra_saude
+	var barra_estresse = _criar_barra_estresse(estresse_total, limite_total)
+	
+	return "%s  Estresse: %d/%d  [%s]" % [
+		nome,
+		estresse_total,
+		limite_total,
+		barra_estresse
 	]
 
 func _criar_barra_saude(atual: int, maximo: int) -> String:
@@ -129,6 +134,21 @@ func _criar_barra_saude(atual: int, maximo: int) -> String:
 	for i in range(tamanho_barra):
 		if i < blocos_cheios:
 			barra += "█"
+		else:
+			barra += "░"
+	
+	return barra
+
+func _criar_barra_estresse(atual: int, maximo: int) -> String:
+	"""Cria uma barra de estresse em texto ASCII"""
+	var tamanho_barra = 10
+	var blocos_cheios = int((float(atual) / float(maximo)) * tamanho_barra)
+	blocos_cheios = clampi(blocos_cheios, 0, tamanho_barra)
+	
+	var barra = ""
+	for i in range(tamanho_barra):
+		if i < blocos_cheios:
+			barra += "▓"  # Blocos mais densos para estresse
 		else:
 			barra += "░"
 	
