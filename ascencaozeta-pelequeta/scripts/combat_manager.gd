@@ -32,7 +32,7 @@ signal turno_passado
 var combatentes_jogador: Array[CombatenteData] = []
 var combatentes_inimigo: Array[CombatenteData] = []
 var ordem_turno: Array[CombatenteData] = []
-var indice_turno_atual: int = 0
+var indice_turno_atual := -1
 var combatente_ativo: CombatenteData = null
 var combate_ativo: bool = false
 
@@ -103,11 +103,11 @@ func _setup_exemplo() -> void:
 	ordem_turno = todos.duplicate()
 
 func _calcular_iniciativa() -> void:
-	"""Cada combatente rola D6 para determinar ordem de turno"""
+	"""Cada combatente compara sua velociadade com os outros"""
 	for combatente in ordem_turno:
-		combatente.iniciativa = randi_range(1, 6)
+		combatente.iniciativa = combatente.atributo_velocidade
 		log_panel.registrar_evento(
-			"%s rolou iniciativa: %d" % [combatente.nome, combatente.iniciativa],
+			"%s iniciativa: %d" % [combatente.nome, combatente.iniciativa],
 			"info"
 		)
 
