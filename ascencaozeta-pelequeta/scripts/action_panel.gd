@@ -7,6 +7,7 @@ signal acao_pericia
 signal acao_habilidade
 signal acao_item
 signal turno_passado
+signal habilidade_sobrecarga
 
 # Referências aos botões
 @onready var vbox = VBoxContainer.new()
@@ -280,7 +281,9 @@ func _on_pericia_selecionada(index: int) -> void:
 	habilitar_acoes()
 
 func _on_habilidade_selecionada(index: int) -> void:
-	"""Callback quando uma habilidade é selecionada"""
 	var habilidade_nome = menu_habilidades.get_item_text(index).strip_edges()
+	if habilidade_nome.contains("SOBRECARGA"):
+		habilidade_sobrecarga.emit()
+		return
 	print("[ActionPanel] Habilidade selecionada: %s" % habilidade_nome)
 	habilitar_acoes()

@@ -139,6 +139,7 @@ static func criar_escolhido() -> CombatenteData:
 ## ============================================================================
 static func criar_JP() -> CombatenteData:
 	var JP = CombatenteData.new("JPdaMaldade", "jogador")
+	var sobrecarga_ativa: bool = false
 	
 	## ATRIBUTOS FIXOS OBLIVIO
 	JP.atributo_carne = 2        # Saúde média

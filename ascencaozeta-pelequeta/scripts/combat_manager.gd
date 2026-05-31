@@ -36,6 +36,7 @@ var indice_turno_atual := -1
 var combatente_ativo: CombatenteData = null
 var combate_ativo: bool = false
 
+
 # Estado da ação atual
 var acao_em_progresso: bool = false
 var regioes_selecionadas: Array[String] = []
@@ -119,6 +120,7 @@ func _conectar_sinais_paineis() -> void:
 		action_panel.acao_habilidade.connect(_iniciar_habilidade)
 		action_panel.acao_item.connect(_iniciar_item)
 		action_panel.turno_passado.connect(_on_turno_passado)
+		action_panel.habilidade_sobrecarga.connect(_ativar_sobrecarga)
 	
 	if regional_selector:
 		regional_selector.regiao_selecionada.connect(_on_regiao_selecionada)
@@ -234,6 +236,21 @@ func _iniciar_habilidade() -> void:
 	# TODO: Mostrar menu de habilidades disponíveis
 	action_panel.mostrar_menu_habilidades(combatente_ativo.para_dictionary())
 
+func _ativar_sobrecarga() -> void:
+	if combatente_ativo == null:
+		return
+
+	combatente_ativo.habilidade_sobrecarga_ativa = true
+
+	acao_em_progresso = false
+
+	log_panel.registrar_evento(
+		"⚡ %s entrou em SOBRECARGA!" % combatente_ativo.nome,
+		"critico"
+	)
+
+	action_panel.habilitar_acoes()
+
 func _iniciar_item() -> void:
 	"""Inicia uso de item"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
@@ -250,19 +267,20 @@ func _iniciar_item() -> void:
 # ============================================================================
 
 func _on_regiao_selecionada(nome_regiao: String, indice: int) -> void:
-	"""Chamado quando jogador seleciona uma região de ataque"""
-	if nome_regiao not in regioes_selecionadas:
+
+	if combatente_ativo.habilidade_sobrecarga_ativa:
 		regioes_selecionadas.append(nome_regiao)
-		log_panel.registrar_evento("Região selecionada: %s" % nome_regiao, "info")
+
+		log_panel.registrar_evento(
+			"⚡ Sobrecarga: %s arriscada novamente!" % nome_regiao,
+			"critico"
+		)
+
 	else:
-		regioes_selecionadas.erase(nome_regiao)
-		log_panel.registrar_evento("Região removida: %s" % nome_regiao, "info")
-	
-	# Atualiza o jogador para confirmar ou cancelar
-	if regioes_selecionadas.size() > 0:
-		log_panel.registrar_evento("Confirme as regiões selecionadas ou cancele.", "info")
-	else:
-		log_panel.registrar_evento("Selecione as regiões de ataque...", "acao")
+		if nome_regiao not in regioes_selecionadas:
+			regioes_selecionadas.append(nome_regiao)
+		else:
+			regioes_selecionadas.erase(nome_regiao)
 
 func _on_regioes_confirmadas(regioes: Array[String]) -> void:
 	"""Chamado quando o jogador confirma as regiões selecionadas"""

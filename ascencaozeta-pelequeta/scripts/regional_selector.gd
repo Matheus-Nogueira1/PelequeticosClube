@@ -19,7 +19,7 @@ var regioes: Array[String] = [
 ]
 
 # Estado da seleção
-var selecionadas: Array[bool] = [false, false, false, false, false]
+var selecionadas: Array[int] = [0, 0, 0, 0, 0]
 var regioes_finais: Array[String] = []
 var modo: String = "desativado"  # desativado, selecionar_ataque, selecionar_defesa
 var permite_multiplas_mesma_regiao: bool = false  # Sobrecarga ativa
@@ -173,53 +173,48 @@ func desativar() -> void:
 # ============================================================================
 
 func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
-	"""Chamado quando um botão de região é clicado"""
 	if modo == "desativado":
 		return
-	
-	# Validar se pode arriscar a região
+
 	if not _pode_arriscar_regiao(nome_regiao):
 		label_info.text = "Essa região não pode ser arriscada!"
 		return
-	
-	# Se Sobrecarga está ativo, permite múltiplas seleções da mesma região
-	# Senão, apenas uma seleção por botão (toggle normal)
-	if not permite_multiplas_mesma_regiao:
-		# Modo normal: toggle
-		selecionadas[indice] = !selecionadas[indice]
+
+	var total_riscos := contar_selecionadas()
+
+	if permite_multiplas_mesma_regiao:
+		if total_riscos >= 5:
+			label_info.text = "Máximo de 5 riscos!"
+			return
+
+		selecionadas[indice] += 1
 	else:
-		# Modo Sobrecarga: pode selecionar múltiplas vezes
-		# Implementar contagem de vezes selecionada (TODO: expandir para array com contagem)
-		selecionadas[indice] = !selecionadas[indice]
-	
-	# Atualizar visual do botão
+		if selecionadas[indice] > 0:
+			selecionadas[indice] = 0
+		else:
+			if total_riscos >= 5:
+				label_info.text = "Máximo de 5 riscos!"
+				return
+
+			selecionadas[indice] = 1
+
 	_atualizar_visual_botao(indice)
-	
-	# Emitir sinal
-	regiao_selecionada.emit(nome_regiao, indice)
-	
-	# Atualizar label de info
 	_atualizar_info_label()
 
+	regiao_selecionada.emit(nome_regiao, indice)
+
 func _on_confirmar() -> void:
-	"""Callback do botão Confirmar"""
 	if modo == "desativado":
 		return
-	
-	# Coletar regiões selecionadas
-	regioes_finais.clear()
-	for i in range(selecionadas.size()):
-		if selecionadas[i]:
-			regioes_finais.append(regioes[i])
-	
+
+	regioes_finais = obter_regioes_selecionadas()
+
 	if regioes_finais.is_empty():
 		label_info.text = "Selecione pelo menos uma região!"
 		return
-	
-	# Emitir sinal de confirmação
+
 	selecao_confirmada.emit(regioes_finais)
-	
-	# Desativar
+
 	desativar()
 
 func _on_cancelar() -> void:
@@ -232,29 +227,45 @@ func _on_cancelar() -> void:
 # ============================================================================
 
 func _atualizar_visual_botao(indice: int) -> void:
-	"""Atualiza o visual de um botão de região"""
 	var botao = botoes_regiao[indice]
-	
-	if selecionadas[indice]:
-		# Botão selecionado
-		botao.add_theme_color_override("font_color", Color.BLACK)
-		botao.add_theme_color_override("font_focus_color", Color.BLACK)
-		# Usar um StyleBox para marcar como selecionado
+
+	var nome_base = regioes[indice]
+
+	if selecionadas[indice] > 0:
+		botao.text = "%s x%d" % [nome_base, selecionadas[indice]]
+
+		botao.add_theme_color_override(
+			"font_color",
+			Color.BLACK
+		)
+
+		botao.add_theme_color_override(
+			"font_focus_color",
+			Color.BLACK
+		)
 	else:
-		# Botão não selecionado
-		botao.remove_theme_color_override("font_color")
-		botao.remove_theme_color_override("font_focus_color")
+		botao.text = nome_base
+
+		botao.remove_theme_color_override(
+			"font_color"
+		)
+
+		botao.remove_theme_color_override(
+			"font_focus_color"
+		)
 
 func _atualizar_info_label() -> void:
-	"""Atualiza o label informativo com contagem"""
-	var quantidade = selecionadas.count(true)
-	var texto_regioes = []
-	for i in range(selecionadas.size()):
-		if selecionadas[i]:
-			texto_regioes.append(regioes[i])
-	
-	var texto = ", ".join(texto_regioes) if texto_regioes.size() > 0 else "nenhuma"
-	label_info.text = "[%d/5] - Selecionadas: %s" % [quantidade, texto]
+	var total := contar_selecionadas()
+
+	var texto := ""
+
+	for i in range(5):
+		if i < total:
+			texto += "●"
+		else:
+			texto += "○"
+
+	label_info.text = "Riscos: %s (%d/5)" % [texto, total]
 
 func _resetar_selecao() -> void:
 	"""Reseta toda a seleção"""
@@ -273,13 +284,18 @@ func _resetar_selecao() -> void:
 # ============================================================================
 
 func obter_regioes_selecionadas() -> Array[String]:
-	"""Retorna array de regiões atualmente selecionadas"""
 	var resultado: Array[String] = []
+
 	for i in range(selecionadas.size()):
-		if selecionadas[i]:
+		for j in range(selecionadas[i]):
 			resultado.append(regioes[i])
+
 	return resultado
 
 func contar_selecionadas() -> int:
-	"""Retorna quantidade de regiões selecionadas"""
-	return selecionadas.count(true)
+	var total := 0
+
+	for valor in selecionadas:
+		total += valor
+
+	return total
