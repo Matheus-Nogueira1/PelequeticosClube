@@ -151,11 +151,11 @@ func aumentar_treino_conhecimento(conhecimento: String, quantidade: int = 1) -> 
 
 ## ===== VERIFICAÇÃO DE STATUS =====
 
-## Verifica se combatente ainda está consciente (pelo menos uma região não esgotada)
+## Verifica se combatente ainda está consciente (Apenas o Torso)
 func esta_consciente() -> bool:
-	for regiao_stress in estresse_por_regiao.values():
-		if regiao_stress["atual"] < regiao_stress["limite"]:
-			return true
+	var torso_stress = estresse_por_regiao["Torso"]
+	if torso_stress["atual"] < torso_stress["limite"]:
+		return true
 	return false
 
 ## Verifica se combatente desmaiou (TODAS regiões esgotadas)

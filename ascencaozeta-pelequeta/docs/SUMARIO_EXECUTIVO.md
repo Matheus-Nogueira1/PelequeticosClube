@@ -133,18 +133,18 @@ var nome_combo = combatente["nome"] if combatente.has("nome") else "Desconhecido
 **Erro Original:**
 ```gdscript
 match pericia.atributo_base:
-    "inteligencia": attr_valor = combatente.atributo_inteligencia  # ❌ Não existe!
-    "agilidade": attr_valor = combatente.atributo_agilidade        # ❌ Não existe!
-    "vontade": attr_valor = combatente.atributo_vontade             # ❌ Não existe!
+	"inteligencia": attr_valor = combatente.atributo_inteligencia  # ❌ Não existe!
+	"agilidade": attr_valor = combatente.atributo_agilidade        # ❌ Não existe!
+	"vontade": attr_valor = combatente.atributo_vontade             # ❌ Não existe!
 ```
 **Corrigido Para (Atributos OBLIVIO):**
 ```gdscript
 match atributo_nome:
-    "carne": attr_valor = combatente.atributo_carne
-    "forca": attr_valor = combatente.atributo_forca
-    "mente": attr_valor = combatente.atributo_mente
-    "fuga": attr_valor = combatente.atributo_fuga
-    "determinacao": attr_valor = combatente.atributo_determinacao
+	"carne": attr_valor = combatente.atributo_carne
+	"forca": attr_valor = combatente.atributo_forca
+	"mente": attr_valor = combatente.atributo_mente
+	"fuga": attr_valor = combatente.atributo_fuga
+	"determinacao": attr_valor = combatente.atributo_determinacao
 ```
 
 ### Erro 3: Atributos Mutáveis Não Calculados
@@ -153,16 +153,16 @@ match atributo_nome:
 **Solução:**
 ```gdscript
 func _init(p_nome: String, p_tipo: String) -> void:
-    nome = p_nome
-    tipo = p_tipo
-    _calcular_atributos_mutaveis()  # ✅ Calcula agora!
+	nome = p_nome
+	tipo = p_tipo
+	_calcular_atributos_mutaveis()  # ✅ Calcula agora!
 
 func _calcular_atributos_mutaveis() -> void:
-    atributo_folego = (atributo_carne + atributo_determinacao) / 2
-    atributo_dano = (atributo_forca + atributo_carne) / 2
-    atributo_coragem = (atributo_determinacao + atributo_mente) / 2
-    atributo_protecao = (atributo_carne + atributo_fuga) / 2
-    atributo_velocidade = (atributo_fuga + atributo_determinacao) / 2
+	atributo_folego = (atributo_carne + atributo_determinacao) / 2
+	atributo_dano = (atributo_forca + atributo_carne) / 2
+	atributo_coragem = (atributo_determinacao + atributo_mente) / 2
+	atributo_protecao = (atributo_carne + atributo_fuga) / 2
+	atributo_velocidade = (atributo_fuga + atributo_determinacao) / 2
 ```
 
 ---

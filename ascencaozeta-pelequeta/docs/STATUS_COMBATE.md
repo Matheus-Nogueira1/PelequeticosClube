@@ -101,10 +101,10 @@ CombatManager (Orquestrador)
 ├── PartyPanel (Lista de personagens + Status)
 ├── CombatLog (Histórico de eventos)
 └── Combatentes
-    ├── CombatenteData (Jogador)
-    ├── CombatenteData (Inimigo 1)
-    ├── CombatenteData (Inimigo 2)
-    └── ...
+	├── CombatenteData (Jogador)
+	├── CombatenteData (Inimigo 1)
+	├── CombatenteData (Inimigo 2)
+	└── ...
 ```
 
 **Dados Atualizados Para:**

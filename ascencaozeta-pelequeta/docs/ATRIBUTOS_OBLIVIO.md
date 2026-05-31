@@ -128,10 +128,10 @@ guerreiro.aplicar_estresse("Torso", 2)  # Adiciona 2 de estresse
 
 # Verificar status
 if guerreiro.regiao_esgotada("Torso"):
-    print("Torso está esgotado!")
+	print("Torso está esgotado!")
 
 if guerreiro.esta_consciente():
-    print("Ainda está consciente")
+	print("Ainda está consciente")
 ```
 
 ### Dano e Transbordamento
@@ -147,26 +147,26 @@ Para criar um novo tipo de inimigo:
 
 ```gdscript
 static func criar_novo_inimigo() -> CombatenteData:
-    var inimigo = CombatenteData.new("Nome", "inimigo")
-    
-    # Atributos Fixos
-    inimigo.atributo_carne = 3
-    inimigo.atributo_forca = 3
-    inimigo.atributo_mente = 2
-    inimigo.atributo_fuga = 2
-    inimigo.atributo_determinacao = 2
-    
-    # Dano e Defesa
-    inimigo.dano_arma = 2
-    inimigo.defesa_base = 1
-    
-    # Perícias (opcional)
-    inimigo.pericias = {
-        "Duelo": 2,
-        "Reflexos": 1
-    }
-    
-    return inimigo
+	var inimigo = CombatenteData.new("Nome", "inimigo")
+	
+	# Atributos Fixos
+	inimigo.atributo_carne = 3
+	inimigo.atributo_forca = 3
+	inimigo.atributo_mente = 2
+	inimigo.atributo_fuga = 2
+	inimigo.atributo_determinacao = 2
+	
+	# Dano e Defesa
+	inimigo.dano_arma = 2
+	inimigo.defesa_base = 1
+	
+	# Perícias (opcional)
+	inimigo.pericias = {
+		"Duelo": 2,
+		"Reflexos": 1
+	}
+	
+	return inimigo
 ```
 
 ---
