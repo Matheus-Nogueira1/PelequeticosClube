@@ -2,7 +2,7 @@ extends Node
 class_name CombatManager
 
 # Importações
-const RolagemDadosD6 = preload("res://scripts/rolagens-dados-d6.gd")
+const RolagemDadosD6 = preload("res://scripts/battle/rolagens-dados-d6.gd")
 
 # Tipos de ações conforme OBLIVIO
 enum ActionType {
@@ -363,20 +363,56 @@ func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: 
 		
 		# FALHA: Apenas o atacante sofre (arriscou e perdeu)
 		if res_regiao["categoria"] in ["Falha Regular", "Falha Crítica"]:
-			var estresse_gerado = 2 if res_regiao["categoria"] == "Falha Crítica" else 1
-			atacante.aplicar_estresse(res_regiao["regiao"], estresse_gerado)
+			var estresse_gerado = 10 if res_regiao["categoria"] == "Falha Crítica" else 10
+			var resultado_estresse = atacante.aplicar_estresse(
+			res_regiao["regiao"],
+			estresse_gerado
+			)
+			if not resultado_estresse.is_empty():
+				log_panel.registrar_evento(
+					resultado_estresse["mensagem"],
+					"critico"
+				)
+				if resultado_estresse.has("resultado_fardo"):
+					log_panel.registrar_evento(
+						resultado_estresse["resultado_fardo"]["mensagem"],
+						"critico"
+					)
+				_verificar_fim_combate()
+				if not combate_ativo:
+					return
+			if atacante.morto:
+				_derrotar_combatente(atacante)
+				return
 			log_panel.registrar_evento("%s sofre %d de estresse em %s (ataque falhou)" % [
 				atacante.nome, estresse_gerado, res_regiao["regiao"]
 			], "aviso")
-		
+			
 		# SUCESSO: Alvo sofre estresse (defesa falhou)
 		elif res_regiao["categoria"] in ["Sucesso Regular", "Sucesso Extremo"]:
-			var estresse_gerado = 1 if res_regiao["categoria"] == "Sucesso Regular" else 2
+			var estresse_gerado = atacante.atributo_dano
 			alvo.aplicar_estresse(res_regiao["regiao"], estresse_gerado)
-			log_panel.registrar_evento("%s sofre %d de estresse em %s (defesa falhou)" % [
-				alvo.nome, estresse_gerado, res_regiao["regiao"]
-			], "dano")
-	
+			var resultado_estresse = alvo.aplicar_estresse(
+				res_regiao["regiao"],
+				estresse_gerado
+			)
+			if not resultado_estresse.is_empty():
+				log_panel.registrar_evento(
+					resultado_estresse["mensagem"],
+					"critico"
+				)
+				if resultado_estresse.has("resultado_fardo"):
+					log_panel.registrar_evento(
+						resultado_estresse["resultado_fardo"]["mensagem"],
+						"critico"
+					)
+				_verificar_fim_combate()
+				if not combate_ativo:
+					return
+				log_panel.registrar_evento("%s sofre %d de estresse em %s (defesa falhou)" % [
+					alvo.nome, estresse_gerado, res_regiao["regiao"]
+				], "dano")
+		
 	# Resumo do ataque
 	log_panel.registrar_evento("Sucessos: %d | Falhas: %d (simples: %d, críticas: %d)" % [
 		resultado_combate["total_sucessos"],
@@ -434,6 +470,8 @@ func _derrotar_combatente(combatente: CombatenteData) -> void:
 	
 	# Verificar se combate acabou
 	_verificar_fim_combate()
+	if not combate_ativo:
+		return
 
 func _verificar_fim_combate() -> void:
 	"""Verifica se um dos lados foi completamente derrotado"""
@@ -453,9 +491,17 @@ func _verificar_fim_combate() -> void:
 		if combatente_ativo.tipo == "jogador":
 			action_panel.habilitar_acoes()
 			log_panel.registrar_evento("Escolha a próxima ação ou passe o turno.", "info")
+	if jogadores_vivos.is_empty():
+		_finalizar_combate("Derrota")
+		return
+	if inimigos_vivos.is_empty():
+		_finalizar_combate("Vitória")
+		return
 
 func _finalizar_combate(resultado: String) -> void:
 	"""Encerra o combate e retorna ao menu/mapa"""
+	if not combate_ativo:
+		return
 	combate_ativo = false
 	log_panel.registrar_evento(
 		"═══ COMBATE FINALIZADO: %s ═══" % resultado,

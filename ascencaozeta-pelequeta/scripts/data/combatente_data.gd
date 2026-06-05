@@ -37,6 +37,8 @@ var dano_arma: int = 1
 var defesa_base: int = 1
 var iniciativa: int = 0
 var status: Array[String] = []
+var desmaiado: bool = false
+
 
 ## ESTRESSE POR REGIÃO (métrica principal em OBLIVIO)
 ## Começa com 0 e acumula até o LIMITE
@@ -153,10 +155,7 @@ func aumentar_treino_conhecimento(conhecimento: String, quantidade: int = 1) -> 
 
 ## Verifica se combatente ainda está consciente (Apenas o Torso)
 func esta_consciente() -> bool:
-	var torso_stress = estresse_por_regiao["Torso"]
-	if torso_stress["atual"] < torso_stress["limite"]:
-		return true
-	return false
+	return not desmaiado
 
 ## Verifica se combatente desmaiou (TODAS regiões esgotadas)
 func esta_desmaiado() -> bool:
@@ -177,30 +176,31 @@ func regiao_pode_ser_arriscada(regiao: String) -> bool:
 
 ## Aplica estresse a uma região (métrica principal em OBLIVIO)
 ## Se superar limite, transborda para torso (exceto se for torso)
-func aplicar_estresse(regiao: String, estresse_quantidade: int) -> void:
+# REGRA OBLIVIO: Dano que supera limite transborda para torso
+func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
+	var resultado: Dictionary = {}
 	if not estresse_por_regiao.has(regiao):
-		print("[CombatenteData] Região inválida: %s" % regiao)
-		return
-	
+		return {}
 	var regiao_stress = estresse_por_regiao[regiao]
 	regiao_stress["atual"] += estresse_quantidade
-	
-	# REGRA OBLIVIO: Dano que supera limite transborda para torso
-	if regiao != "Torso" and regiao_stress["atual"] > regiao_stress["limite"]:
+	# Torso
+	if regiao == "Torso":
+		if regiao_stress["atual"] >= regiao_stress["limite"]:
+			regiao_stress["atual"] = regiao_stress["limite"]
+			if not desmaiado:
+				desmaiado = true
+				resultado = processar_limite_torso()
+		return resultado
+	# Regiões normais
+	if regiao_stress["atual"] > regiao_stress["limite"]:
 		var transbordado = regiao_stress["atual"] - regiao_stress["limite"]
-		regiao_stress["atual"] = regiao_stress["limite"]  # Capa no limite
-		
-		# Transborda para torso
-		if transbordado > 0:
-			print("[CombatenteData] Estresse de %s transbordo %d para Torso!" % [regiao, transbordado])
-			var torso_stress = estresse_por_regiao["Torso"]
-			torso_stress["atual"] += transbordado
-
-## Reduz estresse de uma região (cura/recuperação)
-func aliviar_estresse(regiao: String, quantidade: int) -> void:
-	if estresse_por_regiao.has(regiao):
-		estresse_por_regiao[regiao]["atual"] = max(0, estresse_por_regiao[regiao]["atual"] - quantidade)
-
+		regiao_stress["atual"] = regiao_stress["limite"]
+		var torso_stress = estresse_por_regiao["Torso"]
+		torso_stress["atual"] += transbordado
+		if torso_stress["atual"] >= torso_stress["limite"]:
+			torso_stress["atual"] = torso_stress["limite"]
+			resultado = processar_limite_torso()
+	return resultado
 ## ===== CÁLCULOS =====
 
 ## Retorna estresse total (soma de todas regiões)
@@ -248,30 +248,32 @@ func consumir_pontos_acao(custo: int) -> bool:
 
 ## ===== DESMAIOS E FARDOS =====
 
-## Processa quando Torso atinge limite de estresse (Dark Souls Curse System)
 func processar_limite_torso() -> Dictionary:
-	"""
-	Quando Torso atinge limite:
-	1. Ganha um Fardo (maldição)
-	2. Fica desmaiado (TODAS regiões esgotadas = Torso em limite)
-	3. Pode ser revivido por habilidades
+	print("=== PROCESSAR LIMITE TORSO ===")
+	print(nome)
+	print(tipo)
 	
-	Retorna informações sobre o Fardo aplicado
-	"""
+	# Inimigos não recebem Fardos
+	if tipo == "inimigo":
+		morto = true
+
+		return {
+			"sucesso": true,
+			"derrotado": true,
+			"mensagem": "%s foi derrotado!" % nome
+		}
+
+	# Jogadores recebem Fardos normalmente
 	numero_desmaios_total += 1
-	
-	# Sorteia novo Fardo
+
 	var novo_fardo = FardoData.sortear_fardo(numero_desmaios_total)
 	var resultado_fardo = FardoData.aplicar_fardo(self, novo_fardo)
-	
-	# NÃO reseta Torso - fica em limite para manter desmaiado
-	# Torso permanece em {"atual": limite, "limite": limite}
-	
+
 	return {
 		"numero_desmaio": numero_desmaios_total,
 		"fardo_aplicado": novo_fardo.nome,
 		"resultado_fardo": resultado_fardo,
-		"mensagem": "Desmaio #%d - %s! %s" % [numero_desmaios_total, novo_fardo.nome, resultado_fardo.get("mensagem", "")]
+		"mensagem": "Desmaio #%d - %s!" % [numero_desmaios_total, novo_fardo.nome]
 	}
 
 ## Revive um combatente (reduz 1 ponto de Torso para acordar)
@@ -318,15 +320,15 @@ func para_dictionary() -> Dictionary:
 
 ## Cria a partir de um Dictionary
 static func de_dictionary(dados: Dictionary) -> CombatenteData:
-	var nome = "Desconhecido"
+	var nome_temp = "Desconhecido"
 	if dados.has("nome"):
-		nome = dados["nome"]
+		nome_temp = dados["nome"]
 	
-	var tipo = "npc"
+	var tipo_temp = "npc"
 	if dados.has("tipo"):
-		tipo = dados["tipo"]
+		tipo_temp = dados["tipo"]
 	
-	var combatente = CombatenteData.new(nome, tipo)
+	var combatente = CombatenteData.new(nome_temp, tipo_temp)
 	
 	if dados.has("atributo_carne"):
 		combatente.atributo_carne = dados["atributo_carne"]

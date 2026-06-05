@@ -56,6 +56,7 @@ func _criar_layout() -> void:
 	
 	for i in range(regioes.size()):
 		var botao = _criar_botao_regiao(regioes[i], i)
+		botao.focus_mode = Control.FOCUS_ALL
 		botoes_regiao.append(botao)
 		grid_regioes.add_child(botao)
 	
@@ -101,15 +102,13 @@ func _criar_botao_regiao(nome: String, indice: int) -> Button:
 # ============================================================================
 
 func ativar_para_ataque(combatente: CombatenteData) -> void:
-	"""Ativa o seletor para modo de ataque"""
 	combatente_ativo = combatente
 	modo = "selecionar_ataque"
-	label_titulo.text = "Selecione Regiões de Ataque"
-	label_info.text = "Clique para selecionar"
-	mouse_filter = Control.MOUSE_FILTER_STOP
 	show()
+	await get_tree().process_frame
+	if botoes_regiao.size() > 0:
+		botoes_regiao[0].grab_focus()
 	_resetar_selecao()
-	
 	# Ativar Sobrecarga se o combatente tem a habilidade
 	permite_multiplas_mesma_regiao = combatente.habilidade_sobrecarga_ativa
 	

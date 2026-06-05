@@ -29,6 +29,11 @@ func _ready() -> void:
 	_criar_menus_popup()
 	desabilitar_acoes()
 
+	botao_atacar.focus_mode = Control.FOCUS_ALL
+	botao_pericia.focus_mode = Control.FOCUS_ALL
+	botao_habilidade.focus_mode = Control.FOCUS_ALL
+	botao_item.focus_mode = Control.FOCUS_ALL
+
 # ============================================================================
 # CRIAÇÃO DA UI
 # ============================================================================
@@ -107,15 +112,14 @@ func _criar_menus_popup() -> void:
 # ============================================================================
 
 func ativar_para(combatente: Dictionary, ref_combatente: CombatenteData = null) -> void:
-	"""Ativa o painel de ações para um combatente específico"""
 	combatente_ativo = combatente
 	combatente_ref = ref_combatente
+
 	show()
-	mouse_filter = Control.MOUSE_FILTER_STOP
 	habilitar_acoes()
-	
-	# Mostrar informações do combatente
-	print("[ActionPanel] Ativado para: %s" % combatente["nome"])
+
+	await get_tree().process_frame
+	botao_atacar.grab_focus()
 
 func habilitar_acoes() -> void:
 	"""Habilita todos os botões de ação"""

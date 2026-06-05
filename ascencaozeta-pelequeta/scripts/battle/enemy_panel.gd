@@ -159,15 +159,13 @@ func _criar_barra_estresse(atual: int, maximo: int) -> String:
 # ============================================================================
 
 func ativar_seletor_alvo() -> void:
-	"""Ativa o modo de seleção de alvo"""
 	modo_seletor_ativo = true
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	
-	# Destacar todos os botões como selecionáveis
 	for botao in botoes_inimigos.values():
-		botao.disabled = false
-		botao.toggle_mode = true
-		botao.mouse_filter = Control.MOUSE_FILTER_STOP
+		botao.focus_mode = Control.FOCUS_ALL
+	await get_tree().process_frame
+	if botoes_inimigos.size() > 0:
+		botoes_inimigos.values()[0].grab_focus()
 
 func desativar_seletor_alvo() -> void:
 	"""Desativa o modo de seleção de alvo"""

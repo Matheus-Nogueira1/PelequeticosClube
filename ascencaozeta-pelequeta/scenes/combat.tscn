@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://bvyvc5ny3cht8"]
 
-[ext_resource type="Script" uid="uid://dc3exjjcw8t1a" path="res://scripts/combat_manager.gd" id="1_vcae8"]
-[ext_resource type="Script" uid="uid://bukkkhb0emhf5" path="res://scripts/party_panel.gd" id="2_osi8t"]
-[ext_resource type="Script" uid="uid://b1tedx80y13s8" path="res://scripts/enemy_panel.gd" id="3_4gnb8"]
-[ext_resource type="Script" uid="uid://eu8x2f5u65mw" path="res://scripts/regional_selector.gd" id="4_sa5k0"]
-[ext_resource type="Script" uid="uid://1pi1e308ovsg" path="res://scripts/action_panel.gd" id="5_8we11"]
-[ext_resource type="Script" uid="uid://uhm4r7mxh3le" path="res://scripts/combat_log.gd" id="6_hrcy2"]
+[ext_resource type="Script" uid="uid://dc3exjjcw8t1a" path="res://scripts/battle/combat_manager.gd" id="1_vcae8"]
+[ext_resource type="Script" uid="uid://bukkkhb0emhf5" path="res://scripts/battle/party_panel.gd" id="2_osi8t"]
+[ext_resource type="Script" uid="uid://b1tedx80y13s8" path="res://scripts/battle/enemy_panel.gd" id="3_4gnb8"]
+[ext_resource type="Script" uid="uid://eu8x2f5u65mw" path="res://scripts/battle/regional_selector.gd" id="4_sa5k0"]
+[ext_resource type="Script" uid="uid://1pi1e308ovsg" path="res://scripts/battle/action_panel.gd" id="5_8we11"]
+[ext_resource type="Script" uid="uid://uhm4r7mxh3le" path="res://scripts/battle/combat_log.gd" id="6_hrcy2"]
 
 [node name="Control" type="Control" unique_id=1663544077]
 layout_mode = 3
