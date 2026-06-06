@@ -132,6 +132,10 @@ func _pode_arriscar_regiao(regiao: String) -> bool:
 		var protese = combatente_ativo.proteses[regiao]
 		return not protese.destruida
 	
+	var stress = combatente_ativo.estresse_por_regiao[regiao]
+	if stress["atual"] >= stress["limite"]:
+		return false
+		
 	return true
 
 func _atualizar_estado_botoes() -> void:

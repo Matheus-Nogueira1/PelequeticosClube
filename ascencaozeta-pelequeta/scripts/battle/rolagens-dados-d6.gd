@@ -88,15 +88,7 @@ func rolar_teste_combate_d6(regioes_arriscadas: Array, protecao_alvo: int, dano_
 		})
 
 	var total_sucessos = sucessos_regulares + (sucessos_extremos * 2)
-	var dano_aplicado = 0
-	var protecao_temporaria = max(protecao_alvo - total_sucessos, 0)
-	var dano_causado = false
-
-	if total_sucessos >= protecao_alvo:
-		dano_aplicado = dano_arma + atributo_dano
-		dano_causado = true
-		protecao_temporaria = 0
-
+	
 	return {
 		"tipo": "Combate D6",
 		"regioes_arriscadas": regioes_arriscadas,
@@ -107,10 +99,6 @@ func rolar_teste_combate_d6(regioes_arriscadas: Array, protecao_alvo: int, dano_
 		"falhas_criticas": falhas_criticas,
 		"total_sucessos": total_sucessos,
 		"estresse_gerado": estresse_gerado,
-		"protecao_alvo": protecao_alvo,
-		"protecao_temporaria": protecao_temporaria,
-		"dano_aplicado": dano_aplicado,
-		"dano_causado": dano_causado
 	}
 
 func avaliar_resultado_d6(valor: int) -> String:

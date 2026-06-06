@@ -26,7 +26,7 @@ func registrar_evento(mensagem: String, tipo: String = "normal") -> void:
 	await get_tree().create_timer(TEMPO_SCROLL_DELAY).timeout
 	scroll_to_line(get_line_count() - 1)
 	
-	_limpar_overflow()
+	
 
 func registrar_ataque(dados: Dictionary) -> void:
 	"""
@@ -87,7 +87,7 @@ func registrar_ataque(dados: Dictionary) -> void:
 	await get_tree().create_timer(TEMPO_SCROLL_DELAY).timeout
 	scroll_to_line(get_line_count() - 1)
 	
-	_limpar_overflow()
+	
 
 func registrar_status(combatente: String, status: String, ativo: bool = true) -> void:
 	"""Registra mudança de status de um combatente"""

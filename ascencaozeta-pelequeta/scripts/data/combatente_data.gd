@@ -33,11 +33,16 @@ var atributo_velocidade: int = 1         # Velocidade de movimento
 
 
 ## Dados de combate
+var arma_equipada: String = ""
 var dano_arma: int = 1
 var defesa_base: int = 1
 var iniciativa: int = 0
 var status: Array[String] = []
 var desmaiado: bool = false
+var reducao_protecao_temporaria: int = 0
+
+# Quem causou o último dano após quebrar a proteção
+var atacante_que_quebrou_protecao: String = ""
 
 
 ## ESTRESSE POR REGIÃO (métrica principal em OBLIVIO)
@@ -80,6 +85,7 @@ var habilidades: Array[String] = []
 
 ## Itens
 var inventario: Array[String] = []
+
 
 ## Sistema de Fardos (Dark Souls curses) - Aplicados quando Torso atinge limite
 var fardos: Array = []                           # Array de Fardo aplicados
@@ -192,17 +198,28 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 				resultado = processar_limite_torso()
 		return resultado
 	# Regiões normais
-	if regiao_stress["atual"] > regiao_stress["limite"]:
-		var transbordado = regiao_stress["atual"] - regiao_stress["limite"]
+	if regiao_stress["atual"] >= regiao_stress["limite"]:
 		regiao_stress["atual"] = regiao_stress["limite"]
+		# Marca região como perdida
+		if not regiao in regioes_perdidas:
+			regioes_perdidas.append(regiao)
+		var transbordado = regiao_stress["atual"] - regiao_stress["limite"]
+		
 		var torso_stress = estresse_por_regiao["Torso"]
 		torso_stress["atual"] += transbordado
 		if torso_stress["atual"] >= torso_stress["limite"]:
 			torso_stress["atual"] = torso_stress["limite"]
 			resultado = processar_limite_torso()
 	return resultado
-## ===== CÁLCULOS =====
 
+## ===== CÁLCULOS =====
+func calcular_dano_ataque() -> int:
+	var dano = atributo_dano
+	if arma_equipada != "":
+		dano += ArmaData.rolar_dano_arma(
+			arma_equipada
+		)
+	return dano
 ## Retorna estresse total (soma de todas regiões)
 func get_estresse_total() -> int:
 	var total = 0
@@ -233,6 +250,8 @@ func contar_regioes_esgotadas() -> int:
 			count += 1
 	return count
 
+func obter_protecao_atual() -> int:
+	return max(0, atributo_protecao - reducao_protecao_temporaria)
 ## ===== PA (PONTOS DE AÇÃO) =====
 
 ## Restaura PA no início do turno

@@ -42,6 +42,7 @@ var acao_em_progresso: bool = false
 var regioes_selecionadas: Array[String] = []
 var alvo_selecionado: Dictionary = {}
 
+
 func _ready() -> void:
 	_conectar_sinais_paineis()
 	_inicializar_combate()
@@ -151,6 +152,18 @@ func _avancar_turno() -> void:
 		return
 	
 	combatente_ativo = combatente_proxximo
+	_restaurar_protecoes(combatente_ativo)
+
+	for inimigo in combatentes_inimigo:
+		if inimigo.atacante_que_quebrou_protecao == combatente_ativo.nome:
+			inimigo.reducao_protecao_temporaria = 0
+			inimigo.atacante_que_quebrou_protecao = ""
+
+	for aliado in combatentes_jogador:
+		if aliado.atacante_que_quebrou_protecao == combatente_ativo.nome:
+			aliado.reducao_protecao_temporaria = 0
+			aliado.ultimo_atacante_protecao = ""
+	
 	turno_iniciado.emit(combatente_ativo)
 	
 	# Ativar painel de ações se for personagem jogador
@@ -169,6 +182,24 @@ func _avancar_turno() -> void:
 		# TODO: IA para inimigos
 		await get_tree().create_timer(1.5).timeout
 		_executar_turno_inimigo()
+
+func _restaurar_protecoes(combatente: CombatenteData) -> void:
+	for alvo in combatentes_jogador:
+		if alvo.atacante_que_quebrou_protecao == combatente.nome:
+			alvo.reducao_protecao_temporaria = 0
+			alvo.atacante_que_quebrou_protecao = ""
+			log_panel.registrar_evento(
+				"A proteção de %s foi restaurada." % alvo.nome,
+				"info"
+			)
+	for alvo in combatentes_inimigo:
+		if alvo.atacante_que_quebrou_protecao == combatente.nome:
+			alvo.reducao_protecao_temporaria = 0
+			alvo.atacante_que_quebrou_protecao = ""
+			log_panel.registrar_evento(
+				"A proteção de %s foi restaurada." % alvo.nome,
+				"info"
+			)
 
 func _encontrar_proximo_combatente() -> CombatenteData:
 	"""Encontra o próximo combatente vivo na ordem"""
@@ -340,62 +371,48 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 # PROCESSAMENTO DE ATAQUE
 # ============================================================================
 
-func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: Array[String]) -> void:
-	"""Executa a lógica de ataque: rola dados D6, calcula dano, aplica efeitos (mesma lógica do seletor)"""
-	
-	# Usar RolagemDadosD6 para teste de combate (como no seletor-corpo.gd)
+func _processar_ataque(
+	atacante: CombatenteData,
+	alvo: CombatenteData,
+	regioes: Array[String]
+) -> void:
 	var rolagem = RolagemDadosD6.new()
 	var resultado_combate = rolagem.rolar_teste_combate_d6(
 		regioes,
-		2,  # protecao_alvo (padrão)
-		2,  # dano_arma (padrão)
+		2,
+		2,
 		atacante.atributo_dano
 	)
-	
-	# Log detalhado de cada região - aplicar efeitos
+
+	# ============================================================
+	# LOG DAS REGIÕES
+	# ============================================================
+
 	for res_regiao in resultado_combate["resultados_por_regiao"]:
-		var mensagem = "Região: %s → D6: %d (%s)" % [
-			res_regiao["regiao"],
-			res_regiao["dado"],
-			res_regiao["categoria"]
-		]
-		log_panel.registrar_evento(mensagem, "ataque")
-		
-		# FALHA: Apenas o atacante sofre (arriscou e perdeu)
+		log_panel.registrar_evento(
+			"Região: %s → D6: %d (%s)" % [
+				res_regiao["regiao"],
+				res_regiao["dado"],
+				res_regiao["categoria"]
+			],
+			"ataque"
+		)
 		if res_regiao["categoria"] in ["Falha Regular", "Falha Crítica"]:
-			var estresse_gerado = 10 if res_regiao["categoria"] == "Falha Crítica" else 10
+			var estresse_gerado := 1
+			if res_regiao["categoria"] == "Falha Crítica":
+				estresse_gerado = 2
 			var resultado_estresse = atacante.aplicar_estresse(
-			res_regiao["regiao"],
-			estresse_gerado
-			)
-			if not resultado_estresse.is_empty():
-				log_panel.registrar_evento(
-					resultado_estresse["mensagem"],
-					"critico"
-				)
-				if resultado_estresse.has("resultado_fardo"):
-					log_panel.registrar_evento(
-						resultado_estresse["resultado_fardo"]["mensagem"],
-						"critico"
-					)
-				_verificar_fim_combate()
-				if not combate_ativo:
-					return
-			if atacante.morto:
-				_derrotar_combatente(atacante)
-				return
-			log_panel.registrar_evento("%s sofre %d de estresse em %s (ataque falhou)" % [
-				atacante.nome, estresse_gerado, res_regiao["regiao"]
-			], "aviso")
-			
-		# SUCESSO: Alvo sofre estresse (defesa falhou)
-		elif res_regiao["categoria"] in ["Sucesso Regular", "Sucesso Extremo"]:
-			var estresse_gerado = atacante.atributo_dano
-			alvo.aplicar_estresse(res_regiao["regiao"], estresse_gerado)
-			var resultado_estresse = alvo.aplicar_estresse(
 				res_regiao["regiao"],
 				estresse_gerado
 			)
+			log_panel.registrar_evento(
+				"%s sofre %d de estresse em %s (ataque falhou)" % [
+					atacante.nome,
+					estresse_gerado,
+					res_regiao["regiao"]
+				],
+				"aviso"
+			)
 			if not resultado_estresse.is_empty():
 				log_panel.registrar_evento(
 					resultado_estresse["mensagem"],
@@ -406,28 +423,135 @@ func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: 
 						resultado_estresse["resultado_fardo"]["mensagem"],
 						"critico"
 					)
-				_verificar_fim_combate()
-				if not combate_ativo:
-					return
-				log_panel.registrar_evento("%s sofre %d de estresse em %s (defesa falhou)" % [
-					alvo.nome, estresse_gerado, res_regiao["regiao"]
-				], "dano")
-		
-	# Resumo do ataque
-	log_panel.registrar_evento("Sucessos: %d | Falhas: %d (simples: %d, críticas: %d)" % [
-		resultado_combate["total_sucessos"],
-		resultado_combate["falhas_regulares"] + resultado_combate["falhas_criticas"],
-		resultado_combate["falhas_regulares"],
-		resultado_combate["falhas_criticas"]
-	], "info")
-	
-	# Atualizar painéis (tanto atacante quanto alvo)
+
+	# ============================================================
+	# APÓS TODAS AS FALHAS
+	# VERIFICA SE O ATACANTE AINDA CONSEGUE CONTINUAR
+	# ============================================================
+
+	if atacante.morto or not atacante.esta_consciente():
+		log_panel.registrar_evento(
+			"%s não consegue concluir o ataque." % atacante.nome,
+			"critico"
+		)
+		party_panel.atualizar_personagem(
+			atacante.para_dictionary()
+		)
+		_finalizar_acao()
+		return
+
+	# ============================================================
+	# PROCESSAR SUCESSOS
+	# ============================================================
+
+	var sucessos = resultado_combate["total_sucessos"]
+	if sucessos <= 0:
+		log_panel.registrar_evento(
+			"Nenhum sucesso obtido.",
+			"info"
+		)
+	else:
+		var protecao_atual = alvo.obter_protecao_atual()
+		log_panel.registrar_evento(
+			"Proteção de %s: %d/%d" % [
+				alvo.nome,
+				protecao_atual,
+				alvo.atributo_protecao
+			],
+			"info"
+		)
+		log_panel.registrar_evento(
+			"Sucessos obtidos: %d" % sucessos,
+			"info"
+		)
+		if sucessos < protecao_atual:
+			var protecao_antes = protecao_atual
+
+			alvo.reducao_protecao_temporaria += sucessos
+
+			var protecao_depois = alvo.obter_protecao_atual()
+
+			log_panel.registrar_evento(
+				"Proteção reduzida: %d → %d" % [
+					protecao_antes,
+					protecao_depois
+				],
+				"info"
+			)
+		else:
+			alvo.atacante_que_quebrou_protecao = atacante.nome
+			var dano_atributo = atacante.atributo_dano
+			var dano_arma = 0
+			log_panel.registrar_evento(
+				"Proteção quebrada!" ,
+				"critico"
+			)
+
+			log_panel.registrar_evento(
+				"Proteção: %d → 0" % protecao_atual,
+				"critico"
+			)
+			if atacante.arma_equipada != "":
+				dano_arma = ArmaData.rolar_dano_arma(
+					atacante.arma_equipada
+				)
+			var dano_total = dano_atributo + dano_arma
+			log_panel.registrar_evento(
+				"Dano Base: %d | Dano Arma: %d | Total: %d" % [
+					dano_atributo,
+					dano_arma,
+					dano_total
+				],
+				"info"
+			)
+			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
+			var resultado_estresse = alvo.aplicar_estresse(
+				"Torso",
+				dano_total
+			)
+			log_panel.registrar_evento(
+				"%s causou %d de estresse em %s." % [
+					atacante.nome,
+					dano_total,
+					alvo.nome
+				],
+				"dano"
+			)
+			if not resultado_estresse.is_empty():
+				log_panel.registrar_evento(
+					resultado_estresse["mensagem"],
+					"critico"
+				)
+				if resultado_estresse.has("resultado_fardo"):
+					log_panel.registrar_evento(
+						resultado_estresse["resultado_fardo"]["mensagem"],
+						"critico"
+					)
+
+	# ============================================================
+	# RESUMO
+	# ============================================================
+
+	log_panel.registrar_evento(
+		"Sucessos: %d | Falhas: %d (simples: %d, críticas: %d)" % [
+			resultado_combate["total_sucessos"],
+			resultado_combate["falhas_regulares"] + resultado_combate["falhas_criticas"],
+			resultado_combate["falhas_regulares"],
+			resultado_combate["falhas_criticas"]
+		],
+		"info"
+	)
 	party_panel.atualizar_personagem(atacante.para_dictionary())
 	party_panel.atualizar_personagem(alvo.para_dictionary())
 	var inimigos_atualizado: Array[Dictionary] = []
 	inimigos_atualizado.append(alvo.para_dictionary())
 	enemy_panel.atualizar_todos(inimigos_atualizado)
+	_verificar_fim_combate()
+	if not combate_ativo:
+		return
+	_finalizar_acao()
 	
+func _finalizar_acao() -> void:
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
 	enemy_panel.desativar_seletor_alvo()
@@ -486,17 +610,7 @@ func _verificar_fim_combate() -> void:
 		_finalizar_combate("Derrota")
 	elif inimigos_vivos.is_empty():
 		_finalizar_combate("Vitória")
-	else:
-		# Continuar combate normalmente - próxima ação ou próximo turno
-		if combatente_ativo.tipo == "jogador":
-			action_panel.habilitar_acoes()
-			log_panel.registrar_evento("Escolha a próxima ação ou passe o turno.", "info")
-	if jogadores_vivos.is_empty():
-		_finalizar_combate("Derrota")
-		return
-	if inimigos_vivos.is_empty():
-		_finalizar_combate("Vitória")
-		return
+		
 
 func _finalizar_combate(resultado: String) -> void:
 	"""Encerra o combate e retorna ao menu/mapa"""

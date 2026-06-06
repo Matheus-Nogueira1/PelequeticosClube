@@ -59,6 +59,7 @@ static func criar_mob() -> CombatenteData:
 		"TACO GIGANTE",
 		"VESTIMENTA PESADA",
 	] as Array[String]
+	mob.arma_equipada = "TacoGigante"
 	
 	return mob
 
@@ -131,6 +132,7 @@ static func criar_escolhido() -> CombatenteData:
 		# "Anel de Astora",
 		# "Frasco Estus",
 	] as Array[String]
+	escolhido.arma_equipada = "BolaDeFogo"
 	
 	return escolhido
 
@@ -198,7 +200,7 @@ static func criar_JP() -> CombatenteData:
 		# "Bomba de fumaça",
 		# "Fonte de luz",
 	] as Array[String]
-	
+	JP.arma_equipada = "Besta"
 	return JP
 
 ## ============================================================================
