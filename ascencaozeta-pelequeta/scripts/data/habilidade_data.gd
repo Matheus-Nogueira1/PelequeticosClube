@@ -18,12 +18,18 @@ enum TipoHabilidade {
 class Habilidade:
 	var nome: String
 	var descricao: String
-	var custo_pa: int  # Quanto PA custa
-	var tipo: String  # "ataque", "defesa", "cura", "utilidade"
-	var tipo_habilidade: int  # PRINCIPAL, UNICA ou GERAL
-	var regiao_afetada: String  # Qual região ela afeta
-	var efeito: String  # O que ela faz (texto descritivo por agora)
-	var persona_origem: String = ""  # Qual Persona tem essa Habilidade Única
+	var custo_pa: int
+	var tipo: String
+	var tipo_habilidade: int
+
+	var dano_dados: int = 0
+	var dano_faces: int = 0
+	var dano_bonus: int = 0
+
+	var alcance: String = "Adjacente"
+
+	var efeito: String
+	var persona_origem: String = ""
 	
 	func _init(
 		p_nome: String,
@@ -211,6 +217,30 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.UNICA
 	)
 	habilidades["Instrução Decisiva"].persona_origem = "JPdaMaldade"
+	
+	#HABILIDADES DE INIMIGOS
+	habilidades["Disseminar Praga"] = Habilidade.new(
+	"Disseminar Praga",
+	"Ação Regular",
+	1,
+	"ataque",
+	"A Carcaça ataca um alvo até em Alcance Adjacente, causando
+	2D4+3 PE e obrigando ele a realizar um teste de Esforço, recebendo 1 ponto de Infecção se falhar. Ao final de cada Cena de
+	Jogo, o alvo deve realizar outro teste de Esforço, recebendo
+	um ponto adicional se falhar - ou se ficar Fora de Ação. Para se
+	curar definitivamente, é necessário gastar um Kit de Primeiros
+	Socorros por completo ou um uso da habilidade Bálsamo.
+	• 1 ponto: Botando para Fora até o final da cena.
+	• 2 a 3 pontos: Lentidão até se tratar.
+	• 4 a 5 pontos: Fome até se tratar.
+	• 6 pontos: Se torna uma Carcaça.",
+	TipoHabilidade.GERAL
+	)
+	habilidades["Disseminar Praga"].dano_dados = 2
+	habilidades["Disseminar Praga"].dano_faces = 4
+	habilidades["Disseminar Praga"].dano_bonus = 0
+	habilidades["Disseminar Praga"].alcance = "Curto"
+
 
 ## Obtém uma habilidade pelo nome
 func get_habilidade(nome: String) -> Habilidade:
@@ -283,6 +313,12 @@ func get_todas_habilidades() -> Array:
 	for nome in habilidades:
 		lista.append(habilidades[nome])
 	return lista
+
+func rolar_dano_habilidade(hab: Habilidade) -> int:
+	var dano = hab.dano_bonus
+	for i in range(hab.dano_dados):
+		dano += randi_range(1, hab.dano_faces)
+	return dano
 
 ## Filtra habilidades pelo tipo (PRINCIPAL, UNICA, GERAL)
 static func obter_habilidades_por_tipo(habilidades_array: Array[String], tipo: int) -> Array[String]:

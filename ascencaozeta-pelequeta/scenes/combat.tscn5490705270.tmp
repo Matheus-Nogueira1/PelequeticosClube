@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://bvyvc5ny3cht8"]
 
-[ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_osi8t"]
 [ext_resource type="Script" uid="uid://dc3exjjcw8t1a" path="res://scripts/battle/combat_manager.gd" id="1_vcae8"]
 [ext_resource type="Script" uid="uid://bukkkhb0emhf5" path="res://scripts/battle/party_panel.gd" id="2_osi8t"]
 [ext_resource type="Script" uid="uid://b1tedx80y13s8" path="res://scripts/battle/enemy_panel.gd" id="3_4gnb8"]
@@ -15,7 +14,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_osi8t")
 script = ExtResource("1_vcae8")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1040740590]

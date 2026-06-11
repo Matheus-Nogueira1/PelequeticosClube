@@ -24,12 +24,12 @@ func _criar_layout() -> void:
 	add_child(vbox)
 	
 	# Título
-	label_titulo.text = "Partido"
-	label_titulo.add_theme_font_size_override("font_size", 14)
+	label_titulo.text = "Party"
+	label_titulo.add_theme_font_size_override("font_size", 18)
 	vbox.add_child(label_titulo)
 	
 	# Container de scroll para lista
-	scroll_container.custom_minimum_size = Vector2(0, 200)
+	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_container.clip_contents = true
 	
 	lista_personagens.add_theme_constant_override("separation", 4)
@@ -86,7 +86,7 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 		return
 	
 	var card = PanelContainer.new()
-	card.custom_minimum_size = Vector2(0, 60)
+	card.custom_minimum_size = Vector2(0, 50)
 	
 	var vbox_card = VBoxContainer.new()
 	vbox_card.add_theme_constant_override("separation", 2)
@@ -98,17 +98,20 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 	if personagem.has("status") and not personagem["status"].is_empty():
 		status_text += " [%s]" % ", ".join(personagem["status"])
 	label_nome.text = status_text
-	label_nome.add_theme_font_size_override("font_size", 12)
+	label_nome.add_theme_font_size_override("font_size", 18)
 	vbox_card.add_child(label_nome)
 	
 	# ESTRESSE POR REGIÃO (OBLIVIO display)
-	var label_regioes = Label.new()
-	label_regioes.add_theme_font_size_override("font_size", 9)
+	var label_regioes = RichTextLabel.new()
+	label_regioes.bbcode_enabled = true
+	label_regioes.fit_content = true
+	label_regioes.scroll_active = false
+	label_regioes.add_theme_font_size_override("font_size", 7)
 	vbox_card.add_child(label_regioes)
 	
 	# INDICADORES DE PRÓTESE E REGIÕES PERDIDAS
 	var label_status_especial = Label.new()
-	label_status_especial.add_theme_font_size_override("font_size", 9)
+	label_status_especial.add_theme_font_size_override("font_size", 15)
 	label_status_especial.add_theme_color_override("font_color", Color.LIGHT_CYAN)
 	vbox_card.add_child(label_status_especial)
 	
@@ -125,9 +128,10 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 				return
 			
 			# Atualizar nome e status
+			var novo_nome = p["nome"]
 			if p.has("status") and not p["status"].is_empty():
-				status_text += " [%s]" % ", ".join(p["status"])
-			label_nome.text = status_text
+				novo_nome += " [%s]" % ", ".join(p["status"])
+			label_nome.text = novo_nome
 			
 			# Construir display de regiões com estresse
 			var regioes_text = ""
@@ -146,7 +150,12 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 					limite_total += est_limite
 					
 					# Mostrar região com cores
-					var regiao_display = "%s [%d/%d]" % [regiao.substr(0, 3), est_atual, est_limite]
+
+					var regiao_display = "%s %d/%d" % [
+						regiao,
+						est_atual,
+						est_limite
+					]
 					
 					# Colorir se esgotado ou perdido
 					if est_limite == 0:
@@ -157,7 +166,7 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 					elif float(est_atual) / float(est_limite) > 0.7:
 						regiao_display = "[color=orange]%s[/color]" % regiao_display
 					
-					regioes_text += regiao_display + " "
+					regioes_text += regiao_display + "\n"
 			
 			label_regioes.text = regioes_text
 			
@@ -195,7 +204,12 @@ func indicar_personagem_ativo(personagem: Dictionary) -> void:
 		var card = card_info["node"]
 		
 		var style = StyleBoxFlat.new()
-		style.bg_color = Color.YELLOW.darkened(0.5)
+		style.bg_color = Color(0.35, 0.3, 0.05)
+		style.border_color = Color.GOLD
+		style.corner_radius_top_left = 6
+		style.corner_radius_top_right = 6
+		style.corner_radius_bottom_left = 6
+		style.corner_radius_bottom_right = 6
 		style.border_color = Color.YELLOW
 
 		style.set_border_width_all(2)

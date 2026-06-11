@@ -118,7 +118,8 @@ func ativar_para(combatente: Dictionary, ref_combatente: CombatenteData = null) 
 	show()
 	habilitar_acoes()
 
-	await get_tree().process_frame
+	call_deferred("_focar_botao")
+func _focar_botao():
 	botao_atacar.grab_focus()
 
 func habilitar_acoes() -> void:

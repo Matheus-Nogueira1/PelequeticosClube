@@ -96,10 +96,14 @@ func _setup_exemplo() -> void:
 	combatentes_jogador = [mob, escolhido, jp]
 	
 	# Criar inimigos usando templates
+	var carcaca1 = InimigoData.criar_carcaca()
+	carcaca1.nome = "Carcaça 1"
+	var carcaca2 = InimigoData.criar_carcaca()
+	carcaca2.nome = "Carcaça 2"
 	combatentes_inimigo = [
-		InimigoData.criar_carcaca()
+		carcaca1,
+		carcaca2
 	]
-	
 	# Unificar array de combatentes
 	var todos = combatentes_jogador + combatentes_inimigo
 	ordem_turno = todos.duplicate()
@@ -180,7 +184,7 @@ func _avancar_turno() -> void:
 	else:
 		party_panel.remover_destaque_turno()
 		# TODO: IA para inimigos
-		await get_tree().create_timer(1.5).timeout
+		await get_tree().create_timer(0.3).timeout
 		_executar_turno_inimigo()
 
 func _restaurar_protecoes(combatente: CombatenteData) -> void:
@@ -205,7 +209,8 @@ func _encontrar_proximo_combatente() -> CombatenteData:
 	"""Encontra o próximo combatente vivo na ordem"""
 	var tentativas = 0
 	var max_tentativas = ordem_turno.size() * 2
-	
+	if ordem_turno.is_empty():
+		return null
 	while tentativas < max_tentativas:
 		indice_turno_atual = (indice_turno_atual + 1) % ordem_turno.size()
 		var combatente = ordem_turno[indice_turno_atual]
@@ -224,7 +229,7 @@ func _executar_turno_inimigo() -> void:
 	
 	# TODO: Implementar IA
 	# Por enquanto, passa o turno
-	await get_tree().create_timer(1.0).timeout
+	await get_tree().create_timer(0.2).timeout
 	turno_finalizado.emit(combatente_ativo)
 	_avancar_turno()
 
@@ -518,10 +523,6 @@ func _processar_ataque(
 				"dano"
 			)
 			if not resultado_estresse.is_empty():
-				log_panel.registrar_evento(
-					resultado_estresse["mensagem"],
-					"critico"
-				)
 				if resultado_estresse.has("resultado_fardo"):
 					log_panel.registrar_evento(
 						resultado_estresse["resultado_fardo"]["mensagem"],
@@ -542,15 +543,22 @@ func _processar_ataque(
 		"info"
 	)
 	party_panel.atualizar_personagem(atacante.para_dictionary())
-	party_panel.atualizar_personagem(alvo.para_dictionary())
+	if alvo.tipo == "jogador":
+		party_panel.atualizar_personagem(alvo.para_dictionary())
 	var inimigos_atualizado: Array[Dictionary] = []
-	inimigos_atualizado.append(alvo.para_dictionary())
-	enemy_panel.atualizar_todos(inimigos_atualizado)
-	_verificar_fim_combate()
+	for inimigo in combatentes_inimigo:
+		enemy_panel.atualizar_inimigo(
+		inimigo.para_dictionary()
+	)
+	
+	if alvo.morto:
+		_derrotar_combatente(alvo)
+
 	if not combate_ativo:
 		return
+
 	_finalizar_acao()
-	
+	return
 func _finalizar_acao() -> void:
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
@@ -577,23 +585,24 @@ func _avaliar_categoria_resultado(dado: int) -> String:
 # ============================================================================
 
 func _derrotar_combatente(combatente: CombatenteData) -> void:
-	"""Remove combatente derrotado e verifica fim de combate"""
-	
+	if not ordem_turno.has(combatente):
+		return
 	log_panel.registrar_evento(
-		"⚠️  %s foi derrotado!" % combatente.nome,
+		"⚠️ %s foi derrotado!" % combatente.nome,
 		"critico"
 	)
-	
-	# Sincronizar remoção nos painéis
+	var indice_removido = ordem_turno.find(combatente)
+	ordem_turno.erase(combatente)
+	if indice_removido <= indice_turno_atual:
+		indice_turno_atual -= 1
 	if combatente.tipo == "inimigo":
+		combatentes_inimigo.erase(combatente)
 		enemy_panel.remover_inimigo(combatente.para_dictionary())
 	else:
+		combatentes_jogador.erase(combatente)
 		party_panel.remover_personagem(combatente.para_dictionary())
-	
-	estado_atualizado.emit()
-	
-	# Verificar se combate acabou
 	_verificar_fim_combate()
+	
 	if not combate_ativo:
 		return
 

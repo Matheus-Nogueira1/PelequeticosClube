@@ -2,7 +2,7 @@ extends RichTextLabel
 class_name CombatLog
 
 const MAX_LINHAS_VISIBLES = 50
-const TEMPO_SCROLL_DELAY = 0.1
+const TEMPO_SCROLL_DELAY = 0.0
 
 func _ready() -> void:
 	clear()
@@ -23,7 +23,6 @@ func registrar_evento(mensagem: String, tipo: String = "normal") -> void:
 	append_text(texto)
 	
 	# Scroll automático
-	await get_tree().create_timer(TEMPO_SCROLL_DELAY).timeout
 	scroll_to_line(get_line_count() - 1)
 	
 	

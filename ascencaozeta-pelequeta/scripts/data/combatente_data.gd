@@ -203,10 +203,12 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 		# Marca região como perdida
 		if not regiao in regioes_perdidas:
 			regioes_perdidas.append(regiao)
-		var transbordado = regiao_stress["atual"] - regiao_stress["limite"]
-		
+	var excesso = regiao_stress["atual"] - regiao_stress["limite"]
+	if excesso > 0:
+		regiao_stress["atual"] = regiao_stress["limite"]
 		var torso_stress = estresse_por_regiao["Torso"]
-		torso_stress["atual"] += transbordado
+		torso_stress["atual"] += excesso
+		
 		if torso_stress["atual"] >= torso_stress["limite"]:
 			torso_stress["atual"] = torso_stress["limite"]
 			resultado = processar_limite_torso()
@@ -275,11 +277,11 @@ func processar_limite_torso() -> Dictionary:
 	# Inimigos não recebem Fardos
 	if tipo == "inimigo":
 		morto = true
+		desmaiado = true
 
 		return {
 			"sucesso": true,
 			"derrotado": true,
-			"mensagem": "%s foi derrotado!" % nome
 		}
 
 	# Jogadores recebem Fardos normalmente
@@ -292,7 +294,7 @@ func processar_limite_torso() -> Dictionary:
 		"numero_desmaio": numero_desmaios_total,
 		"fardo_aplicado": novo_fardo.nome,
 		"resultado_fardo": resultado_fardo,
-		"mensagem": "Desmaio #%d - %s!" % [numero_desmaios_total, novo_fardo.nome]
+		"mensagem": "Desmaiou #%d - %s!" % [numero_desmaios_total, novo_fardo.nome]
 	}
 
 ## Revive um combatente (reduz 1 ponto de Torso para acordar)
@@ -359,6 +361,7 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 		combatente.atributo_fuga = dados["atributo_fuga"]
 	if dados.has("atributo_determinacao"):
 		combatente.atributo_determinacao = dados["atributo_determinacao"]
+	
 	if dados.has("atributo_folego"):
 		combatente.atributo_folego = dados["atributo_folego"]
 	if dados.has("atributo_dano"):
@@ -369,7 +372,7 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 		combatente.atributo_protecao = dados["atributo_protecao"]
 	if dados.has("atributo_velocidade"):
 		combatente.atributo_velocidade = dados["atributo_velocidade"]
-
+	combatente._calcular_atributos_mutaveis()
 	if dados.has("dano_arma"):
 		combatente.dano_arma = dados["dano_arma"]
 	if dados.has("defesa_base"):
@@ -399,6 +402,8 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 		combatente.regioes_perdidas = dados["regioes_perdidas"]
 	if dados.has("morto"):
 		combatente.morto = dados["morto"]
+	if dados.has("desmaiado"):
+		combatente.desmaiado = dados["desmaiado"]
 	
 	return combatente
 

@@ -22,10 +22,9 @@ static func criar_carcaca() -> CombatenteData:
 	carcaca.atributo_fuga = 2        # Velocidade
 	carcaca.atributo_determinacao = 2    # Resistência psicológica
 	carcaca.atributo_mente = 1
+	carcaca._calcular_atributos_mutaveis()
 	
 	# Combate
-	carcaca.dano_arma = 3
-	carcaca.defesa_base = 2
 	
 	# Estresse por região - limite total 22 em 4 regiões (sem pernas)
 	# Limite = Carne + Papel. Carcaça tem Carne 2, então base é 2, distrib
@@ -38,6 +37,9 @@ static func criar_carcaca() -> CombatenteData:
 	}
 	
 	carcaca.status = ["Não-morta", "Visão Escura"] as Array[String]
+	carcaca.habilidades.append(
+		"Disseminar Praga"
+	) 
 	
 	return carcaca
 
@@ -55,8 +57,7 @@ static func goblin() -> CombatenteData:
 	goblin.atributo_determinacao = 1
 	goblin.atributo_mente = 2
 	
-	goblin.dano_arma = 1
-	goblin.defesa_base = 1
+	goblin._calcular_atributos_mutaveis()
 	
 	goblin.estresse_por_regiao = {
 		"Torso": {"atual": 0, "limite": 5},
@@ -82,8 +83,7 @@ static func orc_guerreiro() -> CombatenteData:
 	orc.atributo_determinacao = 2
 	orc.atributo_mente = 1
 	
-	orc.dano_arma = 3
-	orc.defesa_base = 2
+	orc._calcular_atributos_mutaveis()
 	
 	orc.estresse_por_regiao = {
 		"Torso": {"atual": 0, "limite": 7},
