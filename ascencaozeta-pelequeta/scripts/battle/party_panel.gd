@@ -47,8 +47,14 @@ func adicionar_personagem(personagem: Dictionary) -> void:
 	_criar_card_personagem(personagem)
 
 func atualizar_personagem(personagem: Dictionary) -> void:
-	"""Atualiza o visual de um personagem"""
+	"""Atualiza o visual de um personagem. Remove se morreu."""
 	var chave = personagem["nome"]
+	
+	# Se morreu, remover da party
+	if personagem.has("morto") and personagem["morto"]:
+		remover_personagem(personagem)
+		return
+	
 	if chave in cards_personagens:
 		var card_wrapper = cards_personagens[chave]
 		if card_wrapper.has("atualizar"):

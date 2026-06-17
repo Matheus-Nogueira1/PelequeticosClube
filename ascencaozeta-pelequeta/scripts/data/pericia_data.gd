@@ -34,7 +34,7 @@ const CONHECIMENTOS_DESCRICOES = {
 }
 
 ## Testa um Conhecimento OBLIVIO (D6 + atributo base + treino + especialização)
-func testar_conhecimento(combatente: CombatenteData, conhecimento: String, dificuldade: int = 0) -> Dictionary:
+func testar_conhecimento(combatente: CombatenteData, conhecimento: String, _dificuldade: int = 0) -> Dictionary:
 	# Validar conhecimento
 	if not CONHECIMENTOS_ATRIBUTOS.has(conhecimento):
 		return {
@@ -44,19 +44,6 @@ func testar_conhecimento(combatente: CombatenteData, conhecimento: String, dific
 			"erro": "Conhecimento não existe: %s" % conhecimento
 		}
 	
-	# Obter valor do atributo base
-	var atributo_nome = CONHECIMENTOS_ATRIBUTOS[conhecimento]
-	var attr_valor = 1
-	match atributo_nome:
-		"carne": attr_valor = combatente.atributo_carne
-		"forca": attr_valor = combatente.atributo_forca
-		"mente": attr_valor = combatente.atributo_mente
-		"fuga": attr_valor = combatente.atributo_fuga
-		"determinacao": attr_valor = combatente.atributo_determinacao
-	
-	# Obter nível de treino
-	var treino = combatente.obter_treino_conhecimento(conhecimento)
-	
 	# Bonus de especialização
 	var bonus_especializacao = 0
 	if combatente.tem_especializacao(conhecimento):
@@ -64,7 +51,10 @@ func testar_conhecimento(combatente: CombatenteData, conhecimento: String, dific
 	
 	# Rolar D6
 	var dado = randi_range(1, 6)
-	var total = dado + attr_valor + treino + bonus_especializacao
+	var resultado_final = dado
+	if combatente.tem_especializacao(conhecimento):
+		resultado_final += 2
+	resultado_final = clampi(resultado_final, 1, 6)
 	
 	# ZONA DE ACERTO OBLIVIO 2.2:
 	# 1 = Falha Crítica (algo extremamente ruim acontece)
@@ -75,7 +65,7 @@ func testar_conhecimento(combatente: CombatenteData, conhecimento: String, dific
 	var resultado: String
 	var sucesso: bool
 	
-	match dado:
+	match resultado_final:
 		1:
 			resultado = "Falha Crítica"
 			sucesso = false
@@ -93,15 +83,11 @@ func testar_conhecimento(combatente: CombatenteData, conhecimento: String, dific
 		"conhecimento": conhecimento,
 		"personagem": combatente.nome,
 		"dado": dado,
-		"atributo_base": atributo_nome,
-		"atributo_valor": attr_valor,
-		"treino": treino,
+		"resultado_final": resultado_final,
 		"especializado": combatente.tem_especializacao(conhecimento),
 		"bonus_especializacao": bonus_especializacao,
-		"total": total,
 		"resultado": resultado,
-		"sucesso": sucesso,
-		"dificuldade": dificuldade
+		"sucesso": sucesso
 	}
 
 ## Retorna lista de todos os Conhecimentos disponíveis
@@ -123,4 +109,40 @@ func conhecimentos_por_atributo(atributo: String) -> Array[String]:
 func obter_descricao(conhecimento: String) -> String:
 	if CONHECIMENTOS_DESCRICOES.has(conhecimento):
 		return CONHECIMENTOS_DESCRICOES[conhecimento]
-	return "Conhecimento desconhecido"
+	return "Conhecimento desconhecido"	
+
+## Retorna executar Duelo
+func executar_duelo(
+	combatente: CombatenteData,
+	_alvo: CombatenteData
+) -> Dictionary:
+	var resultado_teste = testar_conhecimento(
+		combatente,
+		"Duelo"
+	)
+	match resultado_teste["resultado"]:
+		"Falha Crítica":
+			return {
+				"resultado": "Falha Crítica",
+				"analisado": false,
+				"reduzir_protecao": false
+			}
+		"Falha":
+			return {
+				"resultado": "Falha",
+				"analisado": false,
+				"reduzir_protecao": false
+			}
+		"Sucesso":
+			return {
+				"resultado": "Sucesso",
+				"analisado": true,
+				"reduzir_protecao": false
+			}
+		"Sucesso Extremo":
+			return {
+				"resultado": "Sucesso Extremo",
+				"analisado": true,
+				"reduzir_protecao": true
+			}
+	return {}

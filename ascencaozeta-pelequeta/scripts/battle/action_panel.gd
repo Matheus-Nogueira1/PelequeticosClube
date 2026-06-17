@@ -3,11 +3,11 @@ class_name ActionPanel
 
 # Sinais para comunicação com CombatManager
 signal acao_atacar
-signal acao_pericia
 signal acao_habilidade
 signal acao_item
 signal turno_passado
 signal habilidade_sobrecarga
+signal pericia_escolhida(nome_pericia: String)
 
 # Referências aos botões
 @onready var vbox = VBoxContainer.new()
@@ -19,10 +19,17 @@ var botao_item: Button
 # Menus popup
 var menu_pericias: PopupMenu
 var menu_habilidades: PopupMenu
-
+var menu_pericias_aberto := false
 var combatente_ativo: Dictionary = {}
 var combatente_ref: CombatenteData = null
 var acoes_habilitadas: bool = false
+enum EstadoMenu {
+	PRINCIPAL,
+	PERICIAS,
+	HABILIDADES
+}
+var estado_menu := EstadoMenu.PRINCIPAL
+var botoes_pericias: Array[Button] = []
 
 func _ready() -> void:
 	_criar_layout()
@@ -88,7 +95,7 @@ func _criar_layout() -> void:
 	)
 	vbox.add_child(botao_passar)
 
-func _criar_botao(texto: String, tooltip_text: String, callback: Callable) -> Button:
+func _criar_botao(texto: String, p_tooltip_text: String, callback: Callable) -> Button:
 	"""Helper para criar botões com estilo padrão"""
 	var btn = Button.new()
 	btn.text = texto
@@ -106,6 +113,8 @@ func _criar_menus_popup() -> void:
 	menu_habilidades = PopupMenu.new()
 	add_child(menu_habilidades)
 	menu_habilidades.index_pressed.connect(_on_habilidade_selecionada)
+	
+	menu_pericias.popup_hide.connect(_on_menu_pericias_fechado)
 
 # ============================================================================
 # ATIVAÇÃO/DESATIVAÇÃO
@@ -142,6 +151,10 @@ func desabilitar_acoes() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	visible = false
 
+func _on_menu_pericias_fechado():
+	if not visible:
+		show()
+
 # ============================================================================
 # CALLBACKS DOS BOTÕES
 # ============================================================================
@@ -152,9 +165,49 @@ func _on_atacar_pressionado() -> void:
 	acao_atacar.emit()
 
 func _on_pericia_pressionado() -> void:
-	"""Callback do botão PERÍCIA"""
-	desabilitar_acoes()
-	acao_pericia.emit()
+	abrir_menu_pericias()
+
+func abrir_menu_pericias() -> void:
+	estado_menu = EstadoMenu.PERICIAS
+	botao_atacar.hide()
+	botao_pericia.hide()
+	botao_habilidade.hide()
+	botao_item.hide()
+	_criar_botoes_pericias()
+
+func _criar_botoes_pericias() -> void:
+	for pericia in combatente_ref.conhecimentos_treino.keys():
+		var treino = combatente_ref.conhecimentos_treino[pericia]
+		if treino <= 0:
+			continue
+		var btn := Button.new()
+		btn.text = "%s (+%d)" % [
+			pericia,
+			treino
+		]
+		btn.custom_minimum_size = Vector2(0, 32)
+		btn.pressed.connect(
+			func():
+				pericia_escolhida.emit(pericia)
+				fechar_menu_pericias()
+		)
+		vbox.add_child(btn)
+		botoes_pericias.append(btn)
+	var voltar := Button.new()
+	voltar.text = "VOLTAR"
+	voltar.pressed.connect(fechar_menu_pericias)
+	vbox.add_child(voltar)
+	botoes_pericias.append(voltar)
+
+func fechar_menu_pericias() -> void:
+	estado_menu = EstadoMenu.PRINCIPAL
+	for btn in botoes_pericias:
+		btn.queue_free()
+	botoes_pericias.clear()
+	botao_atacar.show()
+	botao_pericia.show()
+	botao_habilidade.show()
+	botao_item.show()
 
 func _on_habilidade_pressionada() -> void:
 	"""Callback do botão HABILIDADE"""
@@ -170,6 +223,11 @@ func _on_passar_turno() -> void:
 	"""Callback do botão PASSAR TURNO - finaliza o turno"""
 	print("[ActionPanel] Turno passado")
 	turno_passado.emit()
+
+func _on_botao_duelo_pressed():
+	pericia_escolhida.emit("Duelo")
+
+
 
 # ============================================================================
 # MENUS ESPECÍFICOS (Stubs para implementação futura)
@@ -280,10 +338,12 @@ func mostrar_menu_itens(combatente: Dictionary) -> void:
 	# TODO: Retornar item selecionado ao CombatManager
 
 func _on_pericia_selecionada(index: int) -> void:
-	"""Callback quando uma perícia é selecionada"""
 	var pericia_nome = menu_pericias.get_item_text(index)
+	# Remove "(Nível X)"
+	pericia_nome = pericia_nome.split(" (")[0]
+	show()
 	print("[ActionPanel] Perícia selecionada: %s" % pericia_nome)
-	habilitar_acoes()
+	pericia_escolhida.emit(pericia_nome)
 
 func _on_habilidade_selecionada(index: int) -> void:
 	var habilidade_nome = menu_habilidades.get_item_text(index).strip_edges()

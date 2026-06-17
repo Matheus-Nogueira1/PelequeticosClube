@@ -40,6 +40,8 @@ var iniciativa: int = 0
 var status: Array[String] = []
 var desmaiado: bool = false
 var reducao_protecao_temporaria: int = 0
+var bonus_duelo_protecao := 0
+var analisado_por_duelo := false
 
 # Quem causou o último dano após quebrar a proteção
 var atacante_que_quebrou_protecao: String = ""
@@ -197,12 +199,11 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 				desmaiado = true
 				resultado = processar_limite_torso()
 		return resultado
-	# Regiões normais
+	# Regiões normais - CAP no limite (não marca como perdida permanentemente)
 	if regiao_stress["atual"] >= regiao_stress["limite"]:
 		regiao_stress["atual"] = regiao_stress["limite"]
-		# Marca região como perdida
-		if not regiao in regioes_perdidas:
-			regioes_perdidas.append(regiao)
+		# Apenas bloqueia seleção enquanto esgotada - pode recuperar depois
+	
 	var excesso = regiao_stress["atual"] - regiao_stress["limite"]
 	if excesso > 0:
 		regiao_stress["atual"] = regiao_stress["limite"]
@@ -253,7 +254,12 @@ func contar_regioes_esgotadas() -> int:
 	return count
 
 func obter_protecao_atual() -> int:
-	return max(0, atributo_protecao - reducao_protecao_temporaria)
+	return max(
+		0,
+		atributo_protecao
+		- reducao_protecao_temporaria
+		- bonus_duelo_protecao
+	)
 ## ===== PA (PONTOS DE AÇÃO) =====
 
 ## Restaura PA no início do turno
@@ -274,19 +280,29 @@ func processar_limite_torso() -> Dictionary:
 	print(nome)
 	print(tipo)
 	
-	# Inimigos não recebem Fardos
+	# Inimigos morrem na primeira
 	if tipo == "inimigo":
 		morto = true
 		desmaiado = true
-
 		return {
 			"sucesso": true,
 			"derrotado": true,
 		}
 
-	# Jogadores recebem Fardos normalmente
+	# Jogadores recebem Fardos
 	numero_desmaios_total += 1
 
+	# 3ª desmaio (ou mais) com Ataque Cardíaco = MORTE PERMANENTE
+	if numero_desmaios_total >= 3 and tem_ataque_cardiaco:
+		morto = true
+		desmaiado = true
+		return {
+			"numero_desmaio": numero_desmaios_total,
+			"morto": true,
+			"mensagem": "ATAQUE CARDÍACO! %s morreu permanentemente!" % nome
+		}
+
+	# Sorteio normal de Fardo
 	var novo_fardo = FardoData.sortear_fardo(numero_desmaios_total)
 	var resultado_fardo = FardoData.aplicar_fardo(self, novo_fardo)
 
@@ -324,6 +340,8 @@ func para_dictionary() -> Dictionary:
 		"atributo_dano": atributo_dano,
 		"atributo_coragem": atributo_coragem,
 		"atributo_protecao": atributo_protecao,
+		"reducao_protecao_temporaria": reducao_protecao_temporaria,
+		"atacante_que_quebrou_protecao": atacante_que_quebrou_protecao,
 		"atributo_velocidade": atributo_velocidade,
 		"status": status,
 		"estresse_por_regiao": estresse_por_regiao,
@@ -331,6 +349,7 @@ func para_dictionary() -> Dictionary:
 		"pontos_acao_maximos": pontos_acao_maximos,
 		"conhecimentos_treino": conhecimentos_treino,
 		"conhecimentos_especializados": conhecimentos_especializados,
+		"analisado_por_duelo": analisado_por_duelo,
 		"habilidades": habilidades,
 		"inventario": inventario,
 		"fardos": fardos,
@@ -338,7 +357,6 @@ func para_dictionary() -> Dictionary:
 		"numero_desmaios_total": numero_desmaios_total,
 		"morto": morto
 	}
-
 ## Cria a partir de um Dictionary
 static func de_dictionary(dados: Dictionary) -> CombatenteData:
 	var nome_temp = "Desconhecido"

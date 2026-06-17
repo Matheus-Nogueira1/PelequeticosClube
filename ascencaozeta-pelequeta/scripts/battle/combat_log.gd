@@ -1,6 +1,16 @@
 extends RichTextLabel
 class_name CombatLog
 
+## LOG DO COMBATE
+## Registra todos os eventos que acontecem durante a luta:
+## - Rolagens de dados
+## - Danos causados
+## - Fardos aplicados
+## - Mortes
+## - Mensagens gerais
+## 
+## Mostra na UI com cores para cada tipo de evento
+
 const MAX_LINHAS_VISIBLES = 50
 const TEMPO_SCROLL_DELAY = 0.0
 

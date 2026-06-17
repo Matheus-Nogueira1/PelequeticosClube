@@ -1,8 +1,18 @@
 extends PanelContainer
 class_name EnemyPanel
 
-# Sinais para comunicação com CombatManager
+## PAINEL DE INIMIGOS
+## Mostra lista dos inimigos com:
+## - Nome de cada inimigo
+## - Estresse total com barra visual (░▓▓▓▓░░░)
+## - Botões para selecionar alvo em combate
+## - Atualização em tempo real quando sofrem dano
+
+## ===== SINAIS =====
+
+## Emitido quando um inimigo é selecionado como alvo
 signal inimigo_selecionado(inimigo: Dictionary)
+## Emitido quando um inimigo é deseleccionado
 signal inimigo_deseleccionado
 
 # UI
@@ -15,6 +25,7 @@ var inimigos: Array[Dictionary] = []
 var botoes_inimigos: Dictionary = {}  # nome -> botão
 var inimigo_selecionado_atual: Dictionary = {}
 var modo_seletor_ativo: bool = false
+
 
 func _ready() -> void:
 	_criar_layout()
@@ -112,7 +123,18 @@ func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
 
 	var estresse_total := 0
 	var limite_total := 0
-
+	var analisado = false
+	if inimigo.has("analisado_por_duelo"):
+		analisado = inimigo["analisado_por_duelo"]
+	if not analisado:
+		return """
+		%s
+		???
+		???
+		???
+		???
+		???
+		""" % nome
 	for regiao_data in inimigo["estresse_por_regiao"].values():
 		estresse_total += regiao_data["atual"]
 		limite_total += regiao_data["limite"]
@@ -122,14 +144,10 @@ func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
 		limite_total
 	)
 
-	var protecao_base: int = int(
-	inimigo.get("atributo_protecao", 0)
-	)
-
-	var reducao: int = int(
-		inimigo.get("reducao_protecao_temporaria", 0)
-	)
-
+	var protecao_base: int = inimigo["atributo_protecao"]
+	var reducao: int = 0
+	if inimigo.has("reducao_protecao_temporaria"):
+		reducao = inimigo["reducao_protecao_temporaria"]
 	var protecao_atual: int = max(
 		0,
 		protecao_base - reducao

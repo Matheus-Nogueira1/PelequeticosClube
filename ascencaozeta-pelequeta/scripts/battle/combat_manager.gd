@@ -35,7 +35,7 @@ var ordem_turno: Array[CombatenteData] = []
 var indice_turno_atual := -1
 var combatente_ativo: CombatenteData = null
 var combate_ativo: bool = false
-
+var pericia_pendente := "" 
 
 # Estado da ação atual
 var acao_em_progresso: bool = false
@@ -121,9 +121,9 @@ func _conectar_sinais_paineis() -> void:
 	"""Conecta os sinais dos painéis ao CombatManager"""
 	if action_panel:
 		action_panel.acao_atacar.connect(_iniciar_ataque)
-		action_panel.acao_pericia.connect(_iniciar_pericia)
 		action_panel.acao_habilidade.connect(_iniciar_habilidade)
 		action_panel.acao_item.connect(_iniciar_item)
+		action_panel.pericia_escolhida.connect(_on_pericia_escolhida)
 		action_panel.turno_passado.connect(_on_turno_passado)
 		action_panel.habilidade_sobrecarga.connect(_ativar_sobrecarga)
 	
@@ -297,6 +297,85 @@ func _iniciar_item() -> void:
 	
 	# TODO: Mostrar inventário
 	action_panel.mostrar_menu_itens(combatente_ativo.para_dictionary())
+func _executar_pericia_duelo(alvo: CombatenteData) -> void:
+	if alvo == null:
+		return
+
+	var pericia = PericiaData.new()
+
+	var resultado = pericia.executar_duelo(
+		combatente_ativo,
+		alvo
+	)
+
+	match resultado["resultado"]:
+
+		"Falha Crítica":
+			log_panel.registrar_evento(
+				"%s interpretou errado os movimentos do inimigo." %
+				combatente_ativo.nome,
+				"critico"
+			)
+
+		"Falha":
+			log_panel.registrar_evento(
+				"%s não encontrou nenhuma abertura." %
+				combatente_ativo.nome,
+				"info"
+			)
+
+		"Sucesso":
+			log_panel.registrar_evento(
+				"%s analisou %s. Proteção atual: %d" % [
+					combatente_ativo.nome,
+					alvo.nome,
+					alvo.obter_protecao_atual()
+				],
+				"info"
+			)
+
+		"Sucesso Extremo":
+			alvo.reducao_protecao_temporaria += 1
+
+			log_panel.registrar_evento(
+				"%s encontrou uma brecha em %s." % [
+					combatente_ativo.nome,
+					alvo.nome
+				],
+				"critico"
+			)
+
+			log_panel.registrar_evento(
+				"Proteção reduzida para %d." %
+				alvo.obter_protecao_atual(),
+				"critico"
+			)
+
+	_finalizar_acao()
+
+func _on_pericia_escolhida(nome_pericia: String) -> void:
+
+	if combatente_ativo == null:
+		return
+
+	match nome_pericia:
+
+		"Duelo":
+
+			pericia_pendente = "Duelo"
+
+			log_panel.registrar_evento(
+				"Selecione o alvo do Duelo.",
+				"acao"
+			)
+
+			enemy_panel.ativar_seletor_alvo()
+
+		_:
+			log_panel.registrar_evento(
+				"Perícia %s ainda não implementada." % nome_pericia,
+				"info"
+			)
 
 # ============================================================================
 # CALLBACKS DE SELEÇÃO
@@ -345,33 +424,46 @@ func _on_turno_passado() -> void:
 		_avancar_turno()
 
 func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
-	"""Chamado quando jogador seleciona um inimigo"""
-	if regioes_selecionadas.is_empty():
-		log_panel.registrar_evento("Nenhuma região selecionada! Confirme antes de selecionar alvo.", "aviso")
-		return
-	
-	if not inimigo_dict.has("nome"):
-		log_panel.registrar_evento("Inimigo inválido selecionado!", "aviso")
-		return
-	
-	# Encontrar o CombatenteData correspondente
-	var alvo = null
-	for inimigo in combatentes_inimigo:
-		if inimigo.nome == inimigo_dict["nome"]:
-			alvo = inimigo
-			break
-	
-	if not alvo:
-		log_panel.registrar_evento("Inimigo não encontrado!", "aviso")
-		return
-	
-	alvo_selecionado = alvo.para_dictionary()
-	log_panel.registrar_evento("Alvo selecionado: %s" % alvo.nome, "info")
-	regional_selector.desativar()
-	
-	# Proceder com ataque
-	_processar_ataque(combatente_ativo, alvo, regioes_selecionadas)
 
+	if not inimigo_dict.has("nome"):
+		log_panel.registrar_evento(
+			"Inimigo inválido selecionado!",
+			"aviso"
+		)
+		return
+
+	# =====================================================
+	# PERÍCIAS QUE PRECISAM DE ALVO
+	# =====================================================
+
+	if pericia_pendente == "Duelo":
+
+		var alvo: CombatenteData = null
+
+		for inimigo in combatentes_inimigo:
+			if inimigo.nome == inimigo_dict["nome"]:
+				alvo = inimigo
+				break
+
+		if alvo == null:
+			return
+
+		pericia_pendente = ""
+
+		_executar_pericia_duelo(alvo)
+
+		return
+
+	# =====================================================
+	# ATAQUE NORMAL
+	# =====================================================
+
+	if regioes_selecionadas.is_empty():
+		log_panel.registrar_evento(
+			"Nenhuma região selecionada! Confirme antes de selecionar alvo.",
+			"aviso"
+		)
+		return
 # ============================================================================
 # PROCESSAMENTO DE ATAQUE
 # ============================================================================
