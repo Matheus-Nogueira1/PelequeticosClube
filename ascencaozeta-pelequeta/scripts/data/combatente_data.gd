@@ -198,6 +198,8 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 			if not desmaiado:
 				desmaiado = true
 				resultado = processar_limite_torso()
+				
+				
 		return resultado
 	# Regiões normais - CAP no limite (não marca como perdida permanentemente)
 	if regiao_stress["atual"] >= regiao_stress["limite"]:
@@ -213,6 +215,7 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 		if torso_stress["atual"] >= torso_stress["limite"]:
 			torso_stress["atual"] = torso_stress["limite"]
 			resultado = processar_limite_torso()
+			
 	return resultado
 
 ## ===== CÁLCULOS =====

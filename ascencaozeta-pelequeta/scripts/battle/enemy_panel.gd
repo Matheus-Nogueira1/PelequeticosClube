@@ -70,8 +70,11 @@ func adicionar_inimigo(inimigo: Dictionary) -> void:
 	_criar_botao_inimigo(inimigo)
 
 func atualizar_inimigo(inimigo: Dictionary) -> void:
-	"""Atualiza o visual de um inimigo existente"""
 	var chave = inimigo["nome"]
+	for i in range(inimigos.size()):
+		if inimigos[i]["nome"] == chave:
+			inimigos[i] = inimigo
+			break
 	if chave in botoes_inimigos:
 		var botao = botoes_inimigos[chave]
 		botao.text = _formatar_texto_inimigo(inimigo)
@@ -127,23 +130,40 @@ func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
 	if inimigo.has("analisado_por_duelo"):
 		analisado = inimigo["analisado_por_duelo"]
 	if not analisado:
+
+		for regiao_data in inimigo["estresse_por_regiao"].values():
+			estresse_total += regiao_data["atual"]
+			limite_total += regiao_data["limite"]
+		var barra = _criar_barra_estresse(
+			estresse_total,
+			limite_total
+		)
 		return """
-		%s
-		???
-		???
-		???
-		???
-		???
-		""" % nome
+	%s
+
+	ESTRESSE %d/%d
+	%s
+
+	PROTEÇÃO ???
+
+	Torso ............. ??/?
+	Braço Direito ..... ??/?
+	Braço Esquerdo .... ??/?
+	Perna Direita ..... ??/?
+	Perna Esquerda .... ??/?
+	""" % [
+			nome,
+			estresse_total,
+			limite_total,
+			barra
+		]
 	for regiao_data in inimigo["estresse_por_regiao"].values():
 		estresse_total += regiao_data["atual"]
 		limite_total += regiao_data["limite"]
-
 	var barra = _criar_barra_estresse(
 		estresse_total,
 		limite_total
 	)
-
 	var protecao_base: int = inimigo["atributo_protecao"]
 	var reducao: int = 0
 	if inimigo.has("reducao_protecao_temporaria"):

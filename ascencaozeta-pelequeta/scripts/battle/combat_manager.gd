@@ -157,17 +157,6 @@ func _avancar_turno() -> void:
 	
 	combatente_ativo = combatente_proxximo
 	_restaurar_protecoes(combatente_ativo)
-
-	for inimigo in combatentes_inimigo:
-		if inimigo.atacante_que_quebrou_protecao == combatente_ativo.nome:
-			inimigo.reducao_protecao_temporaria = 0
-			inimigo.atacante_que_quebrou_protecao = ""
-
-	for aliado in combatentes_jogador:
-		if aliado.atacante_que_quebrou_protecao == combatente_ativo.nome:
-			aliado.reducao_protecao_temporaria = 0
-			aliado.ultimo_atacante_protecao = ""
-	
 	turno_iniciado.emit(combatente_ativo)
 	
 	# Ativar painel de ações se for personagem jogador
@@ -192,16 +181,24 @@ func _restaurar_protecoes(combatente: CombatenteData) -> void:
 		if alvo.atacante_que_quebrou_protecao == combatente.nome:
 			alvo.reducao_protecao_temporaria = 0
 			alvo.atacante_que_quebrou_protecao = ""
+			party_panel.atualizar_personagem(
+				alvo.para_dictionary()
+			)
 			log_panel.registrar_evento(
-				"A proteção de %s foi restaurada." % alvo.nome,
+				"A proteção de %s foi restaurada." %
+				alvo.nome,
 				"info"
 			)
 	for alvo in combatentes_inimigo:
 		if alvo.atacante_que_quebrou_protecao == combatente.nome:
 			alvo.reducao_protecao_temporaria = 0
 			alvo.atacante_que_quebrou_protecao = ""
+			enemy_panel.atualizar_inimigo(
+				alvo.para_dictionary()
+			)
 			log_panel.registrar_evento(
-				"A proteção de %s foi restaurada." % alvo.nome,
+				"A proteção de %s foi restaurada." %
+				alvo.nome,
 				"info"
 			)
 
@@ -333,10 +330,22 @@ func _executar_pericia_duelo(alvo: CombatenteData) -> void:
 				],
 				"info"
 			)
+			alvo.analisado_por_duelo = true
+			enemy_panel.atualizar_inimigo(
+				alvo.para_dictionary()
+			)
 
 		"Sucesso Extremo":
 			alvo.reducao_protecao_temporaria += 1
-
+			if alvo.obter_protecao_atual() <= 0:
+				alvo.atacante_que_quebrou_protecao = combatente_ativo.nome
+				log_panel.registrar_evento(
+					"%s quebrou completamente a proteção de %s!" % [
+						combatente_ativo.nome,
+						alvo.nome
+					],
+					"critico"
+				)
 			log_panel.registrar_evento(
 				"%s encontrou uma brecha em %s." % [
 					combatente_ativo.nome,
@@ -349,6 +358,10 @@ func _executar_pericia_duelo(alvo: CombatenteData) -> void:
 				"Proteção reduzida para %d." %
 				alvo.obter_protecao_atual(),
 				"critico"
+			)
+			alvo.analisado_por_duelo = true
+			enemy_panel.atualizar_inimigo(
+				alvo.para_dictionary()
 			)
 
 	_finalizar_acao()
