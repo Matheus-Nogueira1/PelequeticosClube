@@ -30,7 +30,7 @@ class Habilidade:
 
 	var efeito: String
 	var persona_origem: String = ""
-	
+
 	func _init(
 		p_nome: String,
 		p_descricao: String,
@@ -54,7 +54,7 @@ func _init() -> void:
 
 func _inicializar_habilidades() -> void:
 	"""Define todas as habilidades OBLIVIO disponíveis"""
-	
+
 	# HABILIDADES DE QUEM AGE
 	habilidades["Voracidade"] = Habilidade.new(
 		"Voracidade",
@@ -65,7 +65,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.PRINCIPAL
 	)
 	habilidades["Voracidade"].persona_origem = "Quem Age"
-	
+
 	habilidades["Ataque em Dupla"] = Habilidade.new(
 		"Ataque em Dupla",
 		"Habilidade única, Ação Completa",
@@ -75,7 +75,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.UNICA
 	)
 	habilidades["Ataque em Dupla"].persona_origem = "Quem Age"
-	
+
 	habilidades["Estocada"] = Habilidade.new(
 		"Estocada",
 		"Habilidade única, Ação regular + Movimento",
@@ -94,7 +94,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.UNICA
 	)
 	habilidades["Sede de Sangue"].persona_origem = "Quem Age"
-	
+
 	# HABILIDADES DE QUEM PROTEGE
 	habilidades["Escudo Humano"] = Habilidade.new(
 		"Escudo Humano",
@@ -105,7 +105,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.PRINCIPAL
 	)
 	habilidades["Escudo Humano"].persona_origem = "Mob"
-	
+
 	habilidades["Armadura de Espinhos"] = Habilidade.new(
 		"Armadura de Espinhos",
 		"Habilidade única, Efeito Passivo",
@@ -115,7 +115,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.UNICA
 	)
 	habilidades["Armadura de Espinhos"].persona_origem = "Mob"
-	
+
 	habilidades["Peso Pesado"] = Habilidade.new(
 		"Peso Pesado",
 		"Habilidade única, Efeito Passivo",
@@ -135,7 +135,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.UNICA
 	)
 	habilidades["Repartir a dor"].persona_origem = "Mob"
-	
+
 	# HABILIDADES DE QUEM CUIDA
 	habilidades["Ajudar os necessitados"] = Habilidade.new(
 		"Ajudar os necessitados",
@@ -145,8 +145,8 @@ func _inicializar_habilidades() -> void:
 		"No início de cada rodada, ou uma vez por Cena de Descanso ou Interação, escolha até duas Personas adjacentes para recuperar uma quantidade de pontos de Estresse igual à metade do seu atributo de Mente.",
 		TipoHabilidade.PRINCIPAL
 	)
-	habilidades["Ajudar os necessitados"].persona_origem = "Escolhido"	
-	
+	habilidades["Ajudar os necessitados"].persona_origem = "Escolhido"
+
 	habilidades["Abrir feridas"] = Habilidade.new(
 		"Abrir feridas",
 		"Habilidade única, Ação regular",
@@ -176,7 +176,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.UNICA
 	)
 	habilidades["Última Esperança"].persona_origem = "Escolhido"
-	
+
 	# HABILIDADES DE QUEM RESOLVE (JPdaMaldade)
 	habilidades["Dar uma mãozinha"] = Habilidade.new(
 		"Dar uma mãozinha",
@@ -187,7 +187,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.PRINCIPAL
 	)
 	habilidades["Dar uma mãozinha"].persona_origem = "JPdaMaldade"
-	
+
 	habilidades["Animar os Ânimos"] = Habilidade.new(
 		"Animar os Ânimos",
 		"Habilidade única, Ação extra",
@@ -197,7 +197,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.UNICA
 	)
 	habilidades["Animar os Ânimos"].persona_origem = "JPdaMaldade"
-	
+
 	habilidades["Cópia barata"] = Habilidade.new(
 		"Cópia barata",
 		"Habilidade única, Ação Extra",
@@ -217,7 +217,7 @@ func _inicializar_habilidades() -> void:
 		TipoHabilidade.UNICA
 	)
 	habilidades["Instrução Decisiva"].persona_origem = "JPdaMaldade"
-	
+
 	#HABILIDADES DE INIMIGOS
 	habilidades["Disseminar Praga"] = Habilidade.new(
 	"Disseminar Praga",
@@ -246,7 +246,27 @@ func _inicializar_habilidades() -> void:
 func get_habilidade(nome: String) -> Habilidade:
 	if habilidades.has(nome):
 		return habilidades[nome]
+
+	var nome_normalizado = nome.strip_edges().to_lower()
+	for nome_cadastrado in habilidades.keys():
+		if str(nome_cadastrado).strip_edges().to_lower() == nome_normalizado:
+			return habilidades[nome_cadastrado]
+
 	return null
+
+## Converte o enum de tipo para o texto exibido pelas telas de lista e detalhes.
+## Centralizar esta regra evita que ActionPanel, CombatManager e futuros painéis
+## de inventário usem rótulos diferentes para a mesma classificação.
+static func tipo_habilidade_para_texto(tipo: int) -> String:
+	match tipo:
+		TipoHabilidade.PRINCIPAL:
+			return "Principal"
+		TipoHabilidade.UNICA:
+			return "Única"
+		TipoHabilidade.GERAL:
+			return "Geral"
+		_:
+			return "Geral"
 
 ## Lista habilidades por tipo
 func habilidades_por_tipo(tipo: String) -> Array:
@@ -265,39 +285,52 @@ func habilidades_conhecidas(combatente: CombatenteData) -> Array:
 			lista.append(hab)
 	return lista
 
+## Verifica se o combatente conhece uma habilidade tolerando nomes legados.
+## O projeto já possui dados com diferenças de capitalização; centralizar esta
+## comparação impede que a UI encontre a habilidade, mas o uso falhe depois.
+func combatente_conhece_habilidade(combatente: CombatenteData, nome_habilidade: String) -> bool:
+	var nome_normalizado = nome_habilidade.strip_edges().to_lower()
+	for nome_conhecido in combatente.habilidades:
+		if nome_conhecido.strip_edges().to_lower() == nome_normalizado:
+			return true
+		var habilidade = get_habilidade(nome_conhecido)
+		if habilidade != null and habilidade.nome.strip_edges().to_lower() == nome_normalizado:
+			return true
+	return false
+
 ## Verifica se combatente pode usar habilidade (tem PA e conhece)
 func pode_usar_habilidade(combatente: CombatenteData, nome_habilidade: String) -> bool:
-	if not combatente.habilidades.has(nome_habilidade):
+	if not combatente_conhece_habilidade(combatente, nome_habilidade):
 		return false
-	
+
 	var hab = get_habilidade(nome_habilidade)
 	if hab == null:
 		return false
-	
+
 	return combatente.pontos_acao_atuais >= hab.custo_pa
 
 ## Usa uma habilidade (consome PA)
 func usar_habilidade(combatente: CombatenteData, nome_habilidade: String) -> Dictionary:
 	var hab = get_habilidade(nome_habilidade)
-	
+
 	if hab == null:
 		return {
 			"sucesso": false,
 			"erro": "Habilidade não encontrada: %s" % nome_habilidade
 		}
-	
-	if not combatente.habilidades.has(nome_habilidade):
+
+	if not combatente_conhece_habilidade(combatente, nome_habilidade):
 		return {
 			"sucesso": false,
 			"erro": "%s não conhece essa habilidade" % combatente.nome
 		}
-	
+
 	if not combatente.consumir_pontos_acao(hab.custo_pa):
 		return {
 			"sucesso": false,
 			"erro": "PA insuficiente (precisa de %d, tem %d)" % [hab.custo_pa, combatente.pontos_acao_atuais]
 		}
-	
+
 	return {
 		"sucesso": true,
 		"habilidade": hab.nome,
@@ -325,10 +358,10 @@ static func obter_habilidades_por_tipo(habilidades_array: Array[String], tipo: i
 	"""Retorna array de nomes de habilidades que pertencem ao tipo especificado"""
 	var resultado: Array[String] = []
 	var db = HabilidadeData.new()
-	
+
 	for nome_hab in habilidades_array:
 		var hab = db.get_habilidade(nome_hab)
 		if hab and hab.tipo_habilidade == tipo:
 			resultado.append(nome_hab)
-	
+
 	return resultado

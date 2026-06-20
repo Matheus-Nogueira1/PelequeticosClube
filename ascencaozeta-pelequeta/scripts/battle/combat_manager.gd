@@ -35,7 +35,7 @@ var ordem_turno: Array[CombatenteData] = []
 var indice_turno_atual := -1
 var combatente_ativo: CombatenteData = null
 var combate_ativo: bool = false
-var pericia_pendente := "" 
+var pericia_pendente := ""
 
 # Estado da ação atual
 var acao_em_progresso: bool = false
@@ -54,11 +54,11 @@ func _ready() -> void:
 func _inicializar_combate() -> void:
 	"""Prepara o combate inicial: iniciativa, ordem de turno, etc"""
 	print("[CombatManager] Inicializando combate...")
-	
+
 	# TODO: Carregar dados dos personagens e inimigos
 	# Por enquanto, vou usar estrutura de exemplo
 	_setup_exemplo()
-	
+
 	# Preencher UI dos painéis
 	if enemy_panel:
 		var inimigos_dict: Array[Dictionary] = []
@@ -72,29 +72,29 @@ func _inicializar_combate() -> void:
 		party_panel.atualizar_todos(jogadores_dict)
 	if regional_selector:
 		regional_selector.desativar()
-	
+
 	# Calcular iniciativa
 	_calcular_iniciativa()
-	
+
 	# Ordenar by iniciativa
 	ordem_turno.sort_custom(func(a, b): return a.iniciativa > b.iniciativa)
-	
+
 	combate_ativo = true
 	combate_iniciado.emit()
-	
+
 	# Começar primeiro turno
 	_avancar_turno()
 
 func _setup_exemplo() -> void:
 	"""Setup temporário com dados de exemplo usando CombatenteData"""
-	
+
 	# Criar os 3 personagens principais
 	var mob = PersonagensData.criar_mob()
 	var escolhido = PersonagensData.criar_escolhido()
 	var jp = PersonagensData.criar_JP()
-	
+
 	combatentes_jogador = [mob, escolhido, jp]
-	
+
 	# Criar inimigos usando templates
 	var carcaca1 = InimigoData.criar_carcaca()
 	carcaca1.nome = "Carcaça 1"
@@ -124,14 +124,15 @@ func _conectar_sinais_paineis() -> void:
 		action_panel.acao_habilidade.connect(_iniciar_habilidade)
 		action_panel.acao_item.connect(_iniciar_item)
 		action_panel.pericia_escolhida.connect(_on_pericia_escolhida)
+		action_panel.habilidade_escolhida.connect(_on_habilidade_escolhida)
 		action_panel.turno_passado.connect(_on_turno_passado)
 		action_panel.habilidade_sobrecarga.connect(_ativar_sobrecarga)
-	
+
 	if regional_selector:
 		regional_selector.regiao_selecionada.connect(_on_regiao_selecionada)
 		regional_selector.selecao_confirmada.connect(_on_regioes_confirmadas)
 		regional_selector.selecao_cancelada.connect(_on_selecao_cancelada)
-	
+
 	if enemy_panel:
 		enemy_panel.inimigo_selecionado.connect(_on_inimigo_selecionado)
 
@@ -143,22 +144,22 @@ func _avancar_turno() -> void:
 	"""Move para o próximo combatente com P.A. disponível"""
 	if not combate_ativo:
 		return
-	
+
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
 	# Não limpar alvo_selecionado aqui - será limpo apenas quando mudar de turno de verdade
-	
+
 	# Procurar próximo combatente vivo
 	var combatente_proxximo = _encontrar_proximo_combatente()
-	
+
 	if not combatente_proxximo:
 		print("[CombatManager] Nenhum combatente disponível - possível empate")
 		return
-	
+
 	combatente_ativo = combatente_proxximo
 	_restaurar_protecoes(combatente_ativo)
 	turno_iniciado.emit(combatente_ativo)
-	
+
 	# Ativar painel de ações se for personagem jogador
 	if combatente_ativo.tipo == "jogador":
 		action_panel.ativar_para(combatente_ativo.para_dictionary(), combatente_ativo)
@@ -211,19 +212,19 @@ func _encontrar_proximo_combatente() -> CombatenteData:
 	while tentativas < max_tentativas:
 		indice_turno_atual = (indice_turno_atual + 1) % ordem_turno.size()
 		var combatente = ordem_turno[indice_turno_atual]
-		
+
 		# Verificar se está vivo (não morto e não desmaiado permanentemente)
 		if not combatente.morto and combatente.esta_consciente():
 			return combatente
-		
+
 		tentativas += 1
-	
+
 	return null
 
 func _executar_turno_inimigo() -> void:
 	"""Executa turno automático do inimigo (placeholder)"""
 	print("[CombatManager] Turno do inimigo: %s" % combatente_ativo.nome)
-	
+
 	# TODO: Implementar IA
 	# Por enquanto, passa o turno
 	await get_tree().create_timer(0.2).timeout
@@ -238,11 +239,11 @@ func _iniciar_ataque() -> void:
 	"""Inicia sequência de ataque: seleciona regiões → seleciona alvo → rola dados"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
-	
+
 	acao_em_progresso = true
 	action_panel.desabilitar_acoes()
 	log_panel.registrar_evento("Selecione as regiões de ataque...", "acao")
-	
+
 	# Ativar seletor de corpo com validação de Próteses/Regiões Perdidas/Sobrecarga
 	regional_selector.ativar_para_ataque(combatente_ativo)
 	regional_selector.modo = "selecionar_ataque"
@@ -251,10 +252,10 @@ func _iniciar_pericia() -> void:
 	"""Inicia uso de perícia"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
-	
+
 	acao_em_progresso = true
 	log_panel.registrar_evento("Menu de perícias aberto...", "acao")
-	
+
 	# TODO: Mostrar menu de perícias disponíveis
 	action_panel.mostrar_menu_pericias(combatente_ativo.para_dictionary())
 
@@ -262,11 +263,13 @@ func _iniciar_habilidade() -> void:
 	"""Inicia uso de habilidade especial"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
-	
+
 	acao_em_progresso = true
 	log_panel.registrar_evento("Menu de habilidades aberto...", "acao")
-	
-	# TODO: Mostrar menu de habilidades disponíveis
+
+	# A seleção visual fica no ActionPanel para manter o mesmo fluxo das Perícias:
+	# Menu Principal -> Lista -> Detalhes -> Confirmar Uso.
+	# O CombatManager só volta a atuar quando a habilidade for confirmada.
 	action_panel.mostrar_menu_habilidades(combatente_ativo.para_dictionary())
 
 func _ativar_sobrecarga() -> void:
@@ -284,14 +287,57 @@ func _ativar_sobrecarga() -> void:
 
 	action_panel.habilitar_acoes()
 
+func _on_habilidade_escolhida(nome_habilidade: String) -> void:
+	# Recebe apenas habilidades confirmadas na tela de detalhes do ActionPanel.
+	# A validação de PA e conhecimento permanece aqui porque altera estado real
+	# do combatente e deve ficar centralizada no fluxo de combate.
+	if combatente_ativo == null:
+		return
+
+	var habilidade_data = HabilidadeData.new()
+	var resultado = habilidade_data.usar_habilidade(
+		combatente_ativo,
+		nome_habilidade
+	)
+
+	if not resultado["sucesso"]:
+		acao_em_progresso = false
+		log_panel.registrar_evento(
+			resultado["erro"],
+			"aviso"
+		)
+		action_panel.habilitar_acoes()
+		return
+
+	acao_em_progresso = false
+	log_panel.registrar_evento(
+		"%s usou %s (%d PA)." % [
+			combatente_ativo.nome,
+			resultado["habilidade"],
+			resultado["custo_pa"]
+		],
+		"acao"
+	)
+	log_panel.registrar_evento(
+		resultado["efeito"],
+		"info"
+	)
+
+	# Atualiza o painel da party porque usar habilidade pode consumir PA agora e,
+	# futuramente, também poderá aplicar cura, dano ou estados.
+	party_panel.atualizar_personagem(
+		combatente_ativo.para_dictionary()
+	)
+	action_panel.habilitar_acoes()
+
 func _iniciar_item() -> void:
 	"""Inicia uso de item"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
-	
+
 	acao_em_progresso = true
 	log_panel.registrar_evento("Menu de itens aberto...", "acao")
-	
+
 	# TODO: Mostrar inventário
 	action_panel.mostrar_menu_itens(combatente_ativo.para_dictionary())
 func _executar_pericia_duelo(alvo: CombatenteData) -> void:
@@ -655,7 +701,7 @@ func _processar_ataque(
 		enemy_panel.atualizar_inimigo(
 		inimigo.para_dictionary()
 	)
-	
+
 	if alvo.morto:
 		_derrotar_combatente(alvo)
 
@@ -707,7 +753,7 @@ func _derrotar_combatente(combatente: CombatenteData) -> void:
 		combatentes_jogador.erase(combatente)
 		party_panel.remover_personagem(combatente.para_dictionary())
 	_verificar_fim_combate()
-	
+
 	if not combate_ativo:
 		return
 
@@ -719,12 +765,12 @@ func _verificar_fim_combate() -> void:
 	var inimigos_vivos = combatentes_inimigo.filter(
 		func(c): return not c.morto and c.esta_consciente()
 	)
-	
+
 	if jogadores_vivos.is_empty():
 		_finalizar_combate("Derrota")
 	elif inimigos_vivos.is_empty():
 		_finalizar_combate("Vitória")
-		
+
 
 func _finalizar_combate(resultado: String) -> void:
 	"""Encerra o combate e retorna ao menu/mapa"""
@@ -735,9 +781,9 @@ func _finalizar_combate(resultado: String) -> void:
 		"═══ COMBATE FINALIZADO: %s ═══" % resultado,
 		"critico"
 	)
-	
+
 	combate_finalizado.emit(resultado)
-	
+
 	# TODO: Tela de resultado, experience, loot
 	print("[CombatManager] Combate finalizado com resultado: %s" % resultado)
 
@@ -758,7 +804,7 @@ func aplicar_status(combatente: Dictionary, status_nome: String, duracao: int = 
 		"nome": status_nome,
 		"duracao": duracao
 	}
-	
+
 	if not status in combatente["status"]:
 		combatente["status"].append(status)
 		log_panel.registrar_evento(
