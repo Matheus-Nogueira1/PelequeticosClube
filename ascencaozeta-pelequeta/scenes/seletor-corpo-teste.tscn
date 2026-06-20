@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://dnyfv6ohwdxhc"]
+
+[ext_resource type="Script" uid="uid://ci8sfp72i0jvr" path="res://scripts/seletor-corpo.gd" id="1_r2xsd"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_lj6u0"]
+[ext_resource type="Script" uid="uid://degebnrp74wd7" path="res://scripts/dados.gd" id="3_201in"]
+[ext_resource type="SpriteFrames" uid="uid://cjuxjuc2sqlj6" path="res://assets/new_sprite_frames.tres" id="4_r2xsd"]
+[ext_resource type="Script" path="res://scripts/click-dados-d6.gd" id="5_k5gy5"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_6cdta"]
+font = ExtResource("2_lj6u0")
+font_size = 30
+
+[node name="Control" type="Control" unique_id=1775997112]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_r2xsd")
+
+[node name="Label" type="Label" parent="." unique_id=1912571958]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Regiões selecionadas: 3
+(↑ ↓ para ajustar)
+(→ confirmar | ← cancelar)"
+label_settings = SubResource("LabelSettings_6cdta")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1303049988]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -130.0
+offset_right = -2.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 100
+alignment = 1
+
+[node name="Dado5" type="TextureButton" parent="HBoxContainer" unique_id=89519910]
+layout_mode = 2
+size_flags_stretch_ratio = 0.0
+script = ExtResource("3_201in")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado5" unique_id=78574818]
+texture_filter = 1
+position = Vector2(10, 62)
+scale = Vector2(6, 6)
+sprite_frames = ExtResource("4_r2xsd")
+script = ExtResource("5_k5gy5")
+
+[node name="Dado4" type="TextureButton" parent="HBoxContainer" unique_id=1840499809]
+layout_mode = 2
+script = ExtResource("3_201in")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado4" unique_id=832630026]
+texture_filter = 1
+position = Vector2(10, 62)
+scale = Vector2(6, 6)
+sprite_frames = ExtResource("4_r2xsd")
+script = ExtResource("5_k5gy5")
+
+[node name="Dado3" type="TextureButton" parent="HBoxContainer" unique_id=587896560]
+layout_mode = 2
+script = ExtResource("3_201in")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado3" unique_id=68722154]
+texture_filter = 1
+position = Vector2(10, 62)
+scale = Vector2(6, 6)
+sprite_frames = ExtResource("4_r2xsd")
+script = ExtResource("5_k5gy5")
+
+[node name="Dado2" type="TextureButton" parent="HBoxContainer" unique_id=1963910781]
+layout_mode = 2
+script = ExtResource("3_201in")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado2" unique_id=289641268]
+texture_filter = 1
+position = Vector2(10, 62)
+scale = Vector2(6, 6)
+sprite_frames = ExtResource("4_r2xsd")
+script = ExtResource("5_k5gy5")
+
+[node name="Dado1" type="TextureButton" parent="HBoxContainer" unique_id=1444340003]
+layout_mode = 2
+script = ExtResource("3_201in")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado1" unique_id=3528452]
+texture_filter = 1
+position = Vector2(10, 62)
+scale = Vector2(6, 6)
+sprite_frames = ExtResource("4_r2xsd")
+script = ExtResource("5_k5gy5")

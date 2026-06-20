@@ -8,12 +8,20 @@
 
 config_version=5
 
+[addons]
+
+universal_fade/patterns_directory="res://addons/UniversalFade/Patterns"
+
 [application]
 
 config/name="Ascencaozeta Pelequeta"
-run/main_scene="uid://c07otdsq1smel"
+run/main_scene="uid://bvyvc5ny3cht8"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Dialogos="*uid://btw5b6vlkuhxx"
 
 [input]
 
