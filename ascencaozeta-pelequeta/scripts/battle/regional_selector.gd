@@ -228,11 +228,15 @@ func _on_cancelar() -> void:
 # ============================================================================
 # ATUALIZAÇÕES VISUAIS
 # ============================================================================
+func _obter_nome_visual_regiao(regiao: String) -> String:
+	if combatente_ativo != null and combatente_ativo.proteses.has(regiao):
+		return regiao + " [PR]"
+	return regiao
 
 func _atualizar_visual_botao(indice: int) -> void:
 	var botao = botoes_regiao[indice]
 
-	var nome_base = regioes[indice]
+	var nome_base = _obter_nome_visual_regiao(regioes[indice])
 
 	if selecionadas[indice] > 0:
 		botao.text = "%s x%d" % [nome_base, selecionadas[indice]]
@@ -272,7 +276,7 @@ func _atualizar_info_label() -> void:
 
 func _resetar_selecao() -> void:
 	"""Reseta toda a seleção"""
-	selecionadas = [false, false, false, false, false]
+	selecionadas = [0, 0, 0, 0, 0]
 	regioes_finais.clear()
 	
 	for botao in botoes_regiao:

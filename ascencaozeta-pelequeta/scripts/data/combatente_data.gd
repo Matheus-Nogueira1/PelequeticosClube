@@ -204,6 +204,12 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 	# Regiões normais - CAP no limite (não marca como perdida permanentemente)
 	if regiao_stress["atual"] >= regiao_stress["limite"]:
 		regiao_stress["atual"] = regiao_stress["limite"]
+		resultado = {
+			"regiao_esgotada": true,
+			"regiao": regiao,
+			"mensagem": "%s não pode mais ser arriscado." % regiao
+		}
+		return resultado
 		# Apenas bloqueia seleção enquanto esgotada - pode recuperar depois
 	
 	var excesso = regiao_stress["atual"] - regiao_stress["limite"]
