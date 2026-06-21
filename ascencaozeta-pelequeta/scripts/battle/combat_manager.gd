@@ -523,6 +523,28 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 			"aviso"
 		)
 		return
+
+	var alvo: CombatenteData = null
+
+	for inimigo in combatentes_inimigo:
+		if inimigo.nome == inimigo_dict["nome"]:
+			alvo = inimigo
+			break
+
+	if alvo == null:
+		log_panel.registrar_evento(
+			"Alvo não encontrado.",
+			"aviso"
+		)
+		return
+
+	enemy_panel.desativar_seletor_alvo()
+
+	_processar_ataque(
+		combatente_ativo,
+		alvo,
+		regioes_selecionadas
+	)
 # ============================================================================
 # PROCESSAMENTO DE ATAQUE
 # ============================================================================
@@ -561,6 +583,14 @@ func _processar_ataque(
 				res_regiao["regiao"],
 				estresse_gerado
 			)
+			if resultado_estresse.has("regiao_esgotada"):
+				log_panel.registrar_evento(
+					"%s: %s" % [
+						atacante.nome,
+						resultado_estresse["mensagem"]
+					],
+					"aviso"
+				)
 			log_panel.registrar_evento(
 				"%s sofre %d de estresse em %s (ataque falhou)" % [
 					atacante.nome,
