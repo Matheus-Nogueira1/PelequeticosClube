@@ -15,60 +15,120 @@ class Item:
 	var descricao: String
 	var tipo: TipoItem
 	var quantidade: int = 1
-	var efeitos: Dictionary = {}
-	
-	func _init(p_nome: String, p_tipo: TipoItem, p_descricao: String = ""):
+	var efeitos := {}
+
+	func _init(
+		p_nome:String,
+		p_tipo:TipoItem,
+		p_descricao:String=""
+	):
 		nome = p_nome
 		tipo = p_tipo
 		descricao = p_descricao
+var banco := {}
 
-## ===== ITENS DISPONÍVEIS =====
+func _init():
+	_registrar_itens()
 
-## Estus Flask - Restaura Estresse em uma região
-static func criar_estus_flask(quantidade: int = 1) -> Item:
-	var item = Item.new("Frasco Estus", TipoItem.CONSUMIVEL, "Restaura toda fadiga de uma região do corpo")
-	item.quantidade = quantidade
-	item.efeitos = {
-		"tipo": "restaurar_estresse_regiao",
-		"quantidade": 10  # Restaura 10 pontos de Estresse
+func _registrar_itens():
+	var estus = Item.new(
+		"Frasco Estus",
+		TipoItem.CONSUMIVEL,
+		"Restaura completamente o Estresse de uma região do corpo."
+	)
+
+	estus.efeitos = {
+		"tipo":"restaurar_estresse"
 	}
-	return item
+
+	banco["Frasco Estus"] = estus
+
+func get_item(nome:String) -> Item:
+	return banco.get(nome)
+
+func obter_itens() -> Array:
+	return banco.keys()
+
+func get_itens_do_combatente(combatente: CombatenteData) -> Array:
+	var resultado:Array = []
+
+	for nome in combatente.inventario:
+		var item = get_item(nome)
+		if item != null:
+			resultado.append(item)
+
+	return resultado
+
+func possui_item(nome:String) -> bool:
+	return banco.has(nome)
+
+func obter_descricao(nome:String) -> String:
+	var item = get_item(nome)
+
+	if item == null:
+		return ""
+
+	return item.descricao
+
+func item_existe(nome:String) -> bool:
+	return banco.has(nome)
+
+
 
 ## Usa o item no combatente
-static func usar_item(combatente: CombatenteData, item: Item, alvo_regiao: String = "Torso") -> Dictionary:
-	"""
-	Usa um item e retorna resultado
-	"""
-	match item.nome:
-		"Frasco Estus":
-			return usar_estus_flask(combatente, alvo_regiao)
-		_:
-			return {"sucesso": false, "mensagem": "Item desconhecido"}
+static func usar_item(
+	usuario: CombatenteData,
+	alvo: CombatenteData,
+	item: Item,
+	regiao:String
+) -> Dictionary:
+
+	match item.efeitos["tipo"]:
+
+		"restaurar_estresse":
+			return usar_estus_flask(
+				usuario,
+				alvo,
+				regiao
+			)
+
+	return {
+		"sucesso":false,
+		"mensagem":"Item desconhecido."
+	}
 
 ## Usa Estus Flask - Restaura Estresse de uma região
-static func usar_estus_flask(combatente: CombatenteData, regiao: String) -> Dictionary:
+static func usar_estus_flask(
+	usuario:CombatenteData,
+	alvo:CombatenteData,
+	regiao:String
+) ->Dictionary:
 	"""
 	Estus Flask: Restaura toda fadiga (estresse) de uma região
 	Reduz o estresse da região para 0
 	"""
-	if not combatente.estresse_por_regiao.has(regiao):
+	if not alvo.estresse_por_regiao.has(regiao):
 		return {
-			"sucesso": false,
-			"mensagem": "Região inválida: %s" % regiao
+			"sucesso":false,
+			"mensagem":"Região inválida."
 		}
 	
-	var estresse_antes = combatente.estresse_por_regiao[regiao]["atual"]
-	combatente.aliviar_estresse(regiao, estresse_antes)  # Remove todo estresse
+	var estresse_antes = alvo.estresse_por_regiao[regiao]["atual"]
+	alvo.aliviar_estresse(
+		regiao,
+		estresse_antes
+	)
 	
 	return {
 		"sucesso": true,
 		"regiao": regiao,
 		"estresse_restaurado": estresse_antes,
-		"mensagem": "%s bebeu Estus Flask e recuperou %d pontos de fadiga em %s!" % [
-			combatente.nome, 
-			estresse_antes,
-			regiao
-		]
+		"mensagem":
+	"%s utilizou um Frasco Estus em %s, restaurando completamente o Estresse da região %s." % [
+		usuario.nome,
+		alvo.nome,
+		regiao
+	]
 	}
 
 ## Retorna lista de itens de um combatente

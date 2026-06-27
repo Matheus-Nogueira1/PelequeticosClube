@@ -64,7 +64,7 @@ func _criar_layout() -> void:
 	
 	# Label informativo (mostra estresse)
 	label_info.text = "Clique para selecionar"
-	label_info.add_theme_font_size_override("font_size", 10)
+	label_info.add_theme_font_size_override("font_size", 16)
 	vbox.add_child(label_info)
 	
 	# Espaçador

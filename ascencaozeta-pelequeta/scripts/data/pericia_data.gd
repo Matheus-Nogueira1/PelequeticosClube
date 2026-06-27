@@ -4,145 +4,152 @@
 
 class_name PericiaData
 extends RefCounted
+class Pericia:
+	var nome: String
+	var descricao: String
+	func _init(
+		p_nome:String,
+		p_descricao:String
+	):
+		nome = p_nome
+		descricao = p_descricao
 
-## Mapa de Conhecimentos OBLIVIO para seus atributos base
-const CONHECIMENTOS_ATRIBUTOS = {
-	"Bandidagem": "fuga",       # Delitos, furtividade de crimes
-	"Duelo": "forca",           # Estratégia marcial, brechas em defesa
-	"Emocional": "determinacao", # Autocontrole, gestão de sentimentos
-	"Esforço": "carne",         # Físico desgastante, resistência corporal
-	"Místico": "mente",         # Sobrenatural, artes arcanas, seres outros
-	"Mundo": "mente",           # Natureza, animais, sobrevivência
-	"Rastro": "fuga",           # Percepção, detalhes ocultos, sensoriais
-	"Reflexos": "fuga",         # Esquiva, corporais rápidos, movimento
-	"Saber": "mente",           # Memória, estudos, conhecimento geral
-	"Social": "determinacao"    # Persuasão, manipulação emocional, charisma
-}
+var banco := {}
+func _init():
+	_registrar_pericias()
 
-## Descrições dos 10 Conhecimentos OBLIVIO
-const CONHECIMENTOS_DESCRICOES = {
-	"Bandidagem": "Cometer delitos, furto, invasão, se esgueirar de guardas",
-	"Duelo": "Estratégia de combate, identificar brechas na defesa, vantagens táticas",
-	"Emocional": "Controlar raiva, lágrimas, manter calma, enfrentar medos",
-	"Esforço": "Ações cansativas, manter fôlego, empurrar pesado, resistir venenos",
-	"Místico": "Fenômenos sobrenaturais, runas arcanas, seres de outra realidade",
-	"Mundo": "Natureza, animais selvagens, pontos cardeais, plantas venenosas",
-	"Rastro": "Percepção aguçada, encontrar coisas, ler lábios, farejar pistas",
-	"Reflexos": "Esquivar-se, acertar alvo em movimento, manter equilíbrio",
-	"Saber": "Memória de estudos, hobby favorito, conversa em mesa de bar",
-	"Social": "Persuadir, mentir, convencer, acalmar emoções alheias"
-}
+func _registrar_pericias():
 
-## Testa um Conhecimento OBLIVIO (D6 + atributo base + treino + especialização)
-func testar_conhecimento(combatente: CombatenteData, conhecimento: String, _dificuldade: int = 0) -> Dictionary:
-	# Validar conhecimento
-	if not CONHECIMENTOS_ATRIBUTOS.has(conhecimento):
-		return {
-			"sucesso": false,
-			"conhecimento": conhecimento,
-			"personagem": combatente.nome,
-			"erro": "Conhecimento não existe: %s" % conhecimento
-		}
-	
-	# Bonus de especialização
-	var bonus_especializacao = 0
-	if combatente.tem_especializacao(conhecimento):
-		bonus_especializacao = 2
-	
-	# Rolar D6
-	var dado = randi_range(1, 6)
-	var resultado_final = dado
-	if combatente.tem_especializacao(conhecimento):
-		resultado_final += 2
-	resultado_final = clampi(resultado_final, 1, 6)
-	
-	# ZONA DE ACERTO OBLIVIO 2.2:
-	# 1 = Falha Crítica (algo extremamente ruim acontece)
-	# 2-3 = Falha Regular (não acontece como esperado)
-	# 4-5 = Sucesso Regular (o que era esperado acontece)
-	# 6 = Sucesso Extremo (algo adicional favorável acontece)
-	
-	var resultado: String
-	var sucesso: bool
-	
-	match resultado_final:
+	banco["Bandidagem"] = Pericia.new(
+		"Bandidagem",
+		"Cometer delitos, furtar, invadir locais e agir fora da lei."
+	)
+
+	banco["Duelo"] = Pericia.new(
+		"Duelo",
+		"Analisa o estilo de combate do inimigo procurando brechas e pontos fracos."
+	)
+
+	banco["Emocional"] = Pericia.new(
+		"Emocional",
+		"Controla sentimentos, supera medo e mantém a calma em situações extremas."
+	)
+
+	banco["Esforço"] = Pericia.new(
+		"Esforço",
+		"Executa ações fisicamente desgastantes e suporta grandes esforços."
+	)
+
+	banco["Místico"] = Pericia.new(
+		"Místico",
+		"Compreensão de fenômenos sobrenaturais, magia e entidades."
+	)
+
+	banco["Mundo"] = Pericia.new(
+		"Mundo",
+		"Conhecimento sobre natureza, fauna, flora e sobrevivência."
+	)
+
+	banco["Rastro"] = Pericia.new(
+		"Rastro",
+		"Encontrar pistas, perceber detalhes e interpretar vestígios."
+	)
+
+	banco["Reflexos"] = Pericia.new(
+		"Reflexos",
+		"Movimentos rápidos, esquivas e ações que exigem velocidade."
+	)
+
+	banco["Saber"] = Pericia.new(
+		"Saber",
+		"Conhecimentos gerais, memória e assuntos estudados."
+	)
+
+	banco["Social"] = Pericia.new(
+		"Social",
+		"Persuasão, blefe, intimidação e interação com outras pessoas."
+	)
+
+func get_pericia(nome:String) -> Pericia:
+	return banco.get(nome)
+
+func obter_pericias() -> Array:
+	return banco.keys()
+
+func obter_descricao(nome:String) -> String:
+	var pericia = get_pericia(nome)
+	if pericia == null:
+		return ""
+	return pericia.descricao
+
+func testar_pericia(
+	combatente: CombatenteData,
+	nome_pericia: String
+) -> Dictionary:
+
+	var dado := randi_range(1, 6)
+
+	var resultado := ""
+
+	match dado:
 		1:
 			resultado = "Falha Crítica"
-			sucesso = false
-		2, 3:
+
+		2,3:
 			resultado = "Falha"
-			sucesso = false
-		4, 5:
+
+		4,5:
 			resultado = "Sucesso"
-			sucesso = true
+
 		6:
 			resultado = "Sucesso Extremo"
-			sucesso = true
-	
+
 	return {
-		"conhecimento": conhecimento,
 		"personagem": combatente.nome,
+		"pericia": nome_pericia,
 		"dado": dado,
-		"resultado_final": resultado_final,
-		"especializado": combatente.tem_especializacao(conhecimento),
-		"bonus_especializacao": bonus_especializacao,
 		"resultado": resultado,
-		"sucesso": sucesso
+		"sucesso": dado >= 4
 	}
 
-## Retorna lista de todos os Conhecimentos disponíveis
-func obter_conhecimentos() -> Array[String]:
-	var lista: Array[String] = []
-	for conhecimento in CONHECIMENTOS_ATRIBUTOS.keys():
-		lista.append(conhecimento)
-	return lista
-
-## Retorna os conhecimentos agrupados por atributo base
-func conhecimentos_por_atributo(atributo: String) -> Array[String]:
-	var lista: Array[String] = []
-	for conhecimento in CONHECIMENTOS_ATRIBUTOS:
-		if CONHECIMENTOS_ATRIBUTOS[conhecimento] == atributo:
-			lista.append(conhecimento)
-	return lista
-
-## Retorna descrição de um conhecimento
-func obter_descricao(conhecimento: String) -> String:
-	if CONHECIMENTOS_DESCRICOES.has(conhecimento):
-		return CONHECIMENTOS_DESCRICOES[conhecimento]
-	return "Conhecimento desconhecido"	
-
-## Retorna executar Duelo
 func executar_duelo(
 	combatente: CombatenteData,
 	_alvo: CombatenteData
 ) -> Dictionary:
-	var resultado_teste = testar_conhecimento(
+
+	var teste = testar_pericia(
 		combatente,
 		"Duelo"
 	)
-	match resultado_teste["resultado"]:
+
+	match teste.resultado:
+
 		"Falha Crítica":
 			return {
-				"resultado": "Falha Crítica",
+				"resultado": teste.resultado,
 				"analisado": false,
 				"reduzir_protecao": false
 			}
+
 		"Falha":
 			return {
-				"resultado": "Falha",
+				"resultado": teste.resultado,
 				"analisado": false,
 				"reduzir_protecao": false
 			}
+
 		"Sucesso":
 			return {
-				"resultado": "Sucesso",
+				"resultado": teste.resultado,
 				"analisado": true,
 				"reduzir_protecao": false
 			}
+
 		"Sucesso Extremo":
 			return {
-				"resultado": "Sucesso Extremo",
+				"resultado": teste.resultado,
 				"analisado": true,
 				"reduzir_protecao": true
 			}
+
 	return {}

@@ -36,17 +36,20 @@ var combatente_ativo: Dictionary = {}
 var combatente_ref: CombatenteData = null
 var acoes_habilitadas: bool = false
 var habilidade_db := HabilidadeData.new()
+var pericia_db := PericiaData.new()
 var controles_tela_atual: Array[Node] = []
 
 enum EstadoMenu {
 	PRINCIPAL,
 	PERICIAS,
+	DETALHE_PERICIA,
 	HABILIDADES,
 	DETALHE_HABILIDADE,
 	ITENS
 }
 
 var estado_menu := EstadoMenu.PRINCIPAL
+
 
 func _ready() -> void:
 	_criar_layout()
@@ -165,6 +168,7 @@ func _mostrar_menu_principal() -> void:
 	botao_item.show()
 	spacer_principal.show()
 	botao_passar.show()
+	call_deferred("_focar_botao")
 
 func _ocultar_menu_principal() -> void:
 	botao_atacar.hide()
@@ -257,41 +261,42 @@ func _on_botao_duelo_pressed() -> void:
 
 func abrir_menu_pericias() -> void:
 	if combatente_ref == null:
-		print("[ActionPanel] Combatente não possui referência")
 		return
 
 	estado_menu = EstadoMenu.PERICIAS
+
 	_ocultar_menu_principal()
 	_limpar_tela_contextual()
+
 	_criar_titulo_tela("Perícias")
 
 	var lista = _criar_scroll_lista()
-	var encontrou_pericia := false
 
-	for pericia in combatente_ref.conhecimentos_treino.keys():
-		var treino = combatente_ref.conhecimentos_treino[pericia]
-		if treino <= 0:
-			continue
+	var pericias = _obter_pericias_conhecidas()
 
-		encontrou_pericia = true
-		var btn := _criar_botao(
-			"%s (+%d)" % [pericia, treino],
-			"Usar perícia %s" % pericia,
-			func():
-				pericia_escolhida.emit(pericia)
-				fechar_menu_pericias()
-		)
-		lista.add_child(btn)
-
-	if not encontrou_pericia:
+	if pericias.is_empty():
 		var vazio = Label.new()
 		vazio.text = "Nenhuma perícia treinada."
 		lista.add_child(vazio)
+	else:
+		for pericia in pericias:
+			lista.add_child(_criar_botao_pericia(pericia))
 
 	_criar_botao_voltar(fechar_menu_pericias)
 
+	_focar_primeiro_botao(lista)
+
+
+func _focar_primeiro_botao(container: VBoxContainer) -> void:
+	await get_tree().process_frame
+	for child in container.get_children():
+		if child is Button and child.visible and not child.disabled:
+			child.grab_focus()
+			return
+
 func fechar_menu_pericias() -> void:
 	_mostrar_menu_principal()
+	call_deferred("_focar_botao")
 
 ## ===== TELA DE HABILIDADES =====
 ## Fluxo implementado:
@@ -303,23 +308,21 @@ func abrir_menu_habilidades() -> void:
 	if combatente_ref == null:
 		print("[ActionPanel] Combatente não possui referência")
 		return
-
 	estado_menu = EstadoMenu.HABILIDADES
 	_ocultar_menu_principal()
 	_limpar_tela_contextual()
 	_criar_titulo_tela("Habilidades")
-
 	var lista = _criar_scroll_lista(220)
 	var habilidades_disponiveis = _obter_habilidades_conhecidas()
-
 	if habilidades_disponiveis.is_empty() and not combatente_ref.habilidade_sobrecarga_ativa:
 		var vazio = Label.new()
 		vazio.text = "Nenhuma habilidade disponível."
 		lista.add_child(vazio)
 	else:
 		_preencher_lista_habilidades(lista, habilidades_disponiveis)
-
 	_criar_botao_voltar(_mostrar_menu_principal)
+	_focar_primeiro_botao(lista)
+	
 
 func _obter_habilidades_conhecidas() -> Array:
 	# Resolve os nomes salvos no CombatenteData usando o banco de habilidades.
@@ -332,6 +335,22 @@ func _obter_habilidades_conhecidas() -> Array:
 			resultado.append(habilidade)
 		else:
 			print("[ActionPanel] Habilidade não encontrada no banco: %s" % nome_habilidade)
+	return resultado
+
+func _obter_pericias_conhecidas() -> Array:
+	var resultado: Array = []
+
+	for nome_pericia in combatente_ref.conhecimentos_treino.keys():
+		var treino = combatente_ref.conhecimentos_treino[nome_pericia]
+
+		if treino <= 0:
+			continue
+
+		var pericia = pericia_db.get_pericia(nome_pericia)
+
+		if pericia != null:
+			resultado.append(pericia)
+
 	return resultado
 
 func _preencher_lista_habilidades(lista: VBoxContainer, habilidades_disponiveis: Array) -> void:
@@ -379,6 +398,56 @@ func _criar_botao_habilidade(habilidade) -> Button:
 		"Ver detalhes de %s" % habilidade.nome,
 		_abrir_detalhes_habilidade.bind(habilidade)
 	)
+
+func _criar_botao_pericia(pericia) -> Button:
+	var treino = combatente_ref.conhecimentos_treino.get(pericia.nome, 0)
+
+	var texto = "%s (+%d)" % [
+		pericia.nome,
+		treino
+	]
+
+	return _criar_botao(
+		texto,
+		"Ver detalhes de %s" % pericia.nome,
+		_abrir_detalhes_pericia.bind(pericia)
+	)
+
+func _abrir_detalhes_pericia(pericia) -> void:
+	estado_menu = EstadoMenu.DETALHE_PERICIA
+
+	_limpar_tela_contextual()
+
+	_criar_titulo_tela(pericia.nome)
+
+	var detalhes = _criar_scroll_lista()
+
+	var treino = combatente_ref.conhecimentos_treino.get(pericia.nome, 0)
+
+	_adicionar_linha_detalhe(
+		detalhes,
+		"Treino",
+		"+%d" % treino
+	)
+
+	_adicionar_linha_detalhe(
+		detalhes,
+		"Descrição",
+		pericia.descricao
+	)
+
+	var confirmar = _criar_botao(
+		"USAR PERÍCIA",
+		"Executar perícia",
+		_confirmar_pericia.bind(pericia.nome)
+	)
+
+	vbox.add_child(confirmar)
+	controles_tela_atual.append(confirmar)
+
+	_criar_botao_voltar(abrir_menu_pericias)
+
+	confirmar.grab_focus()
 
 func _abrir_detalhes_habilidade(habilidade) -> void:
 	estado_menu = EstadoMenu.DETALHE_HABILIDADE
@@ -450,15 +519,26 @@ func _texto_ou_padrao(texto: String, padrao: String) -> String:
 		return padrao
 	return texto
 
+func _confirmar_pericia(nome_pericia:String) -> void:
+
+	print("[ActionPanel] Perícia confirmada: %s" % nome_pericia)
+
+	_mostrar_menu_principal()
+
+	call_deferred("_focar_botao")
+
+	pericia_escolhida.emit(nome_pericia)
+
 func _confirmar_habilidade(nome_habilidade: String) -> void:
-	# Após a confirmação, a regra volta para o CombatManager via sinal.
 	print("[ActionPanel] Habilidade confirmada: %s" % nome_habilidade)
 	_mostrar_menu_principal()
+	call_deferred("_focar_botao")
 	habilidade_escolhida.emit(nome_habilidade)
 
 func _confirmar_sobrecarga() -> void:
 	print("[ActionPanel] Sobrecarga confirmada")
 	_mostrar_menu_principal()
+	call_deferred("_focar_botao")
 	habilidade_sobrecarga.emit()
 
 ## ===== MENUS ESPECÍFICOS / COMPATIBILIDADE =====
