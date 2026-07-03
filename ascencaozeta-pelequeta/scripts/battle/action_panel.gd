@@ -14,6 +14,7 @@ signal turno_passado
 signal habilidade_sobrecarga
 signal pericia_escolhida(nome_pericia: String)
 signal habilidade_escolhida(nome_habilidade: String)
+signal item_escolhido(nome_item:String)
 
 ## ===== REFERÊNCIAS DA UI =====
 ## A interface é criada por código para preservar a cena atual. As telas internas
@@ -32,11 +33,12 @@ var spacer_principal: Control
 ## Guarda o combatente ativo e os nós temporários da tela atual. A lista de nós
 ## temporários prepara o mesmo padrão para Itens Consumíveis: basta criar outra
 ## lista contextual e limpar a tela ao voltar.
-var combatente_ativo: Dictionary = {}
+var combatente_ativo: CombatenteData = null
 var combatente_ref: CombatenteData = null
 var acoes_habilitadas: bool = false
 var habilidade_db := HabilidadeData.new()
 var pericia_db := PericiaData.new()
+var item_db := ItemData.new()
 var controles_tela_atual: Array[Node] = []
 
 enum EstadoMenu {
@@ -45,7 +47,8 @@ enum EstadoMenu {
 	DETALHE_PERICIA,
 	HABILIDADES,
 	DETALHE_HABILIDADE,
-	ITENS
+	ITENS,
+	DETALHE_ITEM
 }
 
 var estado_menu := EstadoMenu.PRINCIPAL
@@ -118,10 +121,9 @@ func _criar_botao(texto: String, p_tooltip_text: String, callback: Callable) -> 
 ## Sempre que o painel é reativado, ele volta ao Menu Principal para evitar que
 ## uma tela antiga fique aberta no turno de outro combatente.
 
-func ativar_para(combatente: Dictionary, ref_combatente: CombatenteData = null) -> void:
+func ativar_para(combatente: CombatenteData) -> void:
 	combatente_ativo = combatente
-	combatente_ref = ref_combatente
-
+	combatente_ref = combatente
 	show()
 	habilitar_acoes()
 
@@ -242,10 +244,7 @@ func _on_habilidade_pressionada() -> void:
 	abrir_menu_habilidades()
 
 func _on_item_pressionado() -> void:
-	# Itens ainda usam o fluxo antigo, mas a estrutura contextual já está pronta
-	# para receber uma lista rolável de consumíveis no mesmo padrão das habilidades.
-	desabilitar_acoes()
-	acao_item.emit()
+	abrir_menu_itens()
 
 func _on_passar_turno() -> void:
 	# Finaliza voluntariamente o turno do combatente ativo.
@@ -324,6 +323,33 @@ func abrir_menu_habilidades() -> void:
 	_focar_primeiro_botao(lista)
 	
 
+func abrir_menu_itens() -> void:
+	if combatente_ref == null:
+		return
+	estado_menu = EstadoMenu.ITENS
+	_ocultar_menu_principal()
+	_limpar_tela_contextual()
+	_criar_titulo_tela("Itens")
+	var lista = _criar_scroll_lista()
+	var inventario = item_db.listar_inventario(combatente_ref)
+	if inventario.is_empty():
+		var vazio = Label.new()
+		vazio.text = "Nenhum item."
+		lista.add_child(vazio)
+	else:
+		for nome_item in inventario:
+			var item = item_db.get_item(nome_item)
+			if item == null:
+				continue
+			var btn = _criar_botao(
+				item.nome,
+				item.descricao,
+				_abrir_detalhes_item.bind(item)
+			)
+			lista.add_child(btn)
+	_criar_botao_voltar(_mostrar_menu_principal)
+	_focar_primeiro_botao(lista)
+
 func _obter_habilidades_conhecidas() -> Array:
 	# Resolve os nomes salvos no CombatenteData usando o banco de habilidades.
 	# A busca tolerante a capitalização evita que dados antigos escondam uma
@@ -399,6 +425,19 @@ func _criar_botao_habilidade(habilidade) -> Button:
 		_abrir_detalhes_habilidade.bind(habilidade)
 	)
 
+func _criar_botao_item(item: ItemData.Item) -> Button:
+	var texto := "%s | %s" % [
+		item.nome,
+		ItemData.tipo_item_para_texto(item.tipo)
+	]
+	if item.quantidade > 1:
+		texto += " | x%d" % item.quantidade
+	return _criar_botao(
+		texto,
+		"Ver detalhes de %s" % item.nome,
+		_abrir_detalhes_item.bind(item)
+	)
+
 func _criar_botao_pericia(pericia) -> Button:
 	var treino = combatente_ref.conhecimentos_treino.get(pericia.nome, 0)
 
@@ -447,6 +486,31 @@ func _abrir_detalhes_pericia(pericia) -> void:
 
 	_criar_botao_voltar(abrir_menu_pericias)
 
+	confirmar.grab_focus()
+
+func _abrir_detalhes_item(item) -> void:
+	estado_menu = EstadoMenu.DETALHE_ITEM
+	_limpar_tela_contextual()
+	_criar_titulo_tela(item.nome)
+	var detalhes = _criar_scroll_lista()
+	_adicionar_linha_detalhe(
+		detalhes,
+		"Tipo",
+		"Consumível"
+	)
+	_adicionar_linha_detalhe(
+		detalhes,
+		"Descrição",
+		item.descricao
+	)
+	var confirmar = _criar_botao(
+		"USAR ITEM",
+		"Usar este item",
+		_confirmar_item.bind(item.nome)
+	)
+	vbox.add_child(confirmar)
+	controles_tela_atual.append(confirmar)
+	_criar_botao_voltar(abrir_menu_itens)
 	confirmar.grab_focus()
 
 func _abrir_detalhes_habilidade(habilidade) -> void:
@@ -520,13 +584,9 @@ func _texto_ou_padrao(texto: String, padrao: String) -> String:
 	return texto
 
 func _confirmar_pericia(nome_pericia:String) -> void:
-
 	print("[ActionPanel] Perícia confirmada: %s" % nome_pericia)
-
 	_mostrar_menu_principal()
-
 	call_deferred("_focar_botao")
-
 	pericia_escolhida.emit(nome_pericia)
 
 func _confirmar_habilidade(nome_habilidade: String) -> void:
@@ -534,6 +594,12 @@ func _confirmar_habilidade(nome_habilidade: String) -> void:
 	_mostrar_menu_principal()
 	call_deferred("_focar_botao")
 	habilidade_escolhida.emit(nome_habilidade)
+
+func _confirmar_item(nome_item:String) -> void:
+	print("[ActionPanel] Item confirmado: %s" % nome_item)
+	_mostrar_menu_principal()
+	call_deferred("_focar_botao")
+	item_escolhido.emit(nome_item)
 
 func _confirmar_sobrecarga() -> void:
 	print("[ActionPanel] Sobrecarga confirmada")
@@ -545,20 +611,8 @@ func _confirmar_sobrecarga() -> void:
 ## Métodos mantidos para chamadas externas antigas. Eles agora redirecionam para
 ## o fluxo interno sem menus flutuantes.
 
-func mostrar_menu_pericias(_combatente: Dictionary) -> void:
+func mostrar_menu_pericias(_combatente: CombatenteData) -> void:
 	abrir_menu_pericias()
 
-func mostrar_menu_habilidades(_combatente: Dictionary) -> void:
+func mostrar_menu_habilidades(_combatente: CombatenteData) -> void:
 	abrir_menu_habilidades()
-
-func mostrar_menu_itens(combatente: Dictionary) -> void:
-	# Stub preservado. A futura implementação deve seguir a mesma estrutura:
-	# Menu Principal -> Lista rolável de consumíveis -> Detalhes -> Confirmar Uso.
-	if combatente_ref == null:
-		print("[ActionPanel] Combatente não possui referência")
-		return
-
-	print("[ActionPanel] Menu de itens para %s" % combatente["nome"])
-	# TODO: Criar lista rolável de itens consumíveis.
-	# TODO: Exibir custo de ação, quantidade e descrição antes de confirmar.
-	# TODO: Retornar item selecionado ao CombatManager por sinal próprio.

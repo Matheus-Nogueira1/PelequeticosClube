@@ -21,7 +21,14 @@ var regioes: Array[String] = [
 # Estado da seleção
 var selecionadas: Array[int] = [0, 0, 0, 0, 0]
 var regioes_finais: Array[String] = []
-var modo: String = "desativado"  # desativado, selecionar_ataque, selecionar_defesa
+enum ModoRegional{
+	DESATIVADO,
+	ATAQUE,
+	ITEM,
+	HABILIDADE,
+	PERICIA
+}
+var modo := ModoRegional.DESATIVADO
 var permite_multiplas_mesma_regiao: bool = false  # Sobrecarga ativa
 
 # UI
@@ -103,7 +110,7 @@ func _criar_botao_regiao(nome: String, indice: int) -> Button:
 
 func ativar_para_ataque(combatente: CombatenteData) -> void:
 	combatente_ativo = combatente
-	modo = "selecionar_ataque"
+	modo = ModoRegional.ATAQUE
 	show()
 	await get_tree().process_frame
 	if botoes_regiao.size() > 0:
@@ -115,6 +122,68 @@ func ativar_para_ataque(combatente: CombatenteData) -> void:
 	# Atualizar visual dos botões (desabilitar regiões perdidas/próteses destruídas)
 	_atualizar_estado_botoes()
 
+func ativar_para_item(
+	combatente: CombatenteData
+) -> void:
+
+	combatente_ativo = combatente
+
+	modo = ModoRegional.ITEM
+
+	show()
+
+	await get_tree().process_frame
+
+	if botoes_regiao.size() > 0:
+		botoes_regiao[0].grab_focus()
+
+	_resetar_selecao()
+
+	permite_multiplas_mesma_regiao = false
+
+	_atualizar_estado_botoes()
+
+func ativar_para_habilidade(
+	combatente: CombatenteData
+) -> void:
+
+	combatente_ativo = combatente
+
+	modo = ModoRegional.HABILIDADE
+
+	show()
+
+	await get_tree().process_frame
+
+	if botoes_regiao.size() > 0:
+		botoes_regiao[0].grab_focus()
+
+	_resetar_selecao()
+
+	permite_multiplas_mesma_regiao = false
+
+	_atualizar_estado_botoes()
+
+func ativar_para_pericia(
+	combatente: CombatenteData
+) -> void:
+
+	combatente_ativo = combatente
+
+	modo = ModoRegional.PERICIA
+
+	show()
+
+	await get_tree().process_frame
+
+	if botoes_regiao.size() > 0:
+		botoes_regiao[0].grab_focus()
+
+	_resetar_selecao()
+
+	permite_multiplas_mesma_regiao = false
+
+	_atualizar_estado_botoes()
 
 ## ===== VALIDAÇÃO DE REGIÕES =====
 
@@ -133,7 +202,7 @@ func _pode_arriscar_regiao(regiao: String) -> bool:
 		return not protese.destruida
 	
 	var stress = combatente_ativo.estresse_por_regiao[regiao]
-	if stress["atual"] >= stress["limite"]:
+	if stress.atual >= stress.limite:
 		return false
 		
 	return true
@@ -166,7 +235,7 @@ func _atualizar_estado_botoes() -> void:
 
 func desativar() -> void:
 	"""Desativa o seletor"""
-	modo = "desativado"
+	modo = ModoRegional.DESATIVADO
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	hide()
 	_resetar_selecao()
@@ -176,7 +245,7 @@ func desativar() -> void:
 # ============================================================================
 
 func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
-	if modo == "desativado":
+	if modo == ModoRegional.DESATIVADO:
 		return
 
 	if not _pode_arriscar_regiao(nome_regiao):
@@ -207,7 +276,7 @@ func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
 	regiao_selecionada.emit(nome_regiao, indice)
 
 func _on_confirmar() -> void:
-	if modo == "desativado":
+	if modo == ModoRegional.DESATIVADO:
 		return
 
 	regioes_finais = obter_regioes_selecionadas()
@@ -272,7 +341,20 @@ func _atualizar_info_label() -> void:
 		else:
 			texto += "○"
 
-	label_info.text = "Riscos: %s (%d/5)" % [texto, total]
+	match modo:
+		ModoRegional.ATAQUE:
+			label_info.text = "Riscos: %s (%d/5)" % [texto, total]
+		ModoRegional.ITEM:
+			label_info.text = "Selecione uma região para utilizar o item."
+		ModoRegional.HABILIDADE:
+			label_info.text = "Selecione a região alvo da habilidade."
+		ModoRegional.PERICIA:
+			label_info.text = "Selecione a região da perícia."
+		_:
+			label_info.text = ""
+
+func obter_modo() -> ModoRegional:
+	return modo
 
 func _resetar_selecao() -> void:
 	"""Reseta toda a seleção"""

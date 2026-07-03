@@ -11,7 +11,8 @@ class_name EnemyPanel
 ## ===== SINAIS =====
 
 ## Emitido quando um inimigo é selecionado como alvo
-signal inimigo_selecionado(inimigo: Dictionary)
+signal alvo_selecionado(alvo: CombatenteData)
+signal alvo_deselecionado
 ## Emitido quando um inimigo é deseleccionado
 signal inimigo_deseleccionado
 
@@ -19,13 +20,19 @@ signal inimigo_deseleccionado
 @onready var vbox = VBoxContainer.new()
 @onready var label_titulo = Label.new()
 @onready var scroll_container = ScrollContainer.new()
-@onready var lista_inimigos = VBoxContainer.new()
+@onready var lista_combatentes = VBoxContainer.new()
 
-var inimigos: Array[Dictionary] = []
-var botoes_inimigos: Dictionary = {}  # nome -> botão
-var inimigo_selecionado_atual: Dictionary = {}
+var combatentes: Array[CombatenteData] = []
+var botoes_alvos: Dictionary = {}
+var alvo_selecionado_atual: CombatenteData = null
 var modo_seletor_ativo: bool = false
+enum TipoAlvo{
+	INIMIGO,
+	ALIADO,
+	QUALQUER
+}
 
+var tipo_alvo := TipoAlvo.INIMIGO
 
 func _ready() -> void:
 	_criar_layout()
@@ -51,9 +58,9 @@ func _criar_layout() -> void:
 	scroll_container.clip_contents = true
 	scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
 	
-	lista_inimigos.add_theme_constant_override("separation", 2)
-	lista_inimigos.mouse_filter = Control.MOUSE_FILTER_PASS
-	scroll_container.add_child(lista_inimigos)
+	lista_combatentes.add_theme_constant_override("separation", 2)
+	lista_combatentes.mouse_filter = Control.MOUSE_FILTER_PASS
+	scroll_container.add_child(lista_combatentes)
 	
 	vbox.add_child(scroll_container)
 	
@@ -64,46 +71,44 @@ func _criar_layout() -> void:
 # GERENCIAMENTO DE INIMIGOS
 # ============================================================================
 
-func adicionar_inimigo(inimigo: Dictionary) -> void:
+func adicionar_combatente(combatente: CombatenteData) -> void:
 	"""Adiciona um inimigo à lista"""
-	inimigos.append(inimigo)
-	_criar_botao_inimigo(inimigo)
+	combatentes.append(combatente)
+	_criar_botao_combatente(combatente)
 
-func atualizar_inimigo(inimigo: Dictionary) -> void:
-	var chave = inimigo["nome"]
-	for i in range(inimigos.size()):
-		if inimigos[i]["nome"] == chave:
-			inimigos[i] = inimigo
+func atualizar_combatente(combatente: CombatenteData) -> void:
+	var chave = combatente.nome
+	for i in range(combatentes.size()):
+		if combatentes[i].nome == chave:
+			combatentes[i] = combatente
 			break
-	if chave in botoes_inimigos:
-		var botao = botoes_inimigos[chave]
-		botao.text = _formatar_texto_inimigo(inimigo)
+	if chave in botoes_alvos:
+		var botao = botoes_alvos[chave]
+		botao.text = _formatar_texto_combatente(combatente)
 
-func remover_inimigo(inimigo: Dictionary) -> void:
+func remover_combatente(combatente: CombatenteData) -> void:
 	"""Remove um inimigo da lista (quando derrotado)"""
-	var chave = inimigo["nome"]
-	if chave in botoes_inimigos:
-		botoes_inimigos[chave].queue_free()
-		botoes_inimigos.erase(chave)
+	var chave = combatente.nome
+	if chave in botoes_alvos:
+		botoes_alvos[chave].queue_free()
+		botoes_alvos.erase(chave)
 	
-	inimigos = inimigos.filter(func(i): return i["nome"] != chave)
+	combatentes = combatentes.filter(func(i): return i.nome != chave)
 	
-	if inimigo_selecionado_atual == inimigo:
-		inimigo_selecionado_atual.clear()
+	if alvo_selecionado_atual == combatente:
+		alvo_selecionado_atual = null
 
-func limpar_inimigos() -> void:
-	"""Remove todos os inimigos da lista"""
-	for botao in botoes_inimigos.values():
+func limpar_combatente() -> void:
+	for botao in botoes_alvos.values():
 		botao.queue_free()
-	botoes_inimigos.clear()
-	inimigos.clear()
-	inimigo_selecionado_atual.clear()
+	botoes_alvos.clear()
+	alvo_selecionado_atual = null
 
 # ============================================================================
 # CRIAÇÃO DE BOTÕES
 # ============================================================================
 
-func _criar_botao_inimigo(inimigo: Dictionary) -> void:
+func _criar_botao_combatente(inimigo: CombatenteData) -> void:
 	"""Cria um botão visual para um inimigo"""
 	var botao = Button.new()
 	botao.add_theme_font_size_override(
@@ -112,28 +117,26 @@ func _criar_botao_inimigo(inimigo: Dictionary) -> void:
 	)
 	botao.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	botao.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-	botao.text = _formatar_texto_inimigo(inimigo)
+	botao.text = _formatar_texto_combatente(inimigo)
 	botao.custom_minimum_size = Vector2(0, 120)
 	botao.toggle_mode = true
 	botao.mouse_filter = Control.MOUSE_FILTER_STOP
-	botao.pressed.connect(_on_botao_inimigo_pressionado.bind(inimigo))
+	botao.pressed.connect(_on_botao_combatente_pressionado.bind(inimigo))
 	
-	lista_inimigos.add_child(botao)
-	botoes_inimigos[inimigo["nome"]] = botao
+	lista_combatentes.add_child(botao)
+	botoes_alvos[inimigo.nome] = botao
 
-func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
-	var nome = inimigo["nome"]
+func _formatar_texto_combatente(combatente: CombatenteData) -> String:
+	var nome = combatente.nome
 
 	var estresse_total := 0
 	var limite_total := 0
-	var analisado = false
-	if inimigo.has("analisado_por_duelo"):
-		analisado = inimigo["analisado_por_duelo"]
+	var analisado := combatente.analisado_por_duelo
 	if not analisado:
 
-		for regiao_data in inimigo["estresse_por_regiao"].values():
-			estresse_total += regiao_data["atual"]
-			limite_total += regiao_data["limite"]
+		for regiao_data in combatente.estresse_por_regiao.values():
+			estresse_total += regiao_data.atual
+			limite_total += regiao_data.limite
 		var barra = _criar_barra_estresse(
 			estresse_total,
 			limite_total
@@ -157,26 +160,24 @@ func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
 			limite_total,
 			barra
 		]
-	for regiao_data in inimigo["estresse_por_regiao"].values():
-		estresse_total += regiao_data["atual"]
-		limite_total += regiao_data["limite"]
+	for regiao_data in combatente.estresse_por_regiao.values():
+		estresse_total += regiao_data.atual
+		limite_total += regiao_data.limite
 	var barra = _criar_barra_estresse(
 		estresse_total,
 		limite_total
 	)
-	var protecao_base: int = inimigo["atributo_protecao"]
-	var reducao: int = 0
-	if inimigo.has("reducao_protecao_temporaria"):
-		reducao = inimigo["reducao_protecao_temporaria"]
+	var protecao_base: int = combatente.atributo_protecao
+	var reducao := combatente.reducao_protecao_temporaria
 	var protecao_atual: int = max(
 		0,
 		protecao_base - reducao
 	)
-	var torso = inimigo["estresse_por_regiao"]["Torso"]
-	var bd = inimigo["estresse_por_regiao"]["Braço Direito"]
-	var be = inimigo["estresse_por_regiao"]["Braço Esquerdo"]
-	var pd = inimigo["estresse_por_regiao"]["Perna Direita"]
-	var pe = inimigo["estresse_por_regiao"]["Perna Esquerda"]
+	var torso = combatente.estresse_por_regiao["Torso"]
+	var bd = combatente.estresse_por_regiao["Braço Direito"]
+	var be = combatente.estresse_por_regiao["Braço Esquerdo"]
+	var pd = combatente.estresse_por_regiao["Perna Direita"]
+	var pe = combatente.estresse_por_regiao["Perna Esquerda"]
 
 	return """
 %s
@@ -238,14 +239,34 @@ func _criar_barra_estresse(atual: int, maximo: int) -> String:
 # SELEÇÃO DE ALVO
 # ============================================================================
 
-func ativar_seletor_alvo() -> void:
+func ativar_seletor_alvo(
+	alvos_recebidos: Array[CombatenteData],
+	tipo: TipoAlvo = TipoAlvo.INIMIGO
+) -> void:
+	if combatentes.is_empty():
+		atualizar_todos(alvos_recebidos)
+	tipo_alvo = tipo
+	match tipo_alvo:
+		TipoAlvo.INIMIGO:
+			label_titulo.text = "Inimigos"
+
+		TipoAlvo.ALIADO:
+			label_titulo.text = "Aliados"
+
+		TipoAlvo.QUALQUER:
+			label_titulo.text = "Selecionar alvo"
+
 	modo_seletor_ativo = true
+
 	mouse_filter = Control.MOUSE_FILTER_STOP
-	for botao in botoes_inimigos.values():
+
+	for botao in botoes_alvos.values():
 		botao.focus_mode = Control.FOCUS_ALL
+
 	await get_tree().process_frame
-	if botoes_inimigos.size() > 0:
-		botoes_inimigos.values()[0].grab_focus()
+
+	if botoes_alvos.size() > 0:
+		botoes_alvos.values()[0].grab_focus()
 
 func desativar_seletor_alvo() -> void:
 	"""Desativa o modo de seleção de alvo"""
@@ -253,39 +274,40 @@ func desativar_seletor_alvo() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
 	# Desmarcar todos
-	for botao in botoes_inimigos.values():
+	for botao in botoes_alvos.values():
 		botao.button_pressed = false
 		botao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
-func _on_botao_inimigo_pressionado(inimigo: Dictionary) -> void:
-	"""Chamado quando um botão de inimigo é pressionado"""
+func _on_botao_combatente_pressionado(alvo: CombatenteData) -> void:
+
 	if not modo_seletor_ativo:
 		return
-	
-	# Desselecionar inimigo anterior
-	if inimigo_selecionado_atual.has("nome"):
-		var botao_anterior = botoes_inimigos.get(inimigo_selecionado_atual["nome"])
-		if botao_anterior:
-			botao_anterior.button_pressed = false
-	
-	# Selecionar novo inimigo
-	inimigo_selecionado_atual = inimigo
-	inimigo_selecionado.emit(inimigo)
-	
-	# Desativar seletor após seleção
+
+	if alvo_selecionado_atual != null:
+
+		var anterior = botoes_alvos.get(
+			alvo_selecionado_atual.nome
+		)
+
+		if anterior:
+			anterior.button_pressed = false
+
+	alvo_selecionado_atual = alvo
+
+	alvo_selecionado.emit(alvo)
+
 	desativar_seletor_alvo()
 
-func obter_inimigo_selecionado() -> Dictionary:
-	"""Retorna o inimigo atualmente selecionado"""
-	return inimigo_selecionado_atual
+func obter_alvo_selecionado() -> CombatenteData:
+	return alvo_selecionado_atual
 
 # ============================================================================
 # ATUALIZAÇÃO E SINCRONIZAÇÃO
 # ============================================================================
 
-func atualizar_todos(inimigos_novos: Array[Dictionary]) -> void:
+func atualizar_todos(combatentes_novos: Array[CombatenteData]) -> void:
 	"""Atualiza toda a lista de inimigos"""
-	limpar_inimigos()
-	
-	for inimigo in inimigos_novos:
-		adicionar_inimigo(inimigo)
+	limpar_combatente()
+	combatentes.clear()
+	for combatente in combatentes_novos:
+		adicionar_combatente(combatente)

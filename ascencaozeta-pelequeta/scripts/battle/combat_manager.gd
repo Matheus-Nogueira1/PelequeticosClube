@@ -36,11 +36,14 @@ var indice_turno_atual := -1
 var combatente_ativo: CombatenteData = null
 var combate_ativo: bool = false
 var pericia_pendente := ""
+var item_db := ItemData.new()
+var item_pendente := ""
+var alvo_item_pendente: CombatenteData = null
 
 # Estado da ação atual
 var acao_em_progresso: bool = false
 var regioes_selecionadas: Array[String] = []
-var alvo_selecionado: Dictionary = {}
+var alvo_selecionado: CombatenteData = null
 
 
 func _ready() -> void:
@@ -61,15 +64,13 @@ func _inicializar_combate() -> void:
 
 	# Preencher UI dos painéis
 	if enemy_panel:
-		var inimigos_dict: Array[Dictionary] = []
-		for combatente in combatentes_inimigo:
-			inimigos_dict.append(combatente.para_dictionary())
-		enemy_panel.atualizar_todos(inimigos_dict)
+		enemy_panel.atualizar_todos(
+			combatentes_inimigo
+		)
 	if party_panel:
-		var jogadores_dict: Array[Dictionary] = []
-		for combatente in combatentes_jogador:
-			jogadores_dict.append(combatente.para_dictionary())
-		party_panel.atualizar_todos(jogadores_dict)
+		party_panel.atualizar_todos(
+			combatentes_jogador
+		)
 	if regional_selector:
 		regional_selector.desativar()
 
@@ -123,6 +124,7 @@ func _conectar_sinais_paineis() -> void:
 		action_panel.acao_atacar.connect(_iniciar_ataque)
 		action_panel.acao_habilidade.connect(_iniciar_habilidade)
 		action_panel.acao_item.connect(_iniciar_item)
+		action_panel.item_escolhido.connect(_on_item_escolhido)
 		action_panel.pericia_escolhida.connect(_on_pericia_escolhida)
 		action_panel.habilidade_escolhida.connect(_on_habilidade_escolhida)
 		action_panel.turno_passado.connect(_on_turno_passado)
@@ -134,7 +136,7 @@ func _conectar_sinais_paineis() -> void:
 		regional_selector.selecao_cancelada.connect(_on_selecao_cancelada)
 
 	if enemy_panel:
-		enemy_panel.inimigo_selecionado.connect(_on_inimigo_selecionado)
+		enemy_panel.alvo_selecionado.connect(_on_alvo_selecionado)
 
 # ============================================================================
 # FLUXO DE TURNO
@@ -162,15 +164,15 @@ func _avancar_turno() -> void:
 
 	# Ativar painel de ações se for personagem jogador
 	if combatente_ativo.tipo == "jogador":
-		action_panel.ativar_para(combatente_ativo.para_dictionary(), combatente_ativo)
-		party_panel.indicar_personagem_ativo(combatente_ativo.para_dictionary())
+		action_panel.ativar_para(combatente_ativo)
+		party_panel.indicar_personagem_ativo(combatente_ativo)
 		enemy_panel.desativar_seletor_alvo()
 		log_panel.registrar_evento(
 			"🎯 Turno de %s!" % combatente_ativo.nome,
 			"turno"
 		)
 		# Limpar seleções apenas ao iniciar turno do jogador
-		alvo_selecionado.clear()
+		alvo_selecionado = null
 	else:
 		party_panel.remover_destaque_turno()
 		# TODO: IA para inimigos
@@ -183,7 +185,7 @@ func _restaurar_protecoes(combatente: CombatenteData) -> void:
 			alvo.reducao_protecao_temporaria = 0
 			alvo.atacante_que_quebrou_protecao = ""
 			party_panel.atualizar_personagem(
-				alvo.para_dictionary()
+				alvo
 			)
 			log_panel.registrar_evento(
 				"A proteção de %s foi restaurada." %
@@ -194,8 +196,8 @@ func _restaurar_protecoes(combatente: CombatenteData) -> void:
 		if alvo.atacante_que_quebrou_protecao == combatente.nome:
 			alvo.reducao_protecao_temporaria = 0
 			alvo.atacante_que_quebrou_protecao = ""
-			enemy_panel.atualizar_inimigo(
-				alvo.para_dictionary()
+			enemy_panel.atualizar_combatente(
+				alvo
 			)
 			log_panel.registrar_evento(
 				"A proteção de %s foi restaurada." %
@@ -246,7 +248,7 @@ func _iniciar_ataque() -> void:
 
 	# Ativar seletor de corpo com validação de Próteses/Regiões Perdidas/Sobrecarga
 	regional_selector.ativar_para_ataque(combatente_ativo)
-	regional_selector.modo = "selecionar_ataque"
+
 
 func _iniciar_pericia() -> void:
 	"""Inicia uso de perícia"""
@@ -257,7 +259,7 @@ func _iniciar_pericia() -> void:
 	log_panel.registrar_evento("Menu de perícias aberto...", "acao")
 
 	# TODO: Mostrar menu de perícias disponíveis
-	action_panel.mostrar_menu_pericias(combatente_ativo.para_dictionary())
+	action_panel.mostrar_menu_pericias(combatente_ativo)
 
 func _iniciar_habilidade() -> void:
 	"""Inicia uso de habilidade especial"""
@@ -270,7 +272,7 @@ func _iniciar_habilidade() -> void:
 	# A seleção visual fica no ActionPanel para manter o mesmo fluxo das Perícias:
 	# Menu Principal -> Lista -> Detalhes -> Confirmar Uso.
 	# O CombatManager só volta a atuar quando a habilidade for confirmada.
-	action_panel.mostrar_menu_habilidades(combatente_ativo.para_dictionary())
+	action_panel.mostrar_menu_habilidades(combatente_ativo)
 
 func _ativar_sobrecarga() -> void:
 	if combatente_ativo == null:
@@ -326,20 +328,37 @@ func _on_habilidade_escolhida(nome_habilidade: String) -> void:
 	# Atualiza o painel da party porque usar habilidade pode consumir PA agora e,
 	# futuramente, também poderá aplicar cura, dano ou estados.
 	party_panel.atualizar_personagem(
-		combatente_ativo.para_dictionary()
+		combatente_ativo
 	)
 	action_panel.habilitar_acoes()
 
+func _on_item_escolhido(nome_item:String) -> void:
+
+	item_pendente = nome_item
+
+	log_panel.registrar_evento(
+		"Selecione quem receberá o item.",
+		"acao"
+	)
+
+	party_panel.ativar_seletor_alvo_item()
+
 func _iniciar_item() -> void:
-	"""Inicia uso de item"""
+
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
 
 	acao_em_progresso = true
-	log_panel.registrar_evento("Menu de itens aberto...", "acao")
 
-	# TODO: Mostrar inventário
-	action_panel.mostrar_menu_itens(combatente_ativo.para_dictionary())
+	log_panel.registrar_evento(
+		"Menu de itens aberto.",
+		"acao"
+	)
+
+	action_panel.mostrar_menu_itens(
+		combatente_ativo
+	)
+
 func _executar_pericia_duelo(alvo: CombatenteData) -> void:
 	if alvo == null:
 		return
@@ -377,8 +396,8 @@ func _executar_pericia_duelo(alvo: CombatenteData) -> void:
 				"info"
 			)
 			alvo.analisado_por_duelo = true
-			enemy_panel.atualizar_inimigo(
-				alvo.para_dictionary()
+			enemy_panel.atualizar_combatente(
+				alvo
 			)
 
 		"Sucesso Extremo":
@@ -406,8 +425,8 @@ func _executar_pericia_duelo(alvo: CombatenteData) -> void:
 				"critico"
 			)
 			alvo.analisado_por_duelo = true
-			enemy_panel.atualizar_inimigo(
-				alvo.para_dictionary()
+			enemy_panel.atualizar_combatente(
+				alvo
 			)
 
 	_finalizar_acao()
@@ -428,8 +447,11 @@ func _on_pericia_escolhida(nome_pericia: String) -> void:
 				"acao"
 			)
 
-			enemy_panel.ativar_seletor_alvo()
-
+			enemy_panel.ativar_seletor_alvo(
+				combatentes_inimigo,
+				EnemyPanel.TipoAlvo.INIMIGO
+			)
+ 	  
 		_:
 			log_panel.registrar_evento(
 				"Perícia %s ainda não implementada." % nome_pericia,
@@ -458,17 +480,23 @@ func _on_regiao_selecionada(nome_regiao: String, indice: int) -> void:
 
 func _on_regioes_confirmadas(regioes: Array[String]) -> void:
 	"""Chamado quando o jogador confirma as regiões selecionadas"""
+	if item_pendente != "":
+		_usar_item(regioes[0])
+		return
 	regioes_selecionadas = regioes.duplicate()
 	log_panel.registrar_evento("Regiões confirmadas: %s" % ", ".join(regioes_selecionadas), "acao")
 	log_panel.registrar_evento("Selecione o inimigo alvo...", "acao")
 	regional_selector.desativar()
-	enemy_panel.ativar_seletor_alvo()
+	enemy_panel.ativar_seletor_alvo(
+		combatentes_inimigo,
+		EnemyPanel.TipoAlvo.INIMIGO
+	)
 
 func _on_selecao_cancelada() -> void:
 	"""Chamado quando o jogador cancela a seleção de regiões"""
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
-	alvo_selecionado.clear()
+	alvo_selecionado = null
 	log_panel.registrar_evento("Seleção de regiões cancelada.", "aviso")
 	regional_selector.desativar()
 	action_panel.habilitar_acoes()
@@ -482,28 +510,55 @@ func _on_turno_passado() -> void:
 		await get_tree().create_timer(1.0).timeout
 		_avancar_turno()
 
-func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
+func _abrir_seletor_alvo(tipo: EnemyPanel.TipoAlvo) -> void:
+	match tipo:
 
-	if not inimigo_dict.has("nome"):
+		EnemyPanel.TipoAlvo.INIMIGO:
+			enemy_panel.ativar_seletor_alvo(
+				combatentes_inimigo,
+				tipo
+			)
+
+		EnemyPanel.TipoAlvo.ALIADO:
+			enemy_panel.ativar_seletor_alvo(
+				combatentes_jogador,
+				tipo
+			)
+
+		EnemyPanel.TipoAlvo.QUALQUER:
+			var todos: Array[CombatenteData] = []
+
+			todos.append_array(
+				combatentes_jogador
+			)
+
+			todos.append_array(
+				combatentes_inimigo
+			)
+
+			enemy_panel.ativar_seletor_alvo(
+				todos,
+				tipo
+			)
+
+func _on_alvo_selecionado(alvo: CombatenteData) -> void:
+	if alvo == null:
 		log_panel.registrar_evento(
 			"Inimigo inválido selecionado!",
 			"aviso"
 		)
 		return
-
+	_processar_ataque(
+		combatente_ativo,
+		alvo,
+		regioes_selecionadas
+	)
 	# =====================================================
 	# PERÍCIAS QUE PRECISAM DE ALVO
 	# =====================================================
 
 	if pericia_pendente == "Duelo":
-
-		var alvo: CombatenteData = null
-
-		for inimigo in combatentes_inimigo:
-			if inimigo.nome == inimigo_dict["nome"]:
-				alvo = inimigo
-				break
-
+		
 		if alvo == null:
 			return
 
@@ -523,13 +578,7 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 			"aviso"
 		)
 		return
-
-	var alvo: CombatenteData = null
-
-	for inimigo in combatentes_inimigo:
-		if inimigo.nome == inimigo_dict["nome"]:
-			alvo = inimigo
-			break
+	_executar_pericia_duelo(alvo)
 
 	if alvo == null:
 		log_panel.registrar_evento(
@@ -545,6 +594,13 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 		alvo,
 		regioes_selecionadas
 	)
+
+func _on_personagem_item_selecionado(personagem:CombatenteData) -> void:
+
+	alvo_item_pendente = personagem
+
+	regional_selector.ativar_para_item()
+
 # ============================================================================
 # PROCESSAMENTO DE ATAQUE
 # ============================================================================
@@ -621,7 +677,7 @@ func _processar_ataque(
 			"critico"
 		)
 		party_panel.atualizar_personagem(
-			atacante.para_dictionary()
+			atacante
 		)
 		_finalizar_acao()
 		return
@@ -723,13 +779,12 @@ func _processar_ataque(
 		],
 		"info"
 	)
-	party_panel.atualizar_personagem(atacante.para_dictionary())
+	party_panel.atualizar_personagem(atacante)
 	if alvo.tipo == "jogador":
-		party_panel.atualizar_personagem(alvo.para_dictionary())
-	var inimigos_atualizado: Array[Dictionary] = []
+		party_panel.atualizar_personagem(alvo)
 	for inimigo in combatentes_inimigo:
-		enemy_panel.atualizar_inimigo(
-		inimigo.para_dictionary()
+		enemy_panel.atualizar_combatente(
+		inimigo
 	)
 
 	if alvo.morto:
@@ -740,6 +795,42 @@ func _processar_ataque(
 
 	_finalizar_acao()
 	return
+
+func _usar_item(regiao:String) -> void:
+
+	var item = item_db.get_item(item_pendente)
+
+	if item == null:
+		return
+
+	var resultado = item_db.usar_item(
+		combatente_ativo,
+		alvo_item_pendente,
+		item,
+		regiao
+	)
+
+	if resultado["sucesso"]:
+
+		item_db.remover_item(
+			combatente_ativo,
+			item.nome
+		)
+
+		log_panel.registrar_evento(
+			resultado["mensagem"],
+			"cura"
+		)
+
+		party_panel.atualizar_personagem(
+			alvo_item_pendente
+		)
+
+	item_pendente = ""
+	alvo_item_pendente = null
+
+	_finalizar_acao()
+
 func _finalizar_acao() -> void:
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
@@ -778,10 +869,10 @@ func _derrotar_combatente(combatente: CombatenteData) -> void:
 		indice_turno_atual -= 1
 	if combatente.tipo == "inimigo":
 		combatentes_inimigo.erase(combatente)
-		enemy_panel.remover_inimigo(combatente.para_dictionary())
+		enemy_panel.remover_combatente(combatente)
 	else:
 		combatentes_jogador.erase(combatente)
-		party_panel.remover_personagem(combatente.para_dictionary())
+		party_panel.remover_personagem(combatente)
 	_verificar_fim_combate()
 
 	if not combate_ativo:
@@ -821,14 +912,14 @@ func _finalizar_combate(resultado: String) -> void:
 # UTILIDADES
 # ============================================================================
 
-func calcular_estresse_total(combatente: Dictionary) -> int:
+func calcular_estresse_total(combatente: CombatenteData) -> int:
 	"""Calcula estresse acumulado de todas as regiões"""
 	var total = 0
 	for regiao in combatente["estresse_por_regiao"].values():
 		total += regiao
 	return total
 
-func aplicar_status(combatente: Dictionary, status_nome: String, duracao: int = 1) -> void:
+func aplicar_status(combatente: CombatenteData, status_nome: String, duracao: int = 1) -> void:
 	"""Aplica um status ao combatente"""
 	var status = {
 		"nome": status_nome,
@@ -847,3 +938,9 @@ func remover_status(combatente: Dictionary, status_nome: String) -> void:
 	combatente["status"] = combatente["status"].filter(
 		func(s): return s["nome"] != status_nome
 	)
+
+func _converter_para_dict(lista:Array[CombatenteData]) -> Array[Dictionary]:
+	var resultado:Array[Dictionary] = []
+	for c in lista:
+		resultado.append(c.para_dictionary())
+	return resultado

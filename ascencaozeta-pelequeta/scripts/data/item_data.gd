@@ -74,6 +74,15 @@ func item_existe(nome:String) -> bool:
 	return banco.has(nome)
 
 
+static func tipo_item_para_texto(tipo: TipoItem) -> String:
+	match tipo:
+		TipoItem.CONSUMIVEL:
+			return "Consumível"
+		TipoItem.EQUIPAMENTO:
+			return "Equipamento"
+		TipoItem.QUEST:
+			return "Quest"
+	return "Desconhecido"
 
 ## Usa o item no combatente
 static func usar_item(

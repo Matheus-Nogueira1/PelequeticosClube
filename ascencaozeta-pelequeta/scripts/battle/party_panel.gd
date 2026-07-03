@@ -1,15 +1,24 @@
 extends PanelContainer
 class_name PartyPanel
-
+signal aliado_selecionado(aliado: CombatenteData)
+signal aliado_deselecionado
 # UI
 @onready var vbox = VBoxContainer.new()
 @onready var label_titulo = Label.new()
 @onready var scroll_container = ScrollContainer.new()
 @onready var lista_personagens = VBoxContainer.new()
 
-var personagens: Array[Dictionary] = []
+var personagens: Array[CombatenteData] = []
 var cards_personagens: Dictionary = {}  # nome -> card node
-var personagem_ativo_atual: Dictionary = {}
+var personagem_ativo_atual: CombatenteData = null
+enum TipoAlvo {
+	INIMIGO,
+	ALIADO,
+	QUALQUER
+}
+var aliado_selecionado_atual: CombatenteData = null
+var modo_seletor_ativo := false
+var tipo_alvo := TipoAlvo.ALIADO
 
 func _ready() -> void:
 	_criar_layout()
@@ -41,17 +50,17 @@ func _criar_layout() -> void:
 # GERENCIAMENTO DE PERSONAGENS
 # ============================================================================
 
-func adicionar_personagem(personagem: Dictionary) -> void:
+func adicionar_personagem(personagem: CombatenteData) -> void:
 	"""Adiciona um personagem ao painel"""
 	personagens.append(personagem)
 	_criar_card_personagem(personagem)
 
-func atualizar_personagem(personagem: Dictionary) -> void:
+func atualizar_personagem(personagem: CombatenteData) -> void:
 	"""Atualiza o visual de um personagem. Remove se morreu."""
-	var chave = personagem["nome"]
+	var chave = personagem.nome
 	
 	# Se morreu, remover da party
-	if personagem.has("morto") and personagem["morto"]:
+	if personagem.morto:
 		remover_personagem(personagem)
 		return
 	
@@ -60,14 +69,14 @@ func atualizar_personagem(personagem: Dictionary) -> void:
 		if card_wrapper.has("atualizar"):
 			card_wrapper["atualizar"].call(personagem)
 
-func remover_personagem(personagem: Dictionary) -> void:
+func remover_personagem(personagem: CombatenteData) -> void:
 	"""Remove um personagem do painel (derrotado)"""
-	var chave = personagem["nome"]
+	var chave = personagem.nome
 	if chave in cards_personagens:
 		cards_personagens[chave].queue_free()
 		cards_personagens.erase(chave)
 	
-	personagens = personagens.filter(func(p): return p["nome"] != chave)
+	personagens = personagens.filter(func(p): return p.nome != chave)
 
 func limpar_personagens() -> void:
 	"""Remove todos os personagens"""
@@ -75,34 +84,37 @@ func limpar_personagens() -> void:
 		card.queue_free()
 	cards_personagens.clear()
 	personagens.clear()
-	personagem_ativo_atual.clear()
+	personagem_ativo_atual = null
 
 # ============================================================================
 # CRIAÇÃO DE CARDS
 # ============================================================================
 
-func _criar_card_personagem(personagem: Dictionary) -> void:
+func _criar_card_personagem(personagem: CombatenteData) -> void:
 	"""Cria um card visual para um personagem"""
-	# Validar dados
-	if not personagem.has("nome"):
-		print("[PartyPanel] ERRO: Personagem sem nome")
-		return
-	if not personagem.has("estresse_por_regiao"):
-		print("[PartyPanel] ERRO: Personagem '%s' sem dados de estresse" % personagem["nome"])
-		return
 	
-	var card = PanelContainer.new()
+	var card = Button.new()
+	card.flat = true
+	card.toggle_mode = true
+	card.alignment = HORIZONTAL_ALIGNMENT_LEFT
+	card.custom_minimum_size = Vector2(0, 50)
+	card.pressed.connect(
+		_on_card_personagem_pressionado.bind(personagem)
+	)
 	card.custom_minimum_size = Vector2(0, 50)
 	
+	var margin = MarginContainer.new()
+	card.add_child(margin)
 	var vbox_card = VBoxContainer.new()
-	vbox_card.add_theme_constant_override("separation", 2)
-	card.add_child(vbox_card)
+	margin.add_child(vbox_card)
 	
 	# Nome (com status)
 	var label_nome = Label.new()
-	var status_text = personagem["nome"]
-	if personagem.has("status") and not personagem["status"].is_empty():
-		status_text += " [%s]" % ", ".join(personagem["status"])
+	var status_text = personagem.nome
+	if personagem.status != null:
+		status_text += "\n"
+		for status in personagem.status:
+			status_text += "• %s\n" % status
 	label_nome.text = status_text
 	label_nome.add_theme_font_size_override("font_size", 18)
 	vbox_card.add_child(label_nome)
@@ -115,28 +127,49 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 	label_regioes.add_theme_font_size_override("font_size", 7)
 	vbox_card.add_child(label_regioes)
 	
+	var label_pa = Label.new()
+	label_pa.add_theme_font_size_override(
+		"font_size",
+		14
+	)
+	vbox_card.add_child(label_pa)
+	
 	# INDICADORES DE PRÓTESE E REGIÕES PERDIDAS
 	var label_status_especial = Label.new()
 	label_status_especial.add_theme_font_size_override("font_size", 15)
 	label_status_especial.add_theme_color_override("font_color", Color.LIGHT_CYAN)
 	vbox_card.add_child(label_status_especial)
 	
+	# Equipamentos atualmente utilizados
+	var label_equipamentos = Label.new()
+	label_equipamentos.add_theme_font_size_override("font_size", 13)
+	label_equipamentos.add_theme_color_override(
+		"font_color",
+		Color.LIGHT_GREEN
+	)
+	vbox_card.add_child(label_equipamentos)
+	var label_consumiveis = Label.new()
+	label_consumiveis.add_theme_font_size_override("font_size",13)
+	label_consumiveis.add_theme_color_override(
+		"font_color",
+		Color.AQUA
+	)
+
+	vbox_card.add_child(label_consumiveis)
 	# Armazenar referência para atualizar depois
 	var card_wrapper = {
 		"node": card,
 		"label_nome": label_nome,
 		"label_regioes": label_regioes,
+		"label_pa":label_pa,
 		"label_status_especial": label_status_especial,
-		"atualizar": func(p: Dictionary):
-			# Validar antes de atualizar
-			if not p.has("nome") or not p.has("estresse_por_regiao"):
-				print("[PartyPanel] ERRO: Dados inválidos ao atualizar personagem")
-				return
-			
+		"label_equipamentos": label_equipamentos,
+		"label_consumiveis":label_consumiveis,
+		"atualizar": func(p: CombatenteData):
 			# Atualizar nome e status
-			var novo_nome = p["nome"]
-			if p.has("status") and not p["status"].is_empty():
-				novo_nome += " [%s]" % ", ".join(p["status"])
+			var novo_nome = p.nome
+			if not p.status.is_empty():
+				novo_nome += " [%s]" % ", ".join(p.status)
 			label_nome.text = novo_nome
 			
 			# Construir display de regiões com estresse
@@ -147,8 +180,8 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 			
 			var ordem_regioes = ["Torso", "Braço Direito", "Braço Esquerdo", "Perna Direita", "Perna Esquerda"]
 			for regiao in ordem_regioes:
-				if p["estresse_por_regiao"].has(regiao):
-					var reg_data = p["estresse_por_regiao"][regiao]
+				if regiao in p.estresse_por_regiao:
+					var reg_data = p.estresse_por_regiao[regiao]
 					var est_atual = reg_data["atual"]
 					var est_limite = reg_data["limite"]
 					
@@ -175,27 +208,50 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 					regioes_text += regiao_display + "\n"
 			
 			label_regioes.text = regioes_text
-			
+			label_pa.text = "PA: %d/%d" % [
+				p.pontos_acao_atuais,
+				p.pontos_acao_maximos
+			]
+			if p.arma_equipada != "":
+				label_nome.text += "  ⚔ %s" % p.arma_equipada
 			# Mostrar status especial (Sobrecarga, Próteses)
-			var status_especial = ""
-			if p.has("habilidade_sobrecarga_ativa") and p["habilidade_sobrecarga_ativa"]:
-				status_especial += "⚡SOBRECARGA "
-			if p.has("proteses") and not p["proteses"].is_empty():
-				status_especial += "[PR: %s]" % ", ".join(p["proteses"].keys())
-			if p.has("regioes_perdidas") and not p["regioes_perdidas"].is_empty():
-				status_especial += " [PERDIDO: %s]" % ", ".join(p["regioes_perdidas"])
-			
-			label_status_especial.text = status_especial
+			var linhas: Array[String] = []
+
+			if p.habilidade_sobrecarga_ativa:
+				linhas.append("⚡ SOBRECARGA")
+			if not p.proteses.is_empty():
+				linhas.append("Próteses: %s" % ", ".join(p.proteses.keys()))
+			if not p.regioes_perdidas.is_empty():
+				linhas.append("Regiões Perdidas: %s" % ", ".join(p.regioes_perdidas))
+
+				label_status_especial.text = "\n".join(linhas)
+			var texto_equipamentos := ""
+			if p.arma_equipada != "":
+				texto_equipamentos += "Arma: %s" % p.arma_equipada
+			else:
+				texto_equipamentos = "Arma: Nenhuma"
+
+			label_equipamentos.text = texto_equipamentos
+			var texto_consumiveis := ""
+
+
+			for item in p.inventario:
+
+				texto_consumiveis += item + "\n"
+
+			label_consumiveis.text = texto_consumiveis
 	}
 	
 	lista_personagens.add_child(card)
-	cards_personagens[personagem["nome"]] = card_wrapper
+	cards_personagens[personagem.nome] = card_wrapper
+	card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	card.focus_mode = Control.FOCUS_NONE
 
 # ============================================================================
 # INDICADORES DE TURNO
 # ============================================================================
 
-func indicar_personagem_ativo(personagem: Dictionary) -> void:
+func indicar_personagem_ativo(personagem: CombatenteData) -> void:
 	"""Destaca qual personagem tem turno ativo"""
 	personagem_ativo_atual = personagem
 	
@@ -205,8 +261,8 @@ func indicar_personagem_ativo(personagem: Dictionary) -> void:
 		card.remove_theme_stylebox_override("panel")
 	
 	# Aplicar novo destaque
-	if personagem["nome"] in cards_personagens:
-		var card_info = cards_personagens[personagem["nome"]]
+	if personagem.nome in cards_personagens:
+		var card_info = cards_personagens[personagem.nome]
 		var card = card_info["node"]
 		
 		var style = StyleBoxFlat.new()
@@ -227,23 +283,76 @@ func remover_destaque_turno() -> void:
 		var card = card_info["node"]
 		card.remove_theme_stylebox_override("panel")
 	
-	personagem_ativo_atual.clear()
+	personagem_ativo_atual = null
 
 # ============================================================================
 # ATUALIZAÇÃO
 # ============================================================================
 
-func atualizar_todos(personagens_novos: Array[Dictionary]) -> void:
+func atualizar_todos(personagens_novos: Array[CombatenteData]) -> void:
 	"""Atualiza toda a lista de personagens"""
 	limpar_personagens()
 	
 	for personagem in personagens_novos:
 		adicionar_personagem(personagem)
 
+func ativar_seletor_aliado() -> void:
+
+	modo_seletor_ativo = true
+
+	mouse_filter = Control.MOUSE_FILTER_STOP
+
+	for card_info in cards_personagens.values():
+
+		var card = card_info["node"]
+
+		card.mouse_filter = Control.MOUSE_FILTER_STOP
+		card.focus_mode = Control.FOCUS_ALL
+
+	await get_tree().process_frame
+
+	if cards_personagens.size() > 0:
+		cards_personagens.values()[0]["node"].grab_focus()
+
+func desativar_seletor_aliado() -> void:
+
+	modo_seletor_ativo = false
+
+	mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	for card_info in cards_personagens.values():
+
+		var card = card_info["node"]
+
+		card.button_pressed = false
+		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		card.focus_mode = Control.FOCUS_NONE
+
+func _on_card_personagem_pressionado(
+	aliado: CombatenteData
+) -> void:
+	if not modo_seletor_ativo:
+		return
+	if aliado_selecionado_atual != null:
+		var anterior = cards_personagens[
+			aliado_selecionado_atual.nome
+		]["node"]
+
+		anterior.button_pressed = false
+
+	aliado_selecionado_atual = aliado
+
+	aliado_selecionado.emit(aliado)
+
+	desativar_seletor_aliado()
+
+func obter_aliado_selecionado() -> CombatenteData:
+	return aliado_selecionado_atual
+
 # ============================================================================
 # UTILIDADES
 # ============================================================================
 
-func obter_personagem_ativo() -> Dictionary:
+func obter_personagem_ativo() -> CombatenteData:
 	"""Retorna o personagem ativo"""
 	return personagem_ativo_atual
