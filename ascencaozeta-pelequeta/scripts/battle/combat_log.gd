@@ -122,6 +122,7 @@ func _get_cor_por_tipo(tipo: String) -> String:
 		"aviso":      return "orange"
 		"critico":    return "red"
 		"movimento":  return "lightblue"
+		"cura":       return "limegreen"
 		_:            return "white"
 
 func _get_icon_por_tipo(tipo: String) -> String:
@@ -134,6 +135,7 @@ func _get_icon_por_tipo(tipo: String) -> String:
 		"aviso":      return "⚠️"
 		"critico":    return "✗"
 		"movimento":  return "🚶"
+		"cura":       return "🧪"
 		_:            return "•"
 
 func _get_cor_por_categoria(categoria: String) -> String:

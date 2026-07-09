@@ -42,10 +42,10 @@ static func criar_mob() -> CombatenteData:
 	mob.adicionar_especializacao("Reflexos")
 	
 	## HABILIDADES
-	## Habilidade Principal (todos têm desde o início):
+	## Habilidade Principal (de acordo com a classe):
 	## - Escudo Humano: Bloquear um ataque direcionado a outro membro
 	##
-	## Habilidades Únicas (ganham ao completar missões/aventuras):
+	## Habilidades Únicas (de acordo com a classe):
 	## - Armadura de espinhos (em desenvolvimento)
 	## - Peso pesado (em desenvolvimento)
 	## - Repartir dor (em desenvolvimento)
@@ -92,9 +92,16 @@ static func criar_escolhido() -> CombatenteData:
 	
 	## CONHECIMENTOS (Perícias) - TREINO INICIAL
 	# Mago especializado em magia e conhecimento
-	escolhido.conhecimentos_treino["Rastro"] = 2
-	escolhido.conhecimentos_treino["Místico"] = 2
-	escolhido.conhecimentos_treino["Esforço"] = 2
+	escolhido.conhecimentos_treino["Esforço"] = 3
+	escolhido.conhecimentos_treino["Saber"] = 2
+	escolhido.conhecimentos_treino["Místico"] = 3
+	escolhido.conhecimentos_treino["Mundo"] = 2
+	escolhido.conhecimentos_treino["Rastro"] = 3
+	escolhido.conhecimentos_treino["Emocional"] = 2
+	escolhido.conhecimentos_treino["Social"] = 2
+	escolhido.conhecimentos_treino["Bandidagem"] = 2
+	escolhido.conhecimentos_treino["Reflexos"] = 2
+	escolhido.conhecimentos_treino["Duelo"] = 2
 	# TODO: Adicionar mais perícias conforme necessário
 	
 	## CONHECIMENTOS ESPECIALIZADOS
@@ -130,7 +137,7 @@ static func criar_escolhido() -> CombatenteData:
 	escolhido.inventario = [
 		# "Disparo Medio",
 		# "Anel de Astora",
-		# "Frasco Estus",
+		"Estus Fleskus"
 	] as Array[String]
 	escolhido.arma_equipada = "BolaDeFogo"
 	
@@ -166,7 +173,10 @@ static func criar_JP() -> CombatenteData:
 	# JP especializado em furtividade e esperteza
 	JP.conhecimentos_treino["Bandidagem"] = 2
 	JP.conhecimentos_treino["Reflexos"] = 2
-	JP.conhecimentos_treino["Rastro"] = 1
+	JP.conhecimentos_treino["Rastro"] = 2
+	JP.conhecimentos_treino["Saber"] = 2
+	JP.conhecimentos_treino["Social"] = 2
+	JP.conhecimentos_treino["Emocional"] = 1
 	# TODO: Adicionar mais perícias conforme necessário
 	
 	## CONHECIMENTOS ESPECIALIZADOS

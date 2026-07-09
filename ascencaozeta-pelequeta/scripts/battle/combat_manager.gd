@@ -73,6 +73,11 @@ func _inicializar_combate() -> void:
 		)
 	if regional_selector:
 		regional_selector.desativar()
+		
+	if party_panel:
+		party_panel.aliado_selecionado.connect(
+			_on_personagem_item_selecionado
+		)
 
 	# Calcular iniciativa
 	_calcular_iniciativa()
@@ -548,11 +553,6 @@ func _on_alvo_selecionado(alvo: CombatenteData) -> void:
 			"aviso"
 		)
 		return
-	_processar_ataque(
-		combatente_ativo,
-		alvo,
-		regioes_selecionadas
-	)
 	# =====================================================
 	# PERÍCIAS QUE PRECISAM DE ALVO
 	# =====================================================
@@ -578,7 +578,6 @@ func _on_alvo_selecionado(alvo: CombatenteData) -> void:
 			"aviso"
 		)
 		return
-	_executar_pericia_duelo(alvo)
 
 	if alvo == null:
 		log_panel.registrar_evento(
@@ -586,8 +585,6 @@ func _on_alvo_selecionado(alvo: CombatenteData) -> void:
 			"aviso"
 		)
 		return
-
-	enemy_panel.desativar_seletor_alvo()
 
 	_processar_ataque(
 		combatente_ativo,
@@ -599,7 +596,18 @@ func _on_personagem_item_selecionado(personagem:CombatenteData) -> void:
 
 	alvo_item_pendente = personagem
 
-	regional_selector.ativar_para_item()
+	alvo_item_pendente = personagem
+	
+	party_panel.desativar_seletor_aliado()
+
+	log_panel.registrar_evento(
+		"Selecione a região que receberá o Frasco Estus.",
+		"acao"
+	)
+
+	regional_selector.ativar_para_item(
+		personagem
+	)
 
 # ============================================================================
 # PROCESSAMENTO DE ATAQUE
@@ -797,7 +805,6 @@ func _processar_ataque(
 	return
 
 func _usar_item(regiao:String) -> void:
-
 	var item = item_db.get_item(item_pendente)
 
 	if item == null:
@@ -812,7 +819,7 @@ func _usar_item(regiao:String) -> void:
 
 	if resultado["sucesso"]:
 
-		item_db.remover_item(
+		ItemData.remover_item(
 			combatente_ativo,
 			item.nome
 		)
@@ -826,9 +833,14 @@ func _usar_item(regiao:String) -> void:
 			alvo_item_pendente
 		)
 
+		action_panel.mostrar_menu_itens(
+			combatente_ativo
+		)
+
 	item_pendente = ""
 	alvo_item_pendente = null
-
+	party_panel.desativar_seletor_aliado()
+	regional_selector.desativar()
 	_finalizar_acao()
 
 func _finalizar_acao() -> void:

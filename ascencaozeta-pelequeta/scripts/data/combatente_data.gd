@@ -81,7 +81,6 @@ var conhecimentos_treino: Dictionary = {
 ## Ao testar especializado, soma +2 ao resultado
 var conhecimentos_especializados: Array[String] = []
 
-
 ## Habilidades especiais
 var habilidades: Array[String] = []
 
@@ -224,6 +223,28 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 			
 	return resultado
 
+## Remove estresse de uma região
+func aliviar_estresse(regiao:String, quantidade:int) -> int:
+
+	if not estresse_por_regiao.has(regiao):
+		return 0
+
+	var dados = estresse_por_regiao[regiao]
+
+	var antes = dados["atual"]
+
+	dados["atual"] = max(
+		0,
+		dados["atual"] - quantidade
+	)
+
+	# Caso estivesse desmaiado e o torso voltou abaixo do limite
+	if regiao == "Torso":
+
+		if dados["atual"] < dados["limite"]:
+			desmaiado = false
+
+	return antes - dados["atual"]
 ## ===== CÁLCULOS =====
 func calcular_dano_ataque() -> int:
 	var dano = atributo_dano

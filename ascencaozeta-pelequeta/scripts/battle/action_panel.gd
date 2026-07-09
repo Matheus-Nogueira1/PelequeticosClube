@@ -287,9 +287,16 @@ func abrir_menu_pericias() -> void:
 
 
 func _focar_primeiro_botao(container: VBoxContainer) -> void:
+
 	await get_tree().process_frame
+
+	if not is_instance_valid(container):
+		return
+
 	for child in container.get_children():
+
 		if child is Button and child.visible and not child.disabled:
+
 			child.grab_focus()
 			return
 
@@ -616,3 +623,6 @@ func mostrar_menu_pericias(_combatente: CombatenteData) -> void:
 
 func mostrar_menu_habilidades(_combatente: CombatenteData) -> void:
 	abrir_menu_habilidades()
+
+func mostrar_menu_itens(_combatente: CombatenteData) -> void:
+	abrir_menu_itens()

@@ -32,7 +32,7 @@ func _init():
 
 func _registrar_itens():
 	var estus = Item.new(
-		"Frasco Estus",
+		"Estus Fleskus",
 		TipoItem.CONSUMIVEL,
 		"Restaura completamente o Estresse de uma região do corpo."
 	)
@@ -41,7 +41,7 @@ func _registrar_itens():
 		"tipo":"restaurar_estresse"
 	}
 
-	banco["Frasco Estus"] = estus
+	banco["Estus Fleskus"] = estus
 
 func get_item(nome:String) -> Item:
 	return banco.get(nome)
@@ -98,6 +98,7 @@ static func usar_item(
 			return usar_estus_flask(
 				usuario,
 				alvo,
+				item,
 				regiao
 			)
 
@@ -110,6 +111,7 @@ static func usar_item(
 static func usar_estus_flask(
 	usuario:CombatenteData,
 	alvo:CombatenteData,
+	item: Item,
 	regiao:String
 ) ->Dictionary:
 	"""
@@ -121,23 +123,40 @@ static func usar_estus_flask(
 			"sucesso":false,
 			"mensagem":"Região inválida."
 		}
-	
+	if regiao in alvo.regioes_perdidas:
+		return {
+			"sucesso": false,
+			"mensagem": "Essa região foi perdida e não pode ser restaurada."
+		}
+	if alvo.proteses.has(regiao):
+		var protese = alvo.proteses[regiao]
+
+		if protese.destruida:
+			return {
+				"sucesso": false,
+				"mensagem": "A prótese dessa região está destruída."
+			}
+	if alvo.estresse_por_regiao[regiao]["atual"] <= 0:
+		return {
+			"sucesso": false,
+			"mensagem": "Essa região não possui Estresse."
+		}
 	var estresse_antes = alvo.estresse_por_regiao[regiao]["atual"]
 	alvo.aliviar_estresse(
 		regiao,
 		estresse_antes
 	)
-	
 	return {
 		"sucesso": true,
+		"combatente": alvo,
 		"regiao": regiao,
 		"estresse_restaurado": estresse_antes,
 		"mensagem":
-	"%s utilizou um Frasco Estus em %s, restaurando completamente o Estresse da região %s." % [
-		usuario.nome,
-		alvo.nome,
-		regiao
-	]
+		"%s utilizou um Estus Fleskus em %s, restaurando completamente o Estresse da região %s." % [
+			usuario.nome,
+			alvo.nome,
+			regiao
+		]
 	}
 
 ## Retorna lista de itens de um combatente
