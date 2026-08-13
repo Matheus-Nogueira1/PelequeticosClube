@@ -6,7 +6,7 @@
 
 **Ascensão dos Pelecos** é um jogo digital do gênero **RPG tático em turnos**, desenvolvido como projeto acadêmico do curso **AMS – 1º Ano**, da **Fatec Ourinhos**, durante o ano de 2026.
 
-O projeto busca adaptar para o ambiente digital algumas das principais mecânicas presentes em RPGs de mesa, utilizando **rolagens de dados, atributos, perícias, habilidades, efeitos de status e progressão de personagens**.
+O projeto busca adaptar para o ambiente digital algumas das principais mecânicas presentes em RPGs de mesa, utilizando **rolagens de dados, atributos, perícias, habilidades, efeitos de status, narrativa forte e progressão de personagens**.
 
 ## 🎯 Objetivo
 
