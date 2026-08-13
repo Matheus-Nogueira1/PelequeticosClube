@@ -1,251 +1,104 @@
-# ⚡ QUICK START - 5 Minutos para Começar
+# Quick Start - Combate Atual
 
-**Tempo estimado**: 5-10 minutos
+Use este guia para localizar e testar o fluxo atual de combate. Para detalhes completos, leia [ESTADO_ATUAL_CODIGO.md](ESTADO_ATUAL_CODIGO.md).
 
----
+## 1. Abra a Cena
 
-## 1️⃣ Abra a Cena `combat.tscn`
+No Godot 4:
 
-```
-Godot Editor → File → Open Scene → scenes/combat.tscn
-```
-
----
-
-## 2️⃣ Adicione o Script ao Nó Raiz
-
-Se a raiz é um `Control`:
-
-1. Selecione o nó raiz (Control)
-2. Inspector → Attach Script
-3. Path: `res://scripts/combat_manager.gd`
-4. Create
-
----
-
-## 3️⃣ Marque os Nós com UNIQUE NAME
-
-Para cada painel abaixo, clique direito → Rename:
-
-```
-PartyPanel       → %PartyPanel
-EnemyPanel       → %EnemyPanel
-RegionalPanel    → %RegionalPanel
-ActionPanel      → %ActionPanel
-LogPanel         → %LogPanel
-Battlefield      → %Battlefield (opcional)
+```text
+scenes/combat.tscn
 ```
 
-**Como fazer?**
-1. Clique direito no nó
-2. Selecione "Rename"
-3. Adicione `%` na frente: `%PartyPanel`
-4. Pressione Enter
+A cena ja referencia os scripts atuais em `scripts/battle/`.
 
----
+## 2. Confirme os Scripts Principais
 
-## 4️⃣ Atribua Scripts aos Painéis
+| No/Cena | Script atual |
+| --- | --- |
+| Raiz de `combat.tscn` | `res://scripts/battle/combat_manager.gd` |
+| `%PartyPanel` | `res://scripts/battle/party_panel.gd` |
+| `%EnemyPanel` | `res://scripts/battle/enemy_panel.gd` |
+| `%RegionalPanel` | `res://scripts/battle/regional_selector.gd` |
+| `%ActionPanel` | `res://scripts/battle/action_panel.gd` |
+| `LogPanel/RichTextLabel` | `res://scripts/battle/combat_log.gd` |
 
-Selecione cada nó e atribua o script correto:
+## 3. Execute o Combate
 
-| Nó | Script |
-|----|--------|
-| PartyPanel | `party_panel.gd` |
-| EnemyPanel | `enemy_panel.gd` |
-| RegionalPanel | `regional_selector.gd` |
-| ActionPanel | `action_panel.gd` |
-| LogPanel | `combat_log.gd` |
+Ao rodar `combat.tscn`, o `CombatManager` cria:
 
-**Como fazer?**
-1. Selecione o nó
-2. Inspector → Script (ou arraste o script para lá)
-3. Selecione o script `.gd`
-4. Done!
+- Jogadores: Mob, Escolhido e JPdaMaldade.
+- Inimigos: Carcaca 1 e Carcaca 2.
 
----
+O primeiro turno de jogador deve ativar o `ActionPanel`.
 
-## 5️⃣ Execute (Play)
+## 4. Teste Ataque
 
-```
-Pressione F5 ou clique em Play
-```
+1. Escolha `ATACAR`.
+2. Selecione de 1 a 5 regioes no `RegionalSelector`.
+3. Confirme.
+4. Selecione um inimigo no `EnemyPanel`.
+5. Veja os resultados no `CombatLog`.
 
-**Você deve ver:**
-- ✅ PartyPanel com "Guerreiro"
-- ✅ EnemyPanel com "Goblin"
-- ✅ ActionPanel com 4 botões
-- ✅ LogPanel com "🎯 Turno de Guerreiro!"
+Resultado esperado:
 
----
+- Cada regiao rola 1D6.
+- `1` gera Falha Critica.
+- `2-3` gera Falha Regular.
+- `4-5` gera Sucesso Regular.
+- `6` gera Sucesso Extremo.
+- Falhas geram Estresse no atacante.
+- Sucessos reduzem ou quebram a Protecao do alvo.
 
-## 6️⃣ Teste o Fluxo de Ataque
+## 5. Teste Pericia
 
-1. **Clique em "⚔️ ATACAR"**
-   - RegionalPanel deve aparecer
+1. Escolha `PERICIA`.
+2. Abra uma pericia listada.
+3. Confirme `USAR PERICIA`.
 
-2. **Selecione regiões** (clique em 1-3)
-   - Exemplo: Torso, Braço Direito
+Estado atual:
 
-3. **Clique "Confirmar"**
-   - EnemyPanel deve ficar selecionável
+- `Duelo` e a pericia com efeito de combate implementado.
+- Sucesso em Duelo revela dados do inimigo.
+- Sucesso Extremo em Duelo reduz Protecao temporaria do alvo.
 
-4. **Clique no "Goblin"**
-   - Ver resultado no LogPanel
-   - Exemplo: "✓ Guerreiro atacou Goblin (Torso) - Dado: 5"
+## 6. Teste Habilidade
 
----
+1. Escolha `HABILIDADE`.
+2. Abra uma habilidade conhecida.
+3. Confirme o uso.
 
-## ✅ Pronto!
+Estado atual:
 
-Seu sistema de combate está funcionando! 🎉
+- O sistema valida se a habilidade existe.
+- O sistema valida se o combatente conhece a habilidade.
+- O sistema valida e consome PA.
+- A maior parte dos efeitos ainda e textual/logica pendente.
+- Sobrecarga e tratada como fluxo especial.
 
----
+## 7. Teste Item
 
-## 📚 Próximos Passos
+1. Use o Escolhido, que possui `Estus Fleskus` no inventario inicial.
+2. Escolha `ITEM`.
+3. Selecione o Estus.
+4. Selecione um aliado.
+5. Selecione uma regiao com Estresse.
 
-Leia os documentos nesta ordem:
+Estado atual:
 
-1. **README_COMBATE.md** (índice geral)
-2. **COMBAT_SYSTEM_README.md** (entender funcionamento)
-3. **INTEGRATION_EXAMPLE.md** (aprofundar integração)
-4. **SIGNALS_REFERENCE.md** (se precisar adicionar funcionalidades)
+- O Estus restaura totalmente o Estresse da regiao escolhida.
+- O item e removido do inventario apenas em caso de sucesso.
 
----
+## Troubleshooting
 
-## 🐛 Se Não Funcionar
+### O painel nao recebeu foco
 
-**Erro**: Scripts não estão sendo encontrados
-```
-Solução: Verifique se os arquivos .gd estão em scripts/
-Caminho correto: scripts/combat_manager.gd, etc
-```
+O `ActionPanel` hoje restaura foco em mais de um ponto do fluxo. Consulte [ESTADO_ATUAL_CODIGO.md](ESTADO_ATUAL_CODIGO.md), secao "Foco e Navegacao de UI", antes de alterar qualquer `grab_focus()`.
 
-**Erro**: Nós não estão sendo encontrados
-```
-Solução: Verifique se marcou com % (unique_name)
-Exemplo correto: %PartyPanel (não "PartyPanel")
-```
+### Caminho antigo nao funciona
 
-**Erro**: Painel vazio
-```
-Solução: O script cria a UI automaticamente no _ready()
-Aguarde 1 segundo ou recarregue a cena (F5)
-```
+Use `res://scripts/battle/...` para scripts de combate. Caminhos como `res://scripts/combat_manager.gd` pertencem a documentacao antiga.
 
-**Erro**: Nenhum combatente aparece
-```
-Solução: Há dados de exemplo em _setup_exemplo()
-Se quiser dados reais, edite _inicializar_combate()
-```
+### O codigo parece usar D20
 
----
-
-## 💻 Onde Estão os Arquivos?
-
-```
-✅ Scripts criados:
-   res://scripts/combat_manager.gd
-   res://scripts/action_panel.gd
-   res://scripts/regional_selector.gd
-   res://scripts/enemy_panel.gd
-   res://scripts/party_panel.gd
-   res://scripts/combat_log.gd
-
-📖 Documentação:
-   res://scripts/README_COMBATE.md
-   res://scripts/COMBAT_SYSTEM_README.md
-   res://scripts/INTEGRATION_EXAMPLE.md
-   res://scripts/SIGNALS_REFERENCE.md
-   res://scripts/ARCHITECTURE_VISUAL.md
-```
-
----
-
-## 🎮 Controles do Combate
-
-```
-Botões com mouse/touch:
-├─ ⚔️  ATACAR      - Seleciona regiões → Seleciona alvo
-├─ ✨ PERÍCIA     - [Não implementado ainda]
-├─ 💥 HABILIDADE - [Não implementado ainda]
-├─ 🎒 ITEM       - [Não implementado ainda]
-└─ ➡️  PASSAR     - Passa o turno
-
-Regiões (5):
-├─ Torso
-├─ Braço Direito
-├─ Braço Esquerdo
-├─ Perna Direita
-└─ Perna Esquerda (máximo 3 por ataque)
-```
-
----
-
-## 📊 Estado Atual vs Futuro
-
-**O que funciona AGORA:**
-- ✅ Fluxo de turno (jogador → inimigo → próximo)
-- ✅ Seleção de regiões (1-3)
-- ✅ Seleção de alvo (inimigo)
-- ✅ Rolagem de D6 (resultado simulado)
-- ✅ Histórico colorido
-- ✅ Detecção de derrotas
-- ✅ Indicador de turno ativo
-
-**O que precisa implementar:**
-- ⏳ Custos de ação (PA)
-- ⏳ Menus de perícias/habilidades/itens
-- ⏳ IA de inimigos
-- ⏳ Efeitos visuais
-- ⏳ Integração com sistema de rolagem real
-
----
-
-## 💡 Dica de Ouro
-
-Se você estiver em `CombatManager.gd` e quiser ver o que fazer depois:
-
-```gdscript
-# Procure por:
-# TODO: [descrição]
-
-Exemplo:
-# TODO: Implementar sistema de custos de ação
-# TODO: Adicionar IA para inimigos
-```
-
----
-
-## ☁️ Agora Você Pode...
-
-- [x] Ver o fluxo de combate básico funcionar
-- [x] Testar seleção de regiões
-- [x] Entender como os painéis se comunicam
-- [x] Começar a adicionar funcionalidades próprias
-
----
-
-## 🚀 Próxima Implementação
-
-Após testar o fluxo básico, leia:
-→ **INTEGRATION_EXAMPLE.md** (seção "Como Carregar Dados Reais")
-
-Para carregar seus próprios personagens e inimigos em vez dos de exemplo.
-
----
-
-## 📞 Referência Rápida
-
-| Você quer... | Faça isto... |
-|-------------|-------------|
-| Ver como funciona | Jogue a cena (F5) |
-| Entender o código | Abra `combat_manager.gd` |
-| Integrar melhor | Leia `INTEGRATION_EXAMPLE.md` |
-| Adicionar funcionalidade | Procure `# TODO:` nos scripts |
-| Debugar um problema | Veja seção "Se Não Funcionar" acima |
-
----
-
-**🎉 Pronto! Seu sistema de combate está rodando!**
-
-Divirta-se desenvolvendo! 🎮
+O prototipo `scripts/rolagem-dados.gd` ainda existe, mas o combate principal usa `scripts/battle/rolagens-dados-d6.gd`.

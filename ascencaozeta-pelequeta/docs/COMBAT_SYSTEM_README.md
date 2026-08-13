@@ -1,391 +1,198 @@
-# 🎮 Sistema de Combate OBLIVIO - Arquitetura de Scripts
+# Sistema de Combate Oblivio - Arquitetura Atual
 
-## 📋 Visão Geral
+Este documento descreve a arquitetura atual do combate em Godot 4. Para uma auditoria mais detalhada do codigo, consulte [ESTADO_ATUAL_CODIGO.md](ESTADO_ATUAL_CODIGO.md).
 
-Este sistema implementa o combate por turnos conforme as regras do OBLIVIO. Os scripts foram criados com tipos de ação separados (Ação Regular, Movimento, Extra, Completa) para que você possa adicionar os custos depois, sem mexer na estrutura.
+## Visao Geral
 
----
+O combate principal vive em `scenes/combat.tscn` e e orquestrado por `scripts/battle/combat_manager.gd`. Os paineis de UI sao criados ou preenchidos por codigo e se comunicam por sinais.
 
-## 📦 Scripts Criados
+```text
+CombatManager
+|-- PartyPanel
+|-- EnemyPanel
+|-- RegionalSelector
+|-- ActionPanel
+`-- CombatLog
+```
 
-### 1. **CombatManager.gd** (Principal)
-**Arquivo**: `scripts/combat_manager.gd`
+## Scripts de Combate
 
-**Responsabilidade**: Orquestra todo o fluxo de combate.
+### `scripts/battle/combat_manager.gd`
 
-**Principais Métodos**:
+Responsavel por:
+
+- Inicializar combatentes de exemplo.
+- Conectar sinais dos paineis.
+- Calcular iniciativa por `atributo_velocidade`.
+- Avancar turnos.
+- Processar ataque normal.
+- Processar `Duelo`.
+- Processar uso de habilidades.
+- Processar uso de itens.
+- Atualizar PartyPanel, EnemyPanel e CombatLog.
+- Verificar derrota e fim de combate.
+
+Fluxos principais:
+
 ```gdscript
-# Inicialização
 func _inicializar_combate() -> void
-func _calcular_iniciativa() -> void
-
-# Fluxo de turno
 func _avancar_turno() -> void
-func _encontrar_proximo_combatente() -> Dictionary
-
-# Ações
 func _iniciar_ataque() -> void
-func _iniciar_pericia() -> void
-func _iniciar_habilidade() -> void
-func _iniciar_item() -> void
-
-# Processamento
-func _processar_ataque(atacante, alvo, regioes) -> void
-func _derrotar_combatente(combatente) -> void
-func _verificar_fim_combate() -> void
+func _on_regioes_confirmadas(regioes: Array[String]) -> void
+func _on_alvo_selecionado(alvo: CombatenteData) -> void
+func _processar_ataque(atacante: CombatenteData, alvo: CombatenteData, regioes: Array[String]) -> void
+func _on_pericia_escolhida(nome_pericia: String) -> void
+func _on_habilidade_escolhida(nome_habilidade: String) -> void
+func _on_item_escolhido(nome_item: String) -> void
 ```
 
-**Sinais Emitidos**:
-- `turno_iniciado(combatente)` - Quando um novo turno começa
-- `turno_finalizado(combatente)` - Quando um turno termina
-- `combate_iniciado` - Combate começou
-- `combate_finalizado(resultado)` - Combate acabou
-- `estado_atualizado` - Qualquer mudança no estado
+### `scripts/battle/action_panel.gd`
 
-**TODO (Implementar depois)**:
-```gdscript
-# Sistema de custos de ação
-var pontos_acao: Dictionary = {
-	"Ação Regular": null,      # A definir
-	"Movimento": null,          # A definir
-	"Extra": null,              # A definir
-	"Completa": null            # A definir
-}
+Responsavel por:
 
-func _consumir_pontos_acao(combatente, tipo_acao) -> bool
+- Menu principal do turno: `ATACAR`, `PERICIA`, `HABILIDADE`, `ITEM`, `PASSAR TURNO`.
+- Telas internas de lista e detalhes.
+- Emissao de sinais apenas quando uma escolha precisa ser resolvida pelo `CombatManager`.
+- Foco inicial nos botoes em varios pontos do fluxo.
+
+Estados internos:
+
+```text
+PRINCIPAL
+PERICIAS
+DETALHE_PERICIA
+HABILIDADES
+DETALHE_HABILIDADE
+ITENS
+DETALHE_ITEM
 ```
 
----
+Observacao: os menus de pericia, habilidade e item nao sao mais stubs. Eles existem no painel, com lista, detalhes, confirmar e voltar.
 
-### 2. **ActionPanel.gd**
-**Arquivo**: `scripts/action_panel.gd`
+### `scripts/battle/regional_selector.gd`
 
-**Responsabilidade**: UI dos botões de ação do jogador.
+Responsavel por:
 
-**Principais Métodos**:
-```gdscript
-func ativar_para(combatente: Dictionary) -> void
-func habilitar_acoes() -> void
-func desabilitar_acoes() -> void
+- Selecionar regioes corporais.
+- Validar regiao perdida, protese destruida e regiao esgotada.
+- Permitir ate 5 riscos.
+- Permitir repeticao da mesma regiao apenas quando Sobrecarga esta ativa.
 
-# Stubs para implementação futura
-func mostrar_menu_pericias(combatente) -> void
-func mostrar_menu_habilidades(combatente) -> void
-func mostrar_menu_itens(combatente) -> void
+Modos:
+
+```text
+DESATIVADO
+ATAQUE
+ITEM
+HABILIDADE
+PERICIA
 ```
 
-**Sinais Emitidos**:
-- `acao_atacar` - Jogador clicou "ATACAR"
-- `acao_pericia` - Jogador clicou "PERÍCIA"
-- `acao_habilidade` - Jogador clicou "HABILIDADE"
-- `acao_item` - Jogador clicou "ITEM"
+### `scripts/battle/enemy_panel.gd`
 
-**Botões**:
-```
-⚔️  ATACAR
-✨ PERÍCIA
-💥 HABILIDADE
-🎒 ITEM
-➡️  PASSAR TURNO
-```
+Responsavel por:
 
----
+- Exibir inimigos.
+- Mostrar dados ocultos antes de analise.
+- Revelar Protecao e Estresse por regiao quando o inimigo foi analisado por Duelo.
+- Ativar/desativar selecao de alvo.
 
-### 3. **RegionalSelector.gd**
-**Arquivo**: `scripts/regional_selector.gd`
+### `scripts/battle/party_panel.gd`
 
-**Responsabilidade**: Seleção visual de regiões de ataque (adapta o seletor-corpo.gd).
+Responsavel por:
 
-**Principais Métodos**:
-```gdscript
-func ativar_para_ataque() -> void
-func ativar_para_defesa() -> void
-func desativar() -> void
-func obter_regioes_selecionadas() -> Array[String]
-func contar_selecionadas() -> int
-```
+- Exibir aliados.
+- Mostrar PA, arma, Protecao e Estresse por regiao.
+- Destacar combatente ativo.
+- Ativar selecao de aliado para uso de item.
 
-**Sinais Emitidos**:
-- `regiao_selecionada(nome, indice)` - Quando região é clicada
-- `selecao_confirmada(regioes)` - Quando jogador confirma
-- `selecao_cancelada` - Quando jogador cancela
+### `scripts/battle/combat_log.gd`
 
-**Regiões Disponíveis**:
-```
-1. Torso
-2. Braço Direito
-3. Braço Esquerdo
-4. Perna Direita
-5. Perna Esquerda
-```
+Responsavel por:
 
----
+- Registrar eventos com cor por tipo.
+- Registrar ataques formatados.
+- Registrar status.
+- Manter scroll automatico.
 
-### 4. **EnemyPanel.gd**
-**Arquivo**: `scripts/enemy_panel.gd`
+### `scripts/battle/rolagens-dados-d6.gd`
 
-**Responsabilidade**: Lista e gerencia seleção de inimigos.
+Responsavel por:
 
-**Principais Métodos**:
-```gdscript
-func adicionar_inimigo(inimigo: Dictionary) -> void
-func atualizar_inimigo(inimigo: Dictionary) -> void
-func remover_inimigo(inimigo: Dictionary) -> void
-func ativar_seletor_alvo() -> void
-func desativar_seletor_alvo() -> void
-func obter_inimigo_selecionado() -> Dictionary
-```
+- Rolagem D6 de conhecimento.
+- Rolagem D6 de combate.
+- Classificacao:
+  - `1`: Falha Critica.
+  - `2-3`: Falha Regular.
+  - `4-5`: Sucesso Regular.
+  - `6`: Sucesso Extremo.
 
-**Sinais Emitidos**:
-- `inimigo_selecionado(inimigo)` - Quando jogador seleciona um alvo
+## Fluxo do Turno do Jogador
 
-**Visual dos Inimigos**:
-```
-Nome  HP: 8/10  [████░░░░░░]
-```
+```text
+CombatManager._avancar_turno()
+  -> ActionPanel.ativar_para(combatente)
+  -> jogador escolhe acao
 
----
+ATACAR
+  -> ActionPanel emite acao_atacar
+  -> RegionalSelector seleciona regioes
+  -> EnemyPanel seleciona alvo
+  -> CombatManager processa ataque
 
-### 5. **PartyPanel.gd**
-**Arquivo**: `scripts/party_panel.gd`
+PERICIA
+  -> ActionPanel mostra lista
+  -> ActionPanel mostra detalhes
+  -> ActionPanel emite pericia_escolhida(nome)
+  -> CombatManager resolve efeito implementado
 
-**Responsabilidade**: Mostra personagens do partido e indicador de turno.
+HABILIDADE
+  -> ActionPanel mostra lista
+  -> ActionPanel mostra detalhes
+  -> ActionPanel emite habilidade_escolhida(nome)
+  -> HabilidadeData valida e consome PA
 
-**Principais Métodos**:
-```gdscript
-func adicionar_personagem(personagem: Dictionary) -> void
-func atualizar_personagem(personagem: Dictionary) -> void
-func indicar_personagem_ativo(personagem: Dictionary) -> void
-func remover_destaque_turno() -> void
+ITEM
+  -> ActionPanel mostra inventario
+  -> ActionPanel emite item_escolhido(nome)
+  -> PartyPanel seleciona aliado
+  -> RegionalSelector seleciona regiao
+  -> ItemData aplica efeito
 ```
 
-**Sinais Emitidos**: Nenhum (apenas leitura)
+## Dados de Combatente
 
-**Informações Mostradas**:
-```
-Nome do Personagem
-HP: 15/15
-Estresse: 5
-```
+`CombatenteData` e a estrutura base para jogadores, inimigos e NPCs.
 
----
+Campos centrais:
 
-### 6. **CombatLog.gd**
-**Arquivo**: `scripts/combat_log.gd`
+- `nome` e `tipo`.
+- Atributos fixos: Carne, Forca, Mente, Fuga, Determinacao.
+- Atributos mutaveis: Folego, Dano, Coragem, Protecao, Velocidade.
+- `estresse_por_regiao`.
+- `pontos_acao_atuais` e `pontos_acao_maximos`.
+- `conhecimentos_treino`.
+- `conhecimentos_especializados`.
+- `habilidades`.
+- `inventario`.
+- `fardos`, `regioes_perdidas` e `proteses`.
 
-**Responsabilidade**: Registra e mostra histórico de eventos em tempo real.
+## Regras Implementadas de Combate D6
 
-**Principais Métodos**:
-```gdscript
-func registrar_evento(mensagem: String, tipo: String) -> void
-func registrar_ataque(dados: Dictionary) -> void
-func registrar_status(combatente: String, status: String, ativo: bool) -> void
-func limpar_log() -> void
-```
+- O jogador arrisca de 1 a 5 regioes.
+- Cada regiao gera uma rolagem D6.
+- Sucesso Extremo vale 2 acertos.
+- Sucesso Regular vale 1 acerto.
+- Falhas geram Estresse no atacante.
+- Se sucessos nao quebram Protecao, reduzem Protecao temporaria.
+- Se sucessos quebram Protecao, causam Estresse no Torso do alvo.
+- Dano atual usa atributo de Dano somado a rolagem da arma.
 
-**Tipos de Evento**:
-- `turno` - 🎯 Turno de alguém
-- `acao` - ⚔️ Ação executada
-- `info` - ℹ️ Informação geral
-- `sucesso` - ✓ Sucesso
-- `aviso` - ⚠️ Aviso
-- `critico` - ✗ Evento crítico
-- `movimento` - 🚶 Movimento
+## Pendencias de Arquitetura
 
-**Exemplo de Ataque Registrado**:
-```
-✓ Guerreiro atacou Goblin (Torso) - Dado: 5
-  → DANO: 3
-  → ESTRESSE: +1
-```
-
----
-
-## 🔌 Como Integrar à Cena Combat.tscn
-
-### Passo 1: Adicionar nós à cena
-
-Na sua `combat.tscn`, você precisa ter uma estrutura assim:
-
-```
-Control
-├── MarginContainer
-│   └── VBoxContainer
-│       ├── TopBar
-│       │   ├── PartyPanel (%PartyPanel)
-│       │   ├── Battlefield (%Battlefield)
-│       │   ├── EnemyPanel (%EnemyPanel)
-│       │   ├── RegionalPanel (%RegionalPanel)
-│       │   └── ActionPanel (%ActionPanel)
-│       └── LogPanel (%LogPanel)
-```
-
-### Passo 2: Atribuir scripts aos nós
-
-```
-PartyPanel (PanelContainer) → party_panel.gd
-EnemyPanel (PanelContainer) → enemy_panel.gd
-RegionalPanel (PanelContainer) → regional_selector.gd
-ActionPanel (PanelContainer) → action_panel.gd
-LogPanel (RichTextLabel) → combat_log.gd
-Control (raiz) → combat_manager.gd
-```
-
-### Passo 3: Configurar UniqueNames
-
-Adicione `%` aos seguintes nós (clique direito → Renomear):
-
-```
-PartyPanel → %PartyPanel
-EnemyPanel → %EnemyPanel
-Battlefield → %Battlefield
-RegionalPanel → %RegionalPanel
-ActionPanel → %ActionPanel
-LogPanel → %LogPanel
-```
-
-### Passo 4: Carregar Dados
-
-No `CombatManager.gd`, substitua `_setup_exemplo()` para carregar dados reais:
-
-```gdscript
-func _inicializar_combate() -> void:
-	# Carregar personagens e inimigos da cena/globais
-	combatentes_jogador = CarregarPersonagens()  # Sua função
-	combatentes_inimigo = CarregarInimigos()      # Sua função
-	
-	# Atualizar painéis
-	party_panel.atualizar_todos(combatentes_jogador)
-	enemy_panel.atualizar_todos(combatentes_inimigo)
-	
-	# Rest do código...
-	_calcular_iniciativa()
-	ordem_turno.sort_custom(...)
-```
-
----
-
-## 🎮 Fluxo de Combate
-
-```
-1. INICIALIZAR
-   ├─ Calcular iniciativa
-   ├─ Ordenar combatentes
-   └─ Mostrar party + inimigos
-
-2. TURNO DE JOGADOR
-   ├─ Mostrar ActionPanel
-   │
-   ├─ SE ATACAR:
-   │  ├─ Ativar RegionalSelector
-   │  ├─ Jogador seleciona regiões (1-3)
-   │  ├─ Ativar EnemyPanel seletor
-   │  ├─ Jogador seleciona alvo
-   │  ├─ Rolar D6 + calcular resultado
-   │  ├─ Aplicar dano/estresse
-   │  └─ Próximo turno
-   │
-   ├─ SE PERÍCIA/HABILIDADE/ITEM:
-   │  ├─ Mostrar menu (stub)
-   │  ├─ Executar efeito
-   │  └─ Próximo turno
-   │
-   └─ SE PASSAR:
-	  └─ Próximo turno
-
-3. TURNO DE INIMIGO
-   ├─ IA escolhe ação (stub)
-   └─ Próximo turno
-
-4. VERIFICAR FIM COMBATE
-   ├─ SE todos inimigos mortos → Vitória
-   ├─ SE todos jogadores mortos → Derrota
-   └─ SENÃO → Próximo turno
-```
-
----
-
-## 📊 Estrutura de Dados - Combatente
-
-```gdscript
-{
-	"nome": "Guerreiro",
-	"tipo": "jogador",  # ou "inimigo"
-	
-	# Saúde
-	"saude_maxima": 15,
-	"saude_atual": 15,
-	
-	# Defesa
-	"defesa_base": 2,
-	
-	# Dano
-	"dano_arma": 2,
-	"atributo_dano": 1,
-	
-	# Estresse por região
-	"estresse_por_regiao": {
-		"Torso": 0,
-		"Braço Direito": 0,
-		"Braço Esquerdo": 0,
-		"Perna Direita": 0,
-		"Perna Esquerda": 0
-	},
-	
-	# Status ativos
-	"status": [
-		{"nome": "Defesa Reforçada", "duracao": 1},
-		{"nome": "Ferido", "duracao": 2}
-	],
-	
-	# Iniciativa (calculada)
-	"iniciativa": 5
-}
-```
-
----
-
-## 🚀 Próximos Passos
-
-### Implementar Depois (Custos de Ação):
-
-1. **Definir custos de ação**:
-   ```gdscript
-   ActionType.ACAO_REGULAR: custo em PA
-   ActionType.MOVIMENTO: custo em PA
-   ActionType.EXTRA: custo em PA
-   ActionType.COMPLETA: custo em PA
-   ```
-
-2. **Adicionar sistema de P.A.**:
-   - Cada combatente começa turno com P.A. máximo
-   - Consumir P.A. ao executar ação
-   - Se P.A. > 0, continua na ordem
-
-3. **Expandir menus**:
-   - `mostrar_menu_pericias()` - selecionar perícia
-   - `mostrar_menu_habilidades()` - selecionar habilidade
-   - `mostrar_menu_itens()` - selecionar item do inventário
-
-4. **Implementar IA de inimigos**:
-   - `_executar_turno_inimigo()` - decisão automática
-   - Selecionar ação baseado em estado
-
-5. **Efeitos visuais**:
-   - Animar ataques no Battlefield
-   - Highlight de regiões/inimigos
-   - Feedback visual de dano
-
----
-
-## 🔗 Referências de Regras OBLIVIO
-
-- **Iniciativa**: Rolar D6 no começo do combate
-- **Regiões**: 5 áreas (Torso, Braços, Pernas)
-- **Categorias de Resultado**:
-  - 6: Sucesso Extremo (2 acertos)
-  - 4-5: Sucesso Regular (1 acerto)
-  - 2-3: Falha Regular (0 acertos, +1 estresse)
-  - 1: Falha Crítica (0 acertos, +2 estresse)
-- **Estresse Crítico**: ≥ 12 (próxima falha crítica = morte)
-- **Dano**: Aplicado quando sucessos ≥ proteção do alvo
+- IA de inimigos ainda passa turno automaticamente.
+- Movimento e alcance por fileira ainda nao fazem parte do fluxo principal.
+- `ActionType` existe, mas os custos nao estao unificados para todas as acoes.
+- Pericias ainda nao somam treino/atributo/especializacao.
+- Habilidades ainda precisam aplicar seus efeitos especificos.
+- O fluxo de foco do `ActionPanel` deve ser centralizado para evitar chamadas duplicadas de `grab_focus()`.
