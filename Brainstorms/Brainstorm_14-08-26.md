@@ -1,4 +1,4 @@
-# 14/08/2026
+# Brainstorm 14/08/2026
 ## Tarefas: 
 **-** Terminar o design e animação dos 3 personagens principais: Mob, Escolhido e JPdaMaldade | **PENDENTE** ⚠️
 
