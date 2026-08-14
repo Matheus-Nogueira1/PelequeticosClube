@@ -1,4 +1,4 @@
-# Desenvolvimento
+# Desenvolvimento Inicial
 
 Esta seção apresenta o desenvolvimento do projeto **Ascenção dos Pelecos**, reunindo as funcionalidades implementadas durante o processo de criação do jogo e a organização das versões no GitHub.
 
