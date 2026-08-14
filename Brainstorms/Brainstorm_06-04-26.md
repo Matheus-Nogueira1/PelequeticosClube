@@ -1,3 +1,3 @@
-## Brainstorm 14/08/2026
+## Brainstorm 06/04/2026
 - Finalizar artigo | **PENDENTE** ⚠️
 - Finalizar Mecanicas principais | **PENDENTE** ⚠️
