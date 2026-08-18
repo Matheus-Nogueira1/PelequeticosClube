@@ -9,12 +9,6 @@ Este documento foi atualizado a partir da leitura direta dos scripts atuais do p
 - Scripts principais: `player.gd`, `dialogos.gd`, `caixa-dialogo.gd`, `dados.gd`, `click-dados-d6.gd`, `rolagem-dados.gd`, `seletor-corpo.gd`, `tittle_screen.gd`.
 - Cenas/configuracao verificadas: `project.godot`, `scenes/combat.tscn`, `scenes/player.tscn`, `scenes/tittle_screen.tscn`, `scenes/caixa-dialogo.tscn`.
 
-## Observacao Sobre `atualizar_docs.py`
-
-O script anexado nao foi executado. Ele define `ROOT = Path(__file__).resolve().parent` e procura `battle/`, `data/` e `docs/` diretamente ao lado do arquivo Python. No projeto atual, os caminhos corretos ficam em `ascencaozeta-pelequeta/scripts/battle`, `ascencaozeta-pelequeta/scripts/data` e `ascencaozeta-pelequeta/docs`.
-
-Mesmo tendo uma funcao de seguranca para impedir escrita fora de `docs/`, executar o arquivo como anexado criaria ou atualizaria a pasta `docs/` no local do proprio anexo, nao a documentacao real do projeto. Por isso, a atualizacao foi feita manualmente e somente em Markdown dentro de `ascencaozeta-pelequeta/docs/`.
-
 ## Arquitetura Atual do Combate
 
 `scenes/combat.tscn` usa `scripts/battle/combat_manager.gd` na raiz da cena. O `CombatManager` encontra os paineis por unique names:
