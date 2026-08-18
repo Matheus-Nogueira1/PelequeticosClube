@@ -22,6 +22,11 @@ config/icon="res://icon.svg"
 [autoload]
 
 Dialogos="*uid://btw5b6vlkuhxx"
+DialogueManager="*uid://c3rodes2l3gxb"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/dialogue_manager/plugin.cfg")
 
 [input]
 
