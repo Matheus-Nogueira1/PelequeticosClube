@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Ascencaozeta Pelequeta"
 run/main_scene="uid://dqh2hqtr10ioe"
-config/features=PackedStringArray("4.6", "Mobile")
+config/features=PackedStringArray("4.7", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
