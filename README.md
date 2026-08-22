@@ -212,7 +212,7 @@ Projeto desenvolvido para fins acadêmicos.
 
 [![Coleção de assets utilizados do Itch](https://img.shields.io/badge/Coleção%20do-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://itch.io/c/7050216/pelecos-ascension)
 
-
+[![Página do Itch](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://matheusnogueiraa.itch.io/oblivio)
 
 [![Documentação](https://img.shields.io/badge/Documentação-Projeto-4285F4?style=for-the-badge\&logo=readthedocs\&logoColor=white)](https://www.overleaf.com/read/grpcxtvyvtmt#035dbc)
 
