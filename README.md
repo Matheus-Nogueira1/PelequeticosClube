@@ -210,7 +210,7 @@ Projeto desenvolvido para fins acadêmicos.
 
 <div align="center">
 
-[![Coleção de assets utilizados do Itch](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://itch.io/c/7050216/pelecos-ascension)
+[![Coleção de assets utilizados do Itch](https://img.shields.io/badge/Coleção%20do-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://itch.io/c/7050216/pelecos-ascension)
 
 
 
