@@ -1,9 +1,9 @@
-# Oblívio: jogo RPG 2D medieval com combate por turnos, narrativa interativa e uso de dados
+# Dark Omission jogo RPG 2D medieval com combate por turnos, narrativa interativa e uso de dados
 LINKS: https://matheusnogueiraa.itch.io/oblivio
 https://pt.overleaf.com/5992991517bjfmtrzmyfny#b51adf
 ## Resumo
 
-Este trabalho apresenta o desenvolvimento de **Oblívio**, um jogo digital independente em 2D, com ambientação medieval sombria e forte influência de narrativas de dark fantasy. O projeto parte de uma experiência prévia em mesa de RPG, servindo como base criativa para a construção de um universo autoral, marcado por exploração, escolhas do jogador, diálogos interativos e combate estratégico por turnos. A proposta busca aproximar a experiência de um RPG de mesa do formato digital, preservando elementos como a interpretação de personagens, o uso de dados, a tomada de decisões e a sensação constante de risco.
+Este trabalho apresenta o desenvolvimento de **Omissão Sombria**, um jogo digital independente em 2D, com ambientação medieval sombria e forte influência de narrativas de dark fantasy. O projeto parte de uma experiência prévia em mesa de RPG, servindo como base criativa para a construção de um universo autoral, marcado por exploração, escolhas do jogador, diálogos interativos e combate estratégico por turnos. A proposta busca aproximar a experiência de um RPG de mesa do formato digital, preservando elementos como a interpretação de personagens, o uso de dados, a tomada de decisões e a sensação constante de risco.
 
 Além do aspecto lúdico, o projeto também possui caráter acadêmico e formativo, pois busca aplicar os conhecimentos adquiridos no curso de Análise e Desenvolvimento de Sistemas na criação de um produto autoral. Até o momento, o projeto conta com uma tela de menu, um sistema de rolagem de dados, uma caixa de diálogos e o início da implementação da tela de combate. Dessa forma, o trabalho se propõe a demonstrar como a formação técnica pode ser aplicada na concepção de um jogo independente com identidade própria, mesmo com equipe reduzida e recursos limitados.
 
@@ -11,7 +11,7 @@ Além do aspecto lúdico, o projeto também possui caráter acadêmico e formati
 
 ## Abstract
 
-This paper presents the development of **Oblívio**, an independent 2D digital game set in a dark medieval environment and strongly influenced by dark fantasy narratives. The project is based on a previous tabletop RPG experience, serving as a creative foundation for the construction of an original universe marked by exploration, player choices, interactive dialogues, and strategic turn-based combat. The proposal seeks to bring the tabletop RPG experience into a digital format, preserving character interpretation, dice-based mechanics, decision-making, and a constant sense of risk.
+This paper presents the development of **Dark Omission**, an independent 2D digital game set in a dark medieval environment and strongly influenced by dark fantasy narratives. The project is based on a previous tabletop RPG experience, serving as a creative foundation for the construction of an original universe marked by exploration, player choices, interactive dialogues, and strategic turn-based combat. The proposal seeks to bring the tabletop RPG experience into a digital format, preserving character interpretation, dice-based mechanics, decision-making, and a constant sense of risk.
 
 Beyond its playful aspect, the project also has an academic and educational purpose, as it seeks to apply the knowledge acquired in the Systems Analysis and Development course to the creation of an original product. At the moment, the project includes a menu screen, a dice rolling system, a dialogue box, and the beginning of the combat screen implementation. In this way, the work aims to demonstrate how technical training can be applied to the conception of an independent game with its own identity, even with a small team and limited resources.
 
@@ -19,7 +19,7 @@ Beyond its playful aspect, the project also has an academic and educational purp
 
 ## 1. Introdução
 
-O desenvolvimento de jogos digitais tem se consolidado como uma área que une tecnologia, arte e narrativa em um único produto interativo. Dentro desse cenário, os jogos independentes vêm ganhando destaque por explorarem propostas mais autorais, com foco em identidade visual, liberdade criativa e mecânicas diferenciadas. Nesse contexto, este trabalho apresenta o projeto **Oblívio**, um jogo digital 2D com ambientação medieval sombria, inspirado em uma mesa de RPG previamente mestrada e estruturado a partir de mecânicas narrativas e estratégicas.
+O desenvolvimento de jogos digitais tem se consolidado como uma área que une tecnologia, arte e narrativa em um único produto interativo. Dentro desse cenário, os jogos independentes vêm ganhando destaque por explorarem propostas mais autorais, com foco em identidade visual, liberdade criativa e mecânicas diferenciadas. Nesse contexto, este trabalho apresenta o projeto **Dark Omission**, um jogo digital 2D com ambientação medieval sombria, inspirado em uma mesa de RPG previamente mestrada e estruturado a partir de mecânicas narrativas e estratégicas.
 
 A proposta do jogo é transformar parte da experiência de uma mesa de RPG em um formato digital, preservando características como a interpretação de personagens, a importância das escolhas e o uso de dados como elemento central de resolução de ações. Em vez de seguir apenas modelos tradicionais de combate ou progressão, o projeto busca criar uma experiência marcada por tensão, consequência e liberdade de decisão, elementos que reforçam o aspecto narrativo e a imersão do jogador.
 
@@ -29,7 +29,7 @@ Além da proposta criativa, o projeto possui uma finalidade acadêmica. Seu dese
 
 A escolha por desenvolver um jogo independente com foco narrativo e mecânicas baseadas em dados se justifica por diferentes fatores. Em primeiro lugar, observa-se que jogos digitais com identidade própria, especialmente os independentes, têm conquistado espaço relevante na indústria por apresentarem propostas inovadoras, experimentais e mais livres em relação aos modelos de produção tradicionais. Essa liberdade permite explorar narrativas mais autorais e mecânicas menos convencionais, o que contribui para a diversidade do mercado de jogos.
 
-No caso de **Oblívio**, a proposta é construir uma experiência que una combate tático, diálogos marcantes e uma atmosfera sombria, inspirada em elementos de dark fantasy. A intenção é oferecer um jogo que vá além da simples ação, valorizando também a interpretação, a tensão das escolhas e o impacto das decisões do jogador. Dessa forma, o projeto se diferencia por buscar uma experiência mais próxima da sensação de uma mesa de RPG, mas adaptada ao formato digital.
+No caso de **Dark Omission**, a proposta é construir uma experiência que una combate tático, diálogos marcantes e uma atmosfera sombria, inspirada em elementos de dark fantasy. A intenção é oferecer um jogo que vá além da simples ação, valorizando também a interpretação, a tensão das escolhas e o impacto das decisões do jogador. Dessa forma, o projeto se diferencia por buscar uma experiência mais próxima da sensação de uma mesa de RPG, mas adaptada ao formato digital.
 
 Outro ponto importante é a valorização da produção nacional. O projeto pretende demonstrar que iniciativas autorais podem ser desenvolvidas no contexto acadêmico por equipes pequenas, com foco em criatividade, organização e boa aplicação técnica. Além disso, o trabalho busca reforçar como a formação em Análise e Desenvolvimento de Sistemas prepara o estudante para planejar, estruturar e implementar projetos complexos, mesmo em contextos de recursos limitados.
 
@@ -50,7 +50,7 @@ Desenvolver um jogo digital 2D autoral, com ambientação medieval sombria, insp
 
 ## 4. Conceito do jogo
 
-**Oblívio** é um RPG 2D de atmosfera sombria, com inspiração em mesas de RPG de mesa e em jogos que valorizam combate, interpretação e consequência. A proposta é apresentar um universo medieval marcado por tensão, escolhas difíceis e uma sensação constante de ameaça. O jogador será inserido em um mundo em que suas decisões influenciam diretamente o rumo da aventura, tanto nos diálogos quanto nas batalhas.
+**Dark Omission** é um RPG 2D de atmosfera sombria, com inspiração em mesas de RPG de mesa e em jogos que valorizam combate, interpretação e consequência. A proposta é apresentar um universo medieval marcado por tensão, escolhas difíceis e uma sensação constante de ameaça. O jogador será inserido em um mundo em que suas decisões influenciam diretamente o rumo da aventura, tanto nos diálogos quanto nas batalhas.
 
 O jogo combina exploração, combate por turnos e sistemas narrativos. Em vez de priorizar apenas a ação, a proposta é fazer com que o jogador lide com riscos, consequências e planejamento, especialmente nas cenas de combate. A ideia central é que cada ação tenha peso dentro da narrativa e que os dados sejam um elemento estrutural do sistema, reforçando a sensação de incerteza típica de uma mesa de RPG.
 
