@@ -34,7 +34,7 @@
 
 ## 📌 Semana 18/03/26
 
-* Preparar cenários | **PENDENTE** ⚠️
+* Preparar cenários | **EM ANDAMENTO** 🔄
 * Preparar inimigos | **PENDENTE** ⚠️
 * ~~Preparar tela de combate~~ | **FINALIZADO** ✅
 * ~~Preparar mecânica de diálogos~~ | **FINALIZADO** ✅
