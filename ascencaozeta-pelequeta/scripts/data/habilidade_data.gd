@@ -31,6 +31,7 @@ class Habilidade:
 	var efeito: String
 	var persona_origem: String = ""
 
+	## Inicializa uma habilidade com seus dados de custo, categoria e efeito.
 	func _init(
 		p_nome: String,
 		p_descricao: String,
@@ -49,9 +50,10 @@ class Habilidade:
 ## Banco de habilidades
 var habilidades: Dictionary = {}
 
+## Carrega o catálogo de habilidades ao criar o banco.
 func _init() -> void:
 	_inicializar_habilidades()
-
+## Define o catálogo completo de habilidades, custos, origens e efeitos.
 func _inicializar_habilidades() -> void:
 	"""Define todas as habilidades OBLIVIO disponíveis"""
 
@@ -243,6 +245,7 @@ func _inicializar_habilidades() -> void:
 
 
 ## Obtém uma habilidade pelo nome
+## Aceita diferenças de espaços e capitalização para compatibilidade com saves.
 func get_habilidade(nome: String) -> Habilidade:
 	if habilidades.has(nome):
 		return habilidades[nome]
@@ -269,6 +272,7 @@ static func tipo_habilidade_para_texto(tipo: int) -> String:
 			return "Geral"
 
 ## Lista habilidades por tipo
+## Filtra o catálogo pelo tipo textual da habilidade.
 func habilidades_por_tipo(tipo: String) -> Array:
 	var lista = []
 	for nome in habilidades:
@@ -277,6 +281,7 @@ func habilidades_por_tipo(tipo: String) -> Array:
 	return lista
 
 ## Lista habilidades que um combatente conhece
+## Resolve os nomes armazenados pelo combatente em objetos Habilidade.
 func habilidades_conhecidas(combatente: CombatenteData) -> Array:
 	var lista = []
 	for nome in combatente.habilidades:
@@ -299,6 +304,7 @@ func combatente_conhece_habilidade(combatente: CombatenteData, nome_habilidade: 
 	return false
 
 ## Verifica se combatente pode usar habilidade (tem PA e conhece)
+## Centraliza as duas pré-condições antes de consumir pontos de ação.
 func pode_usar_habilidade(combatente: CombatenteData, nome_habilidade: String) -> bool:
 	if not combatente_conhece_habilidade(combatente, nome_habilidade):
 		return false
@@ -310,6 +316,7 @@ func pode_usar_habilidade(combatente: CombatenteData, nome_habilidade: String) -
 	return combatente.pontos_acao_atuais >= hab.custo_pa
 
 ## Usa uma habilidade (consome PA)
+## Retorna sucesso ou erro detalhado; o custo só é descontado após as validações.
 func usar_habilidade(combatente: CombatenteData, nome_habilidade: String) -> Dictionary:
 	var hab = get_habilidade(nome_habilidade)
 
@@ -341,19 +348,23 @@ func usar_habilidade(combatente: CombatenteData, nome_habilidade: String) -> Dic
 	}
 
 ## Retorna todas as habilidades disponíveis
+## Entrega o catálogo em formato de lista para menus e ferramentas de inspeção.
 func get_todas_habilidades() -> Array:
 	var lista = []
 	for nome in habilidades:
 		lista.append(habilidades[nome])
 	return lista
 
+## Rola os dados configurados e soma o bônus fixo da habilidade.
 func rolar_dano_habilidade(hab: Habilidade) -> int:
+	## Rola os dados configurados e soma o bônus fixo da habilidade.
 	var dano = hab.dano_bonus
 	for i in range(hab.dano_dados):
 		dano += randi_range(1, hab.dano_faces)
 	return dano
 
 ## Filtra habilidades pelo tipo (PRINCIPAL, UNICA, GERAL)
+## Converte nomes em objetos para devolver apenas os nomes compatíveis com o tipo.
 static func obter_habilidades_por_tipo(habilidades_array: Array[String], tipo: int) -> Array[String]:
 	"""Retorna array de nomes de habilidades que pertencem ao tipo especificado"""
 	var resultado: Array[String] = []

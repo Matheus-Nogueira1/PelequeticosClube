@@ -9,6 +9,7 @@ extends RefCounted
 ## ============================================================================
 ## PERSONAGEM 1: Mob - Quem Protege
 ## ============================================================================
+## Monta Mob com atributos, limites regionais, treino, arma e inventário iniciais.
 static func criar_mob() -> CombatenteData:
 	var mob = CombatenteData.new("Mob", "jogador")
 	
@@ -66,6 +67,7 @@ static func criar_mob() -> CombatenteData:
 ## ============================================================================
 ## PERSONAGEM 2: Escolhido - Quem Cuida
 ## ============================================================================
+## Monta o Escolhido e registra sua prótese, especializações e habilidade principal.
 static func criar_escolhido() -> CombatenteData:
 	var escolhido = CombatenteData.new("Escolhido", "jogador")
 	
@@ -146,6 +148,7 @@ static func criar_escolhido() -> CombatenteData:
 ## ============================================================================
 ## PERSONAGEM 3: JPdaMaldade - Quem Manda
 ## ============================================================================
+## Monta JPdaMaldade, incluindo braço perdido e Sobrecarga ativa.
 static func criar_JP() -> CombatenteData:
 	var JP = CombatenteData.new("JPdaMaldade", "jogador")
 	var sobrecarga_ativa: bool = false
@@ -218,6 +221,7 @@ static func criar_JP() -> CombatenteData:
 ## ============================================================================
 
 ## Retorna lista de todos os personagens principais
+## Cria novas instâncias para evitar compartilhar estado entre grupos.
 static func obter_todos_personagens() -> Array[CombatenteData]:
 	return [
 		criar_mob(),
@@ -226,6 +230,7 @@ static func obter_todos_personagens() -> Array[CombatenteData]:
 	]
 
 ## Retorna um personagem específico pelo nome
+## Usa JPdaMaldade como fallback para nomes desconhecidos.
 static func obter_personagem(nome: String) -> CombatenteData:
 	match nome.to_lower():
 		"Mob":
@@ -239,6 +244,7 @@ static func obter_personagem(nome: String) -> CombatenteData:
 	return criar_JP()
 
 ## Cria grupo completo com um personagem como principal
+## Coloca o personagem escolhido primeiro e os demais como membros da party.
 static func criar_grupo_completo(personagem_principal: String) -> Array[CombatenteData]:
 	"""
 	Cria um grupo com o personagem selecionado como principal

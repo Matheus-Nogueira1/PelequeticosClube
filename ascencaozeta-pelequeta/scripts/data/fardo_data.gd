@@ -23,6 +23,7 @@ class Fardo:
 	var tempo_aplicacao: int  # Numero do desmaio quando foi aplicado
 	var dados_fardo: Dictionary  # Dados específicos (ex: qual membro foi perdido)
 	
+	## Inicializa o tipo, o número do desmaio e a descrição do Fardo.
 	func _init(p_tipo: TipoFardo, p_tempo: int):
 		tipo = p_tipo
 		tempo_aplicacao = p_tempo
@@ -49,6 +50,7 @@ class Fardo:
 				descricao = "Teste de Esforço ou morre"
 
 ## Sorteio de Fardo aleatório (1D6)
+## Usa o número do desmaio para registrar quando a maldição foi aplicada.
 static func sortear_fardo(numero_desmaio: int) -> Fardo:
 	var dado = randi_range(1, 6)
 	return Fardo.new(TipoFardo.get(TipoFardo.keys()[dado - 1]), numero_desmaio)
@@ -201,6 +203,7 @@ static func testar_ataque_cardiaco(combatente: CombatenteData) -> Dictionary:
 	}
 
 ## Aplica um Fardo específico ao combatente
+## Registra o Fardo e delega o efeito para o método correspondente ao tipo.
 static func aplicar_fardo(combatente: CombatenteData, fardo: Fardo) -> Dictionary:
 	"""
 	Aplica o fardo e retorna resultado com mensagens

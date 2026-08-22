@@ -46,6 +46,7 @@ var regioes_selecionadas: Array[String] = []
 var alvo_selecionado: CombatenteData = null
 
 
+## Conecta os painéis e inicia o combate com os dados de exemplo atuais.
 func _ready() -> void:
 	_conectar_sinais_paineis()
 	_inicializar_combate()
@@ -54,6 +55,7 @@ func _ready() -> void:
 # INICIALIZAÇÃO
 # ============================================================================
 
+## Cria combatentes, popula a interface, calcula iniciativa e inicia o primeiro turno.
 func _inicializar_combate() -> void:
 	"""Prepara o combate inicial: iniciativa, ordem de turno, etc"""
 	print("[CombatManager] Inicializando combate...")
@@ -91,6 +93,7 @@ func _inicializar_combate() -> void:
 	# Começar primeiro turno
 	_avancar_turno()
 
+## Monta temporariamente a party e os inimigos usados pela cena de teste.
 func _setup_exemplo() -> void:
 	"""Setup temporário com dados de exemplo usando CombatenteData"""
 
@@ -114,6 +117,7 @@ func _setup_exemplo() -> void:
 	var todos = combatentes_jogador + combatentes_inimigo
 	ordem_turno = todos.duplicate()
 
+## Copia a velocidade para iniciativa e registra o valor de cada combatente.
 func _calcular_iniciativa() -> void:
 	"""Cada combatente compara sua velociadade com os outros"""
 	for combatente in ordem_turno:
@@ -123,6 +127,7 @@ func _calcular_iniciativa() -> void:
 			"info"
 		)
 
+## Liga sinais dos painéis aos callbacks que controlam o estado do combate.
 func _conectar_sinais_paineis() -> void:
 	"""Conecta os sinais dos painéis ao CombatManager"""
 	if action_panel:
@@ -147,6 +152,7 @@ func _conectar_sinais_paineis() -> void:
 # FLUXO DE TURNO
 # ============================================================================
 
+## Seleciona o próximo combatente consciente, restaura proteções e abre seu turno.
 func _avancar_turno() -> void:
 	"""Move para o próximo combatente com P.A. disponível"""
 	if not combate_ativo:
@@ -184,6 +190,7 @@ func _avancar_turno() -> void:
 		await get_tree().create_timer(0.3).timeout
 		_executar_turno_inimigo()
 
+## Remove reduções temporárias de proteção causadas pelo combatente anterior.
 func _restaurar_protecoes(combatente: CombatenteData) -> void:
 	for alvo in combatentes_jogador:
 		if alvo.atacante_que_quebrou_protecao == combatente.nome:
@@ -210,6 +217,7 @@ func _restaurar_protecoes(combatente: CombatenteData) -> void:
 				"info"
 			)
 
+## Percorre a ordem circular até encontrar um combatente vivo e consciente.
 func _encontrar_proximo_combatente() -> CombatenteData:
 	"""Encontra o próximo combatente vivo na ordem"""
 	var tentativas = 0
@@ -228,6 +236,7 @@ func _encontrar_proximo_combatente() -> CombatenteData:
 
 	return null
 
+## Executa o turno inimigo provisório e passa a vez enquanto a IA não existe.
 func _executar_turno_inimigo() -> void:
 	"""Executa turno automático do inimigo (placeholder)"""
 	print("[CombatManager] Turno do inimigo: %s" % combatente_ativo.nome)
@@ -242,6 +251,7 @@ func _executar_turno_inimigo() -> void:
 # AÇÕES DO COMBATENTE
 # ============================================================================
 
+## Inicia seleção de regiões e prepara a rolagem do ataque do jogador.
 func _iniciar_ataque() -> void:
 	"""Inicia sequência de ataque: seleciona regiões → seleciona alvo → rola dados"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
@@ -255,6 +265,7 @@ func _iniciar_ataque() -> void:
 	regional_selector.ativar_para_ataque(combatente_ativo)
 
 
+## Abre o fluxo de seleção de uma perícia.
 func _iniciar_pericia() -> void:
 	"""Inicia uso de perícia"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
@@ -266,6 +277,7 @@ func _iniciar_pericia() -> void:
 	# TODO: Mostrar menu de perícias disponíveis
 	action_panel.mostrar_menu_pericias(combatente_ativo)
 
+## Abre o fluxo de seleção de uma habilidade especial.
 func _iniciar_habilidade() -> void:
 	"""Inicia uso de habilidade especial"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
@@ -279,6 +291,7 @@ func _iniciar_habilidade() -> void:
 	# O CombatManager só volta a atuar quando a habilidade for confirmada.
 	action_panel.mostrar_menu_habilidades(combatente_ativo)
 
+## Ativa Sobrecarga no combatente atual e devolve o controle ao painel.
 func _ativar_sobrecarga() -> void:
 	if combatente_ativo == null:
 		return
@@ -294,6 +307,7 @@ func _ativar_sobrecarga() -> void:
 
 	action_panel.habilitar_acoes()
 
+## Valida, consome PA e registra a habilidade confirmada pelo jogador.
 func _on_habilidade_escolhida(nome_habilidade: String) -> void:
 	# Recebe apenas habilidades confirmadas na tela de detalhes do ActionPanel.
 	# A validação de PA e conhecimento permanece aqui porque altera estado real
@@ -337,6 +351,7 @@ func _on_habilidade_escolhida(nome_habilidade: String) -> void:
 	)
 	action_panel.habilitar_acoes()
 
+## Guarda o item escolhido e abre a seleção do aliado destinatário.
 func _on_item_escolhido(nome_item:String) -> void:
 
 	item_pendente = nome_item
@@ -348,6 +363,7 @@ func _on_item_escolhido(nome_item:String) -> void:
 
 	party_panel.ativar_seletor_alvo_item()
 
+## Inicia o fluxo de uso de item no turno do jogador.
 func _iniciar_item() -> void:
 
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
@@ -364,6 +380,7 @@ func _iniciar_item() -> void:
 		combatente_ativo
 	)
 
+## Executa Duelo, atualiza análise do alvo e aplica redução extrema de proteção.
 func _executar_pericia_duelo(alvo: CombatenteData) -> void:
 	if alvo == null:
 		return
@@ -436,6 +453,7 @@ func _executar_pericia_duelo(alvo: CombatenteData) -> void:
 
 	_finalizar_acao()
 
+## Recebe a perícia escolhida e abre seu seletor de alvo específico.
 func _on_pericia_escolhida(nome_pericia: String) -> void:
 
 	if combatente_ativo == null:
@@ -467,6 +485,7 @@ func _on_pericia_escolhida(nome_pericia: String) -> void:
 # CALLBACKS DE SELEÇÃO
 # ============================================================================
 
+## Atualiza a lista de regiões arriscadas, permitindo repetição com Sobrecarga.
 func _on_regiao_selecionada(nome_regiao: String, indice: int) -> void:
 
 	if combatente_ativo.habilidade_sobrecarga_ativa:
@@ -483,6 +502,7 @@ func _on_regiao_selecionada(nome_regiao: String, indice: int) -> void:
 		else:
 			regioes_selecionadas.erase(nome_regiao)
 
+## Encaminha a região para item ou abre a seleção do inimigo do ataque.
 func _on_regioes_confirmadas(regioes: Array[String]) -> void:
 	"""Chamado quando o jogador confirma as regiões selecionadas"""
 	if item_pendente != "":
@@ -497,6 +517,7 @@ func _on_regioes_confirmadas(regioes: Array[String]) -> void:
 		EnemyPanel.TipoAlvo.INIMIGO
 	)
 
+## Cancela a ação atual, limpa seleções e reativa os comandos do jogador.
 func _on_selecao_cancelada() -> void:
 	"""Chamado quando o jogador cancela a seleção de regiões"""
 	acao_em_progresso = false
@@ -506,6 +527,7 @@ func _on_selecao_cancelada() -> void:
 	regional_selector.desativar()
 	action_panel.habilitar_acoes()
 
+## Finaliza o turno sem ação e avança após a pausa visual.
 func _on_turno_passado() -> void:
 	"""Chamado quando o jogador clica em PASSAR TURNO"""
 	if combatente_ativo and combatente_ativo.tipo == "jogador":
@@ -515,6 +537,7 @@ func _on_turno_passado() -> void:
 		await get_tree().create_timer(1.0).timeout
 		_avancar_turno()
 
+## Abre o painel de alvos com a coleção correspondente ao tipo solicitado.
 func _abrir_seletor_alvo(tipo: EnemyPanel.TipoAlvo) -> void:
 	match tipo:
 
@@ -546,6 +569,7 @@ func _abrir_seletor_alvo(tipo: EnemyPanel.TipoAlvo) -> void:
 				tipo
 			)
 
+## Encaminha o alvo para Duelo ou para o processamento do ataque normal.
 func _on_alvo_selecionado(alvo: CombatenteData) -> void:
 	if alvo == null:
 		log_panel.registrar_evento(
@@ -592,6 +616,7 @@ func _on_alvo_selecionado(alvo: CombatenteData) -> void:
 		regioes_selecionadas
 	)
 
+## Guarda o aliado escolhido e abre a seleção da região que receberá o item.
 func _on_personagem_item_selecionado(personagem:CombatenteData) -> void:
 
 	alvo_item_pendente = personagem
@@ -613,6 +638,9 @@ func _on_personagem_item_selecionado(personagem:CombatenteData) -> void:
 # PROCESSAMENTO DE ATAQUE
 # ============================================================================
 
+## Resolve todas as rolagens do ataque: falhas no atacante, proteção, dano e fim.
+## A ordem é essencial: primeiro aplica as falhas, depois impede continuidade
+## se o atacante cair e só então transforma sucessos suficientes em dano no alvo.
 func _processar_ataque(
 	atacante: CombatenteData,
 	alvo: CombatenteData,
@@ -804,6 +832,7 @@ func _processar_ataque(
 	_finalizar_acao()
 	return
 
+## Aplica o item à região escolhida, remove uma unidade e atualiza a party.
 func _usar_item(regiao:String) -> void:
 	var item = item_db.get_item(item_pendente)
 
@@ -843,6 +872,7 @@ func _usar_item(regiao:String) -> void:
 	regional_selector.desativar()
 	_finalizar_acao()
 
+## Limpa o estado da ação, fecha seletores e inicia o próximo turno.
 func _finalizar_acao() -> void:
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
@@ -850,6 +880,7 @@ func _finalizar_acao() -> void:
 	action_panel.habilitar_acoes()
 	_avancar_turno()
 
+## Converte um resultado D6 nas categorias usadas pelo sistema OBLIVIO.
 func _avaliar_categoria_resultado(dado: int) -> String:
 	"""Categoriza o resultado do dado conforme OBLIVIO"""
 	match dado:
@@ -868,6 +899,7 @@ func _avaliar_categoria_resultado(dado: int) -> String:
 # SISTEMA DE COMBATENTES
 # ============================================================================
 
+## Remove o combatente derrotado das listas, painéis e ordem de iniciativa.
 func _derrotar_combatente(combatente: CombatenteData) -> void:
 	if not ordem_turno.has(combatente):
 		return
@@ -890,6 +922,7 @@ func _derrotar_combatente(combatente: CombatenteData) -> void:
 	if not combate_ativo:
 		return
 
+## Detecta vitória ou derrota quando um dos lados fica sem combatentes ativos.
 func _verificar_fim_combate() -> void:
 	"""Verifica se um dos lados foi completamente derrotado"""
 	var jogadores_vivos = combatentes_jogador.filter(
@@ -904,7 +937,7 @@ func _verificar_fim_combate() -> void:
 	elif inimigos_vivos.is_empty():
 		_finalizar_combate("Vitória")
 
-
+## Encerra o estado ativo, registra o resultado e emite o sinal de conclusão.
 func _finalizar_combate(resultado: String) -> void:
 	"""Encerra o combate e retorna ao menu/mapa"""
 	if not combate_ativo:
@@ -923,14 +956,14 @@ func _finalizar_combate(resultado: String) -> void:
 # ============================================================================
 # UTILIDADES
 # ============================================================================
-
+## Soma o estresse de todas as regiões de um combatente.
 func calcular_estresse_total(combatente: CombatenteData) -> int:
 	"""Calcula estresse acumulado de todas as regiões"""
 	var total = 0
 	for regiao in combatente["estresse_por_regiao"].values():
 		total += regiao
 	return total
-
+## Adiciona um status temporário e registra sua aplicação no log.
 func aplicar_status(combatente: CombatenteData, status_nome: String, duracao: int = 1) -> void:
 	"""Aplica um status ao combatente"""
 	var status = {
@@ -944,13 +977,13 @@ func aplicar_status(combatente: CombatenteData, status_nome: String, duracao: in
 			"%s está [%s]!" % [combatente["nome"], status_nome],
 			"aviso"
 		)
-
+## Remove do dicionário todos os status com o nome informado.
 func remover_status(combatente: Dictionary, status_nome: String) -> void:
 	"""Remove um status do combatente"""
 	combatente["status"] = combatente["status"].filter(
 		func(s): return s["nome"] != status_nome
 	)
-
+## Converte uma lista tipada de combatentes para o formato consumido pela UI.
 func _converter_para_dict(lista:Array[CombatenteData]) -> Array[Dictionary]:
 	var resultado:Array[Dictionary] = []
 	for c in lista:

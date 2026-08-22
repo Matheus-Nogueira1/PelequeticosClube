@@ -42,7 +42,7 @@ static func criar_carcaca() -> CombatenteData:
 	) 
 	
 	return carcaca
-
+## Cria um Goblin com baixa resistência e maior agilidade.
 static func goblin() -> CombatenteData:
 	"""Goblin comum - criatura básica
 	
@@ -68,7 +68,7 @@ static func goblin() -> CombatenteData:
 	}
 	
 	return goblin
-
+## Cria um Orc Guerreiro com força e resistência intermediárias.
 static func orc_guerreiro() -> CombatenteData:
 	"""Orc Guerreiro - inimigo forte
 	

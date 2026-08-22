@@ -14,6 +14,7 @@ class_name CombatLog
 const MAX_LINHAS_VISIBLES = 50
 const TEMPO_SCROLL_DELAY = 0.0
 
+## Limpa o log e ativa a formatação e rolagem automáticas.
 func _ready() -> void:
 	clear()
 	bbcode_enabled = true
@@ -24,6 +25,7 @@ func _ready() -> void:
 # EVENTOS GERAIS
 # ============================================================================
 
+## Adiciona uma mensagem colorida e rola o painel até a última linha.
 func registrar_evento(mensagem: String, tipo: String = "normal") -> void:
 	"""Registra um evento genérico com cor baseada no tipo"""
 	var cor = _get_cor_por_tipo(tipo)
@@ -37,6 +39,7 @@ func registrar_evento(mensagem: String, tipo: String = "normal") -> void:
 	
 	
 
+## Registra atacante, alvo, dado, dano e estresse de um ataque detalhado.
 func registrar_ataque(dados: Dictionary) -> void:
 	"""
 	Registra um ataque com todos os detalhes.
@@ -98,6 +101,7 @@ func registrar_ataque(dados: Dictionary) -> void:
 	
 	
 
+## Registra a ativação ou remoção de um status.
 func registrar_status(combatente: String, status: String, ativo: bool = true) -> void:
 	"""Registra mudança de status de um combatente"""
 	var tipo = "aviso" if ativo else "info"
@@ -112,6 +116,7 @@ func registrar_status(combatente: String, status: String, ativo: bool = true) ->
 # HELPERS DE FORMATAÇÃO
 # ============================================================================
 
+## Retorna a cor associada ao tipo de evento.
 func _get_cor_por_tipo(tipo: String) -> String:
 	"""Retorna cor HEX baseada no tipo de evento"""
 	match tipo:
@@ -125,6 +130,7 @@ func _get_cor_por_tipo(tipo: String) -> String:
 		"cura":       return "limegreen"
 		_:            return "white"
 
+## Retorna o ícone associado ao tipo de evento.
 func _get_icon_por_tipo(tipo: String) -> String:
 	"""Retorna ícone baseado no tipo de evento"""
 	match tipo:
@@ -138,6 +144,7 @@ func _get_icon_por_tipo(tipo: String) -> String:
 		"cura":       return "🧪"
 		_:            return "•"
 
+## Retorna a cor associada à categoria de uma rolagem.
 func _get_cor_por_categoria(categoria: String) -> String:
 	"""Retorna cor baseada na categoria de resultado de combate"""
 	match categoria:
@@ -147,6 +154,7 @@ func _get_cor_por_categoria(categoria: String) -> String:
 		"Falha Crítica":    return "red"
 		_:                  return "white"
 
+## Retorna o ícone associado à categoria de uma rolagem.
 func _get_icon_por_categoria(categoria: String) -> String:
 	"""Retorna ícone baseado na categoria de resultado"""
 	match categoria:
@@ -160,6 +168,7 @@ func _get_icon_por_categoria(categoria: String) -> String:
 # LIMPEZA
 # ============================================================================
 
+## Mantém apenas as linhas mais recentes para limitar o custo do log.
 func _limpar_overflow() -> void:
 	"""Remove linhas antigas para manter performance"""
 	if get_line_count() > MAX_LINHAS_VISIBLES:
@@ -174,6 +183,7 @@ func _limpar_overflow() -> void:
 		clear()
 		append_text(novo_texto)
 
+## Remove todo o conteúdo exibido no painel de combate.
 func limpar_log() -> void:
 	"""Limpa todo o conteúdo do log"""
 	clear()

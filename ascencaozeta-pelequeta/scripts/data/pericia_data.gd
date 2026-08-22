@@ -7,6 +7,7 @@ extends RefCounted
 class Pericia:
 	var nome: String
 	var descricao: String
+	## Inicializa nome e descrição de uma perícia.
 	func _init(
 		p_nome:String,
 		p_descricao:String
@@ -15,9 +16,11 @@ class Pericia:
 		descricao = p_descricao
 
 var banco := {}
+## Inicializa o banco com as perícias disponíveis.
 func _init():
 	_registrar_pericias()
 
+## Registra as dez perícias do sistema OBLIVIO.
 func _registrar_pericias():
 
 	banco["Bandidagem"] = Pericia.new(
@@ -70,18 +73,22 @@ func _registrar_pericias():
 		"Persuasão, blefe, intimidação e interação com outras pessoas."
 	)
 
+## Busca uma perícia pelo nome.
 func get_pericia(nome:String) -> Pericia:
 	return banco.get(nome)
 
+## Retorna os nomes de todas as perícias cadastradas.
 func obter_pericias() -> Array:
 	return banco.keys()
 
+## Retorna a descrição de uma perícia ou vazio quando não existir.
 func obter_descricao(nome:String) -> String:
 	var pericia = get_pericia(nome)
 	if pericia == null:
 		return ""
 	return pericia.descricao
 
+## Executa o D6 de conhecimento e classifica falha ou sucesso.
 func testar_pericia(
 	combatente: CombatenteData,
 	nome_pericia: String
@@ -112,6 +119,7 @@ func testar_pericia(
 		"sucesso": dado >= 4
 	}
 
+## Traduz o teste de Duelo em análise e possível redução de proteção.
 func executar_duelo(
 	combatente: CombatenteData,
 	_alvo: CombatenteData

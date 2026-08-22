@@ -38,6 +38,7 @@ var permite_multiplas_mesma_regiao: bool = false  # Sobrecarga ativa
 @onready var label_info = Label.new()
 var botoes_regiao: Array[Button] = []
 
+## Monta os botões das regiões e inicia o seletor oculto.
 func _ready() -> void:
 	_criar_layout()
 	desativar()
@@ -46,6 +47,7 @@ func _ready() -> void:
 # CRIAÇÃO DA UI
 # ============================================================================
 
+## Cria grid, mensagens e botões de confirmação/cancelamento.
 func _criar_layout() -> void:
 	"""Cria o layout do seletor de regiões"""
 	vbox.add_theme_constant_override("separation", 8)
@@ -95,6 +97,7 @@ func _criar_layout() -> void:
 	
 	vbox.add_child(hbox_botoes)
 
+## Cria um botão alternável ligado à região e ao índice correspondentes.
 func _criar_botao_regiao(nome: String, indice: int) -> Button:
 	"""Helper para criar botão de região"""
 	var botao = Button.new()
@@ -108,6 +111,7 @@ func _criar_botao_regiao(nome: String, indice: int) -> Button:
 # ATIVAÇÃO/DESATIVAÇÃO
 # ============================================================================
 
+## Abre o seletor de ataque e permite repetição quando Sobrecarga está ativa.
 func ativar_para_ataque(combatente: CombatenteData) -> void:
 	combatente_ativo = combatente
 	modo = ModoRegional.ATAQUE
@@ -122,6 +126,7 @@ func ativar_para_ataque(combatente: CombatenteData) -> void:
 	# Atualizar visual dos botões (desabilitar regiões perdidas/próteses destruídas)
 	_atualizar_estado_botoes()
 
+## Abre o seletor para escolher uma única região que receberá um item.
 func ativar_para_item(
 	combatente: CombatenteData
 ) -> void:
@@ -143,6 +148,7 @@ func ativar_para_item(
 
 	_atualizar_estado_botoes()
 
+## Abre o seletor para uma habilidade que exige região alvo.
 func ativar_para_habilidade(
 	combatente: CombatenteData
 ) -> void:
@@ -164,6 +170,7 @@ func ativar_para_habilidade(
 
 	_atualizar_estado_botoes()
 
+## Abre o seletor para uma perícia que exige região alvo.
 func ativar_para_pericia(
 	combatente: CombatenteData
 ) -> void:
@@ -187,6 +194,7 @@ func ativar_para_pericia(
 
 ## ===== VALIDAÇÃO DE REGIÕES =====
 
+## Valida região perdida, prótese destruída e limite de estresse atingido.
 func _pode_arriscar_regiao(regiao: String) -> bool:
 	"""Valida se uma região pode ser arriscada em combate"""
 	if combatente_ativo == null:
@@ -207,6 +215,7 @@ func _pode_arriscar_regiao(regiao: String) -> bool:
 		
 	return true
 
+## Reflete nos botões as regiões disponíveis, perdidas ou destruídas.
 func _atualizar_estado_botoes() -> void:
 	"""Atualiza o estado visual dos botões (habilitado/desabilitado)"""
 	for i in range(regioes.size()):
@@ -233,6 +242,7 @@ func _atualizar_estado_botoes() -> void:
 				botao.remove_theme_color_override("font_disabled_color")
 
 
+## Fecha o seletor, bloqueia sua interação e limpa a seleção atual.
 func desativar() -> void:
 	"""Desativa o seletor"""
 	modo = ModoRegional.DESATIVADO
@@ -244,6 +254,7 @@ func desativar() -> void:
 # CALLBACKS
 # ============================================================================
 
+## Alterna uma região ou acumula riscos repetidos durante Sobrecarga.
 func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
 	if modo == ModoRegional.DESATIVADO:
 		return
@@ -275,6 +286,7 @@ func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
 
 	regiao_selecionada.emit(nome_regiao, indice)
 
+## Valida a existência de seleção e emite a lista final ao gerenciador.
 func _on_confirmar() -> void:
 	if modo == ModoRegional.DESATIVADO:
 		return
@@ -288,7 +300,7 @@ func _on_confirmar() -> void:
 	selecao_confirmada.emit(regioes_finais)
 
 	desativar()
-
+## Emite cancelamento e fecha o seletor sem confirmar regiões.
 func _on_cancelar() -> void:
 	"""Callback do botão Cancelar"""
 	selecao_cancelada.emit()
@@ -297,11 +309,13 @@ func _on_cancelar() -> void:
 # ============================================================================
 # ATUALIZAÇÕES VISUAIS
 # ============================================================================
+## Acrescenta o indicador [PR] quando a região usa uma prótese.
 func _obter_nome_visual_regiao(regiao: String) -> String:
 	if combatente_ativo != null and combatente_ativo.proteses.has(regiao):
 		return regiao + " [PR]"
 	return regiao
 
+## Atualiza texto e cores do botão conforme a quantidade selecionada.
 func _atualizar_visual_botao(indice: int) -> void:
 	var botao = botoes_regiao[indice]
 
@@ -330,6 +344,7 @@ func _atualizar_visual_botao(indice: int) -> void:
 			"font_focus_color"
 		)
 
+## Mostra o contador de riscos e a instrução correspondente ao modo atual.
 func _atualizar_info_label() -> void:
 	var total := contar_selecionadas()
 
@@ -353,9 +368,10 @@ func _atualizar_info_label() -> void:
 		_:
 			label_info.text = ""
 
+## Retorna o modo de seleção atualmente ativo.
 func obter_modo() -> ModoRegional:
 	return modo
-
+## Zera contagens, estados visuais e mensagem da seleção atual.
 func _resetar_selecao() -> void:
 	"""Reseta toda a seleção"""
 	selecionadas = [0, 0, 0, 0, 0]
@@ -372,6 +388,7 @@ func _resetar_selecao() -> void:
 # UTILIDADES
 # ============================================================================
 
+## Expande as contagens internas em uma lista com nomes repetidos.
 func obter_regioes_selecionadas() -> Array[String]:
 	var resultado: Array[String] = []
 
@@ -381,6 +398,7 @@ func obter_regioes_selecionadas() -> Array[String]:
 
 	return resultado
 
+## Soma quantos riscos foram escolhidos em todas as regiões.
 func contar_selecionadas() -> int:
 	var total := 0
 

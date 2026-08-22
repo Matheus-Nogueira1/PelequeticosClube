@@ -14,10 +14,12 @@ class Protese:
 	var destruida: bool = false
 	var pode_arriscar: bool = true                ## Pode ser arriscada em combate?
 	
+	## Cria uma prótese associada à região substituída.
 	func _init(p_nome: String, p_regiao: String):
 		nome = p_nome
 		regiao_representada = p_regiao
 	
+	## Acumula estresse e retorna somente o excedente acima do limite da prótese.
 	func sofrer_estresse(quantidade: int) -> int:
 		"""Aplica estresse à prótese, retorna excedente"""
 		estresse_atual += quantidade
@@ -27,10 +29,12 @@ class Protese:
 			return excedente
 		return 0
 	
+	## Remove estresse da prótese sem permitir valores negativos.
 	func recuperar_estresse(quantidade: int) -> void:
 		"""Recupera estresse da prótese"""
 		estresse_atual = max(0, estresse_atual - quantidade)
 	
+	## Incrementa o contador usado para decidir a destruição da prótese.
 	func sofrer_falha_extrema() -> void:
 		"""Registra uma falha extrema sofrida"""
 		falhas_extremas_sofridas += 1
@@ -48,6 +52,7 @@ static func criar_protese_escolhido() -> Protese:
 	return protese
 
 ## Verifica se prótese deve ser destruída (Falhas Extremas > Carne/2)
+## A comparação é estrita: a prótese só quebra quando ultrapassa o limite.
 static func verificar_destruicao(protese: Protese, carne_combatente: int) -> bool:
 	"""
 	Prótese é destruída se sofreu Falhas Extremas > Carne/2
@@ -56,6 +61,7 @@ static func verificar_destruicao(protese: Protese, carne_combatente: int) -> boo
 	return protese.falhas_extremas_sofridas > limite_falhas
 
 ## Destrói a prótese e redistribui limite de estresse
+## Marca a região como perdida e distribui o limite removido entre as demais regiões.
 static func destruir_protese(combatente: CombatenteData, protese: Protese) -> Dictionary:
 	"""
 	Destrói a prótese e redistribui o limite máximo entre as demais regiões

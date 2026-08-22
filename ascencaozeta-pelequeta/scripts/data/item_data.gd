@@ -17,6 +17,7 @@ class Item:
 	var quantidade: int = 1
 	var efeitos := {}
 
+	## Cria um item com tipo, descrição e quantidade inicial.
 	func _init(
 		p_nome:String,
 		p_tipo:TipoItem,
@@ -27,9 +28,11 @@ class Item:
 		descricao = p_descricao
 var banco := {}
 
+## Inicializa o banco de itens disponíveis.
 func _init():
 	_registrar_itens()
 
+## Registra consumíveis, equipamentos e demais itens do catálogo.
 func _registrar_itens():
 	var estus = Item.new(
 		"Estus Fleskus",
@@ -43,12 +46,15 @@ func _registrar_itens():
 
 	banco["Estus Fleskus"] = estus
 
+## Busca um item pelo nome.
 func get_item(nome:String) -> Item:
 	return banco.get(nome)
 
+## Retorna os nomes dos itens cadastrados.
 func obter_itens() -> Array:
 	return banco.keys()
 
+## Converte os nomes do inventário em objetos Item válidos.
 func get_itens_do_combatente(combatente: CombatenteData) -> Array:
 	var resultado:Array = []
 
@@ -59,9 +65,11 @@ func get_itens_do_combatente(combatente: CombatenteData) -> Array:
 
 	return resultado
 
+## Verifica se o catálogo contém o item informado.
 func possui_item(nome:String) -> bool:
 	return banco.has(nome)
 
+## Retorna a descrição do item ou vazio quando não encontrado.
 func obter_descricao(nome:String) -> String:
 	var item = get_item(nome)
 
@@ -70,10 +78,12 @@ func obter_descricao(nome:String) -> String:
 
 	return item.descricao
 
+## Verifica se o item existe no catálogo.
 func item_existe(nome:String) -> bool:
 	return banco.has(nome)
 
 
+## Converte o tipo interno para o rótulo exibido pela interface.
 static func tipo_item_para_texto(tipo: TipoItem) -> String:
 	match tipo:
 		TipoItem.CONSUMIVEL:
@@ -84,7 +94,7 @@ static func tipo_item_para_texto(tipo: TipoItem) -> String:
 			return "Quest"
 	return "Desconhecido"
 
-## Usa o item no combatente
+## Encaminha o uso para o efeito correspondente ao item.
 static func usar_item(
 	usuario: CombatenteData,
 	alvo: CombatenteData,
@@ -108,6 +118,7 @@ static func usar_item(
 	}
 
 ## Usa Estus Flask - Restaura Estresse de uma região
+## Valida região, perda e prótese antes de zerar o estresse restaurável.
 static func usar_estus_flask(
 	usuario:CombatenteData,
 	alvo:CombatenteData,

@@ -7,8 +7,8 @@ class Arma extends RefCounted:
 	var dano_faces: int = 0
 	var alcance: String = ""
 	var propriedades = []
-# Called when the node enters the scene tree for the first time.
 
+## Cria uma besta com dano e propriedades padrão.
 static func criar_besta() -> Arma:
 	var arma = Arma.new()
 	arma.nome = "Besta"
@@ -20,7 +20,7 @@ static func criar_besta() -> Arma:
 		"TIRO_CERTEIRO"
 	]
 	return arma
-
+## Cria uma bola de fogo como arma de médio alcance.
 static func criar_boladefogo() -> Arma:
 	var arma = Arma.new()
 	arma.nome = "BolaDeFogo"
@@ -32,7 +32,7 @@ static func criar_boladefogo() -> Arma:
 		"TIRO_CERTEIRO"
 	]
 	return arma
-
+## Cria o taco gigante com dano alto e alcance longo.
 static func criar_tacogigante() -> Arma:
 	var arma = Arma.new()
 	arma.nome = "TacoGigante"
@@ -44,7 +44,7 @@ static func criar_tacogigante() -> Arma:
 		"TUDO_QUE_VAI_VOLTA"
 	]
 	return arma
-
+## Localiza uma arma pelo nome e retorna null quando ela não existe.
 static func obter_arma(nome_arma: String) -> Arma:
 	match nome_arma:
 		"Besta":
@@ -56,7 +56,7 @@ static func obter_arma(nome_arma: String) -> Arma:
 		"TacoGigante":
 			return criar_tacogigante()
 	return null
-
+## Rola os dados de dano da arma equipada e soma seus resultados.
 static func rolar_dano_arma(nome_arma: String) -> int:
 	var arma = obter_arma(nome_arma)
 	if arma == null:

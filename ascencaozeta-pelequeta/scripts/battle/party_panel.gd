@@ -20,6 +20,7 @@ var aliado_selecionado_atual: CombatenteData = null
 var modo_seletor_ativo := false
 var tipo_alvo := TipoAlvo.ALIADO
 
+## Monta o painel visual da party.
 func _ready() -> void:
 	_criar_layout()
 
@@ -27,6 +28,7 @@ func _ready() -> void:
 # CRIAÇÃO DA UI
 # ============================================================================
 
+## Cria título, rolagem e container onde os cards dos personagens são inseridos.
 func _criar_layout() -> void:
 	"""Cria o layout do painel do partido"""
 	vbox.add_theme_constant_override("separation", 4)
@@ -50,12 +52,12 @@ func _criar_layout() -> void:
 # ============================================================================
 # GERENCIAMENTO DE PERSONAGENS
 # ============================================================================
-
+## Adiciona um personagem e cria seu card visual.
 func adicionar_personagem(personagem: CombatenteData) -> void:
 	"""Adiciona um personagem ao painel"""
 	personagens.append(personagem)
 	_criar_card_personagem(personagem)
-
+## Atualiza o card do personagem ou remove-o quando ele morre.
 func atualizar_personagem(personagem: CombatenteData) -> void:
 	"""Atualiza o visual de um personagem. Remove se morreu."""
 	var chave = personagem.nome
@@ -69,7 +71,7 @@ func atualizar_personagem(personagem: CombatenteData) -> void:
 		var card_wrapper = cards_personagens[chave]
 		if card_wrapper.has("atualizar"):
 			card_wrapper["atualizar"].call(personagem)
-
+## Remove um personagem derrotado da party e da interface.
 func remover_personagem(personagem: CombatenteData) -> void:
 	"""Remove um personagem do painel (derrotado)"""
 	var chave = personagem.nome
@@ -78,7 +80,7 @@ func remover_personagem(personagem: CombatenteData) -> void:
 		cards_personagens.erase(chave)
 	
 	personagens = personagens.filter(func(p): return p.nome != chave)
-
+## Remove todos os cards e zera as referências da party visual.
 func limpar_personagens() -> void:
 	"""Remove todos os personagens"""
 	for card in cards_personagens.values():
@@ -91,6 +93,7 @@ func limpar_personagens() -> void:
 # CRIAÇÃO DE CARDS
 # ============================================================================
 
+## Cria um card e fecha sobre ele a função de atualizar todos os dados visuais.
 func _criar_card_personagem(personagem: CombatenteData) -> void:
 	"""Cria um card visual para um personagem"""
 	
@@ -388,6 +391,7 @@ func _criar_card_personagem(personagem: CombatenteData) -> void:
 # INDICADORES DE TURNO
 # ============================================================================
 
+## Destaca visualmente o card do personagem cujo turno está ativo.
 func indicar_personagem_ativo(
 	personagem: CombatenteData
 ) -> void:
@@ -453,6 +457,7 @@ func indicar_personagem_ativo(
 			ativo
 		)
 
+## Restaura o estilo normal de todos os cards e remove o personagem ativo.
 func remover_destaque_turno() -> void:
 
 	for wrapper in cards_personagens.values():
@@ -490,7 +495,7 @@ func remover_destaque_turno() -> void:
 # ============================================================================
 # ATUALIZAÇÃO
 # ============================================================================
-
+## Reconstrói a lista completa de personagens recebida pelo gerenciador.
 func atualizar_todos(personagens_novos: Array[CombatenteData]) -> void:
 	"""Atualiza toda a lista de personagens"""
 	limpar_personagens()
@@ -498,6 +503,7 @@ func atualizar_todos(personagens_novos: Array[CombatenteData]) -> void:
 	for personagem in personagens_novos:
 		adicionar_personagem(personagem)
 
+## Libera os cards para escolher um aliado como alvo.
 func ativar_seletor_aliado() -> void:
 
 	modo_seletor_ativo = true
@@ -517,6 +523,7 @@ func ativar_seletor_aliado() -> void:
 	if cards_personagens.size() > 0:
 		cards_personagens.values()[0]["node"].grab_focus()
 
+## Bloqueia a seleção de aliados e remove marcações visuais.
 func desativar_seletor_aliado() -> void:
 
 	modo_seletor_ativo = false
@@ -531,6 +538,7 @@ func desativar_seletor_aliado() -> void:
 		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.focus_mode = Control.FOCUS_NONE
 
+## Emite o aliado escolhido e desativa o seletor após o clique.
 func _on_card_personagem_pressionado(
 	aliado: CombatenteData
 ) -> void:
@@ -555,19 +563,22 @@ func _on_card_personagem_pressionado(
 
 	desativar_seletor_aliado()
 
+## Retorna o último aliado escolhido pelo seletor.
 func obter_aliado_selecionado() -> CombatenteData:
 	return aliado_selecionado_atual
 
 # ============================================================================
 # UTILIDADES
 # ============================================================================
-
+## Retorna o personagem marcado como dono do turno atual.
 func obter_personagem_ativo() -> CombatenteData:
 	"""Retorna o personagem ativo"""
 	return personagem_ativo_atual
 
+## Mantém compatibilidade usando o mesmo seletor de aliados para itens.
 func ativar_seletor_item() -> void:
 	ativar_seletor_aliado()
 
+## Abre a seleção de destinatário de um item.
 func ativar_seletor_alvo_item() -> void:
 	ativar_seletor_aliado()

@@ -5,15 +5,15 @@ extends CharacterBody2D
 const ZONA_ACERTO_EXTREMO = 6
 const ZONA_ACERTO_REGULAR = 4
 const REGIOES_CORPO = ["Torso", "Braço Esquerdo", "Braço Direito", "Perna Esquerda", "Perna Direita"]
-
+## Inicializa a aleatoriedade usada nas rolagens do dado.
 func _ready():
 	randomize()
-
+## Inicia uma rolagem quando o sprite do dado recebe um clique.
 func _input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		print("clicou no dado")
 		rolar_dado()
-
+## Executa uma rolagem de conhecimento e anima sua face correspondente.
 func rolar_dado():
 	var resultado = rolar_teste_conhecimento_d6(false)
 	await rodar_e_mostrar_face(resultado.dado)
@@ -25,7 +25,7 @@ func rolar_dado():
 	#var regioes = ["Torso", "Braço Direito", "Perna Esquerda"]
 	#var resultado_combate = rolar_teste_combate_d6(regioes, 3, 2, 1)
 	#print("Combate:", resultado_combate)
-
+## Reproduz a animação e exibe a face obtida ao final.
 func rodar_e_mostrar_face(lado: int) -> void:
 	dado_sprite.animation = "rolar"
 	dado_sprite.play()
@@ -33,7 +33,7 @@ func rodar_e_mostrar_face(lado: int) -> void:
 	dado_sprite.stop()
 	dado_sprite.animation = "default"
 	dado_sprite.frame = lado - 1
-
+## Rola conhecimento, aplica especialização e classifica o resultado.
 func rolar_teste_conhecimento_d6(especializado: bool = false) -> Dictionary:
 	var dado = randi_range(1, 6)
 	var bonus_especializacao = 2 if especializado else 0
@@ -50,7 +50,9 @@ func rolar_teste_conhecimento_d6(especializado: bool = false) -> Dictionary:
 		"sucesso": categoria in ["Sucesso Regular", "Sucesso Extremo"],
 		"falha": categoria in ["Falha Regular", "Falha Crítica"]
 	}
-
+## Rola um D6 por região e separa sucessos e falhas para o combate.
+## As falhas geram estresse no atacante; os sucessos são comparados à
+## proteção do alvo pelo CombatManager.
 func rolar_teste_combate_d6(regioes_arriscadas: Array, protecao_alvo: int, dano_arma: int, atributo_dano: int) -> Dictionary:
 	var quantidade = clamp(regioes_arriscadas.size(), 1, 5)
 	regioes_arriscadas = regioes_arriscadas.slice(0, quantidade)
@@ -100,7 +102,7 @@ func rolar_teste_combate_d6(regioes_arriscadas: Array, protecao_alvo: int, dano_
 		"total_sucessos": total_sucessos,
 		"estresse_gerado": estresse_gerado,
 	}
-
+## Converte o valor de um D6 em uma categoria de resultado.
 func avaliar_resultado_d6(valor: int) -> String:
 	if valor == ZONA_ACERTO_EXTREMO:
 		return "Sucesso Extremo"

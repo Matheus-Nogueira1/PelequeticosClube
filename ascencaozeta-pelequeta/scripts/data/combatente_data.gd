@@ -108,12 +108,14 @@ var morto: bool = false                         # Flag de morte permanente
 
 ## ===== MÉTODOS =====
 
+## Cria um combatente e calcula seus atributos derivados iniciais.
 func _init(p_nome: String, p_tipo: String) -> void:
 	nome = p_nome
 	tipo = p_tipo
 	_calcular_atributos_mutaveis()
 
 ## Calcula todos os Atributos Mutáveis baseado nos Atributos Fixos
+## Deve ser chamado após alterar qualquer um dos cinco atributos fixos.
 func _calcular_atributos_mutaveis() -> void:
 	atributo_folego = (atributo_carne + atributo_determinacao) / 2
 	atributo_dano = (atributo_forca + atributo_carne) / 2
@@ -184,6 +186,7 @@ func regiao_pode_ser_arriscada(regiao: String) -> bool:
 ## Aplica estresse a uma região (métrica principal em OBLIVIO)
 ## Se superar limite, transborda para torso (exceto se for torso)
 # REGRA OBLIVIO: Dano que supera limite transborda para torso
+## Retorna os eventos produzidos, como esgotamento, desmaio ou Fardo.
 func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 	var resultado: Dictionary = {}
 	if not estresse_por_regiao.has(regiao):
@@ -224,6 +227,7 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 	return resultado
 
 ## Remove estresse de uma região
+## Reativa o combatente quando o Torso volta abaixo do limite e retorna o valor removido.
 func aliviar_estresse(regiao:String, quantidade:int) -> int:
 
 	if not estresse_por_regiao.has(regiao):
@@ -246,6 +250,7 @@ func aliviar_estresse(regiao:String, quantidade:int) -> int:
 
 	return antes - dados["atual"]
 ## ===== CÁLCULOS =====
+## Calcula o dano base e acrescenta a rolagem da arma equipada.
 func calcular_dano_ataque() -> int:
 	var dano = atributo_dano
 	if arma_equipada != "":
@@ -282,7 +287,7 @@ func contar_regioes_esgotadas() -> int:
 		if regiao_esgotada(regiao):
 			count += 1
 	return count
-
+## Calcula proteção aplicando reduções temporárias e sem permitir valor negativo.
 func obter_protecao_atual() -> int:
 	return max(
 		0,
@@ -305,6 +310,8 @@ func consumir_pontos_acao(custo: int) -> bool:
 
 ## ===== DESMAIOS E FARDOS =====
 
+## Processa o limite do Torso: derrota inimigos, aplica Fardos a jogadores
+## e verifica a condição de morte permanente por Ataque Cardíaco.
 func processar_limite_torso() -> Dictionary:
 	print("=== PROCESSAR LIMITE TORSO ===")
 	print(nome)
@@ -388,6 +395,7 @@ func para_dictionary() -> Dictionary:
 		"morto": morto
 	}
 ## Cria a partir de um Dictionary
+## Reconstrói um combatente aceitando dados parciais e valores padrão.
 static func de_dictionary(dados: Dictionary) -> CombatenteData:
 	var nome_temp = "Desconhecido"
 	if dados.has("nome"):
@@ -472,6 +480,7 @@ func tem_protese(regiao: String) -> bool:
 	return proteses.has(regiao) and not proteses[regiao].destruida
 
 ## Aplica estresse à prótese (retorna excedente)
+## O excedente pode ser redirecionado para a região ou para o Torso pelo chamador.
 func aplicar_estresse_protese(regiao: String, quantidade: int) -> int:
 	var protese = obter_protese(regiao)
 	if protese:

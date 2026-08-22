@@ -53,7 +53,7 @@ enum EstadoMenu {
 
 var estado_menu := EstadoMenu.PRINCIPAL
 
-
+## Monta os controles do painel e inicia o painel desativado.
 func _ready() -> void:
 	_criar_layout()
 	desabilitar_acoes()
@@ -63,6 +63,7 @@ func _ready() -> void:
 ## As telas de Perícias, Habilidades e futuramente Consumíveis são criadas em
 ## blocos separados para manter o fluxo de navegação fácil de manter.
 
+## Cria os botões fixos do menu principal e seus callbacks.
 func _criar_layout() -> void:
 	# Cria o layout base dos botões de ação do turno.
 	vbox.add_theme_constant_override("separation", 4)
@@ -107,6 +108,7 @@ func _criar_layout() -> void:
 	)
 	vbox.add_child(botao_passar)
 
+## Cria um botão padronizado, com tooltip, tamanho e callback compartilhados.
 func _criar_botao(texto: String, p_tooltip_text: String, callback: Callable) -> Button:
 	# Cria botões com o mesmo tamanho e conexão, evitando divergência visual entre telas.
 	var btn = Button.new()
@@ -121,6 +123,7 @@ func _criar_botao(texto: String, p_tooltip_text: String, callback: Callable) -> 
 ## Sempre que o painel é reativado, ele volta ao Menu Principal para evitar que
 ## uma tela antiga fique aberta no turno de outro combatente.
 
+## Exibe o painel para um combatente e prepara o menu principal do turno.
 func ativar_para(combatente: CombatenteData) -> void:
 	combatente_ativo = combatente
 	combatente_ref = combatente
@@ -129,9 +132,11 @@ func ativar_para(combatente: CombatenteData) -> void:
 
 	call_deferred("_focar_botao")
 
+## Move o foco para o primeiro comando para permitir navegação por teclado.
 func _focar_botao() -> void:
 	botao_atacar.grab_focus()
 
+## Libera os comandos do turno atual e restaura a tela principal.
 func habilitar_acoes() -> void:
 	# Reabre o painel no estado principal e libera os comandos do turno atual.
 	acoes_habilitadas = true
@@ -144,6 +149,7 @@ func habilitar_acoes() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	visible = true
 
+## Bloqueia interação enquanto o CombatManager processa uma ação.
 func desabilitar_acoes() -> void:
 	# Usado enquanto outra seleção está em andamento, como região de ataque ou alvo.
 	acoes_habilitadas = false
@@ -161,6 +167,7 @@ func desabilitar_acoes() -> void:
 ## modelo é usado por Perícias e Habilidades e deixa a futura tela de Itens
 ## Consumíveis preparada para entrar sem menus flutuantes.
 
+## Mostra os controles fixos e limpa qualquer subtela contextual aberta.
 func _mostrar_menu_principal() -> void:
 	estado_menu = EstadoMenu.PRINCIPAL
 	_limpar_tela_contextual()
@@ -172,6 +179,7 @@ func _mostrar_menu_principal() -> void:
 	botao_passar.show()
 	call_deferred("_focar_botao")
 
+## Esconde os controles fixos antes de abrir uma subtela.
 func _ocultar_menu_principal() -> void:
 	botao_atacar.hide()
 	botao_pericia.hide()
@@ -180,6 +188,7 @@ func _ocultar_menu_principal() -> void:
 	spacer_principal.hide()
 	botao_passar.hide()
 
+## Remove nós temporários da subtela sem remover os controles permanentes.
 func _limpar_tela_contextual() -> void:
 	# Remove somente os nós criados pelas subtelas, preservando os botões fixos.
 	for controle in controles_tela_atual:
@@ -189,6 +198,7 @@ func _limpar_tela_contextual() -> void:
 			controle.queue_free()
 	controles_tela_atual.clear()
 
+## Cria e registra o título da subtela atual.
 func _criar_titulo_tela(texto: String) -> Label:
 	var label = Label.new()
 	label.text = texto
@@ -197,6 +207,7 @@ func _criar_titulo_tela(texto: String) -> Label:
 	controles_tela_atual.append(label)
 	return label
 
+## Cria o comando Voltar com o destino fornecido pelo fluxo de navegação.
 func _criar_botao_voltar(callback: Callable) -> Button:
 	# Toda subtela possui Voltar para manter a navegação previsível.
 	var voltar = _criar_botao("VOLTAR", "Retorna à tela anterior", callback)
@@ -204,6 +215,7 @@ func _criar_botao_voltar(callback: Callable) -> Button:
 	controles_tela_atual.append(voltar)
 	return voltar
 
+## Cria uma lista rolável e devolve seu container interno para preenchimento.
 func _criar_scroll_lista(altura_minima: int = 180) -> VBoxContainer:
 	# A lista rolável evita que muitas habilidades ou itens estourem o painel.
 	var scroll = ScrollContainer.new()
@@ -220,6 +232,7 @@ func _criar_scroll_lista(altura_minima: int = 180) -> VBoxContainer:
 	controles_tela_atual.append(scroll)
 	return lista
 
+## Cria uma mensagem informativa temporária na subtela.
 func _criar_label_info(texto: String) -> Label:
 	var label = Label.new()
 	label.text = texto
@@ -232,25 +245,31 @@ func _criar_label_info(texto: String) -> Label:
 ## Cada botão inicia um fluxo diferente. Ataque e Item ainda delegam ao
 ## CombatManager; Perícias e Habilidades navegam dentro do ActionPanel.
 
+## Inicia o fluxo externo de seleção de regiões e alvo para um ataque.
 func _on_atacar_pressionado() -> void:
 	# Inicia o fluxo externo: selecionar regiões, selecionar alvo e processar ataque.
 	desabilitar_acoes()
 	acao_atacar.emit()
 
+## Abre a lista de perícias conhecidas pelo combatente ativo.
 func _on_pericia_pressionado() -> void:
 	abrir_menu_pericias()
 
+## Abre a lista de habilidades disponíveis no turno.
 func _on_habilidade_pressionada() -> void:
 	abrir_menu_habilidades()
 
+## Abre o inventário contextual do combatente ativo.
 func _on_item_pressionado() -> void:
 	abrir_menu_itens()
 
+## Emite o encerramento voluntário do turno atual.
 func _on_passar_turno() -> void:
 	# Finaliza voluntariamente o turno do combatente ativo.
 	print("[ActionPanel] Turno passado")
 	turno_passado.emit()
 
+## Mantém compatibilidade com o antigo botão direto de Duelo.
 func _on_botao_duelo_pressed() -> void:
 	pericia_escolhida.emit("Duelo")
 
@@ -258,6 +277,7 @@ func _on_botao_duelo_pressed() -> void:
 ## Mantém a filosofia já existente: o jogador sai do Menu Principal, escolhe uma
 ## perícia conhecida e o ActionPanel emite um sinal sem decidir a regra.
 
+## Monta a lista de perícias treinadas e oferece seus detalhes.
 func abrir_menu_pericias() -> void:
 	if combatente_ref == null:
 		return
@@ -286,6 +306,7 @@ func abrir_menu_pericias() -> void:
 	_focar_primeiro_botao(lista)
 
 
+## Aguarda a montagem da lista e foca seu primeiro botão habilitado.
 func _focar_primeiro_botao(container: VBoxContainer) -> void:
 
 	await get_tree().process_frame
@@ -300,6 +321,7 @@ func _focar_primeiro_botao(container: VBoxContainer) -> void:
 			child.grab_focus()
 			return
 
+## Fecha a lista de perícias e retorna ao menu principal.
 func fechar_menu_pericias() -> void:
 	_mostrar_menu_principal()
 	call_deferred("_focar_botao")
@@ -310,6 +332,7 @@ func fechar_menu_pericias() -> void:
 ## Nenhuma etapa usa menus flutuantes; tudo é composto no próprio painel para manter
 ## consistência visual com Perícias e facilitar reuso por Itens Consumíveis.
 
+## Monta a lista agrupada de habilidades e a opção de Sobrecarga.
 func abrir_menu_habilidades() -> void:
 	if combatente_ref == null:
 		print("[ActionPanel] Combatente não possui referência")
@@ -330,6 +353,7 @@ func abrir_menu_habilidades() -> void:
 	_focar_primeiro_botao(lista)
 	
 
+## Monta a lista de itens presentes no inventário do combatente.
 func abrir_menu_itens() -> void:
 	if combatente_ref == null:
 		return
@@ -357,6 +381,7 @@ func abrir_menu_itens() -> void:
 	_criar_botao_voltar(_mostrar_menu_principal)
 	_focar_primeiro_botao(lista)
 
+## Resolve os nomes de habilidades do combatente usando o banco de dados.
 func _obter_habilidades_conhecidas() -> Array:
 	# Resolve os nomes salvos no CombatenteData usando o banco de habilidades.
 	# A busca tolerante a capitalização evita que dados antigos escondam uma
@@ -370,6 +395,7 @@ func _obter_habilidades_conhecidas() -> Array:
 			print("[ActionPanel] Habilidade não encontrada no banco: %s" % nome_habilidade)
 	return resultado
 
+## Filtra conhecimentos treinados e retorna suas definições para a UI.
 func _obter_pericias_conhecidas() -> Array:
 	var resultado: Array = []
 
@@ -386,6 +412,7 @@ func _obter_pericias_conhecidas() -> Array:
 
 	return resultado
 
+## Agrupa habilidades por tipo e adiciona Sobrecarga quando aplicável.
 func _preencher_lista_habilidades(lista: VBoxContainer, habilidades_disponiveis: Array) -> void:
 	# Agrupa por categoria para que Principal, Única e Geral apareçam de forma
 	# consistente mesmo quando o combatente tiver muitas habilidades.
@@ -419,6 +446,7 @@ func _preencher_lista_habilidades(lista: VBoxContainer, habilidades_disponiveis:
 		)
 		lista.add_child(btn_sobrecarga)
 
+## Cria o botão resumido de uma habilidade, exibindo tipo e custo de PA.
 func _criar_botao_habilidade(habilidade) -> Button:
 	# O texto mostra custo e categoria para reduzir idas desnecessárias à tela de detalhes.
 	var texto = "%s | %s | %d PA" % [
@@ -432,6 +460,7 @@ func _criar_botao_habilidade(habilidade) -> Button:
 		_abrir_detalhes_habilidade.bind(habilidade)
 	)
 
+## Cria o botão resumido de um item do inventário.
 func _criar_botao_item(item: ItemData.Item) -> Button:
 	var texto := "%s | %s" % [
 		item.nome,
@@ -445,6 +474,7 @@ func _criar_botao_item(item: ItemData.Item) -> Button:
 		_abrir_detalhes_item.bind(item)
 	)
 
+## Cria o botão de uma perícia e informa seu nível de treino.
 func _criar_botao_pericia(pericia) -> Button:
 	var treino = combatente_ref.conhecimentos_treino.get(pericia.nome, 0)
 
@@ -459,6 +489,7 @@ func _criar_botao_pericia(pericia) -> Button:
 		_abrir_detalhes_pericia.bind(pericia)
 	)
 
+## Exibe descrição, treino e confirmação de uso de uma perícia.
 func _abrir_detalhes_pericia(pericia) -> void:
 	estado_menu = EstadoMenu.DETALHE_PERICIA
 
@@ -495,6 +526,7 @@ func _abrir_detalhes_pericia(pericia) -> void:
 
 	confirmar.grab_focus()
 
+## Exibe os detalhes e a confirmação de uso de um item.
 func _abrir_detalhes_item(item) -> void:
 	estado_menu = EstadoMenu.DETALHE_ITEM
 	_limpar_tela_contextual()
@@ -520,6 +552,7 @@ func _abrir_detalhes_item(item) -> void:
 	_criar_botao_voltar(abrir_menu_itens)
 	confirmar.grab_focus()
 
+## Exibe custo, origem, alcance e efeito antes de confirmar uma habilidade.
 func _abrir_detalhes_habilidade(habilidade) -> void:
 	estado_menu = EstadoMenu.DETALHE_HABILIDADE
 	_limpar_tela_contextual()
@@ -546,6 +579,7 @@ func _abrir_detalhes_habilidade(habilidade) -> void:
 	_criar_botao_voltar(abrir_menu_habilidades)
 	confirmar.grab_focus()
 
+## Exibe e confirma a regra especial de Sobrecarga (Ir Além).
 func _abrir_detalhes_sobrecarga() -> void:
 	# Sobrecarga é uma regra especial do combate que não está no banco principal
 	# de HabilidadeData. Ela recebe uma tela de detalhes própria para preservar
@@ -576,6 +610,7 @@ func _abrir_detalhes_sobrecarga() -> void:
 	_criar_botao_voltar(abrir_menu_habilidades)
 	confirmar.grab_focus()
 
+## Adiciona uma linha formatada de informação à tela de detalhes.
 func _adicionar_linha_detalhe(container: VBoxContainer, rotulo: String, valor: String) -> void:
 	# Usa RichTextLabel para suportar descrições longas sem quebrar o painel.
 	var label = RichTextLabel.new()
@@ -585,29 +620,34 @@ func _adicionar_linha_detalhe(container: VBoxContainer, rotulo: String, valor: S
 	label.text = "[b]%s:[/b] %s" % [rotulo, valor]
 	container.add_child(label)
 
+## Evita campos vazios na interface usando um texto substituto.
 func _texto_ou_padrao(texto: String, padrao: String) -> String:
 	if texto.strip_edges() == "":
 		return padrao
 	return texto
 
+## Fecha a tela e emite a perícia confirmada ao CombatManager.
 func _confirmar_pericia(nome_pericia:String) -> void:
 	print("[ActionPanel] Perícia confirmada: %s" % nome_pericia)
 	_mostrar_menu_principal()
 	call_deferred("_focar_botao")
 	pericia_escolhida.emit(nome_pericia)
 
+## Fecha a tela e emite a habilidade confirmada ao CombatManager.
 func _confirmar_habilidade(nome_habilidade: String) -> void:
 	print("[ActionPanel] Habilidade confirmada: %s" % nome_habilidade)
 	_mostrar_menu_principal()
 	call_deferred("_focar_botao")
 	habilidade_escolhida.emit(nome_habilidade)
 
+## Fecha a tela e emite o item confirmado ao CombatManager.
 func _confirmar_item(nome_item:String) -> void:
 	print("[ActionPanel] Item confirmado: %s" % nome_item)
 	_mostrar_menu_principal()
 	call_deferred("_focar_botao")
 	item_escolhido.emit(nome_item)
 
+## Confirma a ativação de Sobrecarga e emite seu sinal específico.
 func _confirmar_sobrecarga() -> void:
 	print("[ActionPanel] Sobrecarga confirmada")
 	_mostrar_menu_principal()
@@ -618,11 +658,14 @@ func _confirmar_sobrecarga() -> void:
 ## Métodos mantidos para chamadas externas antigas. Eles agora redirecionam para
 ## o fluxo interno sem menus flutuantes.
 
+## Mantém a API antiga redirecionando para o menu interno de perícias.
 func mostrar_menu_pericias(_combatente: CombatenteData) -> void:
 	abrir_menu_pericias()
 
+## Mantém a API antiga redirecionando para o menu interno de habilidades.
 func mostrar_menu_habilidades(_combatente: CombatenteData) -> void:
 	abrir_menu_habilidades()
 
+## Mantém a API antiga redirecionando para o menu interno de itens.
 func mostrar_menu_itens(_combatente: CombatenteData) -> void:
 	abrir_menu_itens()

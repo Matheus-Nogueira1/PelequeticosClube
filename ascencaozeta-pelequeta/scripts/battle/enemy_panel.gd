@@ -34,13 +34,14 @@ enum TipoAlvo{
 
 var tipo_alvo := TipoAlvo.INIMIGO
 
+## Monta o painel e deixa a seleção de alvos inicialmente bloqueada.
 func _ready() -> void:
 	_criar_layout()
 
 # ============================================================================
 # CRIAÇÃO DA UI
 # ============================================================================
-
+## Cria o título, a lista rolável e o estado inicial do painel.
 func _criar_layout() -> void:
 	"""Cria o layout do painel de inimigos"""
 	vbox.add_theme_constant_override("separation", 2)
@@ -70,12 +71,13 @@ func _criar_layout() -> void:
 # ============================================================================
 # GERENCIAMENTO DE INIMIGOS
 # ============================================================================
-
+## Adiciona um combatente à lista visual de inimigos.
 func adicionar_combatente(combatente: CombatenteData) -> void:
 	"""Adiciona um inimigo à lista"""
 	combatentes.append(combatente)
 	_criar_botao_combatente(combatente)
 
+## Atualiza o texto do inimigo existente sem recriar sua lista.
 func atualizar_combatente(combatente: CombatenteData) -> void:
 	var chave = combatente.nome
 	for i in range(combatentes.size()):
@@ -85,7 +87,7 @@ func atualizar_combatente(combatente: CombatenteData) -> void:
 	if chave in botoes_alvos:
 		var botao = botoes_alvos[chave]
 		botao.text = _formatar_texto_combatente(combatente)
-
+## Remove um inimigo derrotado e limpa sua referência de seleção.
 func remover_combatente(combatente: CombatenteData) -> void:
 	"""Remove um inimigo da lista (quando derrotado)"""
 	var chave = combatente.nome
@@ -98,6 +100,7 @@ func remover_combatente(combatente: CombatenteData) -> void:
 	if alvo_selecionado_atual == combatente:
 		alvo_selecionado_atual = null
 
+## Remove todos os botões e limpa o alvo atualmente selecionado.
 func limpar_combatente() -> void:
 	for botao in botoes_alvos.values():
 		botao.queue_free()
@@ -107,7 +110,6 @@ func limpar_combatente() -> void:
 # ============================================================================
 # CRIAÇÃO DE BOTÕES
 # ============================================================================
-
 func _criar_botao_combatente(inimigo: CombatenteData) -> void:
 	"""Cria um botão visual para um inimigo"""
 	var botao = Button.new()
@@ -126,6 +128,7 @@ func _criar_botao_combatente(inimigo: CombatenteData) -> void:
 	lista_combatentes.add_child(botao)
 	botoes_alvos[inimigo.nome] = botao
 
+## Formata estresse, proteção e estado de análise para exibição no botão.
 func _formatar_texto_combatente(combatente: CombatenteData) -> String:
 	var nome = combatente.nome
 
@@ -205,6 +208,7 @@ Perna Esquerda .... %d/%d
 		pd["atual"], pd["limite"],
 		pe["atual"], pe["limite"]
 	]
+## Gera uma barra textual de saúde com dez posições.
 func _criar_barra_saude(atual: int, maximo: int) -> String:
 	"""Cria uma barra de saúde em texto ASCII"""
 	var tamanho_barra = 10
@@ -220,6 +224,7 @@ func _criar_barra_saude(atual: int, maximo: int) -> String:
 	
 	return barra
 
+## Gera uma barra textual de estresse com dez posições preenchidas.
 func _criar_barra_estresse(atual: int, maximo: int) -> String:
 	"""Cria uma barra de estresse em texto ASCII"""
 	var tamanho_barra = 10
@@ -238,11 +243,12 @@ func _criar_barra_estresse(atual: int, maximo: int) -> String:
 # ============================================================================
 # SELEÇÃO DE ALVO
 # ============================================================================
-
+## Ativa o modo de seleção para a lista de alvos recebida.
 func ativar_seletor_alvo(
 	alvos_recebidos: Array[CombatenteData],
 	tipo: TipoAlvo = TipoAlvo.INIMIGO
 ) -> void:
+	## Ativa os botões recebidos e define se o alvo será inimigo, aliado ou qualquer.
 	if combatentes.is_empty():
 		atualizar_todos(alvos_recebidos)
 	tipo_alvo = tipo
@@ -267,7 +273,7 @@ func ativar_seletor_alvo(
 
 	if botoes_alvos.size() > 0:
 		botoes_alvos.values()[0].grab_focus()
-
+## Desativa a seleção e desfaz as marcações dos botões.
 func desativar_seletor_alvo() -> void:
 	"""Desativa o modo de seleção de alvo"""
 	modo_seletor_ativo = false
@@ -278,6 +284,7 @@ func desativar_seletor_alvo() -> void:
 		botao.button_pressed = false
 		botao.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
+## Emite o alvo clicado e encerra o modo de seleção após a escolha.
 func _on_botao_combatente_pressionado(alvo: CombatenteData) -> void:
 
 	if not modo_seletor_ativo:
@@ -297,14 +304,14 @@ func _on_botao_combatente_pressionado(alvo: CombatenteData) -> void:
 	alvo_selecionado.emit(alvo)
 
 	desativar_seletor_alvo()
-
+## Retorna o inimigo atualmente selecionado, se houver.
 func obter_alvo_selecionado() -> CombatenteData:
 	return alvo_selecionado_atual
 
 # ============================================================================
 # ATUALIZAÇÃO E SINCRONIZAÇÃO
 # ============================================================================
-
+## Substitui a lista atual e recria todos os botões de inimigos.
 func atualizar_todos(combatentes_novos: Array[CombatenteData]) -> void:
 	"""Atualiza toda a lista de inimigos"""
 	limpar_combatente()
