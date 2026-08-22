@@ -4,3 +4,4 @@
 - Programação de movimentação dos 3 personagens
 - Criação de cenas separadas para os persoonagens
 - Finalização da programação, quando seleciona o personagem na tela de menu, ele automaticamente aparece no mapa
+- Primeira gravação e live do PelecosProduction, Atualização da documentação, Inicio do desenvolvimento do proximo mapa
