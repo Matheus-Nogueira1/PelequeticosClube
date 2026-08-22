@@ -210,11 +210,11 @@ Projeto desenvolvido para fins acadêmicos.
 
 <div align="center">
 
-[![Coleção de assets utilizados do Itch](https://img.shields.io/badge/GitHub-Repositório-181717?style=for-the-badge\&logo=github\&logoColor=white)](https://itch.io/c/7050216/pelecos-ascension)
+[![Coleção de assets utilizados do Itch](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://itch.io/c/7050216/pelecos-ascension)
 
 
 
-[![Documentação](https://img.shields.io/badge/Documentação-Projeto-4285F4?style=for-the-badge\&logo=readthedocs\&logoColor=white)]([LINK_DA_DOCUMENTACAO](https://www.overleaf.com/read/grpcxtvyvtmt#035dbc))
+[![Documentação](https://img.shields.io/badge/Documentação-Projeto-4285F4?style=for-the-badge\&logo=readthedocs\&logoColor=white)](https://www.overleaf.com/read/grpcxtvyvtmt#035dbc)
 
 [![Fatec Ourinhos](https://img.shields.io/badge/Fatec-Ourinhos-005C9C?style=for-the-badge)](https://www.fatecourinhos.edu.br/)
 
