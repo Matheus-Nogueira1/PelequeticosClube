@@ -5,3 +5,5 @@
 - Criação de cenas separadas para os persoonagens
 - Finalização da programação, quando seleciona o personagem na tela de menu, ele automaticamente aparece no mapa
 - Primeira gravação e live do PelecosProduction, Atualização da documentação, Inicio do desenvolvimento do proximo mapa
+- Design base do primeiro mapa finalizado
+- Colisão do personagem e mapa finalizado
