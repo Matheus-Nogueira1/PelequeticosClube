@@ -2,6 +2,28 @@
 
 > RPG tático em turnos inspirado em sistemas brasileiros de RPG de mesa.
 
+## 🔗 Links
+
+<div align="center">
+
+[![Coleção de assets utilizados do Itch](https://img.shields.io/badge/Coleção%20do-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://itch.io/c/7050216/pelecos-ascension)
+
+[![Página do Itch](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://matheusnogueiraa.itch.io/oblivio)
+
+[![Documentação](https://img.shields.io/badge/Documentação-Projeto-4285F4?style=for-the-badge\&logo=readthedocs\&logoColor=white)](https://www.overleaf.com/read/grpcxtvyvtmt#035dbc)
+
+[![Twitch](https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=twitch&logoColor=white)](https://www.twitch.tv/pelecoproductions)
+
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@PelecoProductions)
+
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/nMzF3dCeT)
+
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/pelecoproductions?igsi=MXFmcHQ1eHY5ZTdjeQ%3D%3D)
+
+[![Fatec Ourinhos](https://img.shields.io/badge/Fatec-Ourinhos-005C9C?style=for-the-badge)](https://www.fatecourinhos.edu.br/)
+
+</div>
+
 ## 📖 Sobre o Projeto
 
 **Ascensão dos Pelecos** é um jogo digital do gênero **RPG tático em turnos**, desenvolvido como projeto acadêmico do curso **AMS – 1º Ano**, da **Fatec Ourinhos**, durante o ano de 2026.
@@ -206,19 +228,6 @@ Projeto desenvolvido para fins acadêmicos.
 
 ---
 
-## 🔗 Links
-
-<div align="center">
-
-[![Coleção de assets utilizados do Itch](https://img.shields.io/badge/Coleção%20do-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://itch.io/c/7050216/pelecos-ascension)
-
-[![Página do Itch](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://matheusnogueiraa.itch.io/oblivio)
-
-[![Documentação](https://img.shields.io/badge/Documentação-Projeto-4285F4?style=for-the-badge\&logo=readthedocs\&logoColor=white)](https://www.overleaf.com/read/grpcxtvyvtmt#035dbc)
-
-[![Fatec Ourinhos](https://img.shields.io/badge/Fatec-Ourinhos-005C9C?style=for-the-badge)](https://www.fatecourinhos.edu.br/)
-
-</div>
 
 ### 📚 Acesso rápido
 
