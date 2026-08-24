@@ -7,3 +7,4 @@
 - Primeira gravação e live do PelecosProduction, Atualização da documentação, Inicio do desenvolvimento do proximo mapa
 - Design base do primeiro mapa finalizado
 - Colisão do personagem e mapa finalizado
+- Terceira live, Networkin com devs, criação das redes sociais do projeto
