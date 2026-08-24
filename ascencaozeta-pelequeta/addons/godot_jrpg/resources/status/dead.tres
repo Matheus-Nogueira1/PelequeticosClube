@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="Status" format=3 uid="uid://bhccddi8p1iq3"]
+
+[ext_resource type="Script" uid="uid://qpouciwxr7ym" path="res://addons/godot_jrpg/resources/status/status.gd" id="1_eaump"]
+[ext_resource type="Script" uid="uid://bquvjaspk3x0y" path="res://addons/godot_jrpg/resources/traits/trait.gd" id="2_2e8o5"]
+[ext_resource type="Script" uid="uid://blsdm7gdk1cog" path="res://addons/godot_jrpg/resources/traits/flag_traits/trait_no_xp.gd" id="3_2e8o5"]
+[ext_resource type="Script" uid="uid://e4p3e8vukja" path="res://addons/godot_jrpg/resources/traits/trait_list.gd" id="4_hhtgj"]
+
+[sub_resource type="Resource" id="Resource_rmlcl"]
+script = ExtResource("3_2e8o5")
+flag_name = null
+metadata/_custom_type_script = "uid://blsdm7gdk1cog"
+
+[sub_resource type="Resource" id="Resource_preve"]
+script = ExtResource("4_hhtgj")
+entries = Array[ExtResource("2_2e8o5")]([SubResource("Resource_rmlcl")])
+metadata/_custom_type_script = "uid://e4p3e8vukja"
+
+[resource]
+script = ExtResource("1_eaump")
+name = "Dead"
+action_restriction = 1
+traits = SubResource("Resource_preve")
+is_dead_state = true
+end_in = "Nothing"
+message_ally_affected = "is dead"
+message_enemy_affected = "is dead"
+message_restore_ally = "revived"
+message_restore_enemy = "revived"
+metadata/_custom_type_script = "uid://qpouciwxr7ym"

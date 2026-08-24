@@ -1,0 +1,47 @@
+class_name CommandStartBattle extends Command
+
+@export var settings: BattleSettings
+@export var fade_pattern: Texture2D
+
+static func create(_settings: BattleSettings, _fade_pattern: Texture2D = null) -> CommandStartBattle:
+	var cmd = CommandStartBattle.new()
+	cmd.settings = _settings
+	cmd.fade_pattern = _fade_pattern
+	cmd.is_wait = true
+	return cmd
+
+func resolve():
+	print("[CommandStartBattle] Starting battle.")
+	
+	var battle_scene = load("uid://bgyg5l0h0l00g").instantiate()
+	if Director.instance != null:
+		var director = Director.instance
+		var map = director.current_scene
+		director.remove_child(map)
+		director.add_child(battle_scene)
+		await director.get_tree().process_frame
+		battle_scene.initialize(settings)
+		
+		await battle_scene.battle_finished
+		battle_scene.queue_free()
+		director.add_child(map)
+		await director.get_tree().process_frame
+	else:
+		print("[CommandStartBattle] Starting battle. Director not found, using fallback root.")
+		var tree = Engine.get_main_loop() as SceneTree
+		var root = tree.root
+		var map = tree.current_scene
+		root.remove_child(map)
+		root.add_child(battle_scene)
+		tree.current_scene = battle_scene
+		await tree.process_frame
+		battle_scene.initialize(settings)
+	
+		await battle_scene.battle_finished
+		battle_scene.queue_free()
+		root.add_child(map)
+		tree.current_scene = map
+		await tree.process_frame
+		
+	print("[CommandStartBattle] Finished battle.")
+	finished.emit()

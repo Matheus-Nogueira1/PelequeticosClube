@@ -1,0 +1,602 @@
+[gd_scene format=3 uid="uid://b7rec6sbed7vs"]
+
+[ext_resource type="Script" uid="uid://1ue0dgaxmlwf" path="res://addons/godot_jrpg/nodes/ui/menu/equip/menu_equip.gd" id="1_8xy2i"]
+[ext_resource type="Script" uid="uid://bi7u8encjoq0i" path="res://addons/godot_jrpg/nodes/ui/menu/equip/weapon/weapon_equipped_button.gd" id="2_4pood"]
+[ext_resource type="Resource" uid="uid://bjcik50rg61bm" path="res://addons/godot_jrpg/nodes/ui/menu/menu_signals.tres" id="2_qagbo"]
+[ext_resource type="Resource" uid="uid://xcf0l6c5vwkg" path="res://addons/godot_jrpg/tests/actors/battlers/players/test_player_1.tres" id="3_a08jx"]
+[ext_resource type="Script" uid="uid://b6onpb18nw81" path="res://addons/godot_jrpg/nodes/ui/menu/equip/armor/armor_equipped_button.gd" id="5_i6iul"]
+[ext_resource type="Script" uid="uid://44ita44q8fd5" path="res://addons/godot_jrpg/nodes/ui/menu/equip/accessory/accessory_equipped_button.gd" id="6_iev38"]
+[ext_resource type="Script" uid="uid://xhae2ygb45bg" path="res://addons/godot_jrpg/nodes/ui/menu/equip/head/head_equipped_button.gd" id="7_gypfo"]
+[ext_resource type="Script" uid="uid://flk7qs7q1l6l" path="res://addons/godot_jrpg/nodes/ui/menu/equip/shield/shield_equipped_button.gd" id="8_vydne"]
+[ext_resource type="PackedScene" uid="uid://mxnhv1hko42n" path="res://addons/godot_jrpg/nodes/ui/menu/equip/weapon/weapon_equip_button.tscn" id="9_a08jx"]
+[ext_resource type="PackedScene" uid="uid://dmcl4lw3brlsh" path="res://addons/godot_jrpg/nodes/ui/menu/equip/armor/armor_equip_button.tscn" id="10_ahu3j"]
+[ext_resource type="PackedScene" uid="uid://c66y0p6585vky" path="res://addons/godot_jrpg/nodes/ui/menu/equip/accessory/accessory_equip_button.tscn" id="10_gypfo"]
+[ext_resource type="PackedScene" uid="uid://blqedi40xdp4u" path="res://addons/godot_jrpg/nodes/ui/menu/equip/head/head_equip_button.tscn" id="12_wi6vs"]
+[ext_resource type="PackedScene" uid="uid://16fxr43l5cxt" path="res://addons/godot_jrpg/nodes/ui/menu/equip/shield/shield_equip_button.tscn" id="13_nnb4d"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8xy2i"]
+bg_color = Color(0.15337178, 0.15337181, 0.15337175, 0.52156866)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+
+[sub_resource type="Theme" id="Theme_f4ej4"]
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_8xy2i")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4pood"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qagbo"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[node name="MenuEquip" type="Control" unique_id=653413658]
+z_index = 99
+layout_mode = 3
+anchors_preset = 0
+theme = SubResource("Theme_f4ej4")
+script = ExtResource("1_8xy2i")
+menu_signals = ExtResource("2_qagbo")
+player = ExtResource("3_a08jx")
+weapon_equip_container = ExtResource("9_a08jx")
+armor_equip_container = ExtResource("10_ahu3j")
+accessory_equip_container = ExtResource("10_gypfo")
+head_equip_container = ExtResource("12_wi6vs")
+shield_equip_container = ExtResource("13_nnb4d")
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1747304795]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -6.1035156e-05
+offset_right = 701.0531
+offset_bottom = 352.48163
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.91291237, 0.9986337)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1707053653]
+layout_mode = 2
+
+[node name="Messenger" type="PanelContainer" parent="PanelContainer/VBoxContainer" unique_id=1969745437]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.25
+
+[node name="MessengerLabel" type="RichTextLabel" parent="PanelContainer/VBoxContainer/Messenger" unique_id=1064329683]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Testando"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=765757649]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="StatsPanel" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=1683785544]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel" unique_id=1560980376]
+layout_mode = 2
+alignment = 1
+
+[node name="AttackContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer" unique_id=1927563082]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AttackContainer" unique_id=419051394]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="Attack" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AttackContainer" unique_id=798470037]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Attack"
+
+[node name="AttackValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AttackContainer" unique_id=1651768827]
+layout_mode = 2
+text = "10"
+
+[node name="Arrow" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AttackContainer" unique_id=1043135924]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "→"
+
+[node name="NewValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AttackContainer" unique_id=1202279058]
+layout_mode = 2
+text = "12"
+
+[node name="DefenseContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer" unique_id=193771300]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/DefenseContainer" unique_id=1759902424]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="Defense" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/DefenseContainer" unique_id=1096029288]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Defense"
+
+[node name="DefenseValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/DefenseContainer" unique_id=1442605827]
+layout_mode = 2
+text = "10"
+
+[node name="Arrow" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/DefenseContainer" unique_id=1818317836]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "→"
+
+[node name="NewValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/DefenseContainer" unique_id=1974789727]
+layout_mode = 2
+text = "12"
+
+[node name="IntelligenceContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer" unique_id=1585144978]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/IntelligenceContainer" unique_id=1225041995]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="Intelligence" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/IntelligenceContainer" unique_id=587032728]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Intelligence"
+
+[node name="IntelligenceValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/IntelligenceContainer" unique_id=1126566249]
+layout_mode = 2
+text = "10"
+
+[node name="Arrow" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/IntelligenceContainer" unique_id=792678692]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "→"
+
+[node name="NewValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/IntelligenceContainer" unique_id=406380124]
+layout_mode = 2
+text = "12"
+
+[node name="SpeedContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer" unique_id=263702393]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/SpeedContainer" unique_id=1845865463]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="Speed" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/SpeedContainer" unique_id=1469515847]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Speed"
+
+[node name="SpeedValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/SpeedContainer" unique_id=344433500]
+layout_mode = 2
+text = "10"
+
+[node name="Arrow" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/SpeedContainer" unique_id=625141867]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "→"
+
+[node name="NewValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/SpeedContainer" unique_id=1971354773]
+layout_mode = 2
+text = "12"
+
+[node name="AccuracyContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer" unique_id=1144751006]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AccuracyContainer" unique_id=1042692870]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="Accuracy" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AccuracyContainer" unique_id=560253783]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Accuracy"
+
+[node name="AccuracyValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AccuracyContainer" unique_id=835275826]
+layout_mode = 2
+text = "10"
+
+[node name="Arrow" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AccuracyContainer" unique_id=1964987496]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "→"
+
+[node name="NewValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/AccuracyContainer" unique_id=1162362044]
+layout_mode = 2
+text = "12"
+
+[node name="EvasionContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer" unique_id=1538338595]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/EvasionContainer" unique_id=1225396740]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="Evasion" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/EvasionContainer" unique_id=1585250881]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Evasion"
+
+[node name="EvasionValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/EvasionContainer" unique_id=1414458546]
+layout_mode = 2
+text = "10"
+
+[node name="Arrow" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/EvasionContainer" unique_id=654194428]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "→"
+
+[node name="NewValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/EvasionContainer" unique_id=92055615]
+layout_mode = 2
+text = "12"
+
+[node name="LuckContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer" unique_id=562723876]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/LuckContainer" unique_id=316497740]
+layout_mode = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+
+[node name="Luck" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/LuckContainer" unique_id=1105255469]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Luck"
+
+[node name="LuckValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/LuckContainer" unique_id=49135118]
+layout_mode = 2
+text = "10"
+
+[node name="Arrow" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/LuckContainer" unique_id=1490485984]
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "→"
+
+[node name="NewValue" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/StatsPanel/VBoxContainer/LuckContainer" unique_id=1105410906]
+layout_mode = 2
+text = "12"
+
+[node name="EquippedPanel" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=265982608]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel" unique_id=660769108]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer" unique_id=2083726966]
+layout_mode = 2
+theme_override_constants/separation = 6
+alignment = 1
+
+[node name="WeaponEquippedContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer" unique_id=1555334067]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4pood")
+
+[node name="WeaponEquippedButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/WeaponEquippedContainer" unique_id=725444909]
+unique_name_in_owner = true
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath(".")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../../ArmorEquippedContainer/ArmorEquippedButton")
+theme_override_styles/normal = SubResource("StyleBoxFlat_qagbo")
+script = ExtResource("2_4pood")
+menu_signals = ExtResource("2_qagbo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/WeaponEquippedContainer" unique_id=1254190683]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="WeaponEquippedLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/WeaponEquippedContainer/HBoxContainer" unique_id=252264975]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Weapon"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/WeaponEquippedContainer/HBoxContainer" unique_id=801668375]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 2
+
+[node name="WeaponEquippedIcon" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/WeaponEquippedContainer/HBoxContainer/HBoxContainer" unique_id=15886693]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(23, 23)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="WeaponEquippedName" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/WeaponEquippedContainer/HBoxContainer/HBoxContainer" unique_id=1843937996]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ArmorEquippedContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer" unique_id=560723179]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4pood")
+
+[node name="ArmorEquippedButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ArmorEquippedContainer" unique_id=1569647951]
+unique_name_in_owner = true
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../../WeaponEquippedContainer/WeaponEquippedButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../../AccessoryEquippedContainer/AccessoryEquippedButton")
+theme_override_styles/normal = SubResource("StyleBoxFlat_qagbo")
+script = ExtResource("5_i6iul")
+menu_signals = ExtResource("2_qagbo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ArmorEquippedContainer" unique_id=1351545010]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ArmorEquippedLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ArmorEquippedContainer/HBoxContainer" unique_id=935723633]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Armor"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ArmorEquippedContainer/HBoxContainer" unique_id=270763130]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 2
+
+[node name="ArmorEquippedIcon" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ArmorEquippedContainer/HBoxContainer/HBoxContainer" unique_id=2091368873]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(23, 23)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="ArmorEquippedName" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ArmorEquippedContainer/HBoxContainer/HBoxContainer" unique_id=1218681817]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="AccessoryEquippedContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer" unique_id=2010692907]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4pood")
+
+[node name="AccessoryEquippedButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/AccessoryEquippedContainer" unique_id=1583255475]
+unique_name_in_owner = true
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../../ArmorEquippedContainer/ArmorEquippedButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../../HeadEquippedContainer/HeadEquippedButton")
+theme_override_styles/normal = SubResource("StyleBoxFlat_qagbo")
+script = ExtResource("6_iev38")
+menu_signals = ExtResource("2_qagbo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/AccessoryEquippedContainer" unique_id=791644827]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="AccessoryEquippedLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/AccessoryEquippedContainer/HBoxContainer" unique_id=2141883405]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Accessory"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/AccessoryEquippedContainer/HBoxContainer" unique_id=2131349621]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 2
+
+[node name="AccessoryEquippedIcon" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/AccessoryEquippedContainer/HBoxContainer/HBoxContainer" unique_id=1909228119]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(23, 23)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="AccessoryEquippedName" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/AccessoryEquippedContainer/HBoxContainer/HBoxContainer" unique_id=2067721312]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HeadEquippedContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer" unique_id=139934688]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4pood")
+
+[node name="HeadEquippedButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/HeadEquippedContainer" unique_id=1027769733]
+unique_name_in_owner = true
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../../AccessoryEquippedContainer/AccessoryEquippedButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath("../../ShieldEquippedContainer/ShieldEquippedButton")
+theme_override_styles/normal = SubResource("StyleBoxFlat_qagbo")
+script = ExtResource("7_gypfo")
+menu_signals = ExtResource("2_qagbo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/HeadEquippedContainer" unique_id=959799773]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HeadEquippedLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/HeadEquippedContainer/HBoxContainer" unique_id=549072020]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Head"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/HeadEquippedContainer/HBoxContainer" unique_id=1157414546]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 2
+
+[node name="HeadEquippedIcon" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/HeadEquippedContainer/HBoxContainer/HBoxContainer" unique_id=1149720583]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(23, 23)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="HeadEquippedName" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/HeadEquippedContainer/HBoxContainer/HBoxContainer" unique_id=2087673545]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="ShieldEquippedContainer" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer" unique_id=1875326346]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_4pood")
+
+[node name="ShieldEquippedButton" type="Button" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ShieldEquippedContainer" unique_id=151659389]
+unique_name_in_owner = true
+layout_mode = 2
+focus_neighbor_left = NodePath(".")
+focus_neighbor_top = NodePath("../../HeadEquippedContainer/HeadEquippedButton")
+focus_neighbor_right = NodePath(".")
+focus_neighbor_bottom = NodePath(".")
+theme_override_styles/normal = SubResource("StyleBoxFlat_qagbo")
+script = ExtResource("8_vydne")
+menu_signals = ExtResource("2_qagbo")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ShieldEquippedContainer" unique_id=748346047]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="ShieldEquippedLabel" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ShieldEquippedContainer/HBoxContainer" unique_id=1604510852]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "Shield"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ShieldEquippedContainer/HBoxContainer" unique_id=1342538115]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+alignment = 2
+
+[node name="ShieldEquippedIcon" type="TextureRect" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ShieldEquippedContainer/HBoxContainer/HBoxContainer" unique_id=839980449]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(23, 23)
+layout_mode = 2
+mouse_filter = 2
+expand_mode = 1
+
+[node name="ShieldEquippedName" type="Label" parent="PanelContainer/VBoxContainer/HBoxContainer/EquippedPanel/MarginContainer/VBoxContainer/ShieldEquippedContainer/HBoxContainer/HBoxContainer" unique_id=1759486020]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EquipPanel" type="PanelContainer" parent="PanelContainer/VBoxContainer/HBoxContainer" unique_id=688915911]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel" unique_id=1232611594]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="WeaponEquipScroll" type="ScrollContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer" unique_id=842676260]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/WeaponEquipScroll" unique_id=906456045]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="WeaponEquipVBox" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/WeaponEquipScroll/MarginContainer" unique_id=412403871]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ArmorEquipScroll" type="ScrollContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer" unique_id=1786389273]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/ArmorEquipScroll" unique_id=133318524]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ArmorEquipVBox" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/ArmorEquipScroll/MarginContainer" unique_id=507341804]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AccessoryEquipScroll" type="ScrollContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer" unique_id=591738928]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/AccessoryEquipScroll" unique_id=807417476]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="AccessoryEquipVBox" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/AccessoryEquipScroll/MarginContainer" unique_id=1680998294]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HeadEquipScroll" type="ScrollContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer" unique_id=313820033]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/HeadEquipScroll" unique_id=1975473989]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HeadEquipVBox" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/HeadEquipScroll/MarginContainer" unique_id=1796260988]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ShieldEquipScroll" type="ScrollContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer" unique_id=1832008126]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/ShieldEquipScroll" unique_id=398214239]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="ShieldEquipVBox" type="VBoxContainer" parent="PanelContainer/VBoxContainer/HBoxContainer/EquipPanel/MarginContainer/ShieldEquipScroll/MarginContainer" unique_id=1623802539]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
