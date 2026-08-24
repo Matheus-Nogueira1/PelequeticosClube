@@ -3,26 +3,124 @@
 > RPG tático em turnos inspirado em sistemas brasileiros de RPG de mesa.
 
 ## 🔗 Links
+Sim. Para o link do itch.io, dá para usar um badge com temática de controle/jogo. O mais adequado seria usar o logo do itch.io no badge, mas se você quer especificamente a estética de controle, dá para usar um badge genérico de “Jogar”.
+
+Por exemplo:
+
+[![Jogar no itch.io](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](SEU_LINK_DO_ITCH_IO)
+
+Ele ficará aproximadamente assim:
+
+🎮 Jogar no itch.io
+
+Se quiser algo mais com cara de controle:
+
+[![Jogar](https://img.shields.io/badge/🎮%20Jogar-itch.io-FA5C5C?style=for-the-badge)](SEU_LINK_DO_ITCH_IO)
+
+Eu particularmente usaria o primeiro, porque o logo oficial do itch.io deixa o README mais profissional e imediatamente identifica onde o jogo está disponível.
+
+Para o seu README, a seção poderia ficar:
+
+## 🔗 Links
 
 <div align="center">
 
-[![Coleção de assets utilizados do Itch](https://img.shields.io/badge/Coleção%20do-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://itch.io/c/7050216/pelecos-ascension)
+[![GitHub](https://img.shields.io/badge/GitHub-Repositório-181717?style=for-the-badge&logo=github&logoColor=white)](SEU_LINK)
 
-[![Página do Itch](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](https://matheusnogueiraa.itch.io/oblivio)
-
-[![Documentação](https://img.shields.io/badge/Documentação-Projeto-4285F4?style=for-the-badge\&logo=readthedocs\&logoColor=white)](https://www.overleaf.com/read/grpcxtvyvtmt#035dbc)
-
-[![Twitch](https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=twitch&logoColor=white)](https://www.twitch.tv/pelecoproductions)
-
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@PelecoProductions)
-
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/nMzF3dCeT)
-
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/pelecoproductions?igsi=MXFmcHQ1eHY5ZTdjeQ%3D%3D)
+[![Jogar no itch.io](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](SEU_LINK_DO_ITCH_IO)
 
 [![Fatec Ourinhos](https://img.shields.io/badge/Fatec-Ourinhos-005C9C?style=for-the-badge)](https://www.fatecourinhos.edu.br/)
 
 </div>
+
+Se você me passar o link da página do Ascensão dos Pelecos no itch.io, posso montar a seção já com os links corretos.
+
+hoje 7:38
+me manda agora badge para twitch youtube discord e instagram
+
+Claro. Para manter o mesmo padrão for-the-badge que você está usando, pode usar estes:
+
+Twitch
+[![Twitch](https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=twitch&logoColor=white)](SEU_LINK_DA_TWITCH)
+YouTube
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](SEU_LINK_DO_YOUTUBE)
+Discord
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](SEU_LINK_DO_DISCORD)
+Instagram
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](SEU_LINK_DO_INSTAGRAM)
+
+E, se quiser colocar todos juntos na seção do README:
+
+<div align="center">
+
+[![Twitch](https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=twitch&logoColor=white)](SEU_LINK_DA_TWITCH)
+[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](SEU_LINK_DO_YOUTUBE)
+[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](SEU_LINK_DO_DISCORD)
+[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](SEU_LINK_DO_INSTAGRAM)
+
+</div>
+
+Para o README do Ascensão dos Pelecos, eu colocaria esses badges junto do itch.io e GitHub, formando uma seção de links bem completa.
+
+Para badges em Twitch/YouTube/Discord/Instagram, dá para usar geradores de logos.
+Anúncio
+deixe a div em um quadrado 2x4
+
+Sim. Se você quer uma grade com 2 colunas × 4 linhas, totalizando até 8 badges, o ideal é usar uma <table> no README, porque o GitHub não garante display: grid ou flex em HTML.
+
+Para os 4 badges que você pediu, ficaria assim, deixando espaço para mais 4:
+
+<table align="center">
+	<tr>
+		<td align="center">
+			<a href="https://www.twitch.tv/pelecoproductions">
+				<img src="https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=twitch&logoColor=white">
+			</a>
+		</td>
+		<td align="center">
+			<a href="https://www.youtube.com/@PelecoProductions">
+				<img src="https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white">
+			</a>
+		</td>
+	</tr>
+	<tr>
+		<td align="center">
+			<a href="https://discord.gg/nMzF3dCeT">
+				<img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
+			</a>
+		</td>
+		<td align="center">
+			<a href="https://www.instagram.com/pelecoproductions?igsi=MXFmcHQ1eHY5ZTdjeQ%3D%3D">
+				<img src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white">
+			</a>
+		</td>
+	</tr>
+  	<tr>
+		<td align="center">
+			<a href="https://itch.io/c/7050216/pelecos-ascension">
+				<img src="https://img.shields.io/badge/Coleção%20do-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white">
+			</a>
+		</td>
+		<td align="center">
+			<a href="https://matheusnogueiraa.itch.io/oblivio">
+				<img src="https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white">
+			</a>
+		</td>
+	</tr>
+  <tr>
+		<td align="center">
+			<a href="https://www.overleaf.com/read/grpcxtvyvtmt#035dbc">
+				<img src="https://img.shields.io/badge/Documentação-Projeto-4285F4?style=for-the-badge&logo=readthedocs&logoColor=white">
+			</a>
+		</td>
+		<td align="center">
+			<a href="https://www.fatecourinhos.edu.br/">
+				<img src="https://img.shields.io/badge/Fatec-Ourinhos-005C9C?style=for-the-badge">
+			</a>
+		</td>
+	</tr>
+</table>
+
 
 ## 📖 Sobre o Projeto
 
