@@ -3,54 +3,6 @@
 > RPG tático em turnos inspirado em sistemas brasileiros de RPG de mesa.
 
 ## 🔗 Links
-
-<div align="center">
-
-[![GitHub](https://img.shields.io/badge/GitHub-Repositório-181717?style=for-the-badge&logo=github&logoColor=white)](SEU_LINK)
-
-[![Jogar no itch.io](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](SEU_LINK_DO_ITCH_IO)
-
-[![Fatec Ourinhos](https://img.shields.io/badge/Fatec-Ourinhos-005C9C?style=for-the-badge)](https://www.fatecourinhos.edu.br/)
-
-</div>
-
-Se você me passar o link da página do Ascensão dos Pelecos no itch.io, posso montar a seção já com os links corretos.
-
-hoje 7:38
-me manda agora badge para twitch youtube discord e instagram
-
-Claro. Para manter o mesmo padrão for-the-badge que você está usando, pode usar estes:
-
-Twitch
-[![Twitch](https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=twitch&logoColor=white)](SEU_LINK_DA_TWITCH)
-YouTube
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](SEU_LINK_DO_YOUTUBE)
-Discord
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](SEU_LINK_DO_DISCORD)
-Instagram
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](SEU_LINK_DO_INSTAGRAM)
-
-E, se quiser colocar todos juntos na seção do README:
-
-<div align="center">
-
-[![Twitch](https://img.shields.io/badge/Twitch-9146FF?style=for-the-badge&logo=twitch&logoColor=white)](SEU_LINK_DA_TWITCH)
-[![YouTube](https://img.shields.io/badge/YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](SEU_LINK_DO_YOUTUBE)
-[![Discord](https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white)](SEU_LINK_DO_DISCORD)
-[![Instagram](https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](SEU_LINK_DO_INSTAGRAM)
-
-</div>
-
-Para o README do Ascensão dos Pelecos, eu colocaria esses badges junto do itch.io e GitHub, formando uma seção de links bem completa.
-
-Para badges em Twitch/YouTube/Discord/Instagram, dá para usar geradores de logos.
-Anúncio
-deixe a div em um quadrado 2x4
-
-Sim. Se você quer uma grade com 2 colunas × 4 linhas, totalizando até 8 badges, o ideal é usar uma <table> no README, porque o GitHub não garante display: grid ou flex em HTML.
-
-Para os 4 badges que você pediu, ficaria assim, deixando espaço para mais 4:
-
 <table align="center">
 	<tr>
 		<td align="center">
