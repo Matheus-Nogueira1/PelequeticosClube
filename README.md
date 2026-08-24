@@ -3,25 +3,6 @@
 > RPG tático em turnos inspirado em sistemas brasileiros de RPG de mesa.
 
 ## 🔗 Links
-Sim. Para o link do itch.io, dá para usar um badge com temática de controle/jogo. O mais adequado seria usar o logo do itch.io no badge, mas se você quer especificamente a estética de controle, dá para usar um badge genérico de “Jogar”.
-
-Por exemplo:
-
-[![Jogar no itch.io](https://img.shields.io/badge/Jogar%20no-itch.io-FA5C5C?style=for-the-badge&logo=itchdotio&logoColor=white)](SEU_LINK_DO_ITCH_IO)
-
-Ele ficará aproximadamente assim:
-
-🎮 Jogar no itch.io
-
-Se quiser algo mais com cara de controle:
-
-[![Jogar](https://img.shields.io/badge/🎮%20Jogar-itch.io-FA5C5C?style=for-the-badge)](SEU_LINK_DO_ITCH_IO)
-
-Eu particularmente usaria o primeiro, porque o logo oficial do itch.io deixa o README mais profissional e imediatamente identifica onde o jogo está disponível.
-
-Para o seu README, a seção poderia ficar:
-
-## 🔗 Links
 
 <div align="center">
 
