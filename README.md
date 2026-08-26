@@ -1,4 +1,4 @@
-# 🎲 Ascensão dos Pelecos
+# 🎲 Dark Omission
 
 > RPG tático em turnos inspirado em sistemas brasileiros de RPG de mesa.
 
