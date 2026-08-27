@@ -5,17 +5,18 @@ Estamos chegando nos momentos finais do prazo, onde devemos apresentar algo rele
 ## O que deverá ser feito durante esse 1 mês?
 - **Logo "PELECO PRODUCTIONS":** 🟢 *NÍVEL DE PRIORIDADE*
  
-Preparar o design da logo do projeto
+~~Preparar o design da logo do projeto~~
 
-Inseri-la como a primeira tela do jogo
+Inseri-la como a primeira tela do jogo 
+
 #
 - **A "Velha do Poço":** 🔴 *NÍVEL DE PRIORIDADE*
 
-Preparar as animações, onde ela empurra o personagem ao poço
+~~Preparar as animações, onde ela empurra o personagem ao poço~~
 
 Programar a ação de empurrar dela
 
-Alterar sprites, ao qual o player escolher
+~~Alterar sprites, ao qual o player escolher~~
 #
 - **As Cutscenes:** 🔴 *NÍVEL DE PRIORIDADE*
 
