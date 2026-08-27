@@ -9,7 +9,7 @@
 * ~~Estilo gráfico dos cenários~~ | **FINALIZADO** ✅
 * Estudo de Makeoffs de jogos no estilo Fear & Hunger | **PENDENTE** ⚠️
 * ~~Organizar possível introdução do game~~ | **FINALIZADO** ✅
-* Pensar em um nome melhor | **PENDENTE** ⚠️
+* ~~Pensar em um nome melhor~~ | **FINALIZADO** ✅
 
 ## 📌 Semana 12/02/26
 
@@ -27,7 +27,7 @@
 
 ## 📌 Semana 07/03/26
 
-* Finalizar início | **EM ANDAMENTO** 🔄
+* ~~Finalizar início~~ | **FINALIZADO** ✅
 * ~~Mecânica de rolar dados~~ | **FINALIZADO** ✅
 * ~~Implementação de Assets~~ | **FINALIZADO** ✅
 * ~~Finalizar tela de menu~~ | **FINALIZADO** ✅
@@ -43,19 +43,14 @@
 
 ## 📌 Semana 06/04/26
 
-* Finalizar artigo | **PENDENTE** ⚠️
+* ~~Finalizar artigo~~ | **FINALIZADO** ✅
 * Finalizar mecânicas principais | **EM ANDAMENTO** 🔄
 
 ## 📌 Semana 22/04/26
 
-* Finalizar documentação!!!!! | **EM ANDAMENTO** 🔄
+* ~~Finalizar documentaçãO~~ | **FINALIZADO** ✅
 * Preparar design do combate | **EM ANDAMENTO** 🔄
 * Preparar mapa | **EM ANDAMENTO** 🔄
-* Finalizar parte escrita | **PENDENTE** ⚠️
-* Finalizar parte escrita | **PENDENTE** ⚠️
-* Finalizar parte escrita | **PENDENTE** ⚠️
-* Finalizar parte escrita | **PENDENTE** ⚠️
-* Finalizar parte escrita | **PENDENTE** ⚠️
 
 ## 📌 Semana 12/05/26
 
