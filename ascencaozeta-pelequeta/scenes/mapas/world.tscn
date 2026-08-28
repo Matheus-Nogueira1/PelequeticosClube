@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://don678k6xnkfw"]
 
-[ext_resource type="Texture2D" uid="uid://e2tt6mdc3fyu" path="res://assets/images/world/MapTileSet.png" id="1_nnsk1"]
+[ext_resource type="Texture2D" uid="uid://e2tt6mdc3fyu" path="res://assets/images/world/MapTileSet.png" id="1_irp01"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rwgxs"]
-texture = ExtResource("1_nnsk1")
+texture = ExtResource("1_irp01")
 0:0/0 = 0
 1:0/0 = 0
 4:0/0 = 0

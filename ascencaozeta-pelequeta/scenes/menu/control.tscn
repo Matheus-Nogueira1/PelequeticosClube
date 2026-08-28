@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dlnw4rg6tmyej"]
 
-[ext_resource type="Script" uid="uid://cm8ka2lpmhap5" path="res://control.gd" id="1_5p55f"]
-[ext_resource type="Texture2D" uid="uid://u6t3lx1ec57e" path="res://assets/images/player/Player1.png" id="2_8n18e"]
-[ext_resource type="Texture2D" uid="uid://dyysk8jmqslcw" path="res://prefabs/Background.png" id="2_tjwpk"]
-[ext_resource type="Texture2D" uid="uid://balpib756h42w" path="res://assets/images/player/Player2.png" id="3_tjwpk"]
-[ext_resource type="Texture2D" uid="uid://brel8j6tkquwu" path="res://assets/images/player/Player3.png" id="4_lpubu"]
+[ext_resource type="Script" uid="uid://cm8ka2lpmhap5" path="res://scripts/testes/control.gd" id="1_bpd2b"]
+[ext_resource type="Texture2D" uid="uid://dyysk8jmqslcw" path="res://prefabs/Background.png" id="2_k1lql"]
+[ext_resource type="Texture2D" uid="uid://u6t3lx1ec57e" path="res://assets/images/player/Player1.png" id="3_s3a17"]
+[ext_resource type="Texture2D" uid="uid://balpib756h42w" path="res://assets/images/player/Player2.png" id="4_jqb3s"]
+[ext_resource type="Texture2D" uid="uid://brel8j6tkquwu" path="res://assets/images/player/Player3.png" id="5_sgkp4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tjwpk"]
 bg_color = Color(0.03, 0.03, 0.03, 0.85)
@@ -31,7 +31,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_5p55f")
+script = ExtResource("1_bpd2b")
 
 [node name="BackGround" type="TextureRect" parent="." unique_id=1301064228]
 layout_mode = 1
@@ -43,7 +43,7 @@ offset_top = -7.0
 offset_right = -5.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_tjwpk")
+texture = ExtResource("2_k1lql")
 expand_mode = 2
 stretch_mode = 6
 
@@ -68,7 +68,7 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 120.0
 offset_bottom = 121.0
-texture = ExtResource("2_8n18e")
+texture = ExtResource("3_s3a17")
 stretch_mode = 5
 
 [node name="Player2" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=883764063]
@@ -81,7 +81,7 @@ offset_left = 21.0
 offset_top = 2.0
 offset_right = 96.0
 offset_bottom = 120.0
-texture = ExtResource("3_tjwpk")
+texture = ExtResource("4_jqb3s")
 
 [node name="Player3" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=1105994070]
 custom_minimum_size = Vector2(120, 120)
@@ -93,7 +93,7 @@ offset_left = 1.0
 offset_top = -1.0
 offset_right = 121.0
 offset_bottom = 124.0
-texture = ExtResource("4_lpubu")
+texture = ExtResource("5_sgkp4")
 stretch_mode = 5
 
 [node name="CharacterName" type="Label" parent="." unique_id=1079664423]

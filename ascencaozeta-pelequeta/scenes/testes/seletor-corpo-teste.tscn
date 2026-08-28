@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dnyfv6ohwdxhc"]
 
-[ext_resource type="Script" uid="uid://ci8sfp72i0jvr" path="res://scripts/seletor-corpo.gd" id="1_r2xsd"]
+[ext_resource type="Script" uid="uid://ci8sfp72i0jvr" path="res://scripts/battle/seletor-corpo.gd" id="1_r2xsd"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_lj6u0"]
-[ext_resource type="Script" uid="uid://degebnrp74wd7" path="res://scripts/dados.gd" id="3_201in"]
+[ext_resource type="Script" uid="uid://degebnrp74wd7" path="res://scripts/testes/dados.gd" id="3_201in"]
 [ext_resource type="SpriteFrames" uid="uid://cjuxjuc2sqlj6" path="res://assets/new_sprite_frames.tres" id="4_r2xsd"]
-[ext_resource type="Script" path="res://scripts/click-dados-d6.gd" id="5_k5gy5"]
+[ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/animações/click-dados-d6.gd" id="5_k5gy5"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6cdta"]
 font = ExtResource("2_lj6u0")

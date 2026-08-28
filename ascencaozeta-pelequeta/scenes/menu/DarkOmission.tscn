@@ -1,0 +1,176 @@
+[gd_scene format=3 uid="uid://nd12gkm2saxj"]
+
+[ext_resource type="Script" uid="uid://g3f0ktuyb8wd" path="res://scripts/menu/tittle_screen.gd" id="1_8i2nj"]
+[ext_resource type="Texture2D" uid="uid://vk3katq8f1ff" path="res://prefabs/menu.png" id="2_2igj2"]
+[ext_resource type="Script" uid="uid://bimelmc1ce1b2" path="res://addons/simple-gui-transitions/transition.gd" id="2_cnd45"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="3_o6cb7"]
+[ext_resource type="Theme" uid="uid://c1gb313mmmfnu" path="res://default_btn.tres" id="4_d0b7d"]
+[ext_resource type="Texture2D" uid="uid://bqaw58wxrqnyg" path="res://assets/images/logo/Logo.png" id="7_rluro"]
+
+[sub_resource type="GDScript" id="GDScript_y81sa"]
+script/source = "extends Control
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[node name="Inicio" type="Node" unique_id=1692624205]
+
+[node name="TittleScreen" type="Control" parent="." unique_id=984001895]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8i2nj")
+
+[node name="bg" type="TextureRect" parent="TittleScreen" unique_id=130727187]
+layout_mode = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("2_2igj2")
+expand_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="TittleScreen" unique_id=974025507]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="CenterContainer" type="CenterContainer" parent="TittleScreen/MarginContainer" unique_id=197405118]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TittleScreen/MarginContainer/CenterContainer" unique_id=2032261774]
+layout_mode = 2
+size_flags_horizontal = 6
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer" unique_id=1759305609]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_o6cb7")
+theme_override_font_sizes/font_size = 54
+text = "ASCENÇÃO DOS PELECOS"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer" unique_id=1368859364]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 60
+
+[node name="VBoxContainer" type="VBoxContainer" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=866077704]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="start_btn" type="Button" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1794185044]
+layout_mode = 2
+theme = ExtResource("4_d0b7d")
+theme_override_fonts/font = ExtResource("3_o6cb7")
+theme_override_font_sizes/font_size = 44
+text = "START"
+
+[node name="credits_btn" type="Button" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=904268630]
+layout_mode = 2
+theme = ExtResource("4_d0b7d")
+theme_override_fonts/font = ExtResource("3_o6cb7")
+theme_override_font_sizes/font_size = 44
+text = "CREDITS
+"
+
+[node name="quit_btn" type="Button" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=560253333]
+layout_mode = 2
+theme = ExtResource("4_d0b7d")
+theme_override_fonts/font = ExtResource("3_o6cb7")
+theme_override_font_sizes/font_size = 44
+text = "QUIT"
+
+[node name="GuiTransition" type="Node" parent="TittleScreen" unique_id=1385953147]
+script = ExtResource("2_cnd45")
+controls = Array[NodePath]([NodePath("../ColorRect/VBoxContainer/ColorRect"), NodePath("../ColorRect/VBoxContainer/Label"), NodePath("../ColorRect/VBoxContainer/Label2")])
+metadata/_custom_type_script = "uid://bimelmc1ce1b2"
+
+[node name="Logo" type="Control" parent="." unique_id=1364662840]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_y81sa")
+
+[node name="ColorRect" type="ColorRect" parent="Logo" unique_id=2075551685]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07450981, 0.15686275, 0.15686275, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Logo/ColorRect" unique_id=821209972]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -250.0
+offset_top = -250.0
+offset_right = 250.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="Logo/ColorRect/VBoxContainer" unique_id=1855285308]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_fonts/font = ExtResource("3_o6cb7")
+theme_override_font_sizes/font_size = 60
+text = "PELECOS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="TextureRect" parent="Logo/ColorRect/VBoxContainer" unique_id=968653450]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("7_rluro")
+stretch_mode = 5
+
+[node name="Label2" type="Label" parent="Logo/ColorRect/VBoxContainer" unique_id=1568761272]
+layout_mode = 2
+size_flags_vertical = 2
+theme_override_fonts/font = ExtResource("3_o6cb7")
+theme_override_font_sizes/font_size = 60
+text = "PRODUCTIONS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GuiTransition" type="Node" parent="Logo" unique_id=868996944]
+script = ExtResource("2_cnd45")
+auto_start = 1
+fade_layout = 1
+animation_enter = 4
+animation_leave = 4
+duration = 1.9999999999999998
+delay = 1.0
+ease_type = "IN_OUT"
+layout = NodePath("../../TittleScreen")
+layout_id = "Logo"
+controls = Array[NodePath]([NodePath("../ColorRect/VBoxContainer")])
+metadata/_custom_type_script = "uid://bimelmc1ce1b2"
+
+[connection signal="pressed" from="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/start_btn" to="TittleScreen" method="_on_start_btn_pressed"]
+[connection signal="pressed" from="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/credits_btn" to="TittleScreen" method="_on_credits_btn_pressed"]
+[connection signal="pressed" from="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/quit_btn" to="TittleScreen" method="_on_quit_btn_pressed"]
