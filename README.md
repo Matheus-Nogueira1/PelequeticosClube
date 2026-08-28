@@ -238,7 +238,7 @@ As principais telas planejadas para o projeto são:
 
 **João Pedro Silva Machado de Oliveira**
 
-**Matheus Nogueira**
+**Matheus Nogueira Rodrigues dos Santos**
 
 ### Instituição
 
