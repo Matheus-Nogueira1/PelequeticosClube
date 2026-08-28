@@ -57,7 +57,7 @@
 
 ## 📖 Sobre o Projeto
 
-**Ascensão dos Pelecos** é um jogo digital do gênero **RPG tático em turnos**, desenvolvido como projeto acadêmico do curso **AMS – 1º Ano**, da **Fatec Ourinhos**, durante o ano de 2026.
+**Dark Omission** é um jogo digital do gênero **RPG tático em turnos**, desenvolvido como projeto acadêmico do curso **AMS – 1º Ano**, da **Fatec Ourinhos**, durante o ano de 2026.
 
 O projeto busca adaptar para o ambiente digital algumas das principais mecânicas presentes em RPGs de mesa, utilizando **rolagens de dados, atributos, perícias, habilidades, efeitos de status, narrativa forte e progressão de personagens**.
 
@@ -108,6 +108,7 @@ As ações podem envolver:
 * Ataques;
 * Esquivas;
 * Habilidades;
+* Uso de Perícias;
 * Uso de itens;
 * Buffs e debuffs;
 * Efeitos de status;
@@ -120,7 +121,7 @@ O jogador poderá obter experiência ao derrotar inimigos e completar determinad
 Ao evoluir, os personagens poderão receber:
 
 * Pontos de atributo;
-* Aumento de recursos máximos;
+* Novas Habilidades
 * Novas possibilidades de desenvolvimento.
 
 ### 🎒 Sistema de Inventário
@@ -220,8 +221,8 @@ As principais telas planejadas para o projeto são:
 * Seleção de personagem;
 * Tela de combate;
 * Inventário;
-* Loja;
-* Exploração.
+* Mapa inicial;
+* Mapa principal.
 
 > Imagens e protótipos serão adicionados ao README conforme o desenvolvimento do projeto avançar.
 
@@ -231,6 +232,7 @@ As principais telas planejadas para o projeto são:
 * GDScript
 * Git
 * GitHub
+* Aseprite
 
 ## 👨‍💻 Equipe
 
