@@ -7,14 +7,14 @@ Estamos chegando nos momentos finais do prazo, onde devemos apresentar algo rele
  
 ~~Preparar o design da logo do projeto~~
 
-Inseri-la como a primeira tela do jogo 
+~~Inseri-la como a primeira tela do jogo~~ 
 
 #
 - **A "Velha do Poço":** 🔴 *NÍVEL DE PRIORIDADE*
 
 ~~Preparar as animações, onde ela empurra o personagem ao poço~~
 
-Programar a ação de empurrar dela
+~~Programar a ação de empurrar dela~~
 
 ~~Alterar sprites, ao qual o player escolher~~
 #
