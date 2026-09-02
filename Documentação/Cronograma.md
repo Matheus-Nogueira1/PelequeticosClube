@@ -62,3 +62,9 @@
 * Finalizar mecânica de itens em combate | **EM ANDAMENTO** 🔄
 * Finalizar mecânica de inimigos | **PENDENTE** ⚠️
 * Finalizar mecânica de perícias em combate | **PENDENTE** ⚠️
+
+## 📌 Semana 02/09/26
+
+*
+*  
+* 
