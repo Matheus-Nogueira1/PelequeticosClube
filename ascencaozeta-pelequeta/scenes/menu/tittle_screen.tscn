@@ -18,11 +18,14 @@ grow_vertical = 2
 script = ExtResource("1_vhpic")
 
 [node name="bg" type="TextureRect" parent="TittleScreen" unique_id=1838264461]
-layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("1_gvuh6")
-expand_mode = 2
+expand_mode = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="TittleScreen" unique_id=1186874960]
 layout_mode = 1
@@ -41,34 +44,40 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_constants/separation = 20
+alignment = 1
 
 [node name="Label" type="Label" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer" unique_id=917749002]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_gwofy")
-theme_override_font_sizes/font_size = 54
+theme_override_font_sizes/font_size = 30
 text = "ASCENÇÃO DOS PELECOS"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer" unique_id=1457880978]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_constants/separation = 60
+alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=80765452]
 layout_mode = 2
 theme_override_constants/separation = 10
+alignment = 1
 
 [node name="start_btn" type="Button" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1351847552]
 layout_mode = 2
 theme = ExtResource("4_wb77v")
 theme_override_fonts/font = ExtResource("2_gwofy")
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 25
 text = "START"
 
 [node name="credits_btn" type="Button" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=13326148]
 layout_mode = 2
 theme = ExtResource("4_wb77v")
 theme_override_fonts/font = ExtResource("2_gwofy")
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 25
 text = "CREDITS
 "
 
@@ -76,7 +85,7 @@ text = "CREDITS
 layout_mode = 2
 theme = ExtResource("4_wb77v")
 theme_override_fonts/font = ExtResource("2_gwofy")
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 25
 text = "QUIT"
 
 [node name="GuiTransition" type="Node" parent="TittleScreen" unique_id=1226555092]

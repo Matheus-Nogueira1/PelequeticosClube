@@ -31,8 +31,9 @@ InputManager="*uid://l03e2mmhgbjs"
 
 [display]
 
-window/size/viewport_width=960
-window/size/viewport_height=540
+window/size/viewport_width=320
+window/size/viewport_height=192
+window/size/mode=2
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 
