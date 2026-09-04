@@ -1,13 +1,13 @@
 [gd_scene format=4 uid="uid://don678k6xnkfw"]
 
-[ext_resource type="Texture2D" uid="uid://dauikeo4jrxx5" path="res://assets/images/world/TemplateMapaUm.png" id="1_rwgxs"]
-[ext_resource type="Script" uid="uid://cmqegko3bil0n" path="res://scenes/World.gd" id="2_rwgxs"]
-[ext_resource type="Script" uid="uid://dsfklh35bbens" path="res://scenes/empurrar.gd" id="3_71j4m"]
-[ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/images/player/Shadow.png" id="4_qfnet"]
-[ext_resource type="Texture2D" uid="uid://brd25mqc18gt8" path="res://assets/images/player/VeiaEmpurrarTemplate.png" id="5_i7141"]
+[ext_resource type="Texture2D" uid="uid://dauikeo4jrxx5" path="res://assets/images/world/TemplateMapaUm.png" id="1_4wvfk"]
+[ext_resource type="Script" uid="uid://cmqegko3bil0n" path="res://scripts/mapas/World.gd" id="2_4wvfk"]
+[ext_resource type="Script" uid="uid://dsfklh35bbens" path="res://scripts/personagens/empurrar.gd" id="3_4wvfk"]
+[ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/images/player/Shadow.png" id="4_qjijs"]
+[ext_resource type="Texture2D" uid="uid://brd25mqc18gt8" path="res://assets/images/player/VeiaEmpurrarTemplate.png" id="5_fprfk"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rwgxs"]
-texture = ExtResource("1_rwgxs")
+texture = ExtResource("1_4wvfk")
 1:0/0 = 0
 4:0/0 = 0
 4:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-6.0078125, 2.9882813, -6, 6.0195313, -3.984375, 6.0351563, -3.984375, 7.0195313, 1.9921875, 6.9882813, 1.984375, 6.0117188, 3, 6.0039063, 3, 5.0039063, 3.9921875, 4.9882813, 4, 3.0429688)
@@ -84,7 +84,7 @@ sources/0 = SubResource("TileSetAtlasSource_rwgxs")
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("4_qfnet")
+"texture": ExtResource("4_qjijs")
 }],
 "loop": 1,
 "name": &"shadow",
@@ -92,35 +92,35 @@ animations = [{
 }]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7r4gi"]
-atlas = ExtResource("5_i7141")
+atlas = ExtResource("5_fprfk")
 region = Rect2(0, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w7kh3"]
-atlas = ExtResource("5_i7141")
+atlas = ExtResource("5_fprfk")
 region = Rect2(32, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_e3hyu"]
-atlas = ExtResource("5_i7141")
+atlas = ExtResource("5_fprfk")
 region = Rect2(64, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q5onr"]
-atlas = ExtResource("5_i7141")
+atlas = ExtResource("5_fprfk")
 region = Rect2(96, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jhx03"]
-atlas = ExtResource("5_i7141")
+atlas = ExtResource("5_fprfk")
 region = Rect2(128, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o8fc1"]
-atlas = ExtResource("5_i7141")
+atlas = ExtResource("5_fprfk")
 region = Rect2(160, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xo05s"]
-atlas = ExtResource("5_i7141")
+atlas = ExtResource("5_fprfk")
 region = Rect2(192, 0, 32, 32)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dss4m"]
-atlas = ExtResource("5_i7141")
+atlas = ExtResource("5_fprfk")
 region = Rect2(224, 0, 32, 32)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ngb7v"]
@@ -166,10 +166,9 @@ y_sort_enabled = true
 
 [node name="Map" type="TileMap" parent="." unique_id=1048926892]
 y_sort_enabled = true
-scale = Vector2(3, 3)
 tile_set = SubResource("TileSet_vh468")
 format = 2
-script = ExtResource("2_rwgxs")
+script = ExtResource("2_4wvfk")
 
 [node name="grass" type="TileMapLayer" parent="Map" unique_id=2037851953]
 use_parent_material = true
@@ -241,8 +240,7 @@ color = Color(0, 0, 0, 1)
 
 [node name="Velha" type="CharacterBody2D" parent="." unique_id=654136390]
 y_sort_enabled = true
-scale = Vector2(3, 3)
-script = ExtResource("3_71j4m")
+script = ExtResource("3_4wvfk")
 
 [node name="Shadow" type="AnimatedSprite2D" parent="Velha" unique_id=2023901219]
 position = Vector2(236.66667, 122.333336)

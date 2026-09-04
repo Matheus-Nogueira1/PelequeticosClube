@@ -1,13 +1,13 @@
-[gd_scene format=3 uid="uid://dnyfv6ohwdxhc"]
+[gd_scene format=3 uid="uid://dwey645eciy7d"]
 
-[ext_resource type="Script" uid="uid://ci8sfp72i0jvr" path="res://scripts/seletor-corpo.gd" id="1_r2xsd"]
-[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_lj6u0"]
-[ext_resource type="Script" uid="uid://degebnrp74wd7" path="res://scripts/dados.gd" id="3_201in"]
-[ext_resource type="SpriteFrames" uid="uid://cjuxjuc2sqlj6" path="res://assets/new_sprite_frames.tres" id="4_r2xsd"]
-[ext_resource type="Script" path="res://scripts/click-dados-d6.gd" id="5_k5gy5"]
+[ext_resource type="Script" uid="uid://ci8sfp72i0jvr" path="res://scripts/battle/seletor-corpo.gd" id="1_7xh4a"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_s3c6t"]
+[ext_resource type="Script" uid="uid://degebnrp74wd7" path="res://scripts/testes/dados.gd" id="3_c5lp0"]
+[ext_resource type="SpriteFrames" uid="uid://cjuxjuc2sqlj6" path="res://assets/new_sprite_frames.tres" id="4_v3kpc"]
+[ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/testes/click-dados-d6.gd" id="5_7qsrd"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_6cdta"]
-font = ExtResource("2_lj6u0")
+font = ExtResource("2_s3c6t")
 font_size = 30
 
 [node name="Control" type="Control" unique_id=1775997112]
@@ -18,7 +18,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_r2xsd")
+script = ExtResource("1_7xh4a")
 
 [node name="Label" type="Label" parent="." unique_id=1912571958]
 layout_mode = 1
@@ -52,55 +52,55 @@ alignment = 1
 [node name="Dado5" type="TextureButton" parent="HBoxContainer" unique_id=89519910]
 layout_mode = 2
 size_flags_stretch_ratio = 0.0
-script = ExtResource("3_201in")
+script = ExtResource("3_c5lp0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado5" unique_id=78574818]
 texture_filter = 1
 position = Vector2(10, 62)
 scale = Vector2(6, 6)
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("4_v3kpc")
+script = ExtResource("5_7qsrd")
 
 [node name="Dado4" type="TextureButton" parent="HBoxContainer" unique_id=1840499809]
 layout_mode = 2
-script = ExtResource("3_201in")
+script = ExtResource("3_c5lp0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado4" unique_id=832630026]
 texture_filter = 1
 position = Vector2(10, 62)
 scale = Vector2(6, 6)
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("4_v3kpc")
+script = ExtResource("5_7qsrd")
 
 [node name="Dado3" type="TextureButton" parent="HBoxContainer" unique_id=587896560]
 layout_mode = 2
-script = ExtResource("3_201in")
+script = ExtResource("3_c5lp0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado3" unique_id=68722154]
 texture_filter = 1
 position = Vector2(10, 62)
 scale = Vector2(6, 6)
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("4_v3kpc")
+script = ExtResource("5_7qsrd")
 
 [node name="Dado2" type="TextureButton" parent="HBoxContainer" unique_id=1963910781]
 layout_mode = 2
-script = ExtResource("3_201in")
+script = ExtResource("3_c5lp0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado2" unique_id=289641268]
 texture_filter = 1
 position = Vector2(10, 62)
 scale = Vector2(6, 6)
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("4_v3kpc")
+script = ExtResource("5_7qsrd")
 
 [node name="Dado1" type="TextureButton" parent="HBoxContainer" unique_id=1444340003]
 layout_mode = 2
-script = ExtResource("3_201in")
+script = ExtResource("3_c5lp0")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="HBoxContainer/Dado1" unique_id=3528452]
 texture_filter = 1
 position = Vector2(10, 62)
 scale = Vector2(6, 6)
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("4_v3kpc")
+script = ExtResource("5_7qsrd")

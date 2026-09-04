@@ -1,55 +1,55 @@
-[gd_scene format=3 uid="uid://cckmocpmkwsuy"]
+[gd_scene format=3 uid="uid://cukhj0ugxrh7l"]
 
-[ext_resource type="Script" uid="uid://bc7ekladnrv0v" path="res://scripts/battle/rolagens-dados-d6.gd" id="1_qnuan"]
-[ext_resource type="Texture2D" uid="uid://dy7718ubsy8b6" path="res://assets/six sided die.png" id="2_1yoky"]
-[ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/click-dados-d6.gd" id="3_kvjsq"]
+[ext_resource type="Script" uid="uid://bc7ekladnrv0v" path="res://scripts/battle/rolagens-dados-d6.gd" id="1_b72id"]
+[ext_resource type="Texture2D" uid="uid://dy7718ubsy8b6" path="res://assets/six sided die.png" id="2_p3lcj"]
+[ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/testes/click-dados-d6.gd" id="3_v5qci"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ij6vw"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(0, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ghijl"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(16, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_44cfe"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(32, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_dd465"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(48, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lhvu3"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(64, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4sjlk"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(80, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qp52p"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(0, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_6ct3r"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(16, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1kp85"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(32, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qnedo"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(48, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wyqjk"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(64, 224, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k85er"]
-atlas = ExtResource("2_1yoky")
+atlas = ExtResource("2_p3lcj")
 region = Rect2(80, 224, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ebjds"]
@@ -73,7 +73,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4sjlk")
 }],
-"loop": false,
+"loop": 0,
 "name": &"default",
 "speed": 12.0
 }, {
@@ -96,7 +96,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k85er")
 }],
-"loop": false,
+"loop": 0,
 "name": &"rolar",
 "speed": 5.0
 }]
@@ -106,14 +106,14 @@ size = Vector2(1.6393442, 5.0632896)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=2129393194]
 input_pickable = true
-script = ExtResource("1_qnuan")
+script = ExtResource("1_b72id")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1493194244]
 texture_filter = 1
 position = Vector2(600, 333)
 scale = Vector2(36.3125, 36.3125)
 sprite_frames = SubResource("SpriteFrames_ebjds")
-script = ExtResource("3_kvjsq")
+script = ExtResource("3_v5qci")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=538735764]
 position = Vector2(600, 333)

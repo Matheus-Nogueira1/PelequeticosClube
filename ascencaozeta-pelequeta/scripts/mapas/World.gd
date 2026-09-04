@@ -1,9 +1,9 @@
 extends Node2D
 
 var character_scenes = {
-	"Escolhido": preload("res://characters/Escolhido.tscn"),
-	"JP": preload("res://characters/Jp.tscn"),
-	"Mob": preload("res://characters/Mob.tscn")
+	"Escolhido": preload("res://scenes/personagens/Escolhido.tscn"),
+	"JP": preload("res://scenes/personagens/Jp.tscn"),
+	"Mob": preload("res://scenes/personagens/Mob.tscn")
 }
 
 

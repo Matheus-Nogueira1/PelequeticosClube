@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c07otdsq1smel"]
+
+[ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="1_opdtk"]
+
+[node name="Main" type="Node2D" unique_id=106822715]
+
+[node name="Player" parent="." unique_id=403807826 instance=ExtResource("1_opdtk")]
+position = Vector2(584, 384)

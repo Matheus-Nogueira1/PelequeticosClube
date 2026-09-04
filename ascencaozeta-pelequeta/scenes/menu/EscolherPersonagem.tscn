@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dlnw4rg6tmyej"]
 
-[ext_resource type="Script" uid="uid://cm8ka2lpmhap5" path="res://control.gd" id="1_tjt66"]
+[ext_resource type="Script" uid="uid://cm8ka2lpmhap5" path="res://scripts/menu/control.gd" id="1_tjt66"]
 [ext_resource type="Texture2D" uid="uid://dyysk8jmqslcw" path="res://prefabs/Background.png" id="2_aif0b"]
 [ext_resource type="Texture2D" uid="uid://c0coxobrsbqhf" path="res://assets/images/player/EscolhidoBase.png" id="3_wetd2"]
 [ext_resource type="Texture2D" uid="uid://bqi8ykk15gghd" path="res://assets/images/player/JpBase.png" id="4_mrfmh"]

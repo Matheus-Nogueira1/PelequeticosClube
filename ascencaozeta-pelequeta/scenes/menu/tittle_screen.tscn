@@ -1,9 +1,9 @@
-[gd_scene format=3 uid="uid://dqh2hqtr10ioe"]
+[gd_scene format=3 uid="uid://ckxl2kvgi6e40"]
 
-[ext_resource type="Texture2D" uid="uid://vk3katq8f1ff" path="res://prefabs/menu.png" id="1_gvuh6"]
-[ext_resource type="Script" uid="uid://g3f0ktuyb8wd" path="res://scripts/tittle_screen.gd" id="1_vhpic"]
-[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_gwofy"]
-[ext_resource type="Theme" uid="uid://c1gb313mmmfnu" path="res://default_btn.tres" id="4_wb77v"]
+[ext_resource type="Script" uid="uid://g3f0ktuyb8wd" path="res://scripts/menu/tittle_screen.gd" id="1_svpp1"]
+[ext_resource type="Texture2D" uid="uid://vk3katq8f1ff" path="res://prefabs/menu.png" id="2_gw6nr"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="3_utjah"]
+[ext_resource type="Theme" uid="uid://c1gb313mmmfnu" path="res://default_btn.tres" id="4_k78vi"]
 
 [node name="TittleScreen" type="Control" unique_id=326066292]
 layout_mode = 3
@@ -12,13 +12,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_vhpic")
+script = ExtResource("1_svpp1")
 
 [node name="bg" type="TextureRect" parent="." unique_id=1838264461]
 layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 648.0
-texture = ExtResource("1_gvuh6")
+texture = ExtResource("2_gw6nr")
 expand_mode = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1186874960]
@@ -41,7 +41,7 @@ theme_override_constants/separation = 20
 
 [node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=917749002]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_gwofy")
+theme_override_fonts/font = ExtResource("3_utjah")
 theme_override_font_sizes/font_size = 54
 text = "ASCENÇÃO DOS PELECOS"
 
@@ -56,23 +56,23 @@ theme_override_constants/separation = 10
 
 [node name="start_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1351847552]
 layout_mode = 2
-theme = ExtResource("4_wb77v")
-theme_override_fonts/font = ExtResource("2_gwofy")
+theme = ExtResource("4_k78vi")
+theme_override_fonts/font = ExtResource("3_utjah")
 theme_override_font_sizes/font_size = 44
 text = "START"
 
 [node name="credits_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=13326148]
 layout_mode = 2
-theme = ExtResource("4_wb77v")
-theme_override_fonts/font = ExtResource("2_gwofy")
+theme = ExtResource("4_k78vi")
+theme_override_fonts/font = ExtResource("3_utjah")
 theme_override_font_sizes/font_size = 44
 text = "CREDITS
 "
 
 [node name="quit_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=353378484]
 layout_mode = 2
-theme = ExtResource("4_wb77v")
-theme_override_fonts/font = ExtResource("2_gwofy")
+theme = ExtResource("4_k78vi")
+theme_override_fonts/font = ExtResource("3_utjah")
 theme_override_font_sizes/font_size = 44
 text = "QUIT"
 

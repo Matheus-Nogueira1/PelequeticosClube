@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://pupmbn2fmc7k"]
 
 [ext_resource type="Texture2D" uid="uid://tsbf2a0vcf6q" path="res://assets/images/player/Walk_Escolhido_Template.png" id="2_0qvx1"]
-[ext_resource type="Script" uid="uid://m6si84mho71r" path="res://scripts/Movimento.gd" id="2_22mqn"]
+[ext_resource type="Script" uid="uid://m6si84mho71r" path="res://scripts/personagens/Movimento.gd" id="2_22mqn"]
 [ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/images/player/Shadow.png" id="2_tw08g"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_22mqn"]
