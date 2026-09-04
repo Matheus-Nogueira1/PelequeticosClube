@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://dic48gv5fbj3b"]
 
 [ext_resource type="PackedScene" uid="uid://cutoedwrg8j2w" path="res://scenes/mapas/Bastilha.tscn" id="1_hem5k"]
-[ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/testes/player.tscn" id="2_aq6lr"]
+[ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="2_aq6lr"]
+[ext_resource type="Script" uid="uid://cmqegko3bil0n" path="res://scripts/mapas/World.gd" id="2_bdc0s"]
 [ext_resource type="Script" uid="uid://bd046eokvcnu2" path="res://addons/phantom_camera/scripts/phantom_camera_host/phantom_camera_host.gd" id="3_bdc0s"]
 [ext_resource type="Script" uid="uid://bhexx6mj1xv3q" path="res://addons/phantom_camera/scripts/phantom_camera/phantom_camera_2d.gd" id="4_sbn2x"]
 [ext_resource type="Script" uid="uid://8umksf8e80fw" path="res://addons/phantom_camera/scripts/resources/tween_resource.gd" id="5_0g4s5"]
@@ -19,6 +20,7 @@ layer_1/tile_data = PackedInt32Array(-196610, 196608, 21, -131074, 196608, 22, -
 layer_2/name = "Porta"
 layer_2/modulate = Color(0.31764707, 0.31764707, 0.31764707, 1)
 layer_2/tile_data = PackedInt32Array(-196607, 3670016, 3, -131071, 3670016, 4, -65535, 3670016, 5, 1, 3670016, 6, -196606, 3735552, 3, -131070, 3735552, 4, -65534, 3735552, 5, 2, 3735552, 6, -262141, 1769472, 7, -196605, 1769472, 8, -131069, 1769472, 9, -65533, 1769472, 10, 3, 1769472, 11, -262144, 1769472, 7, -196608, 1769472, 8, -131072, 1769472, 9, -65536, 1769472, 10, 0, 1769472, 11, 26, 327681, 4, 65562, 327681, 5, 131098, 327681, 6, 27, 393217, 4, 65563, 393217, 5, 131099, 393217, 6, 196634, 327681, 4, 262170, 327681, 5, 327706, 327681, 6, 196635, 393217, 4, 262171, 393217, 5, 327707, 393217, 6, 393242, 327681, 4, 458778, 327681, 5, 524314, 327681, 6, 393243, 393217, 4, 458779, 393217, 5, 524315, 393217, 6, 24, 327681, 4, 65560, 327681, 5, 131096, 327681, 6, 25, 393217, 4, 65561, 393217, 5, 131097, 393217, 6, 196632, 327681, 4, 262168, 327681, 5, 327704, 327681, 6, 196633, 393217, 4, 262169, 393217, 5, 327705, 393217, 6, 393240, 327681, 4, 458776, 327681, 5, 524312, 327681, 6, 393241, 393217, 4, 458777, 393217, 5, 524313, 393217, 6, 720904, 458753, 2, 786440, 458752, 10, 720913, 458753, 2, 786449, 458752, 10, 720922, 458753, 2, 786458, 458752, 10, -196602, 589825, 1, -131066, 589825, 2, -196599, 589825, 1, -131063, 589825, 2, -196596, 589825, 1, -131060, 589825, 2, -196593, 589825, 1, -131057, 589825, 2, -196590, 589825, 1, -131054, 589825, 2, -196587, 589825, 1, -131051, 589825, 2, -196584, 327681, 1, -131048, 327681, 2, -196581, 327681, 1, -131045, 327681, 2, 655377, 458753, 1, 655368, 458753, 1, 655386, 458753, 1, 65558, 2, 42, 131094, 2, 43, 65559, 65538, 42, 131095, 65538, 43, 196630, 131074, 42, 262166, 131074, 43, 196631, 196610, 42, 262167, 196610, 43, 524310, 2, 43, 524311, 65538, 43, 458774, 131074, 42, 458775, 196610, 42, 327703, 196610, 42, 393239, 196610, 43)
+script = ExtResource("2_bdc0s")
 
 [node name="Camera2D" type="Camera2D" parent="TileMap" unique_id=364009415]
 physics_interpolation_mode = 1
@@ -47,6 +49,7 @@ limit_right = 575
 limit_bottom = 415
 
 [node name="Player" parent="TileMap" unique_id=403807826 instance=ExtResource("2_aq6lr")]
+modulate = Color(0.31764707, 0.31764707, 0.31764707, 1)
 texture_filter = 1
 position = Vector2(158, 99)
 scale = Vector2(1, 1)

@@ -1,10 +1,10 @@
-[gd_scene format=3 uid="uid://dlnw4rg6tmyej"]
+[gd_scene format=3 uid="uid://6o7mrqu1338"]
 
-[ext_resource type="Script" uid="uid://cm8ka2lpmhap5" path="res://scripts/testes/control.gd" id="1_bpd2b"]
-[ext_resource type="Texture2D" uid="uid://dyysk8jmqslcw" path="res://prefabs/Background.png" id="2_k1lql"]
-[ext_resource type="Texture2D" uid="uid://u6t3lx1ec57e" path="res://assets/images/player/Player1.png" id="3_s3a17"]
-[ext_resource type="Texture2D" uid="uid://balpib756h42w" path="res://assets/images/player/Player2.png" id="4_jqb3s"]
-[ext_resource type="Texture2D" uid="uid://brel8j6tkquwu" path="res://assets/images/player/Player3.png" id="5_sgkp4"]
+[ext_resource type="Script" uid="uid://cm8ka2lpmhap5" path="res://scripts/testes/control.gd" id="1_tjt66"]
+[ext_resource type="Texture2D" uid="uid://dyysk8jmqslcw" path="res://prefabs/Background.png" id="2_aif0b"]
+[ext_resource type="Texture2D" uid="uid://c0coxobrsbqhf" path="res://assets/images/player/EscolhidoBase.png" id="3_wetd2"]
+[ext_resource type="Texture2D" uid="uid://bqi8ykk15gghd" path="res://assets/images/player/JpBase.png" id="4_mrfmh"]
+[ext_resource type="Texture2D" uid="uid://d1fsa5i0xk5gv" path="res://assets/images/player/MobBase.png" id="5_ayp0l"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tjwpk"]
 bg_color = Color(0.03, 0.03, 0.03, 0.85)
@@ -31,7 +31,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_bpd2b")
+script = ExtResource("1_tjt66")
 
 [node name="BackGround" type="TextureRect" parent="." unique_id=1301064228]
 layout_mode = 1
@@ -40,10 +40,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -5.0
 offset_top = -7.0
-offset_right = 2.0
+offset_right = -5.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_k1lql")
+texture = ExtResource("2_aif0b")
 expand_mode = 2
 stretch_mode = 6
 
@@ -53,7 +53,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -60.0
+offset_top = 1.0
 offset_right = 60.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -70,7 +72,7 @@ layout_mode = 2
 layout_mode = 0
 offset_right = 120.0
 offset_bottom = 121.0
-texture = ExtResource("3_s3a17")
+texture = ExtResource("3_wetd2")
 stretch_mode = 5
 
 [node name="Player2" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=883764063]
@@ -79,11 +81,12 @@ layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer/Player2" unique_id=1555085370]
 layout_mode = 0
-offset_left = 21.0
+offset_left = 1.0
 offset_top = 2.0
-offset_right = 96.0
-offset_bottom = 120.0
-texture = ExtResource("4_jqb3s")
+offset_right = 121.0
+offset_bottom = 123.0
+texture = ExtResource("4_mrfmh")
+stretch_mode = 5
 
 [node name="Player3" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=1105994070]
 custom_minimum_size = Vector2(120, 120)
@@ -95,7 +98,7 @@ offset_left = 1.0
 offset_top = -1.0
 offset_right = 121.0
 offset_bottom = 124.0
-texture = ExtResource("5_sgkp4")
+texture = ExtResource("5_ayp0l")
 stretch_mode = 5
 
 [node name="CharacterName" type="Label" parent="." unique_id=1079664423]

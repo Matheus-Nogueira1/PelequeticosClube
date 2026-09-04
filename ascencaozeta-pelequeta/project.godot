@@ -28,6 +28,7 @@ PhantomCameraManager="*uid://duq6jhf6unyis"
 VFXManager="*uid://cgkr7tsoxq5kj"
 Audio="*uid://dkod14f143sv2"
 InputManager="*uid://l03e2mmhgbjs"
+Global="*uid://gj2mnbielrxc"
 
 [display]
 
