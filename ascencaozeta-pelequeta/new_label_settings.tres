@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://ch5kik1mpjmso"]
+
+[ext_resource type="FontFile" uid="uid://d07vpj0lfm57h" path="res://fonts/monogram-extended.ttf" id="1_1nvk1"]
+
+[resource]
+font = ExtResource("1_1nvk1")
+font_size = 50
