@@ -4,11 +4,9 @@
 [ext_resource type="Script" uid="uid://g3f0ktuyb8wd" path="res://scripts/menu/tittle_screen.gd" id="1_vhpic"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_gwofy"]
 [ext_resource type="Theme" uid="uid://c1gb313mmmfnu" path="res://default_btn.tres" id="4_wb77v"]
-[ext_resource type="Script" uid="uid://bimelmc1ce1b2" path="res://addons/simple-gui-transitions/transition.gd" id="5_utjah"]
 
-[node name="Node" type="Node" unique_id=964104620]
-
-[node name="TittleScreen" type="Control" parent="." unique_id=326066292]
+[node name="TittleScreen" type="Control" unique_id=326066292]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -17,7 +15,8 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_vhpic")
 
-[node name="bg" type="TextureRect" parent="TittleScreen" unique_id=1838264461]
+[node name="bg" type="TextureRect" parent="." unique_id=1838264461]
+texture_filter = 5
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -26,8 +25,9 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_gvuh6")
 expand_mode = 1
+stretch_mode = 6
 
-[node name="MarginContainer" type="MarginContainer" parent="TittleScreen" unique_id=1186874960]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1186874960]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -37,43 +37,48 @@ grow_vertical = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="CenterContainer" type="CenterContainer" parent="TittleScreen/MarginContainer" unique_id=1259145581]
+[node name="CenterContainer" type="CenterContainer" parent="MarginContainer" unique_id=1259145581]
 layout_mode = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TittleScreen/MarginContainer/CenterContainer" unique_id=1817837123]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer" unique_id=1817837123]
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Label" type="Label" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer" unique_id=917749002]
+[node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=917749002]
+texture_filter = 1
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 5
 theme_override_fonts/font = ExtResource("2_gwofy")
 theme_override_font_sizes/font_size = 30
-text = "ASCENÇÃO DOS PELECOS"
+text = "Dark Omission"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer" unique_id=1457880978]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=1457880978]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_constants/separation = 60
 alignment = 1
 
-[node name="VBoxContainer" type="VBoxContainer" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=80765452]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=80765452]
 layout_mode = 2
 theme_override_constants/separation = 10
 alignment = 1
 
-[node name="start_btn" type="Button" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1351847552]
+[node name="start_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1351847552]
 layout_mode = 2
 theme = ExtResource("4_wb77v")
 theme_override_fonts/font = ExtResource("2_gwofy")
 theme_override_font_sizes/font_size = 25
 text = "START"
 
-[node name="credits_btn" type="Button" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=13326148]
+[node name="credits_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=13326148]
 layout_mode = 2
 theme = ExtResource("4_wb77v")
 theme_override_fonts/font = ExtResource("2_gwofy")
@@ -81,18 +86,15 @@ theme_override_font_sizes/font_size = 25
 text = "CREDITS
 "
 
-[node name="quit_btn" type="Button" parent="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=353378484]
+[node name="quit_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=353378484]
 layout_mode = 2
 theme = ExtResource("4_wb77v")
 theme_override_fonts/font = ExtResource("2_gwofy")
 theme_override_font_sizes/font_size = 25
 text = "QUIT"
 
-[node name="GuiTransition" type="Node" parent="TittleScreen" unique_id=1226555092]
-script = ExtResource("5_utjah")
-controls = Array[NodePath]([NodePath("../ColorRect/VBoxContainer/ColorRect"), NodePath("../ColorRect/VBoxContainer/Label"), NodePath("../ColorRect/VBoxContainer/Label2")])
-metadata/_custom_type_script = "uid://bimelmc1ce1b2"
+[node name="Node" type="Node" parent="." unique_id=964104620]
 
-[connection signal="pressed" from="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/start_btn" to="TittleScreen" method="_on_start_btn_pressed"]
-[connection signal="pressed" from="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/credits_btn" to="TittleScreen" method="_on_credits_btn_pressed"]
-[connection signal="pressed" from="TittleScreen/MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/quit_btn" to="TittleScreen" method="_on_quit_btn_pressed"]
+[connection signal="pressed" from="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/start_btn" to="." method="_on_start_btn_pressed"]
+[connection signal="pressed" from="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/credits_btn" to="." method="_on_credits_btn_pressed"]
+[connection signal="pressed" from="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/quit_btn" to="." method="_on_quit_btn_pressed"]
