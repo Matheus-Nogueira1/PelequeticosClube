@@ -267,7 +267,6 @@ radius = 6.0369244
 
 [node name="Escolhido" type="CharacterBody2D" unique_id=188751351]
 y_sort_enabled = true
-scale = Vector2(1.5, 1.5)
 script = ExtResource("2_22mqn")
 
 [node name="Walk" type="AnimatedSprite2D" parent="." unique_id=275653830]
