@@ -200,6 +200,22 @@ Os inimigos derrotados também poderão fornecer **drops**, que poderão ser uti
 * **RNF05:** O sistema deverá permitir expansão de habilidades e inimigos.
 * **RNF06:** O jogo deverá funcionar em computadores com configuração intermediária.
 
+RN01: O jogador poderá formar e controlar sua party de personagens.
+
+RN02: Cada personagem possuirá atributos, habilidades, recursos e equipamentos.
+
+RN03: O combate ocorrerá por turnos entre jogadores e inimigos.
+
+RN04: Ações e testes poderão utilizar rolagens de dados virtuais.
+
+RN05: Habilidades, itens e efeitos de status deverão respeitar suas condições de uso.
+
+RN06: Personagens poderão ganhar experiência, subir de nível e distribuir pontos de atributo.
+
+RN07: O jogador poderá explorar áreas, interagir com NPCs e obter recursos para compra e criação de equipamentos.
+
+RN08: Os dados e o progresso do jogo deverão ser armazenados localmente.
+
 ## 📐 Documentação
 
 A documentação do projeto contempla:
