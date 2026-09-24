@@ -34,7 +34,7 @@
 
 ## 📌 Semana 18/03/26
 
-* Preparar cenários | **EM ANDAMENTO** 🔄
+* Preparar cenários | **FINALIZADO** ✅
 * Preparar inimigos | **PENDENTE** ⚠️
 * ~~Preparar tela de combate~~ | **FINALIZADO** ✅
 * ~~Preparar mecânica de diálogos~~ | **FINALIZADO** ✅
@@ -50,7 +50,7 @@
 
 * ~~Finalizar documentaçãO~~ | **FINALIZADO** ✅
 * Preparar design do combate | **EM ANDAMENTO** 🔄
-* Preparar mapa | **EM ANDAMENTO** 🔄
+* Preparar mapa | **FINALIZADO** ✅
 
 ## 📌 Semana 12/05/26
 
@@ -65,7 +65,7 @@
 
 ## 📌 Semana 02/09/26
 
-* Finalização da primeira Etapa do mapa principal | **EM ANDAMENTO** 🔄
+* Finalização da primeira Etapa do mapa principal | **FINALIZADO** ✅
 * Melhoria na decoração e interação de objetos dos mapas | **PENDENTE** ⚠️
-* Criação do próximo mapa | **PENDENTE** ⚠️
+* Criação do próximo mapa | **EM ANDAMENTO** 🔄
 * Inserção dos primeiros inimigos e NPC's no próximo mapa | **PENDENTE** ⚠️
