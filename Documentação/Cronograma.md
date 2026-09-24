@@ -69,3 +69,10 @@
 * Melhoria na decoração e interação de objetos dos mapas | **PENDENTE** ⚠️
 * Criação do próximo mapa | **EM ANDAMENTO** 🔄
 * Inserção dos primeiros inimigos e NPC's no próximo mapa | **PENDENTE** ⚠️
+
+## 📌 Semana 24/09/26
+
+* Finalizar segundo mapa | **EM ANDAMENTO** 🔄
+* Criar mecânicas de exploração do mapa | **PENDENTE** ⚠️
+* Melhorar Tela de combate | **PENDENTE** ⚠️
+* Finalizar mecânicas de Inimigos | **PENDENTE** ⚠️
