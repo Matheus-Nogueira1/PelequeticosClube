@@ -26,7 +26,7 @@ Criar Cutscene do player lutando
 #
 - **Mapa Bastilha:** 🔴 *NÍVEL DE PRIORIDADE*
 
-Criação do design do mapa
+~~Criação do design do mapa~~
 
 Colisão dos objetos
 
