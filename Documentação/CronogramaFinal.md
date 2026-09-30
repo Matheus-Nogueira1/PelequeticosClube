@@ -20,9 +20,9 @@ Estamos chegando nos momentos finais do prazo, onde devemos apresentar algo rele
 #
 - **As Cutscenes:** 🔴 *NÍVEL DE PRIORIDADE*
 
-Criar Cutscene do player caindo no poço
+~~Criar Cutscene do player caindo no poço~~
 
-Criar Cutscene do player lutando
+~~Criar Cutscene do player lutando~~
 #
 - **Mapa Bastilha:** 🔴 *NÍVEL DE PRIORIDADE*
 
