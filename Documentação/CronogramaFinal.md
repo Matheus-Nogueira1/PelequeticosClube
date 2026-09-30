@@ -38,6 +38,13 @@ Interação com o "Dummy"
 
 Interação com a "FireKeeper"
 #
+- **Mapa da cabana:** 🟡 *NÍVEL DE PRIORIDADE*
+
+Criação do design do mapa
+
+Colisão dos objetos
+
+#
 - **Inimigos:** 🟡 *NÍVEL DE PRIORIDADE*
   
 Criar o primeiro inimigo teste "Dummy"
