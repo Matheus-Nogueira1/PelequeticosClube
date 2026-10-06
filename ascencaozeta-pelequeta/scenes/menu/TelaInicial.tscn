@@ -1,25 +1,31 @@
 [gd_scene format=3 uid="uid://djetl6pcyah7s"]
 
-[ext_resource type="Script" uid="uid://g3f0ktuyb8wd" path="res://scripts/menu/tittle_screen.gd" id="1_63sgn"]
-[ext_resource type="Texture2D" uid="uid://vk3katq8f1ff" path="res://prefabs/menu.png" id="2_4x8dh"]
-[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="3_fuuxw"]
-[ext_resource type="Theme" uid="uid://c1gb313mmmfnu" path="res://default_btn.tres" id="4_wefxj"]
+[ext_resource type="Texture2D" uid="uid://vk3katq8f1ff" path="res://prefabs/menu.png" id="1_gvuh6"]
+[ext_resource type="Script" uid="uid://g3f0ktuyb8wd" path="res://scripts/menu/tittle_screen.gd" id="1_vhpic"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_gwofy"]
+[ext_resource type="Theme" uid="uid://c1gb313mmmfnu" path="res://default_btn.tres" id="4_wb77v"]
 
 [node name="TittleScreen" type="Control" unique_id=326066292]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_63sgn")
+script = ExtResource("1_vhpic")
 
 [node name="bg" type="TextureRect" parent="." unique_id=1838264461]
-layout_mode = 0
-offset_right = 1152.0
-offset_bottom = 648.0
-texture = ExtResource("2_4x8dh")
-expand_mode = 2
+texture_filter = 5
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_gvuh6")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1186874960]
 layout_mode = 1
@@ -38,42 +44,53 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 6
 theme_override_constants/separation = 20
+alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=917749002]
+texture_filter = 1
 layout_mode = 2
-theme_override_fonts/font = ExtResource("3_fuuxw")
-theme_override_font_sizes/font_size = 54
-text = "ASCENÇÃO DOS PELECOS"
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_outline_size = 5
+theme_override_fonts/font = ExtResource("2_gwofy")
+theme_override_font_sizes/font_size = 30
+text = "Dark Omission"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=1457880978]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 4
 theme_override_constants/separation = 60
+alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=80765452]
 layout_mode = 2
 theme_override_constants/separation = 10
+alignment = 1
 
 [node name="start_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1351847552]
 layout_mode = 2
-theme = ExtResource("4_wefxj")
-theme_override_fonts/font = ExtResource("3_fuuxw")
-theme_override_font_sizes/font_size = 44
+theme = ExtResource("4_wb77v")
+theme_override_fonts/font = ExtResource("2_gwofy")
+theme_override_font_sizes/font_size = 25
 text = "START"
 
 [node name="credits_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=13326148]
 layout_mode = 2
-theme = ExtResource("4_wefxj")
-theme_override_fonts/font = ExtResource("3_fuuxw")
-theme_override_font_sizes/font_size = 44
+theme = ExtResource("4_wb77v")
+theme_override_fonts/font = ExtResource("2_gwofy")
+theme_override_font_sizes/font_size = 25
 text = "CREDITS
 "
 
 [node name="quit_btn" type="Button" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=353378484]
 layout_mode = 2
-theme = ExtResource("4_wefxj")
-theme_override_fonts/font = ExtResource("3_fuuxw")
-theme_override_font_sizes/font_size = 44
+theme = ExtResource("4_wb77v")
+theme_override_fonts/font = ExtResource("2_gwofy")
+theme_override_font_sizes/font_size = 25
 text = "QUIT"
 
 [connection signal="pressed" from="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer/VBoxContainer/start_btn" to="." method="_on_start_btn_pressed"]

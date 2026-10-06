@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://dfakqswx5si0k"]
 
-[ext_resource type="Script" uid="uid://vy65xcsx00ny" path="res://scripts/testes/player.gd" id="1_q5fqt"]
 [ext_resource type="Texture2D" uid="uid://u6t3lx1ec57e" path="res://assets/images/player/Player1.png" id="2_bjdoq"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_hem5k"]
@@ -17,7 +16,6 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_g4v7s"]
 
 [node name="Player" type="CharacterBody2D" unique_id=403807826]
-script = ExtResource("1_q5fqt")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=275653830]
 texture_filter = 1

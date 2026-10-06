@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://nd12gkm2saxj"]
 
-[ext_resource type="PackedScene" uid="uid://dqh2hqtr10ioe" path="res://scenes/menu/tittle_screen.tscn" id="1_h7o6f"]
+[ext_resource type="PackedScene" uid="uid://dqh2hqtr10ioe" path="res://scenes/menu/TelaInicial.tscn" id="1_h7o6f"]
 [ext_resource type="PackedScene" uid="uid://k8gfl42dcq0v" path="res://scenes/menu/logo.tscn" id="2_o41tf"]
 
 [node name="Inicio" type="Node" unique_id=1692624205]

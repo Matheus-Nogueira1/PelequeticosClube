@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://k8gfl42dcq0v"]
 
+[ext_resource type="Script" uid="uid://g4vcy6enl7id" path="res://scripts/menu/logo.gd" id="1_16jvu"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="1_dapyb"]
 [ext_resource type="Texture2D" uid="uid://bqaw58wxrqnyg" path="res://assets/images/logo/Logo.png" id="2_16jvu"]
 
@@ -14,6 +15,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource("1_16jvu")
 
 [node name="ColorRect" type="ColorRect" parent="Logo" unique_id=112931405]
 layout_mode = 1
@@ -58,3 +60,9 @@ theme_override_font_sizes/font_size = 30
 text = "PRODUCTIONS"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="Logo" unique_id=1612994750]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="Logo/Timer" to="Logo" method="_on_timer_timeout"]

@@ -3,7 +3,6 @@ extends Control
 @onready var nome_label: Label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/NomeLabel")
 @onready var texto_label: RichTextLabel = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/TextoLabel")
 @onready var dica_label: Label = get_node_or_null("PanelContainer/MarginContainer/VBoxContainer/DicaLabel")
-
 var falas: Array = []
 var indice_atual: int = 0
 var escrevendo: bool = false
@@ -110,4 +109,4 @@ func fechar_dialogo() -> void:
 	visible = false
 	falas.clear()
 	indice_atual = 0
-	get_tree().change_scene_to_file("res://scenes/player.tscn")
+	get_tree().change_scene_to_file("res://scenes/menu/EscolherPersonagem.tscn")
