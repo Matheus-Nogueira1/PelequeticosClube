@@ -13,7 +13,7 @@
 
 ## 📌 Semana 12/02/26
 
-* Design do mapa principal | **FINALIZADO** ✅
+* ~~Design do mapa principal~~ | **FINALIZADO** ✅
 * ~~Design do personagem principal~~ | **FINALIZADO** ✅
 * ~~Modo de implementação das mecânicas~~ | **FINALIZADO** ✅
 * ~~Requisitos funcionais e não funcionais~~ | **FINALIZADO** ✅
@@ -34,7 +34,7 @@
 
 ## 📌 Semana 18/03/26
 
-* Preparar cenários | **FINALIZADO** ✅
+* ~~Preparar cenários~~ | **FINALIZADO** ✅
 * Preparar inimigos | **PENDENTE** ⚠️
 * ~~Preparar tela de combate~~ | **FINALIZADO** ✅
 * ~~Preparar mecânica de diálogos~~ | **FINALIZADO** ✅
@@ -50,7 +50,7 @@
 
 * ~~Finalizar documentaçãO~~ | **FINALIZADO** ✅
 * Preparar design do combate | **EM ANDAMENTO** 🔄
-* Preparar mapa | **FINALIZADO** ✅
+* ~~Preparar mapa~~ | **FINALIZADO** ✅
 
 ## 📌 Semana 12/05/26
 
@@ -65,9 +65,9 @@
 
 ## 📌 Semana 02/09/26
 
-* Finalização da primeira Etapa do mapa principal | **FINALIZADO** ✅
+* ~~Finalização da primeira Etapa do mapa principal~~ | **FINALIZADO** ✅
 * Melhoria na decoração e interação de objetos dos mapas | **PENDENTE** ⚠️
-* Criação do próximo mapa | **EM ANDAMENTO** 🔄
+* ~~Criação do próximo mapa~~ | **FINALIZADO** ✅
 * Inserção dos primeiros inimigos e NPC's no próximo mapa | **PENDENTE** ⚠️
 
 ## 📌 Semana 24/09/26
@@ -75,4 +75,3 @@
 * Finalizar segundo mapa | **EM ANDAMENTO** 🔄
 * Criar mecânicas de exploração do mapa | **PENDENTE** ⚠️
 * Melhorar Tela de combate | **PENDENTE** ⚠️
-* Finalizar mecânicas de Inimigos | **PENDENTE** ⚠️
