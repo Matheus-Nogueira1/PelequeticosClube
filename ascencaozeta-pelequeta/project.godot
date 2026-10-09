@@ -24,7 +24,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Dialogos="*uid://btw5b6vlkuhxx"
-GuiTransitions="*uid://lbwvyqfdnu7x"
+GuiTransitions="uid://lbwvyqfdnu7x"
 Global="*uid://gj2mnbielrxc"
 
 [display]
