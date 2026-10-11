@@ -66,6 +66,10 @@ Tela Opções
 Tela Créditos
 
 ~~Botão Sair~~
+- **Aseprite** 🟡 *NÍVEL DE PRIORIDADE*
+
+Separar as sprites por layer ( Recomendação Xzerow )
+  
 #
 ## Observações:
 🔴 PRIORIDADE **ALTA**
