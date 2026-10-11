@@ -22,7 +22,7 @@ Estamos chegando nos momentos finais do prazo, onde devemos apresentar algo rele
 
 ~~Criar Cutscene do player caindo no poço~~
 
-~~Criar Cutscene do player lutando~~
+Criar Cutscene do player lutando
 #
 - **Mapa Bastilha:** 🔴 *NÍVEL DE PRIORIDADE*
 
@@ -40,14 +40,14 @@ Interação com a "FireKeeper"
 #
 - **Mapa da cabana:** 🟡 *NÍVEL DE PRIORIDADE*
 
-Criação do design do mapa
+~~Criação do design do mapa~~
 
 Colisão dos objetos
 
 #
 - **Inimigos:** 🟡 *NÍVEL DE PRIORIDADE*
   
-Criar o primeiro inimigo teste "Dummy"
+~~Criar o primeiro inimigo teste "Dummy"~~
 # 
 - **Tela combate:** 🟡 *NÍVEL DE PRIORIDADE*
   
@@ -59,13 +59,13 @@ Linkar personagens
   
 Programar Tela de menu
 
-Design Tela Menu
+~~Design Tela Menu~~
 
 Tela Opções
 
 Tela Créditos
 
-Botão Sair
+~~Botão Sair~~
 #
 ## Observações:
 🔴 PRIORIDADE **ALTA**
