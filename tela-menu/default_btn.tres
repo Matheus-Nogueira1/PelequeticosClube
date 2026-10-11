@@ -1,0 +1,55 @@
+[gd_resource type="Theme" format=3 uid="uid://c1gb313mmmfnu"]
+
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="1_ngb7v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wpuga"]
+bg_color = Color(0, 0.09019608, 0.43137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.003921569, 0.20784314, 0.8117647, 1)
+border_blend = true
+expand_margin_left = 4.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vhpic"]
+bg_color = Color(0, 0.09019608, 0.43137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.003921569, 0.20784314, 0.8117647, 1)
+border_blend = true
+expand_margin_left = 4.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wb77v"]
+bg_color = Color(0, 0.19215687, 0.78431374, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.31764707, 0.5294118, 1, 1)
+border_blend = true
+expand_margin_left = 4.0
+expand_margin_bottom = 2.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i7rao"]
+bg_color = Color(0, 0.09019608, 0.43137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.003921569, 0.20784314, 0.8117647, 1)
+border_blend = true
+expand_margin_left = 4.0
+expand_margin_bottom = 2.0
+
+[resource]
+Button/colors/font_color = Color(1, 1, 1, 1)
+Button/fonts/font = ExtResource("1_ngb7v")
+Button/styles/focus = SubResource("StyleBoxFlat_wpuga")
+Button/styles/hover = SubResource("StyleBoxFlat_vhpic")
+Button/styles/normal = SubResource("StyleBoxFlat_wb77v")
+Button/styles/pressed = SubResource("StyleBoxFlat_i7rao")

@@ -1,0 +1,68 @@
+[gd_scene format=3 uid="uid://k8gfl42dcq0v"]
+
+[ext_resource type="Script" uid="uid://g4vcy6enl7id" path="res://scripts/menu/logo.gd" id="1_4qsij"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_w387m"]
+[ext_resource type="Texture2D" uid="uid://bqaw58wxrqnyg" path="res://assets/images/logo/Logo.png" id="3_x5fgo"]
+
+[node name="Node" type="Node" unique_id=308286490]
+
+[node name="Logo" type="Control" parent="." unique_id=1017202562]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_4qsij")
+
+[node name="ColorRect" type="ColorRect" parent="Logo" unique_id=112931405]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.07450981, 0.15686275, 0.15686275, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Logo/ColorRect" unique_id=956920645]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+alignment = 1
+
+[node name="Label" type="Label" parent="Logo/ColorRect/VBoxContainer" unique_id=1322894782]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_w387m")
+theme_override_font_sizes/font_size = 30
+text = "PELECOS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ColorRect" type="TextureRect" parent="Logo/ColorRect/VBoxContainer" unique_id=1422717559]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("3_x5fgo")
+
+[node name="Label2" type="Label" parent="Logo/ColorRect/VBoxContainer" unique_id=476866138]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_w387m")
+theme_override_font_sizes/font_size = 30
+text = "PRODUCTIONS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="Logo" unique_id=1612994750]
+wait_time = 3.0
+one_shot = true
+
+[connection signal="timeout" from="Logo/Timer" to="Logo" method="_on_timer_timeout"]

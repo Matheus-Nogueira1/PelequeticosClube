@@ -1,0 +1,242 @@
+[gd_scene format=3 uid="uid://de6e343s07542"]
+
+[ext_resource type="Script" uid="uid://c7ky1iwx7lyhq" path="res://addons/godot_jrpg/nodes/ui/menu/status/menu_status.gd" id="1_li2ur"]
+[ext_resource type="Resource" uid="uid://xcf0l6c5vwkg" path="res://addons/godot_jrpg/tests/actors/battlers/players/test_player_1.tres" id="2_li2ur"]
+[ext_resource type="PackedScene" uid="uid://pwpqnggbxhst" path="res://addons/godot_jrpg/nodes/ui/menu/status/status_icon.tscn" id="3_p3x7g"]
+[ext_resource type="Script" uid="uid://bjn8a8svw8sat" path="res://addons/godot_jrpg/nodes/ui/bars/bar_label.gd" id="3_q3rv0"]
+[ext_resource type="Script" uid="uid://bcujvgam7focj" path="res://addons/godot_jrpg/nodes/ui/bars/bar.gd" id="4_li2ur"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_v45wu"]
+bg_color = Color(0.18431373, 0.18431373, 0.18431373, 0.54901963)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fnojh"]
+bg_color = Color(0.79607844, 0, 0.15686275, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p3x7g"]
+bg_color = Color(0.18431373, 0.18431373, 0.18431373, 0.54901963)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jpa1m"]
+bg_color = Color(0.1053055, 0.6561091, 1, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[node name="StatusMenu" type="Control" unique_id=1685748811]
+z_index = 99
+layout_mode = 3
+anchors_preset = 0
+scale = Vector2(0.5, 0.5)
+script = ExtResource("1_li2ur")
+player = ExtResource("2_li2ur")
+status_icon = ExtResource("3_p3x7g")
+
+[node name="Panel" type="Panel" parent="." unique_id=2019179005]
+layout_mode = 0
+offset_left = 368.0
+offset_right = 944.0
+offset_bottom = 704.0
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1653306553]
+layout_mode = 0
+offset_left = 480.0
+offset_right = 832.0
+offset_bottom = 704.0
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1680140629]
+layout_mode = 2
+theme_override_constants/separation = 10
+alignment = 1
+
+[node name="PlayerContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1808888843]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="FacePlayer" type="TextureRect" parent="MarginContainer/HBoxContainer/PlayerContainer" unique_id=1657134046]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+expand_mode = 2
+stretch_mode = 5
+
+[node name="NamePlayer" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer" unique_id=1914665886]
+unique_name_in_owner = true
+layout_mode = 2
+text = "asdfasf"
+
+[node name="StatusContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/PlayerContainer" unique_id=69623412]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+
+[node name="StatsContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/PlayerContainer" unique_id=1843271385]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer" unique_id=2033492680]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer" unique_id=1219554050]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer" unique_id=2047272054]
+layout_mode = 2
+alignment = 1
+
+[node name="HP" type="BoxContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=329409598]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/HP" unique_id=1623125595]
+layout_mode = 2
+
+[node name="HPCurrent" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/HP/VBoxContainer" unique_id=1780828249]
+unique_name_in_owner = true
+layout_mode = 2
+text = "9999/9999"
+horizontal_alignment = 2
+script = ExtResource("3_q3rv0")
+
+[node name="HPBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/HP/VBoxContainer" unique_id=300468650]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(43, 3)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_v45wu")
+theme_override_styles/fill = SubResource("StyleBoxFlat_fnojh")
+value = 100.0
+fill_mode = 1
+show_percentage = false
+script = ExtResource("4_li2ur")
+
+[node name="HPLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/HP" unique_id=755901546]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.79607844, 0, 0.15686275, 1)
+text = "HP"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/HP" unique_id=429205564]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="MP" type="BoxContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1153027976]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/MP" unique_id=1514010813]
+layout_mode = 2
+
+[node name="MPCurrent" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/MP/VBoxContainer" unique_id=1428861270]
+unique_name_in_owner = true
+layout_mode = 2
+text = "9999/9999"
+horizontal_alignment = 2
+script = ExtResource("3_q3rv0")
+
+[node name="MPBar" type="ProgressBar" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/MP/VBoxContainer" unique_id=397664225]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(43, 3)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_p3x7g")
+theme_override_styles/fill = SubResource("StyleBoxFlat_jpa1m")
+value = 100.0
+fill_mode = 1
+show_percentage = false
+script = ExtResource("4_li2ur")
+
+[node name="MPLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/MP" unique_id=809035380]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.1053055, 0.6561091, 1, 1)
+text = "HP"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/HBoxContainer/MP" unique_id=1610145781]
+layout_mode = 2
+theme_override_constants/margin_left = 8
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer" unique_id=713590043]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer" unique_id=78123777]
+layout_mode = 2
+theme_override_constants/h_separation = 100
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="AttackLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=1512223023]
+layout_mode = 2
+text = "Attack"
+
+[node name="AttackValue" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=870742509]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="DefenseLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=764685933]
+layout_mode = 2
+text = "Defense"
+
+[node name="DefenseValue" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=1902592185]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="IntelligenceLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=1243633670]
+layout_mode = 2
+text = "Intelligence"
+
+[node name="IntelligenceValue" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=988398527]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="SpeedLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=1487444480]
+layout_mode = 2
+text = "Speed"
+
+[node name="SpeedValue" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=562561550]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="AccuracyLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=1293773364]
+layout_mode = 2
+text = "Accuracy"
+
+[node name="AccuracyValue" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=437531075]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="EvasionLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=1499340210]
+layout_mode = 2
+text = "Evasion"
+
+[node name="EvasionValue" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=1287713252]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
+
+[node name="LuckLabel" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=1003585173]
+layout_mode = 2
+text = "Luck"
+
+[node name="LuckValue" type="Label" parent="MarginContainer/HBoxContainer/PlayerContainer/StatsContainer/MarginContainer/VBoxContainer/GridContainer" unique_id=2112474266]
+unique_name_in_owner = true
+layout_mode = 2
+text = "0"
