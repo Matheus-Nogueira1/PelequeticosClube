@@ -1,0 +1,17 @@
+## Semana 5 | 11/10/2026
+- Design do Dummy Base
+- Design do Dummy atacando, desviando e tomando hit
+- Remake do menu com novos botões e Logo
+- Remake da "Firekeeper"
+- Animação da "Firekeeper" mão
+- Postagem e Edição dos vídeos sobre o devlog e outros
+- Cutscene do personagem caindo com animação e programação ( base )
+---------------------------------------------------------------------
+- Finalização da bastilha ( base )
+- Criação e finalização da cabana da "FireKeeper"
+- Nome para a "FireKeeper" --> "Elizabeth"
+- Animação da Tela Início ( FADE-IN & FADE-OUT  e Outros )
+- Aprimoramento do Github
+- Remodelagem do projeto no Godot Engine
+- Decoração da Bastilha
+- Decoração da Cabana
