@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://bvyvc5ny3cht8"]
+
+[node name="Control" type="Control" unique_id=1663544077]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1040740590]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=702596601]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TopBar" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1418944177]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar" unique_id=1367544077]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PartyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/HBoxContainer" unique_id=1169267679]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/HBoxContainer/PartyPanel" unique_id=102618737]
+layout_mode = 2
+
+[node name="Battlefield" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/HBoxContainer" unique_id=468784180]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/TopBar/HBoxContainer/Battlefield" unique_id=98674895]
+layout_mode = 2
+
+[node name="EnemyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/HBoxContainer" unique_id=1029187186]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/HBoxContainer/EnemyPanel" unique_id=1166486139]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar" unique_id=1593638322]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="RegionalPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/HBoxContainer2" unique_id=2041982078]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+
+[node name="ActionPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/HBoxContainer2" unique_id=424074914]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LogPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=602699646]
+custom_minimum_size = Vector2(0, 120)
+layout_mode = 2
+
+[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/LogPanel" unique_id=1241593587]
+layout_mode = 2
