@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://cckmocpmkwsuy"]
+[gd_scene format=3 uid="uid://vxt0d605rabb"]
 
 [ext_resource type="Script" uid="uid://bc7ekladnrv0v" path="res://scripts/battle/rolagens-dados-d6.gd" id="1_qnuan"]
-[ext_resource type="Texture2D" uid="uid://dy7718ubsy8b6" path="res://assets/six sided die.png" id="2_1yoky"]
+[ext_resource type="Texture2D" uid="uid://dy7718ubsy8b6" path="res://assets/menu/six sided die.png" id="2_1yoky"]
 [ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/animações/click-dados-d6.gd" id="3_kvjsq"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ij6vw"]
@@ -73,7 +73,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_4sjlk")
 }],
-"loop": false,
+"loop": 0,
 "name": &"default",
 "speed": 12.0
 }, {
@@ -96,13 +96,13 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_k85er")
 }],
-"loop": false,
+"loop": 0,
 "name": &"rolar",
 "speed": 5.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ij6vw"]
-size = Vector2(1.6393442, 5.0632896)
+size = Vector2(14.409836, 14.531645)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=2129393194]
 input_pickable = true
@@ -110,12 +110,9 @@ script = ExtResource("1_qnuan")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1493194244]
 texture_filter = 1
-position = Vector2(600, 333)
-scale = Vector2(36.3125, 36.3125)
 sprite_frames = SubResource("SpriteFrames_ebjds")
 script = ExtResource("3_kvjsq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=538735764]
-position = Vector2(600, 333)
-scale = Vector2(354.41, -114.74752)
+position = Vector2(-0.20492554, -0.26582336)
 shape = SubResource("RectangleShape2D_ij6vw")
