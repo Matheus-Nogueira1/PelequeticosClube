@@ -14,7 +14,7 @@ universal_fade/patterns_directory="res://addons/UniversalFade/Patterns"
 
 [application]
 
-config/name="TelaMenu"
+config/name="PelequeticosClube"
 run/main_scene="uid://k8gfl42dcq0v"
 config/features=PackedStringArray("4.7", "Mobile")
 boot_splash/bg_color=Color(0.07450981, 0.15686275, 0.15686275, 1)
