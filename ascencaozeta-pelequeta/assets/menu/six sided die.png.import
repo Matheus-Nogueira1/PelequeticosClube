@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bk1lsyeqtcda5"
-path="res://.godot/imported/walk.png-f8718ddfa87da4582918631555740f37.ctex"
+uid="uid://dy7718ubsy8b6"
+path="res://.godot/imported/six sided die.png-9f3642c3cad56d7dfa4a94aeb68c9be4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/images/player/walk.png"
-dest_files=["res://.godot/imported/walk.png-f8718ddfa87da4582918631555740f37.ctex"]
+source_file="res://assets/menu/six sided die.png"
+dest_files=["res://.godot/imported/six sided die.png-9f3642c3cad56d7dfa4a94aeb68c9be4.ctex"]
 
 [params]
 
