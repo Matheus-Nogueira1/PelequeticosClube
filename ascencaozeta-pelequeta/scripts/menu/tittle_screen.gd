@@ -77,7 +77,7 @@ func _transicionar_para_cutscene() -> void:
 
 	# Só troca a cena depois que a tela estiver preta.
 	get_tree().change_scene_to_file(
-		"res://scenes/testes/caixa-dialogo.tscn"
+		"res://scenes/menu/caixa-dialogo.tscn"
 	)
 
 

@@ -1,12 +1,12 @@
 [gd_scene format=4 uid="uid://b1mak0l3ariyh"]
 
 [ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="1_3kl3c"]
-[ext_resource type="Texture2D" uid="uid://dhwhe2vbbk8jf" path="res://assets/images/world/Furniture.png" id="1_unkkh"]
-[ext_resource type="Texture2D" uid="uid://sh8isxje8r2v" path="res://assets/images/world/tiles.png" id="2_r26ap"]
-[ext_resource type="Texture2D" uid="uid://chc4y1lhpo7ob" path="res://assets/images/world/Tools.png" id="3_jx1cy"]
-[ext_resource type="Texture2D" uid="uid://bbj83tcsss14s" path="res://assets/images/world/Pan.png" id="4_6xgox"]
-[ext_resource type="Texture2D" uid="uid://d0dped4wv2xiq" path="res://assets/images/world/Meat.png" id="5_00cim"]
-[ext_resource type="Texture2D" uid="uid://v3r2qydmoih8" path="res://assets/images/world/mainlevbuild.png" id="6_bmteq"]
+[ext_resource type="Texture2D" uid="uid://dhwhe2vbbk8jf" path="res://assets/world/Furniture.png" id="1_unkkh"]
+[ext_resource type="Texture2D" uid="uid://sh8isxje8r2v" path="res://assets/world/tiles.png" id="2_r26ap"]
+[ext_resource type="Texture2D" uid="uid://chc4y1lhpo7ob" path="res://assets/world/Tools.png" id="3_jx1cy"]
+[ext_resource type="Texture2D" uid="uid://bbj83tcsss14s" path="res://assets/world/Pan.png" id="4_6xgox"]
+[ext_resource type="Texture2D" uid="uid://d0dped4wv2xiq" path="res://assets/world/Meat.png" id="5_00cim"]
+[ext_resource type="Texture2D" uid="uid://v3r2qydmoih8" path="res://assets/world/mainlevbuild.png" id="6_bmteq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_om33r"]
 texture = ExtResource("1_unkkh")

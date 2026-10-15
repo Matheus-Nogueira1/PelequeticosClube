@@ -64,6 +64,20 @@ var pontos_acao_maximos: int = 3
 
 ## CONHECIMENTOS (Perícias OBLIVIO)
 ## Nível de treino em cada um dos 10 Conhecimentos (sem máximo)
+
+## Origem das especializações
+const ORIGEM_PAPEL: String = "papel"
+const ORIGEM_MENTE: String = "mente"
+const ORIGEM_PROGRESSAO: String = "progressao"
+
+## Origem de cada conhecimento especializado.
+## Chave: nome do conhecimento; valor: origem.
+var conhecimentos_origem: Dictionary = {}
+
+## Conhecimentos que podem receber treinamento por permissão explícita.
+## Usado para exceções de personagem e progressões autorizadas.
+var conhecimentos_treino_permitido: Array[String] = []
+
 var conhecimentos_treino: Dictionary = { 
 	"Bandidagem": 0,    # Delitos, furtividade de crimes
 	"Duelo": 0,         # Estratégia marcial, brechas em defesa
@@ -72,7 +86,7 @@ var conhecimentos_treino: Dictionary = {
 	"Místico": 0,       # Sobrenatural, artes arcanas, seres outros
 	"Mundo": 0,         # Natureza, animais, sobrevivência
 	"Rastro": 0,        # Percepção, detalhes ocultos, sensoriais
-	"Reflexos": 0,      # Esquiva, corporais rápidos, movimento
+	"Reflexos": 0,      # Esqu	iva, corporais rápidos, movimento
 	"Saber": 0,         # Memória, estudos, conhecimento geral
 	"Social": 0         # Persuasão, manipulação emocional, charisma
 }
@@ -134,28 +148,135 @@ func atualizar_atributo_fixo(atributo: String, valor: int) -> void:
 
 ## ===== CONHECIMENTOS (PERÍCIAS OBLIVIO) =====
 
-## Verifica se um Conhecimento é especializado
+## Conta quantas especializações pertencem a uma origem.
+func contar_especializacoes_por_origem(origem: String) -> int:
+	var total: int = 0
+
+	for conhecimento in conhecimentos_especializados:
+		if conhecimentos_origem.get(conhecimento, "") == origem:
+			total += 1
+
+	return total
+
+
+## Verifica se um conhecimento é especializado.
 func tem_especializacao(conhecimento: String) -> bool:
 	return conhecimento in conhecimentos_especializados
 
-## Adiciona especialização a um conhecimento
-func adicionar_especializacao(conhecimento: String) -> void:
-	if conhecimento in conhecimentos_treino and not tem_especializacao(conhecimento):
-		conhecimentos_especializados.append(conhecimento)
 
-## Remove especialização de um conhecimento
-func remover_especializacao(conhecimento: String) -> void:
+## Adiciona uma especialização durante a criação inicial.
+## O limite é validado separadamente para Papel e Mente.
+func adicionar_especializacao_inicial(
+	conhecimento: String,
+	origem: String
+) -> bool:
+	if not conhecimentos_treino.has(conhecimento):
+		return false
+
 	if tem_especializacao(conhecimento):
-		conhecimentos_especializados.erase(conhecimento)
+		return false
 
-## Retorna nível de treino em um conhecimento
-func obter_treino_conhecimento(conhecimento: String) -> int:
+	if origem == ORIGEM_PAPEL:
+		if contar_especializacoes_por_origem(ORIGEM_PAPEL) >= 3:
+			return false
+	elif origem == ORIGEM_MENTE:
+		var limite_mente: int = int(floor(float(atributo_mente) / 2.0))
+		if contar_especializacoes_por_origem(ORIGEM_MENTE) >= limite_mente:
+			return false
+	else:
+		return false
+
+	conhecimentos_especializados.append(conhecimento)
+	conhecimentos_origem[conhecimento] = origem
+	return true
+
+
+## Adiciona uma especialização por progressão.
+## O bônus de treinamento só é liberado se explicitamente autorizado.
+func adicionar_especializacao(
+	conhecimento: String,
+	permite_treinamento: bool = false
+) -> bool:
+	if not conhecimentos_treino.has(conhecimento):
+		return false
+
+	if tem_especializacao(conhecimento):
+		return false
+
+	conhecimentos_especializados.append(conhecimento)
+	conhecimentos_origem[conhecimento] = ORIGEM_PROGRESSAO
+
+	if permite_treinamento:
+		if conhecimento not in conhecimentos_treino_permitido:
+			conhecimentos_treino_permitido.append(conhecimento)
+
+	return true
+
+
+## Remove especialização e os dados de treinamento associados.
+func remover_especializacao(conhecimento: String) -> void:
+	if not tem_especializacao(conhecimento):
+		return
+
+	conhecimentos_especializados.erase(conhecimento)
+	conhecimentos_origem.erase(conhecimento)
+	conhecimentos_treino_permitido.erase(conhecimento)
+
 	if conhecimentos_treino.has(conhecimento):
-		return conhecimentos_treino[conhecimento]
-	return 0
+		conhecimentos_treino[conhecimento] = 0
 
-## Aumenta nível de treino em um conhecimento
-func aumentar_treino_conhecimento(conhecimento: String, quantidade: int = 1) -> void:
+## Verifica se o treinamento pode conceder bônus.
+## Especializações adicionais pela Mente recebem bônus automaticamente.
+## Papel e progressão exigem permissão explícita.
+func pode_receber_bonus_treinamento(conhecimento: String) -> bool:
+	if not tem_especializacao(conhecimento):
+		return false
+
+	var origem: String = conhecimentos_origem.get(conhecimento, "")
+
+	if origem == ORIGEM_MENTE:
+		return true
+
+	return conhecimento in conhecimentos_treino_permitido
+
+
+## Calcula o bônus total de um teste de conhecimento.
+## Especialização: +2.
+## Treinamento permitido: +1 por nível.
+func calcular_bonus_conhecimento(conhecimento: String) -> int:
+	if not tem_especializacao(conhecimento):
+		return 0
+
+	var bonus: int = 2
+
+	if pode_receber_bonus_treinamento(conhecimento):
+		bonus += obter_treino_conhecimento(conhecimento)
+
+	return bonus
+
+
+## Remove treinamentos que não podem conceder bônus.
+func limpar_treinamentos_invalidos() -> void:
+	for conhecimento in conhecimentos_treino.keys():
+		if not pode_receber_bonus_treinamento(conhecimento):
+			conhecimentos_treino[conhecimento] = 0
+
+
+## Retorna nível de treino em um conhecimento.
+func obter_treino_conhecimento(conhecimento: String) -> int:
+	return int(conhecimentos_treino.get(conhecimento, 0))
+
+## Aumenta treinamento apenas quando a regra permite.
+func aumentar_treino_conhecimento(
+	conhecimento: String,
+	quantidade: int = 1
+) -> void:
+	if quantidade <= 0:
+		return
+
+	if not pode_receber_bonus_treinamento(conhecimento):
+		return
+
 	if conhecimentos_treino.has(conhecimento):
 		conhecimentos_treino[conhecimento] += quantidade
 
@@ -358,6 +479,8 @@ func para_dictionary() -> Dictionary:
 		"pontos_acao_maximos": pontos_acao_maximos,
 		"conhecimentos_treino": conhecimentos_treino,
 		"conhecimentos_especializados": conhecimentos_especializados,
+		"conhecimentos_origem": conhecimentos_origem.duplicate(true),
+		"conhecimentos_treino_permitido": conhecimentos_treino_permitido.duplicate(),
 		"analisado_por_duelo": analisado_por_duelo,
 		"habilidades": habilidades,
 		"inventario": inventario,
@@ -414,11 +537,26 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 		combatente.pontos_acao_atuais = dados["pontos_acao_atuais"]
 	if dados.has("pontos_acao_maximos"):
 		combatente.pontos_acao_maximos = dados["pontos_acao_maximos"]
-	
+
+	if dados.has("conhecimentos_origem"):
+		combatente.conhecimentos_origem = dados["conhecimentos_origem"].duplicate(true)
+	else:
+		## Migração conservadora de saves antigos sem origem registrada.
+		## A origem não será presumida como Mente.
+		for conhecimento in combatente.conhecimentos_especializados:
+			combatente.conhecimentos_origem[conhecimento] = ORIGEM_PROGRESSAO
+
+	if dados.has("conhecimentos_treino_permitido"):
+		combatente.conhecimentos_treino_permitido.clear()
+
+		for conhecimento in dados["conhecimentos_treino_permitido"]:
+			if conhecimento in combatente.conhecimentos_treino:
+				combatente.conhecimentos_treino_permitido.append(conhecimento)
+
 	if dados.has("conhecimentos_treino"):
-		combatente.conhecimentos_treino = dados["conhecimentos_treino"]
-	if dados.has("conhecimentos_especializados"):
-		combatente.conhecimentos_especializados = dados["conhecimentos_especializados"]
+		combatente.conhecimentos_treino = dados["conhecimentos_treino"].duplicate(true)
+
+	combatente.limpar_treinamentos_invalidos()
 	if dados.has("habilidades"):
 		combatente.habilidades = dados["habilidades"]
 	if dados.has("inventario"):

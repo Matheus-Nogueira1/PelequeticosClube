@@ -6,6 +6,38 @@
 class_name PersonagensData
 extends RefCounted
 
+
+## ============================================================================
+## DADOS DE APRESENTAÇÃO DOS PERSONAGENS
+## Utilizados pela tela de seleção de personagem.
+## ============================================================================
+
+static func obter_dados_apresentacao(nome: String) -> Dictionary:
+	match nome.to_lower():
+		"escolhido":
+			return {
+				"nome": "Escolhido",
+				"descricao": ""
+			}
+
+		"jp", "jp da maldade", "jp da maldade", "jp da maldade":
+			return {
+				"nome": "JP da Maldade",
+				"descricao": "JP da Maldade, um ser caótico e imprevisível.\nDizem que onde ele passa, apenas ruína permanece."
+			}
+
+		"mob":
+			return {
+				"nome": "Mob",
+				"descricao": "Um simples mob... ou talvez não?\nMesmo os mais fracos podem esconder perigos inesperados."
+			}
+
+	return {
+		"nome": "Personagem desconhecido",
+		"descricao": "Nenhuma descrição disponível."
+	}
+
+
 ## ============================================================================
 ## PERSONAGEM 1: Mob - Quem Protege
 ## ============================================================================
@@ -37,9 +69,18 @@ static func criar_mob() -> CombatenteData:
 	
 	## CONHECIMENTOS ESPECIALIZADOS
 	## Quem Protege escolhe 3 do Papel + Mente/2 adicionais (0/2 = 0 total)
-	mob.adicionar_especializacao("Duelo")
-	mob.adicionar_especializacao("Esforço")
-	mob.adicionar_especializacao("Reflexos")
+	mob.adicionar_especializacao_inicial(
+	"Duelo",
+	CombatenteData.ORIGEM_PAPEL
+	)
+	mob.adicionar_especializacao_inicial(
+		"Esforço",
+		CombatenteData.ORIGEM_PAPEL
+	)
+	mob.adicionar_especializacao_inicial(
+		"Reflexos",
+		CombatenteData.ORIGEM_PAPEL
+	)
 	
 	## HABILIDADES
 	## Habilidade Principal (todos têm desde o início):
@@ -101,14 +142,48 @@ static func criar_escolhido() -> CombatenteData:
 	## Quem Cuida escolhe 3 do Papel + Mente/2 adicionais (10/2 = 5 total)
 	## Do Papel: Esforço, Saber, Místico
 	## Adicionais (liberdade do jogador): Mundo, Rastro, Emocional, Social, Bandidagem
-	escolhido.adicionar_especializacao("Esforço")
-	escolhido.adicionar_especializacao("Saber")
-	escolhido.adicionar_especializacao("Místico")
-	escolhido.adicionar_especializacao("Mundo")
-	escolhido.adicionar_especializacao("Rastro")
-	escolhido.adicionar_especializacao("Emocional")
-	escolhido.adicionar_especializacao("Social")
-	escolhido.adicionar_especializacao("Bandidagem")
+	## Especializações do Papel: Quem Cuida
+	escolhido.adicionar_especializacao_inicial(
+		"Esforço",
+		CombatenteData.ORIGEM_PAPEL
+	)
+	escolhido.adicionar_especializacao_inicial(
+		"Saber",
+		CombatenteData.ORIGEM_PAPEL
+	)
+	escolhido.adicionar_especializacao_inicial(
+		"Místico",
+		CombatenteData.ORIGEM_PAPEL
+	)
+
+	## Especializações adicionais pela Mente 10: cinco
+	escolhido.adicionar_especializacao_inicial(
+		"Mundo",
+		CombatenteData.ORIGEM_MENTE
+	)
+	escolhido.adicionar_especializacao_inicial(
+		"Rastro",
+		CombatenteData.ORIGEM_MENTE
+	)
+	escolhido.adicionar_especializacao_inicial(
+		"Emocional",
+		CombatenteData.ORIGEM_MENTE
+	)
+	escolhido.adicionar_especializacao_inicial(
+		"Social",
+		CombatenteData.ORIGEM_MENTE
+	)
+	escolhido.adicionar_especializacao_inicial(
+		"Bandidagem",
+		CombatenteData.ORIGEM_MENTE
+	)
+
+	## Exceção explícita: Místico é o treinamento principal do Escolhido.
+	escolhido.conhecimentos_treino_permitido.append("Místico")
+
+	## Treinamentos iniciais mantidos
+	escolhido.conhecimentos_treino["Místico"] = 2
+	escolhido.conhecimentos_treino["Rastro"] = 2
 	
 	## HABILIDADES
 	## Habilidade Principal (todos têm desde o início):
@@ -173,11 +248,33 @@ static func criar_JP() -> CombatenteData:
 	## Quem Manda escolhe 3 do Papel + Mente/2 adicionais (4/2 = 2 total)
 	## Do Papel: Saber, Social, Emocional
 	## Adicionais (liberdade do jogador): Rastro, Bandidagem
-	JP.adicionar_especializacao("Saber")
-	JP.adicionar_especializacao("Social")
-	JP.adicionar_especializacao("Emocional")
-	JP.adicionar_especializacao("Rastro")
-	JP.adicionar_especializacao("Bandidagem")
+	## Especializações do Papel: Quem Manda
+	JP.adicionar_especializacao_inicial(
+		"Saber",
+		CombatenteData.ORIGEM_PAPEL
+	)
+	JP.adicionar_especializacao_inicial(
+		"Social",
+		CombatenteData.ORIGEM_PAPEL
+	)
+	JP.adicionar_especializacao_inicial(
+		"Emocional",
+		CombatenteData.ORIGEM_PAPEL
+	)
+
+	## Especializações adicionais pela Mente 4: duas
+	JP.adicionar_especializacao_inicial(
+		"Rastro",
+		CombatenteData.ORIGEM_MENTE
+	)
+	JP.adicionar_especializacao_inicial(
+		"Bandidagem",
+		CombatenteData.ORIGEM_MENTE
+	)
+
+	## Treinamentos iniciais mantidos
+	JP.conhecimentos_treino["Bandidagem"] = 2
+	JP.conhecimentos_treino["Rastro"] = 1
 	
 	## HABILIDADES
 	## Habilidade Principal (todos têm desde o início):
@@ -217,16 +314,15 @@ static func obter_todos_personagens() -> Array[CombatenteData]:
 
 ## Retorna um personagem específico pelo nome
 static func obter_personagem(nome: String) -> CombatenteData:
-	match nome.to_lower():
-		"Mob":
+	match nome.strip_edges().to_lower():
+		"mob":
 			return criar_mob()
-		"Escolhido":
+		"escolhido":
 			return criar_escolhido()
-		"JPdaMaldade":
+		"jp", "jp da maldade", "jpdamaldade":
 			return criar_JP()
-	
-	# Padrão: retorna Guerreiro
-	return criar_JP()
+
+	return null
 
 ## Cria grupo completo com um personagem como principal
 static func criar_grupo_completo(personagem_principal: String) -> Array[CombatenteData]:
@@ -245,34 +341,3 @@ static func criar_grupo_completo(personagem_principal: String) -> Array[Combaten
 			grupo.append(personagem)
 	
 	return grupo
-
-## ============================================================================
-## TODO PARA PRÓXIMA SESSÃO
-## ============================================================================
-##
-## 1. HABILIDADES:
-##    - Criar HabilidadeData.gd com sistema de habilidades
-##    - Adicionar habilidades específicas para cada personagem
-##    - Implementar custos de PA e efeitos
-##
-## 2. PERÍCIAS AVANÇADAS:
-##    - Completar treino em perícias adicionais
-##    - Expandir conhecimentos especializados
-##    - Vincular perícias a cenários de combate
-##
-## 3. ITENS:
-##    - Criar ItemData.gd com sistema de itens
-##    - Adicionar equipamentos e consumíveis
-##    - Implementar bônus de itens aos atributos
-##
-## 4. UI PARA SELEÇÃO:
-##    - Botão "Escolher Personagem Principal"
-##    - Display de informações do personagem
-##    - Preview de grupo (principal + party)
-##
-## 5. INTEGRAÇÃO COM COMBAT_MANAGER:
-##    - Carregar grupo selecionado no combate
-##    - Mostrar party no party_panel
-##    - Permitir reviver membros com habilidades
-##
-## ============================================================================

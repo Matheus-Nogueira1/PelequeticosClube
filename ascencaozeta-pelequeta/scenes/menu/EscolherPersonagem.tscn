@@ -2,9 +2,12 @@
 
 [ext_resource type="Script" uid="uid://cm8ka2lpmhap5" path="res://scripts/menu/control.gd" id="1_tjt66"]
 [ext_resource type="Texture2D" uid="uid://dyysk8jmqslcw" path="res://prefabs/Background.png" id="2_aif0b"]
-[ext_resource type="Texture2D" uid="uid://c0coxobrsbqhf" path="res://assets/images/player/EscolhidoBase.png" id="3_wetd2"]
-[ext_resource type="Texture2D" uid="uid://bqi8ykk15gghd" path="res://assets/images/player/JpBase.png" id="4_mrfmh"]
-[ext_resource type="Texture2D" uid="uid://d1fsa5i0xk5gv" path="res://assets/images/player/MobBase.png" id="5_ayp0l"]
+[ext_resource type="Texture2D" uid="uid://c0coxobrsbqhf" path="res://assets/Player/ESCOLHIDO/EscolhidoBase.png" id="3_wetd2"]
+[ext_resource type="Texture2D" uid="uid://bqi8ykk15gghd" path="res://assets/Player/JP/JpBase.png" id="4_mrfmh"]
+[ext_resource type="Texture2D" uid="uid://d1fsa5i0xk5gv" path="res://assets/Player/MOB/MobBase.png" id="5_ayp0l"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="6_gipqf"]
+[ext_resource type="LabelSettings" uid="uid://ch5kik1mpjmso" path="res://fonts/Titulos.tres" id="7_jog0g"]
+[ext_resource type="LabelSettings" uid="uid://c4uyji3i1damp" path="res://fonts/Descrição.tres" id="8_ru14h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tjwpk"]
 bg_color = Color(0.03, 0.03, 0.03, 0.85)
@@ -52,10 +55,6 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -60.0
-offset_top = 1.0
-offset_right = 60.0
-offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
@@ -65,73 +64,70 @@ theme_override_constants/separation = 40
 alignment = 1
 
 [node name="Player1" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=1146593757]
-custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer/Player1" unique_id=1886063957]
-layout_mode = 0
-offset_right = 120.0
-offset_bottom = 121.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("3_wetd2")
 stretch_mode = 5
 
 [node name="Player2" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=883764063]
-custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer/Player2" unique_id=1555085370]
-layout_mode = 0
-offset_left = 1.0
-offset_top = 2.0
-offset_right = 121.0
-offset_bottom = 123.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("4_mrfmh")
 stretch_mode = 5
 
 [node name="Player3" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=1105994070]
-custom_minimum_size = Vector2(120, 120)
 layout_mode = 2
 
 [node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer/Player3" unique_id=1605036739]
-layout_mode = 0
-offset_left = 1.0
-offset_top = -1.0
-offset_right = 121.0
-offset_bottom = 124.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("5_ayp0l")
 stretch_mode = 5
 
 [node name="CharacterName" type="Label" parent="." unique_id=1079664423]
-custom_minimum_size = Vector2(80, 80)
 layout_mode = 1
-anchors_preset = -1
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.349
 anchor_right = 0.5
-anchor_bottom = 0.349
-offset_left = -87.0
-offset_top = -40.152008
-offset_right = 93.0
-offset_bottom = 39.847992
+offset_left = -90.0
+offset_right = 90.0
+offset_bottom = 80.0
 grow_horizontal = 2
-grow_vertical = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("6_gipqf")
+theme_override_font_sizes/font_size = 10
+label_settings = ExtResource("7_jog0g")
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="DescriptionPanel" type="Panel" parent="." unique_id=23730271]
 layout_mode = 1
 anchors_preset = -1
-anchor_left = 0.2847222
-anchor_top = 0.6574074
-anchor_right = 0.2847222
-anchor_bottom = 0.6574074
-offset_right = 500.0
-offset_bottom = 200.0
-grow_horizontal = 2
-grow_vertical = 0
+anchor_left = 0.2
+anchor_top = 0.62
+anchor_right = 0.8
+anchor_bottom = 0.905
 theme_override_styles/panel = SubResource("StyleBoxFlat_tjwpk")
-metadata/_edit_use_anchors_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="DescriptionPanel" unique_id=1183576361]
 layout_mode = 1
@@ -143,13 +139,11 @@ grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Name" type="Label" parent="DescriptionPanel/VBoxContainer" unique_id=1842676470]
-layout_mode = 2
-horizontal_alignment = 1
-autowrap_mode = 2
-
 [node name="Description" type="Label" parent="DescriptionPanel/VBoxContainer" unique_id=1890970100]
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_vertical = 3
-horizontal_alignment = 1
+theme_override_fonts/font = ExtResource("6_gipqf")
+theme_override_font_sizes/font_size = 5
+label_settings = ExtResource("8_ru14h")
 autowrap_mode = 2

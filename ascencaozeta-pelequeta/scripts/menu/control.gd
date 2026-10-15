@@ -1,176 +1,159 @@
 extends Control
 
-@onready var slots = $CenterContainer/HBoxContainer.get_children()
-@onready var name_label = $CharacterName
-@onready var panel_name_label = $DescriptionPanel/VBoxContainer/Name
-@onready var description_label = $DescriptionPanel/VBoxContainer/Description
+@onready var slots: Array[Node] = $CenterContainer/HBoxContainer.get_children()
+@onready var name_label: Label = $CharacterName
+@onready var description_label: Label = $DescriptionPanel/VBoxContainer/Description
 
-var selected_index = 1
-
-# 🧠 nomes dos personagens
-var character_names = [
+# Ordem visual dos personagens na tela.
+var character_ids: Array[String] = [
 	"Escolhido",
 	"JP da Maldade",
 	"Mob"
 ]
 
-# 📜 descrições
-var character_descriptions = [
-	"Um escolhido marcado por um destino desconhecido.\nSeu passado é um mistério, mas seu futuro será sangrento.",
+var selected_index: int = 1
 
-	"JP da Maldade, um ser caótico e imprevisível.\nDizem que onde ele passa, apenas ruína permanece.",
 
-	"Um simples mob... ou talvez não?\nMesmo os mais fracos podem esconder perigos inesperados."
-]
-
-func _ready():
+func _ready() -> void:
 	await get_tree().process_frame
-		
-	name_label.modulate = Color(0.9, 0.8, 0.6)
-	panel_name_label.modulate = Color(0.8, 0.7, 0.5)
-	description_label.modulate = Color(0.6, 0.7, 1.0)
 
-	description_label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	if slots.is_empty():
+		push_error("EscolherPersonagem: nenhum personagem encontrado no HBoxContainer.")
+		return
 
-	panel_name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	if slots.size() != character_ids.size():
+		push_error(
+			"EscolherPersonagem: a quantidade de slots não corresponde " +
+			"à quantidade de personagens."
+		)
+		return
+
+	selected_index = clampi(selected_index, 0, slots.size() - 1)
 
 	update_visual(true)
 
 
-func _input(event):
+func _input(event: InputEvent) -> void:
+	if slots.is_empty():
+		return
+
 	if event.is_action_pressed("ui_right"):
 		selected_index = (selected_index + 1) % slots.size()
 		update_visual()
+		get_viewport().set_input_as_handled()
 
 	elif event.is_action_pressed("ui_left"):
 		selected_index = (selected_index - 1 + slots.size()) % slots.size()
 		update_visual()
+		get_viewport().set_input_as_handled()
 
 	elif event.is_action_pressed("ui_accept"):
 		select_character()
 
 
-func update_visual(skip_animation := false):
+## Consulta os dados centralizados em PersonagensData.gd.
+func obter_personagem_selecionado() -> Dictionary:
+	return PersonagensData.obter_dados_apresentacao(
+		character_ids[selected_index]
+	)	
 
-	# 🔥 atualiza tudo
+
+func update_visual(skip_animation: bool = false) -> void:
 	update_name(skip_animation)
-	update_panel_name(skip_animation)
 	update_description(skip_animation)
 
+	# Atualiza apenas a transparência dos personagens.
+	# Não altera posição, escala ou dimensões.
 	for i in range(slots.size()):
-		var slot = slots[i]
+		var slot: Control = slots[i] as Control
+
+		if slot == null:
+			continue
 
 		if slot.has_meta("tween"):
 			var old_tween = slot.get_meta("tween")
-			if old_tween:
+			if old_tween is Tween and old_tween.is_running():
 				old_tween.kill()
 
-		var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		var tween: Tween = create_tween()
+		tween.set_trans(Tween.TRANS_SINE)
+		tween.set_ease(Tween.EASE_OUT)
 		slot.set_meta("tween", tween)
 
-		var size = slot.size
+		var target_color: Color
 
-		if i < selected_index:
-			slot.pivot_offset = Vector2(0, size.y / 2)
-		elif i > selected_index:
-			slot.pivot_offset = Vector2(size.x, size.y / 2)
+		if i == selected_index:
+			target_color = Color.WHITE
 		else:
-			slot.pivot_offset = size / 2
-
-		var target_scale = Vector2(1.2, 1.2) if i == selected_index else Vector2(0.75, 0.75)
-		var target_color = Color(1,1,1,1) if i == selected_index else Color(0.2,0.2,0.2,1)
+			target_color = Color(0.45, 0.45, 0.45, 1.0)
 
 		if skip_animation:
-			slot.scale = target_scale
 			slot.modulate = target_color
 		else:
-			tween.tween_property(slot, "scale", target_scale, 0.25)
-			tween.tween_property(slot, "modulate", target_color, 0.25)
+			tween.tween_property(
+				slot, "modulate", target_color, 0.2
+			)
 
 
-# 🔝 Nome grande (topo)
-func update_name(skip_animation):
-
-	var new_name = character_names[selected_index]
-	var container = $CenterContainer/HBoxContainer
-
-	var target_pos = container.global_position + container.size / 3.65	
-	target_pos.y -= 120
+func update_name(skip_animation: bool = false) -> void:
+	var dados: Dictionary = obter_personagem_selecionado()
+	var novo_nome: String = dados["nome"]
 
 	if name_label.has_meta("tween"):
-		var old = name_label.get_meta("tween")
-		if old:
-			old.kill()
+		var old_tween = name_label.get_meta("tween")
+		if old_tween is Tween and old_tween.is_running():
+			old_tween.kill()
 
-	var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	var tween: Tween = create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_OUT)
 	name_label.set_meta("tween", tween)
 
 	if skip_animation:
-		name_label.text = new_name
-		name_label.global_position = target_pos
-		name_label.modulate.a = 1
+		name_label.text = novo_nome
+		name_label.modulate.a = 1.0
 	else:
-		tween.tween_property(name_label, "modulate:a", 0, 0.1)
-
-		tween.tween_callback(func():
-			name_label.text = new_name
+		tween.tween_property(name_label, "modulate:a", 0.0, 0.1)
+		tween.tween_callback(func() -> void:
+			name_label.text = novo_nome
 		)
-
-		tween.parallel().tween_property(name_label, "global_position", target_pos, 0.25)
-		tween.parallel().tween_property(name_label, "modulate:a", 1, 0.15)
+		tween.tween_property(name_label, "modulate:a", 1.0, 0.15)
 
 
-# 📛 Nome dentro do painel (título)
-func update_panel_name(skip_animation := false):
-
-	var new_name = character_names[selected_index]
-
-	if panel_name_label.has_meta("tween"):
-		var old = panel_name_label.get_meta("tween")
-		if old:
-			old.kill()
-
-	var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	panel_name_label.set_meta("tween", tween)
-
-	if skip_animation:
-		panel_name_label.text = new_name
-		panel_name_label.modulate.a = 1
-	else:
-		tween.tween_property(panel_name_label, "modulate:a", 0, 0.1)
-
-		tween.tween_callback(func():
-			panel_name_label.text = new_name
-		)
-
-		tween.tween_property(panel_name_label, "modulate:a", 1, 0.2)
-
-
-# 📜 Descrição
-func update_description(skip_animation := false):
-
-	var new_text = character_descriptions[selected_index]
+func update_description(skip_animation: bool = false) -> void:
+	var dados: Dictionary = obter_personagem_selecionado()
+	var novo_texto: String = dados["descricao"]
 
 	if description_label.has_meta("tween"):
-		var old = description_label.get_meta("tween")
-		if old:
-			old.kill()
+		var old_tween = description_label.get_meta("tween")
+		if old_tween is Tween and old_tween.is_running():
+			old_tween.kill()
 
-	var tween = create_tween().set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	var tween: Tween = create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.set_ease(Tween.EASE_OUT)
 	description_label.set_meta("tween", tween)
 
 	if skip_animation:
-		description_label.text = new_text
-		description_label.modulate.a = 1
+		description_label.text = novo_texto
+		description_label.modulate.a = 1.0
 	else:
-		tween.tween_property(description_label, "modulate:a", 0, 0.1)
-
-		tween.tween_callback(func():
-			description_label.text = new_text
+		tween.tween_property(
+			description_label, "modulate:a", 0.0, 0.1
+		)
+		tween.tween_callback(func() -> void:
+			description_label.text = novo_texto
+		)
+		tween.tween_property(
+			description_label, "modulate:a", 1.0, 0.2
 		)
 
-		tween.tween_property(description_label, "modulate:a", 1, 0.2)
 
-
-func select_character():
-	print("Escolhido:", character_names[selected_index])
+func select_character() -> void:
+	var dados: Dictionary = obter_personagem_selecionado()
+	
+	print("Personagem selecionado: ", dados["nome"])
+	print("Identificador interno: ", character_ids[selected_index])
+	get_tree().change_scene_to_file(
+		"res://scenes/mapas/world.tscn"
+	)
