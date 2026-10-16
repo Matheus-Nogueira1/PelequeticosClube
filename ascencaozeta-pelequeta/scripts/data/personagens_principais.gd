@@ -17,7 +17,8 @@ static func obter_dados_apresentacao(nome: String) -> Dictionary:
 		"escolhido":
 			return {
 				"nome": "Escolhido",
-				"descricao": ""
+				"descricao": "Cleptomaníaco, Imperdoável, Inefável.
+Um borrão indistinguível guiado por uma motivação que nunca lhe pertenceu. Causado por uma origem tomada a força e fadado a destinos impossíveis de alcançar. Escolhido para extinguir as sombras custe o que custar."
 			}
 
 		"jp", "jp da maldade", "jp da maldade", "jp da maldade":

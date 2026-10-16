@@ -116,6 +116,7 @@ grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_gipqf")
 theme_override_font_sizes/font_size = 10
+text = "ESCOLHIDO"
 label_settings = ExtResource("7_jog0g")
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -145,5 +146,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_fonts/font = ExtResource("6_gipqf")
 theme_override_font_sizes/font_size = 5
+text = "Cleptomaníaco, Imperdoável, Inefável.
+Um borrão indistinguível guiado por uma motivação que nunca lhe pertenceu. Causado por uma origem tomada a força e fadado a destinos impossíveis de alcançar. Escolhido para extinguir as sombras custe o que custar."
 label_settings = ExtResource("8_ru14h")
 autowrap_mode = 2
