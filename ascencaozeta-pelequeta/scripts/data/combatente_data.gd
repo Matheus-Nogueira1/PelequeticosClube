@@ -537,25 +537,56 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 		combatente.pontos_acao_atuais = dados["pontos_acao_atuais"]
 	if dados.has("pontos_acao_maximos"):
 		combatente.pontos_acao_maximos = dados["pontos_acao_maximos"]
+	
+	combatente.conhecimentos_especializados.clear()
 
+	for conhecimento in dados.get("conhecimentos_especializados", []):
+		var nome_conhecimento: String = str(conhecimento)
+
+		if not combatente.conhecimentos_especializados.has(nome_conhecimento):
+			combatente.conhecimentos_especializados.append(nome_conhecimento)
+	
+		# Restaura as especializações antes de validar os treinamentos.
+	combatente.conhecimentos_especializados.clear()
+
+	if dados.has("conhecimentos_especializados"):
+		for conhecimento in dados["conhecimentos_especializados"]:
+			var nome_conhecimento: String = str(conhecimento)
+
+			if combatente.conhecimentos_treino.has(nome_conhecimento):
+				if nome_conhecimento not in combatente.conhecimentos_especializados:
+					combatente.conhecimentos_especializados.append(nome_conhecimento)
+
+	# Restaura a origem das especializações.
 	if dados.has("conhecimentos_origem"):
 		combatente.conhecimentos_origem = dados["conhecimentos_origem"].duplicate(true)
 	else:
-		## Migração conservadora de saves antigos sem origem registrada.
-		## A origem não será presumida como Mente.
+		# Compatibilidade com saves antigos sem origem registrada.
 		for conhecimento in combatente.conhecimentos_especializados:
-			combatente.conhecimentos_origem[conhecimento] = ORIGEM_PROGRESSAO
+			combatente.conhecimentos_origem[conhecimento] = CombatenteData.ORIGEM_PROGRESSAO
+
+	# Restaura os conhecimentos autorizados a receber treinamento.
+	combatente.conhecimentos_treino_permitido.clear()
 
 	if dados.has("conhecimentos_treino_permitido"):
-		combatente.conhecimentos_treino_permitido.clear()
-
 		for conhecimento in dados["conhecimentos_treino_permitido"]:
-			if conhecimento in combatente.conhecimentos_treino:
-				combatente.conhecimentos_treino_permitido.append(conhecimento)
+			var nome_conhecimento: String = str(conhecimento)
 
+			if combatente.conhecimentos_treino.has(nome_conhecimento):
+				if nome_conhecimento not in combatente.conhecimentos_treino_permitido:
+					combatente.conhecimentos_treino_permitido.append(nome_conhecimento)
+
+	# Restaura os níveis de treinamento.
 	if dados.has("conhecimentos_treino"):
-		combatente.conhecimentos_treino = dados["conhecimentos_treino"].duplicate(true)
+		var treinos_salvos: Dictionary = dados["conhecimentos_treino"]
 
+		for conhecimento in combatente.conhecimentos_treino.keys():
+			if treinos_salvos.has(conhecimento):
+				combatente.conhecimentos_treino[conhecimento] = int(
+					treinos_salvos[conhecimento]
+				)
+
+	# Só valida depois de restaurar todos os dados necessários.
 	combatente.limpar_treinamentos_invalidos()
 	if dados.has("habilidades"):
 		combatente.habilidades = dados["habilidades"]

@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://chc4y1lhpo7ob" path="res://assets/world/Tools.png" id="12_vix4v"]
 [ext_resource type="Texture2D" uid="uid://d0dped4wv2xiq" path="res://assets/world/Meat.png" id="13_g6kdl"]
 [ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="14_2ca7b"]
+[ext_resource type="Script" uid="uid://drjfvij04q55a" path="res://scripts/mapas/TesteDialogoMapa.gd" id="15_cl456"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uaggq"]
 resource_name = "Bastilha"
@@ -3387,3 +3388,6 @@ limit_right = 1935
 limit_bottom = 1640
 editor_draw_limits = true
 metadata/_edit_lock_ = true
+
+[node name="TesteDialogoMapa" type="Node" parent="." unique_id=617851227]
+script = ExtResource("15_cl456")

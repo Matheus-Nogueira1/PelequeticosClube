@@ -1,5 +1,5 @@
 extends CharacterBody2D
-
+class_name RolagemD6
 @onready var dado_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 const ZONA_ACERTO_EXTREMO = 6
@@ -12,12 +12,12 @@ func _ready():
 func _input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
 		print("clicou no dado")
-		rolar_dado()
+	#	rolar_dado()
 
-func rolar_dado():
-	var resultado = rolar_teste_conhecimento_d6(false)
-	await rodar_e_mostrar_face(resultado.dado)
-	print("Resultado Conhecimento:", resultado)
+#func rolar_dado():
+	##var resultado = rolar_teste_conhecimento_d6(false)
+	#await rodar_e_mostrar_face(resultado.dado)
+	#print("Resultado Conhecimento:", resultado)
 
 	#var resultado_especial = rolar_teste_conhecimento_d6(true)
 	#print("Conhecimento Especializado:", resultado_especial)
@@ -34,17 +34,30 @@ func rodar_e_mostrar_face(lado: int) -> void:
 	dado_sprite.animation = "default"
 	dado_sprite.frame = lado - 1
 
-func rolar_teste_conhecimento_d6(especializado: bool = false) -> Dictionary:
-	var dado = randi_range(1, 6)
-	var bonus_especializacao = 2 if especializado else 0
-	var total = dado + bonus_especializacao
-	var categoria = avaliar_resultado_d6(total)
+func rolar_teste_conhecimento_d6(
+	combatente: CombatenteData,
+	conhecimento: String
+) -> Dictionary:
+	if combatente == null:
+		push_error("Não foi fornecido um CombatenteData para o teste.")
+		return {}
+
+	var dado: int = randi_range(1, 6)
+	var especializado: bool = combatente.conhecimentos_especializados.has(conhecimento)
+	var bonus_especializacao: int = 2 if especializado else 0
+	var bonus_total: int = combatente.calcular_bonus_conhecimento(conhecimento)
+	var bonus_treinamento: int = bonus_total - bonus_especializacao
+	var total: int = dado + bonus_total
+	var categoria: String = avaliar_resultado_d6(total)
 
 	return {
 		"tipo": "Conhecimento D6",
+		"conhecimento": conhecimento,
 		"especializado": especializado,
 		"dado": dado,
 		"bonus_especializacao": bonus_especializacao,
+		"bonus_treinamento": bonus_treinamento,
+		"bonus_total": bonus_total,
 		"total": total,
 		"categoria": categoria,
 		"sucesso": categoria in ["Sucesso Regular", "Sucesso Extremo"],
@@ -113,12 +126,45 @@ func rolar_teste_combate_d6(regioes_arriscadas: Array, protecao_alvo: int, dano_
 		"dano_causado": dano_causado
 	}
 
-func avaliar_resultado_d6(valor: int) -> String:
-	if valor == ZONA_ACERTO_EXTREMO:
+static func avaliar_resultado_d6(valor: int) -> String:
+	if valor >= 6:
 		return "Sucesso Extremo"
-	elif valor >= ZONA_ACERTO_REGULAR:
+	elif valor >= 4:
 		return "Sucesso Regular"
 	elif valor == 1:
 		return "Falha Crítica"
 	else:
 		return "Falha Regular"
+
+static func calcular_teste_conhecimento(
+	combatente: CombatenteData,
+	conhecimento: String
+) -> Dictionary:
+	if combatente == null:
+		push_error("Não foi fornecido um CombatenteData para o teste.")
+		return {}
+
+	if not combatente.conhecimentos_especializados.has(conhecimento):
+		push_warning("O personagem não possui a especialização: " + conhecimento)
+		return {}
+
+	var dado: int = randi_range(1, 6)
+	var bonus_especializacao: int = 2
+	var bonus_total: int = combatente.calcular_bonus_conhecimento(conhecimento)
+	var bonus_treinamento: int = bonus_total - bonus_especializacao
+	var total: int = dado + bonus_total
+	var categoria: String = avaliar_resultado_d6(total)
+
+	return {
+		"tipo": "Conhecimento D6",
+		"conhecimento": conhecimento,
+		"especializado": true,
+		"dado": dado,
+		"bonus_especializacao": bonus_especializacao,
+		"bonus_treinamento": bonus_treinamento,
+		"bonus_total": bonus_total,
+		"total": total,
+		"categoria": categoria,
+		"sucesso": categoria in ["Sucesso Regular", "Sucesso Extremo"],
+		"falha": categoria in ["Falha Regular", "Falha Crítica"]
+	}

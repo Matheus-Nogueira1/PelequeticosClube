@@ -83,7 +83,6 @@ label_settings = ExtResource("4_aydvo")
 horizontal_alignment = 1
 
 [node name="DialogueBox" type="Panel" parent="PanelContainer/MarginContainer" unique_id=1618778544]
-visible = false
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 8

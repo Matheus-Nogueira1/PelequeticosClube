@@ -1,5 +1,7 @@
 extends Node2D
 
+@export var caixa_dialogo_scene: PackedScene
+@export var dialogo_parent: Control
 var character_scenes = {
 	"Escolhido": preload("res://scenes/personagens/Escolhido.tscn"),
 	"JP": preload("res://scenes/personagens/Jp.tscn"),
@@ -32,3 +34,25 @@ func _ready():
 	print("Personagem adicionado ao Player!")
 	print("Posição do Player: ", $Player.position)
 	print("Posição do personagem: ", player.position)
+
+func abrir_dialogo(
+	personagem: CombatenteData,
+	id_dialogo: String
+) -> void:
+	if caixa_dialogo_scene == null:
+		push_error("A cena CaixaDialogo.tscn não foi configurada.")
+		return
+
+	if dialogo_parent == null:
+		push_error("O nó pai da caixa de diálogo não foi configurado.")
+		return
+
+	var caixa = caixa_dialogo_scene.instantiate()
+
+	caixa.configurar_dialogo(
+		personagem,
+		id_dialogo,
+		false
+	)
+
+	dialogo_parent.add_child(caixa)
