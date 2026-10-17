@@ -83,7 +83,7 @@
 * Design da escolha do personagem | **EM ANDAMENTO** 🔄
 * Colisão dos novos mapas | **EM ANDAMENTO** 🔄
 * Remake dos mapas | **EM ANDAMENTO** 🔄
-  --------------------------------------
+--------------------------------------------------
 * Implementação do remake tela de menu | **EM ANDAMENTO** 🔄
 * Design da tela de combate | **EM ANDAMENTO** 🔄
 * Implementação dos assets dos inimigos, personagens e npcs | **EM ANDAMENTO** 🔄
