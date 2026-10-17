@@ -75,3 +75,17 @@
 * Finalizar segundo mapa | **EM ANDAMENTO** 🔄
 * Criar mecânicas de exploração do mapa | **PENDENTE** ⚠️
 * Melhorar Tela de combate | **PENDENTE** ⚠️
+
+## 📌 Semana 17/02/26
+
+* Design Escolhido caindo e levantando | **EM ANDAMENTO** 🔄
+* Design Escolhido  Tela de combate | **EM ANDAMENTO** 🔄
+* Design da escolha do personagem | **EM ANDAMENTO** 🔄
+* Colisão dos novos mapas | **EM ANDAMENTO** 🔄
+* Remake dos mapas | **EM ANDAMENTO** 🔄
+  --------------------------------------
+* Implementação do remake tela de menu | **EM ANDAMENTO** 🔄
+* Design da tela de combate | **EM ANDAMENTO** 🔄
+* Implementação dos assets dos inimigos, personagens e npcs | **EM ANDAMENTO** 🔄
+* Decoração do mapa principal | **EM ANDAMENTO** 🔄
+* Linkar dialogos, pericias e combate nos mapas. | **EM ANDAMENTO** 🔄
