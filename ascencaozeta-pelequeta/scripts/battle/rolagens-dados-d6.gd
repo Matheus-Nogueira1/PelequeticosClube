@@ -27,9 +27,19 @@ func _input_event(_viewport, event, _shape_idx):
 	#print("Combate:", resultado_combate)
 
 func rodar_e_mostrar_face(lado: int) -> void:
+	if dado_sprite == null:
+		push_error("AnimatedSprite2D não foi encontrado no dado.")
+		return
+
+	lado = clampi(lado, 1, 6)
+	
+	dado_sprite.stop()
 	dado_sprite.animation = "rolar"
+	dado_sprite.frame = 0
 	dado_sprite.play()
+
 	await get_tree().create_timer(1.0).timeout
+
 	dado_sprite.stop()
 	dado_sprite.animation = "default"
 	dado_sprite.frame = lado - 1
@@ -48,7 +58,12 @@ func rolar_teste_conhecimento_d6(
 	var bonus_total: int = combatente.calcular_bonus_conhecimento(conhecimento)
 	var bonus_treinamento: int = bonus_total - bonus_especializacao
 	var total: int = dado + bonus_total
-	var categoria: String = avaliar_resultado_d6(total)
+	var categoria: String
+
+	if dado == 1:
+		categoria = "Falha Crítica"
+	else:
+		categoria = avaliar_resultado_d6(total)
 
 	return {
 		"tipo": "Conhecimento D6",
@@ -59,7 +74,7 @@ func rolar_teste_conhecimento_d6(
 		"bonus_treinamento": bonus_treinamento,
 		"bonus_total": bonus_total,
 		"total": total,
-		"categoria": categoria,
+		"categoria": categoria,	
 		"sucesso": categoria in ["Sucesso Regular", "Sucesso Extremo"],
 		"falha": categoria in ["Falha Regular", "Falha Crítica"]
 	}
@@ -153,7 +168,12 @@ static func calcular_teste_conhecimento(
 	var bonus_total: int = combatente.calcular_bonus_conhecimento(conhecimento)
 	var bonus_treinamento: int = bonus_total - bonus_especializacao
 	var total: int = dado + bonus_total
-	var categoria: String = avaliar_resultado_d6(total)
+	var categoria: String
+
+	if dado == 1:
+		categoria = "Falha Crítica"
+	else:
+		categoria = avaliar_resultado_d6(total)
 
 	return {
 		"tipo": "Conhecimento D6",

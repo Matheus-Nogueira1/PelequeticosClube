@@ -14,7 +14,8 @@
 [ext_resource type="Texture2D" uid="uid://chc4y1lhpo7ob" path="res://assets/world/Tools.png" id="12_vix4v"]
 [ext_resource type="Texture2D" uid="uid://d0dped4wv2xiq" path="res://assets/world/Meat.png" id="13_g6kdl"]
 [ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="14_2ca7b"]
-[ext_resource type="Script" uid="uid://drjfvij04q55a" path="res://scripts/mapas/TesteDialogoMapa.gd" id="15_cl456"]
+[ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="15_cl456"]
+[ext_resource type="PackedScene" uid="uid://vxt0d605rabb" path="res://scenes/testes/rolagem-dado.tscn" id="16_efs1e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uaggq"]
 resource_name = "Bastilha"
@@ -3379,6 +3380,7 @@ metadata/_edit_lock_ = true
 [node name="Escolhido" parent="." unique_id=188751351 instance=ExtResource("14_2ca7b")]
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
 position = Vector2(34, 3)
+metadata/_edit_lock_ = true
 
 [node name="Camera2D" type="Camera2D" parent="Escolhido" unique_id=364009415]
 scale = Vector2(4, 4)
@@ -3389,5 +3391,10 @@ limit_bottom = 1640
 editor_draw_limits = true
 metadata/_edit_lock_ = true
 
-[node name="TesteDialogoMapa" type="Node" parent="." unique_id=617851227]
-script = ExtResource("15_cl456")
+[node name="CaixaDialogo" parent="." unique_id=1996844437 instance=ExtResource("15_cl456")]
+visible = false
+iniciar_intro_automaticamente = false
+fechar_para_selecao = false
+
+[node name="CharacterBody2D" parent="." unique_id=2129393194 instance=ExtResource("16_efs1e")]
+position = Vector2(-26, -25)

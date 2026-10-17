@@ -9,7 +9,11 @@ extends Control
 @onready var dica_label: Label = get_node_or_null(
 	"PanelContainer/MarginContainer/Panel/VBoxContainer/DicaLabel"
 )
-@onready var dialogue_box: Control = get_node_or_null("DialogueBox")
+@onready var dialogue_box: Control = get_node_or_null("PanelContainer/MarginContainer/DialogueBox")
+
+@onready var LightButton: Control = get_node_or_null("PanelContainer/MarginContainer/DialogueBox/LightButton")
+@onready var DarknessButton: Control = get_node_or_null("PanelContainer/MarginContainer/DialogueBox/DarknessButton")
+@onready var DarknessButton2: Control = get_node_or_null("PanelContainer/MarginContainer/DialogueBox/DarknessButton2")
 
 @export var iniciar_intro_automaticamente: bool = true
 @export var fechar_para_selecao: bool = true
@@ -39,18 +43,30 @@ func _ready() -> void:
 		push_error("Um ou mais nodes da caixa de diálogo não foram encontrados.")
 		return
 
-	visible = false
 	texto_label.scroll_active = false
 	texto_label.fit_content = true
+	
+	combatente = GrupoAtual.obter_personagem_principal()
+	
+	if combatente == null:
+		push_warning("Nenhum personagem principal foi definido em GrupoAtual.")
+
 
 	_configurar_interface_opcoes()
 
+	# Se o diálogo foi configurado por outro script, usa essa configuração.
 	if dialogo_configurado:
 		iniciar_dialogo(dialogo_configurado_id)
 	elif iniciar_intro_automaticamente:
 		await get_tree().process_frame
 		iniciar_dialogo("intro")
+	else:
+		visible = false
 
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("interact") and not ativo:
+		iniciar_dialogo("parede_estranha")
+		get_viewport().set_input_as_handled()
 
 func configurar_dialogo(
 	personagem: CombatenteData,
@@ -67,30 +83,38 @@ func configurar_dialogo(
 		iniciar_dialogo(dialogo_configurado_id)
 
 
+
 func _configurar_interface_opcoes() -> void:
 	botoes_opcoes.clear()
 	rotulo_opcoes = null
 
 	if dialogue_box == null:
-		push_warning("DialogueBox não foi encontrado. Opções de diálogo indisponíveis.")
+		push_error("DialogueBox não foi encontrado na cena.")
 		return
 
-	var encontrados: Array[Node] = dialogue_box.find_children("*", "Button", true, false)
+	rotulo_opcoes = dialogue_box.get_node_or_null("Label") as Label
 
-	for node in encontrados:
-		var botao := node as Button
-		if botao != null:
-			botoes_opcoes.append(botao)
-			botao.visible = false
-			botao.focus_mode = Control.FOCUS_ALL
+	var nomes_botoes: Array[String] = [
+		"LightButton",
+		"DarknessButton",
+		"DarknessButton2"
+	]
 
-	var rotulos: Array[Node] = dialogue_box.find_children("*", "Label", true, false)
+	for nome_botao in nomes_botoes:
+		var botao := dialogue_box.get_node_or_null(nome_botao) as Button
 
-	if not rotulos.is_empty():
-		rotulo_opcoes = rotulos[0] as Label
+		if botao == null:
+			push_error("Botão não encontrado em DialogueBox: " + nome_botao)
+			continue
 
-	dialogue_box.visible = false
+		botoes_opcoes.append(botao)
+		botao.hide()
+		botao.focus_mode = Control.FOCUS_NONE
 
+	if rotulo_opcoes != null:
+		rotulo_opcoes.hide()
+
+	dialogue_box.hide()
 
 func iniciar_dialogo(id_dialogo: String) -> void:
 	print("Abrindo diálogo:", id_dialogo)
@@ -110,9 +134,11 @@ func iniciar_dialogo(id_dialogo: String) -> void:
 	indice_atual = 0
 	ativo = true
 	visible = true
-	_esconder_opcoes()
-	_mostrar_fala_atual()
 
+	# O painel padrão permanece visível; apenas as opções ficam ocultas.
+	_esconder_opcoes()
+
+	_mostrar_fala_atual()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not ativo:
@@ -319,9 +345,32 @@ func _confirmar_opcao() -> void:
 	var conhecimento: String = String(opcao.get("knowledge", ""))
 
 	if not conhecimento.is_empty():
-		if combatente == null:
-			dica_label.text = "Não há personagem ativo para realizar o teste."
+		var resultado_teste: Dictionary = await _executar_teste_conhecimento(
+			conhecimento
+		)
+
+		if resultado_teste.is_empty():
+			opcoes_ativas = true
 			return
+
+		var destino: String
+
+		if bool(resultado_teste["sucesso"]):
+			destino = String(opcao.get("success_dialogue", ""))
+		else:
+			destino = String(opcao.get("failure_dialogue", ""))
+
+		await get_tree().create_timer(1.0).timeout
+
+		if not ativo:
+			return
+
+		if not destino.is_empty():
+			iniciar_dialogo(destino)
+		else:
+			fechar_dialogo()
+
+		return
 
 		if not combatente.tem_especializacao(conhecimento):
 			dica_label.text = "Requer especialização em " + conhecimento + "."
@@ -334,18 +383,23 @@ func _confirmar_opcao() -> void:
 
 		if resultado.is_empty():
 			return
-
+	
 		print("Resultado do teste de conhecimento: ", resultado)
 
-		var destino: String
+		var destino_teste: String
 
-		if resultado["sucesso"]:
-			destino = String(opcao.get("success_dialogue", ""))
+		if bool(resultado_teste["sucesso"]):
+			destino_teste = String(opcao.get("success_dialogue", ""))
 		else:
-			destino = String(opcao.get("failure_dialogue", ""))
+			destino_teste = String(opcao.get("failure_dialogue", ""))
 
-		if not destino.is_empty():
-			iniciar_dialogo(destino)
+		await get_tree().create_timer(1.0).timeout
+
+		if not ativo:
+			return	
+
+		if not destino_teste.is_empty():
+			iniciar_dialogo(destino_teste)
 		else:
 			fechar_dialogo()
 
@@ -397,3 +451,45 @@ func fechar_dialogo() -> void:
 		get_tree().change_scene_to_file(
 			"res://scenes/menu/EscolherPersonagem.tscn"
 		)
+
+func _executar_teste_conhecimento(conhecimento: String) -> Dictionary:
+	if combatente == null:
+		dica_label.text = "Não há personagem ativo para realizar o teste."
+		return {}
+
+	if not combatente.tem_especializacao(conhecimento):
+		dica_label.text = "Requer especialização em " + conhecimento + "."
+		return {}
+
+	var resultado: Dictionary = RolagemD6.calcular_teste_conhecimento(
+		combatente,
+		conhecimento
+	)
+
+	if resultado.is_empty():
+		dica_label.text = "Não foi possível realizar o teste."
+		return {}
+
+	# Impede que o jogador confirme a opção novamente durante a rolagem.
+	opcoes_ativas = false
+
+	var dado_visual := get_tree().get_first_node_in_group("dado_d6") as RolagemD6
+
+	if dado_visual != null:
+		await dado_visual.rodar_e_mostrar_face(int(resultado["dado"]))
+	else:
+		push_warning("Nenhum nó do dado foi encontrado no grupo 'dado_d6'.")
+
+	dica_label.text = (
+		"D6: %d + bônus %d = %d — %s"
+		% [
+			int(resultado["dado"]),
+			int(resultado["bonus_total"]),
+			int(resultado["total"]),
+			String(resultado["categoria"])
+		]
+	)
+
+	print("Resultado do teste de conhecimento: ", resultado)
+
+	return resultado

@@ -115,5 +115,10 @@ func iniciar_empurrao():
 	)
 	
 	await fade.finished
-	
-	print("Tela preta - iniciar cutscene")
+
+	var erro := get_tree().change_scene_to_file(
+		"res://scenes/mapas/Bastilha.tscn"
+	)
+
+	if erro != OK:
+		push_error("Não foi possível abrir a seleção de personagem. Erro: " + str(erro))

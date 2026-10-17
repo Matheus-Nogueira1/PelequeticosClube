@@ -25,6 +25,7 @@ config/icon="res://icon.svg"
 
 Dialogos="*uid://btw5b6vlkuhxx"
 Global="*uid://gj2mnbielrxc"
+GrupoAtual="*uid://ovlxyn8ur3so"
 
 [display]
 

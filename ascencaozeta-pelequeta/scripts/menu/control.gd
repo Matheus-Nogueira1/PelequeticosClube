@@ -149,11 +149,20 @@ func update_description(skip_animation: bool = false) -> void:
 		)
 
 
+
 func select_character() -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
+	var nome_personagem: String = character_ids[selected_index]
 	
 	print("Personagem selecionado: ", dados["nome"])
-	print("Identificador interno: ", character_ids[selected_index])
+	print("Identificador interno: ", nome_personagem)
+	
+	GrupoAtual.definir_personagem_principal(nome_personagem)
+	
+	if GrupoAtual.obter_personagem_principal() == null:
+		push_error("Falha ao definir o personagem principal.")
+		return
+	
 	get_tree().change_scene_to_file(
 		"res://scenes/mapas/world.tscn"
 	)
