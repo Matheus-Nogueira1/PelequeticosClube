@@ -214,10 +214,10 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qfnet"]
-radius = 7.28011
+radius = 5.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_71j4m"]
-radius = 20.431467
+radius = 15.0
 
 [node name="World" type="Node2D" unique_id=1027781910]
 y_sort_enabled = true
@@ -323,24 +323,26 @@ y_sort_enabled = true
 script = ExtResource("6_qjijs")
 
 [node name="Shadow" type="AnimatedSprite2D" parent="Velha" unique_id=2023901219]
-position = Vector2(261, 119)
+position = Vector2(259.625, 119.00001)
+scale = Vector2(0.89062494, 0.9375001)
 sprite_frames = SubResource("SpriteFrames_4mrxx")
 animation = &"shadow"
 
 [node name="Empurrar" type="AnimatedSprite2D" parent="Velha" unique_id=2027523488]
-position = Vector2(262, 120)
+position = Vector2(260, 122.99999)
+scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_ngb7v")
 animation = &"empurrar"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Velha" unique_id=1324561027]
-position = Vector2(262, 129)
+position = Vector2(260, 129)
 shape = SubResource("CircleShape2D_qfnet")
 
 [node name="InteractionArea" type="Area2D" parent="Velha" unique_id=2009385112]
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Velha/InteractionArea" unique_id=2083882700]
-position = Vector2(262, 129)
+position = Vector2(260, 129)
 shape = SubResource("CircleShape2D_71j4m")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="Velha" unique_id=1566911850]
