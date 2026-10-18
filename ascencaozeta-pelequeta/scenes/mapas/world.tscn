@@ -3,11 +3,11 @@
 [ext_resource type="Texture2D" uid="uid://ddau662gs3yvt" path="res://assets/world/TileMap_Template_MundoUm.png" id="2_0fipq"]
 [ext_resource type="Script" uid="uid://cmqegko3bil0n" path="res://scripts/mapas/World.gd" id="2_4wvfk"]
 [ext_resource type="LabelSettings" uid="uid://ch5kik1mpjmso" path="res://fonts/Titulos.tres" id="3_0fipq"]
-[ext_resource type="Script" uid="uid://dsfklh35bbens" path="res://scripts/personagens/empurrar.gd" id="3_4wvfk"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="4_fprfk"]
 [ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/Player/Base/Shadow.png" id="4_qjijs"]
 [ext_resource type="Texture2D" uid="uid://brd25mqc18gt8" path="res://assets/Npc/Veia/VeiaEmpurrarTemplate.png" id="5_fprfk"]
 [ext_resource type="Texture2D" uid="uid://0lp03bptho16" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_CaindoCutscene-Sheet.png" id="5_qjijs"]
+[ext_resource type="Script" uid="uid://2nt3e04vjvi1" path="res://scripts/animações/empurrar.gd" id="6_qjijs"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qjijs"]
 texture = ExtResource("2_0fipq")
@@ -320,7 +320,7 @@ frame_progress = 0.8495732
 
 [node name="Velha" type="CharacterBody2D" parent="." unique_id=654136390]
 y_sort_enabled = true
-script = ExtResource("3_4wvfk")
+script = ExtResource("6_qjijs")
 
 [node name="Shadow" type="AnimatedSprite2D" parent="Velha" unique_id=2023901219]
 position = Vector2(261, 119)
