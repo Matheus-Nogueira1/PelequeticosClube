@@ -35,27 +35,6 @@ grow_vertical = 2
 theme_override_constants/margin_top = 20
 theme_override_constants/margin_bottom = 20
 
-[node name="CenterContainer" type="CenterContainer" parent="MarginContainer" unique_id=1259145581]
-layout_mode = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer" unique_id=1817837123]
-layout_mode = 2
-size_flags_horizontal = 6
-theme_override_constants/separation = 20
-alignment = 1
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer" unique_id=1457880978]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_constants/separation = 60
-alignment = 1
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/CenterContainer/VBoxContainer/HBoxContainer" unique_id=80765452]
-layout_mode = 2
-theme_override_constants/separation = 10
-alignment = 1
-
 [node name="Fade" type="ColorRect" parent="." unique_id=1181374655]
 visible = false
 layout_mode = 1
