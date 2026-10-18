@@ -157,6 +157,7 @@ func iniciar_empurrao():
 
 	await fade.finished
 
+<<<<<<< HEAD
 	# Esconde o jogador original.
 	player_ref.visible = false
 
@@ -211,6 +212,10 @@ func iniciar_empurrao():
 	# Vai para a Bastilha.
 	var erro = get_tree().change_scene_to_file(
 		"res://scenes/mapas/Bastilha.tscn"
+=======
+	var erro := get_tree().change_scene_to_file(
+		"res://scenes/mapas/CabanaElizabeth.tscn"
+>>>>>>> c0982a7f537c5a1e9488297499dd9f99bbec3a11
 	)
 
 	if erro != OK:

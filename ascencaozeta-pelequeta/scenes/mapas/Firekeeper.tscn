@@ -1,4 +1,4 @@
-[gd_scene format=4 uid="uid://b1mak0l3ariyh"]
+[gd_scene format=4 uid="uid://cxk7nna3455te"]
 
 [ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="1_3kl3c"]
 [ext_resource type="Texture2D" uid="uid://dhwhe2vbbk8jf" path="res://assets/world/Furniture.png" id="1_unkkh"]

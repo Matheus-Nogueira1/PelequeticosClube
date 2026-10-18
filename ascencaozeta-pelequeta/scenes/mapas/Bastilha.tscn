@@ -15,7 +15,7 @@
 [ext_resource type="Texture2D" uid="uid://d0dped4wv2xiq" path="res://assets/world/Meat.png" id="13_g6kdl"]
 [ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="14_2ca7b"]
 [ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="15_cl456"]
-[ext_resource type="PackedScene" uid="uid://vxt0d605rabb" path="res://scenes/testes/rolagem-dado.tscn" id="16_efs1e"]
+[ext_resource type="PackedScene" uid="uid://cckmocpmkwsuy" path="res://scenes/menu/rolagem-dado.tscn" id="16_efs1e"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uaggq"]
 resource_name = "Bastilha"
@@ -3396,5 +3396,5 @@ visible = false
 iniciar_intro_automaticamente = false
 fechar_para_selecao = false
 
-[node name="CharacterBody2D" parent="." unique_id=2129393194 instance=ExtResource("16_efs1e")]
-position = Vector2(-26, -25)
+[node name="CharacterBody2D" parent="." unique_id=2129393194 groups=["dado-d6"] instance=ExtResource("16_efs1e")]
+position = Vector2(-8, -30)

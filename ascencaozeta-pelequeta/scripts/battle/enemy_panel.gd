@@ -47,7 +47,6 @@ func _criar_layout() -> void:
 	vbox.add_child(label_titulo)
 	
 	# Container de scroll para lista
-	scroll_container.custom_minimum_size = Vector2(0, 300)
 	scroll_container.clip_contents = true
 	scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
 	

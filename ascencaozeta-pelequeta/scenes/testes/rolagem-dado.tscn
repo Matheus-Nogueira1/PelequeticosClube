@@ -105,6 +105,7 @@ animations = [{
 size = Vector2(14.409836, 14.531645)
 
 [node name="CharacterBody2D" type="CharacterBody2D" unique_id=2129393194]
+position = Vector2(155, 92)
 input_pickable = true
 script = ExtResource("1_qnuan")
 
@@ -112,7 +113,9 @@ script = ExtResource("1_qnuan")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_ebjds")
 script = ExtResource("3_kvjsq")
+metadata/_edit_lock_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=538735764]
 position = Vector2(-0.20492554, -0.26582336)
 shape = SubResource("RectangleShape2D_ij6vw")
+metadata/_edit_lock_ = true

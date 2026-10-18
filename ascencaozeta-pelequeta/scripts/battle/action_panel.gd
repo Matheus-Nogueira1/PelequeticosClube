@@ -91,7 +91,6 @@ func _criar_layout() -> void:
 	vbox.add_child(botao_item)
 
 	spacer_principal = Control.new()
-	spacer_principal.custom_minimum_size.y = 10
 	vbox.add_child(spacer_principal)
 
 	botao_passar = _criar_botao(
@@ -107,7 +106,7 @@ func _criar_botao(texto: String, p_tooltip_text: String, callback: Callable) -> 
 	btn.text = texto
 	btn.tooltip_text = p_tooltip_text
 	btn.pressed.connect(callback)
-	btn.custom_minimum_size = Vector2(0, 32)
+	btn.custom_minimum_size = Vector2(0, 2)
 	return btn
 
 ## ===== ATIVAÇÃO / DESATIVAÇÃO =====
@@ -186,7 +185,7 @@ func _limpar_tela_contextual() -> void:
 func _criar_titulo_tela(texto: String) -> Label:
 	var label = Label.new()
 	label.text = texto
-	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_font_size_override("font_size", 10)
 	vbox.add_child(label)
 	controles_tela_atual.append(label)
 	return label
@@ -198,7 +197,7 @@ func _criar_botao_voltar(callback: Callable) -> Button:
 	controles_tela_atual.append(voltar)
 	return voltar
 
-func _criar_scroll_lista(altura_minima: int = 180) -> VBoxContainer:
+func _criar_scroll_lista(altura_minima: int = 50) -> VBoxContainer:
 	# A lista rolável evita que muitas habilidades ou itens estourem o painel.
 	var scroll = ScrollContainer.new()
 	scroll.custom_minimum_size = Vector2(0, altura_minima)
@@ -309,7 +308,7 @@ func abrir_menu_habilidades() -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela("Habilidades")
 
-	var lista = _criar_scroll_lista(220)
+	var lista = _criar_scroll_lista(50)
 	var habilidades_disponiveis = _obter_habilidades_conhecidas()
 
 	if habilidades_disponiveis.is_empty() and not combatente_ref.habilidade_sobrecarga_ativa:
@@ -414,7 +413,7 @@ func _abrir_detalhes_sobrecarga() -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela("Sobrecarga (Ir Além)")
 
-	var detalhes = _criar_scroll_lista(220)
+	var detalhes = _criar_scroll_lista(50)
 	_adicionar_linha_detalhe(detalhes, "Tipo", "Geral")
 	_adicionar_linha_detalhe(detalhes, "Custo de PA", "0")
 	_adicionar_linha_detalhe(detalhes, "Persona de origem", combatente_ref.nome)

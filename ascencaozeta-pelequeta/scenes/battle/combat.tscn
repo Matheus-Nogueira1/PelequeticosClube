@@ -35,7 +35,7 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="TopBar" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1418944177]
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -50,41 +50,40 @@ theme_override_constants/separation = 8
 
 [node name="PartyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1169267679]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 script = ExtResource("2_osi8t")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/PartyPanel" unique_id=102618737]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
 [node name="Battlefield" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=468784180]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.0
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=98674895]
 layout_mode = 2
 
 [node name="EnemyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1029187186]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(260, 0)
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 script = ExtResource("3_4gnb8")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/EnemyPanel" unique_id=1166486139]
+custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer" unique_id=1593638322]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-theme_override_constants/separation = 8
 
 [node name="RegionalPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer2" unique_id=2041982078]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 2.0
 script = ExtResource("4_sa5k0")
 
 [node name="ActionPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer2" unique_id=424074914]
@@ -95,7 +94,7 @@ script = ExtResource("5_8we11")
 
 [node name="LogPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=602699646]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 120)
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/LogPanel" unique_id=1241593587]
