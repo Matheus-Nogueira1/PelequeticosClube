@@ -2319,20 +2319,20 @@ position = Vector2(130, 107)
 ignore_rotation = false
 limit_left = -26
 limit_top = -12
-limit_right = 351
+limit_right = 347
 limit_bottom = 468
+
+[node name="CanvasLayer" type="CanvasLayer" parent="Escolhido/Camera2D" unique_id=1080641646]
+
+[node name="CaixaDialogo" parent="Escolhido/Camera2D/CanvasLayer" unique_id=1996844437 instance=ExtResource("10_tfhua")]
+offset_top = 122.0
+size_flags_horizontal = 3
+iniciar_intro_automaticamente = false
+fechar_para_selecao = false
 
 [node name="Elizabeth" parent="." unique_id=1698368650 instance=ExtResource("9_dc1to")]
 position = Vector2(279, 90)
-caminho_dica_interacao = NodePath("../CaixaDialogo")
-
-[node name="CaixaDialogo" parent="." unique_id=1996844437 instance=ExtResource("10_tfhua")]
-offset_left = 167.0
-offset_top = 167.0
-offset_right = 167.0
-offset_bottom = 167.0
-iniciar_intro_automaticamente = false
-fechar_para_selecao = false
+caminho_dica_interacao = NodePath("../Escolhido/Camera2D/CanvasLayer/CaixaDialogo")
 
 [node name="Dado" parent="." unique_id=2129393194 instance=ExtResource("11_yl0f2")]
 position = Vector2(182, 192)
