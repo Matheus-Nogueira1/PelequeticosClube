@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://dqlkhnmctas0" path="res://scenes/npc's/Elizabeth.tscn" id="9_dc1to"]
 [ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="10_tfhua"]
 [ext_resource type="PackedScene" uid="uid://cckmocpmkwsuy" path="res://scenes/menu/rolagem-dado.tscn" id="11_yl0f2"]
+[ext_resource type="PackedScene" uid="uid://dx72kckk1qgbn" path="res://scenes/inimigos/Dummy.tscn" id="12_ffjnq"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_om33r"]
 texture = ExtResource("2_ffjnq")
@@ -2326,7 +2327,6 @@ position = Vector2(279, 90)
 caminho_dica_interacao = NodePath("../CaixaDialogo")
 
 [node name="CaixaDialogo" parent="." unique_id=1996844437 instance=ExtResource("10_tfhua")]
-visible = false
 offset_left = 167.0
 offset_top = 167.0
 offset_right = 167.0
@@ -2336,3 +2336,6 @@ fechar_para_selecao = false
 
 [node name="Dado" parent="." unique_id=2129393194 instance=ExtResource("11_yl0f2")]
 position = Vector2(182, 192)
+
+[node name="Dummy" parent="." unique_id=406659815 instance=ExtResource("12_ffjnq")]
+position = Vector2(316, 175)

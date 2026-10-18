@@ -15,7 +15,7 @@ class_name NPCController
 var jogador_proximo: bool = false
 var dialogo_em_andamento: bool = false
 var jogador_atual: Node2D = null
-@export var caminho_dica_interacao: NodePath = "PanelContainer/MarginContainer/Panel/VBoxContainer/DicaLabel"
+@export var caminho_dica_interacao: NodePath = "CaixaDialogo/	PanelContainer/MarginContainer/Panel/VBoxContainer/DicaLabel"
 
 @onready var dica_interacao: Label = get_node_or_null(
 	caminho_dica_interacao
@@ -77,6 +77,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	dialogo_em_andamento = true
+	caixa.ocultar_dica_interacao()
 
 	caixa.iniciar_dialogo_npc(
 		personagem,
@@ -85,10 +86,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	)
 
 	get_viewport().set_input_as_handled()
-
 	await caixa.dialogo_encerrado
 
 	dialogo_em_andamento = false
+
+	if jogador_proximo:
+		caixa.mostrar_dica_interacao()
 
 
 func _ao_jogador_entrar(body: Node2D) -> void:
@@ -97,8 +100,14 @@ func _ao_jogador_entrar(body: Node2D) -> void:
 
 	jogador_atual = body
 	jogador_proximo = true
-	if dica_interacao != null and not dialogo_em_andamento:
-		dica_interacao.show()
+
+	if dialogo_em_andamento:
+		return
+
+	var caixa := _obter_caixa_dialogo()
+
+	if caixa != null:
+		caixa.mostrar_dica_interacao()
 
 
 func _ao_jogador_sair(body: Node2D) -> void:
@@ -107,8 +116,11 @@ func _ao_jogador_sair(body: Node2D) -> void:
 
 	jogador_atual = null
 	jogador_proximo = false
-	if dica_interacao != null:
-		dica_interacao.hide()
+
+	var caixa := _obter_caixa_dialogo()
+
+	if caixa != null:
+		caixa.ocultar_dica_interacao()
 
 func _obter_caixa_dialogo() -> Node:
 	var caixas := get_tree().get_nodes_in_group("dialogue_box")

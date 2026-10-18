@@ -8,7 +8,7 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a25oy"]
 bg_color = Color(0.07450981, 0.15686275, 0.15686275, 1)
 
-[node name="CaixaDialogo" type="Control" unique_id=1996844437]
+[node name="CaixaDialogo" type="Control" unique_id=1996844437 groups=["dialogue_box"]]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,11 +34,13 @@ theme_override_constants/margin_right = 10
 theme_override_constants/margin_bottom = 10
 
 [node name="Panel" type="Panel" parent="PanelContainer/MarginContainer" unique_id=1849659203]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
 size_flags_vertical = 8
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer/Panel" unique_id=1075610655]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -53,6 +55,7 @@ theme_override_constants/separation = 8
 alignment = 1
 
 [node name="NomeLabel" type="Label" parent="PanelContainer/MarginContainer/Panel/VBoxContainer" unique_id=1652803143]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 0)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -62,6 +65,7 @@ label_settings = ExtResource("2_2upoj")
 vertical_alignment = 1
 
 [node name="TextoLabel" type="RichTextLabel" parent="PanelContainer/MarginContainer/Panel/VBoxContainer" unique_id=1376247949]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 10)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -76,6 +80,7 @@ scroll_active = false
 vertical_alignment = 1
 
 [node name="DicaLabel" type="Label" parent="PanelContainer/MarginContainer/Panel/VBoxContainer" unique_id=402366517]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("3_uf2yu")
 text = "Aperte Enter"
@@ -83,11 +88,13 @@ label_settings = ExtResource("4_aydvo")
 horizontal_alignment = 1
 
 [node name="DialogueBox" type="Panel" parent="PanelContainer/MarginContainer" unique_id=1618778544]
+unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 8
 
 [node name="Label" type="Label" parent="PanelContainer/MarginContainer/DialogueBox" unique_id=675233801]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
@@ -100,6 +107,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LightButton" type="Button" parent="PanelContainer/MarginContainer/DialogueBox" unique_id=943856799]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -114,6 +122,7 @@ theme_override_font_sizes/font_size = 15
 text = "Luz"
 
 [node name="DarknessButton" type="Button" parent="PanelContainer/MarginContainer/DialogueBox" unique_id=795688904]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5
@@ -128,6 +137,7 @@ theme_override_font_sizes/font_size = 15
 text = "Escuridão"
 
 [node name="DarknessButton2" type="Button" parent="PanelContainer/MarginContainer/DialogueBox" unique_id=1522803636]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 14
 anchor_top = 0.5

@@ -1,19 +1,14 @@
 extends Control
 
-@onready var nome_label: Label = get_node_or_null(
-	"PanelContainer/MarginContainer/Panel/VBoxContainer/NomeLabel"
-)
-@onready var texto_label: RichTextLabel = get_node_or_null(
-	"PanelContainer/MarginContainer/Panel/VBoxContainer/TextoLabel"
-)
-@onready var dica_label: Label = get_node_or_null(
-	"PanelContainer/MarginContainer/Panel/VBoxContainer/DicaLabel"
-)
-@onready var dialogue_box: Control = get_node_or_null("PanelContainer/MarginContainer/DialogueBox")
+@onready var nome_label: Label = %NomeLabel
+@onready var texto_label: RichTextLabel = %TextoLabel
+@onready var dica_label: Label = %DicaLabel
 
-@onready var LightButton: Control = get_node_or_null("PanelContainer/MarginContainer/DialogueBox/LightButton")
-@onready var DarknessButton: Control = get_node_or_null("PanelContainer/MarginContainer/DialogueBox/DarknessButton")
-@onready var DarknessButton2: Control = get_node_or_null("PanelContainer/MarginContainer/DialogueBox/DarknessButton2")
+@onready var dialogue_box: Control = %DialogueBox
+
+@onready var light_button: Button = %LightButton
+@onready var darkness_button: Button = %DarknessButton
+@onready var darkness_button_2: Button = %DarknessButton2
 
 @export var iniciar_intro_automaticamente: bool = true
 @export var fechar_para_selecao: bool = true
@@ -85,34 +80,21 @@ func configurar_dialogo(
 
 func _configurar_interface_opcoes() -> void:
 	botoes_opcoes.clear()
-	rotulo_opcoes = null
 
-	if dialogue_box == null:
-		push_error("DialogueBox não foi encontrado na cena.")
-		return
+	rotulo_opcoes = %Label
 
-	rotulo_opcoes = dialogue_box.get_node_or_null("Label") as Label
-
-	var nomes_botoes: Array[String] = [
-		"LightButton",
-		"DarknessButton",
-		"DarknessButton2"
+	var botoes: Array[Button] = [
+		light_button,
+		darkness_button,
+		darkness_button_2
 	]
 
-	for nome_botao in nomes_botoes:
-		var botao := dialogue_box.get_node_or_null(nome_botao) as Button
-
-		if botao == null:
-			push_error("Botão não encontrado em DialogueBox: " + nome_botao)
-			continue
-
+	for botao in botoes:
 		botoes_opcoes.append(botao)
 		botao.hide()
 		botao.focus_mode = Control.FOCUS_NONE
 
-	if rotulo_opcoes != null:
-		rotulo_opcoes.hide()
-
+	rotulo_opcoes.hide()
 	dialogue_box.hide()
 
 func iniciar_dialogo(id_dialogo: String) -> void:
@@ -133,7 +115,7 @@ func iniciar_dialogo(id_dialogo: String) -> void:
 	indice_atual = 0
 	ativo = true
 	visible = true
-
+	dica_label.show()
 	# O painel padrão permanece visível; apenas as opções ficam ocultas.
 	_esconder_opcoes()
 
@@ -540,3 +522,19 @@ func _executar_teste_conhecimento(conhecimento: String) -> Dictionary:
 	print("Resultado do teste de conhecimento: ", resultado)
 
 	return resultado
+
+func mostrar_dica_interacao() -> void:
+	if ativo:
+		return
+
+	visible = true
+	dica_label.text = "ENTER — Conversar"
+	dica_label.show()
+
+
+func ocultar_dica_interacao() -> void:
+	if ativo:
+		return
+
+	dica_label.hide()
+	visible = false

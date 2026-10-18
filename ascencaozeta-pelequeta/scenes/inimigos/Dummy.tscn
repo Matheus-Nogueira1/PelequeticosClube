@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://dx72kckk1qgbn"]
 
+[ext_resource type="Script" uid="uid://bj73s66lad7kr" path="res://scripts/inimigos/dummy.gd" id="1_hm17y"]
 [ext_resource type="Texture2D" uid="uid://tsbf2a0vcf6q" path="res://assets/Player/ESCOLHIDO/Walk_Escolhido_Template.png" id="2_j2rdx"]
 [ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/Player/Base/Shadow.png" id="3_y1fd6"]
 
@@ -264,8 +265,12 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_mgf8l"]
 radius = 6.0369244
 
-[node name="Escolhido" type="CharacterBody2D" unique_id=188751351]
+[sub_resource type="CircleShape2D" id="CircleShape2D_qunvf"]
+radius = 6.0369244
+
+[node name="Dummy" type="CharacterBody2D" unique_id=188751351]
 y_sort_enabled = true
+script = ExtResource("1_hm17y")
 
 [node name="Walk" type="AnimatedSprite2D" parent="." unique_id=275653830]
 y_sort_enabled = true
@@ -281,3 +286,10 @@ animation = &"shadow"
 y_sort_enabled = true
 position = Vector2(0, 8.666667)
 shape = SubResource("CircleShape2D_mgf8l")
+
+[node name="InteractionArea" type="Area2D" parent="." unique_id=1512694263]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1144769281]
+y_sort_enabled = true
+scale = Vector2(5, 5)
+shape = SubResource("CircleShape2D_qunvf")

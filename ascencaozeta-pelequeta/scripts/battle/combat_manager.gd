@@ -59,6 +59,10 @@ func _inicializar_combate() -> void:
 	# Por enquanto, vou usar estrutura de exemplo
 	_setup_exemplo()
 
+	if combatentes_jogador.is_empty() or combatentes_inimigo.is_empty():
+		push_error("[CombatManager] Combate cancelado: participantes não foram inicializados.")
+		return
+
 	# Preencher UI dos painéis
 	if enemy_panel:
 		var inimigos_dict: Array[Dictionary] = []
@@ -86,27 +90,36 @@ func _inicializar_combate() -> void:
 	_avancar_turno()
 
 func _setup_exemplo() -> void:
-	"""Setup temporário com dados de exemplo usando CombatenteData"""
+	"""Prepara o encontro inicial: personagem selecionado contra Dummy."""
 
-	# Criar os 3 personagens principais
-	var mob = PersonagensData.criar_mob()
-	var escolhido = PersonagensData.criar_escolhido()
-	var jp = PersonagensData.criar_JP()
+	combatentes_jogador.clear()
+	combatentes_inimigo.clear()
+	ordem_turno.clear()
 
-	combatentes_jogador = [mob, escolhido, jp]
+	# Recuperar o personagem principal selecionado pelo jogador.
+	var escolhido: CombatenteData = GrupoAtual.obter_personagem_principal()
 
-	# Criar inimigos usando templates
-	var carcaca1 = InimigoData.criar_carcaca()
-	carcaca1.nome = "Carcaça 1"
-	var carcaca2 = InimigoData.criar_carcaca()
-	carcaca2.nome = "Carcaça 2"
-	combatentes_inimigo = [
-		carcaca1,
-		carcaca2
-	]
-	# Unificar array de combatentes
-	var todos = combatentes_jogador + combatentes_inimigo
-	ordem_turno = todos.duplicate()
+	if escolhido == null:
+		push_error(
+			"[CombatManager] Nenhum personagem principal foi definido em GrupoAtual."
+		)
+		return
+
+	combatentes_jogador.append(escolhido)
+
+	# Criar o Dummy reutilizando temporariamente os dados da Carcaça.
+	var dummy: CombatenteData = InimigoData.criar_carcaca()
+	dummy.nome = "Dummy"
+
+	combatentes_inimigo.append(dummy)
+
+	# Unificar os participantes para calcular a iniciativa.
+	ordem_turno = combatentes_jogador + combatentes_inimigo
+
+	print("[CombatManager] Encontro preparado:")
+	print("  Jogador: ", escolhido.nome)
+	print("  Inimigo: ", dummy.nome)
+	print("  Total de combatentes: ", ordem_turno.size())
 
 func _calcular_iniciativa() -> void:
 	"""Cada combatente compara sua velociadade com os outros"""
