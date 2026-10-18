@@ -1,6 +1,8 @@
 extends Node
 
 const CONVERSAS: Dictionary = {
+#INTROS
+
 	"intro": [
 		{"speaker": "Testemunha", "text": "O abismo não grita, ele sussurra."},
 		{"speaker": "Testemunha", "text": "Quem pulou? Tolos, nunca tiveram chance, quem desce jamais volta."},
@@ -21,30 +23,110 @@ const CONVERSAS: Dictionary = {
 		{"speaker": "Testemunha", "text": "Quando confirmarem, os dados vão rolar."}
 	],
 
-	"parede_estranha": [
+#CABANA ELIZABETH
+
+	"Elizabeth": [
+		{"speaker": "Elizabeth", "text": "Olá Escolhido."},
+		{"speaker": "Elizabeth", "text": "Seja bem vindo a nossa cabana."},
+		{"speaker": "Elizabeth", "text": "Você compreende o motivo dessa reunião?", "options":
+		[{"text": "Onde estou?"}, 
+		{"text": "Quem é você?"},
+		{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso"}]}
+	],
+	"elizabeth_social_sucesso": [
+		{
+			"speaker": "Escolhido",
+			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda. Como recompensa terei as respostas que procuro, acertei?"
+		},
+		{
+			"speaker": "Elizabeth",
+			"text": "Na mosca."
+		}
+	],
+
+#BASTILHA INTERAÇÔES
+
+"parede_estranha": [
+	{
+		"speaker": "Testemunha",
+		"text": "Era pra ter mais uma porta aqui, mas uma parede estranha parece bloquear a passagem...",
+		"options": [
+			{
+				"text": "Usar Esforço",
+				"knowledge": "Esforço",
+				"success_dialogue": "parede_esforco_sucesso",
+				"failure_dialogue": "parede_esforco_falha",
+				"critical_failure_dialogue": "parede_esforco_falha_critica",
+				"extreme_success_dialogue": "parede_esforco_sucesso_extremo"
+			},
+			{
+				"text": "Usar Místico",
+				"knowledge": "Místico",
+				"success_dialogue": "parede_mistico_sucesso",
+				"failure_dialogue": "parede_mistico_falha",
+				"critical_failure_dialogue": "parede_mistico_falha_critica",
+				"extreme_success_dialogue": "parede_mistico_sucesso_extremo"
+			},
+			{
+				"text": "Usar Bandidagem",
+				"knowledge": "Bandidagem",
+				"success_dialogue": "parede_bandidagem_sucesso",
+				"failure_dialogue": "parede_bandidagem_falha",
+				"critical_failure_dialogue": "parede_bandidagem_falha_critica",
+				"extreme_success_dialogue": "parede_bandidagem_sucesso_extremo"
+			}
+		]
+	}
+],
+	# ESFORÇO — FALHA CRÍTICA
+	"parede_esforco_falha_critica": [
 		{
 			"speaker": "Testemunha",
-			"text": "Era pra ter mais uma porta aqui mas uma parede estranha parece bloquear a passagem...",
-			"options": [
-				{
-					"text": "Usar Esforço",
-					"knowledge": "Esforço",
-					"success_dialogue": "parede_esforco_sucesso",
-					"failure_dialogue": "parede_esforco_falha"
-				},
-				{
-					"text": "Usar Místico",
-					"knowledge": "Místico",
-					"success_dialogue": "parede_mistico_sucesso",
-					"failure_dialogue": "parede_mistico_falha"
-				},
-				{
-					"text": "Usar Bandidagem",
-					"knowledge": "Bandidagem",
-					"success_dialogue": "parede_bandidagem_sucesso",
-					"failure_dialogue": "parede_bandidagem_falha"
-				}
-			]
+			"text": "Você prepara um golpe com toda a sua força, no momento em que encosta na parede, tropeça , atravessa a parede e cai de cara no chão. Era apenas uma ilusão. Você sente uma dor aguda em sua cabeça."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "Recebeu 1 de estresse."
+		}
+	],
+
+	# ESFORÇO — SUCESSO EXTREMO
+	"parede_esforco_sucesso_extremo": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você concentra toda a sua força e avança sem hesitar. No instante do impacto, a parede se desfaz como fumaça. Você atravessa a ilusão com tanta força que chega ao outro lado antes mesmo de perceber que a passagem estava livre."
+		}
+	],
+
+	# MÍSTICO — FALHA CRÍTICA
+	"parede_mistico_falha_critica": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você aproxima a mão da parede e tenta sentir sua essência. Por um instante, algo responde ao seu toque. Uma presença fria percorre seu braço, e a sensação desaparece antes que você consiga compreender o que despertou."
+		}
+	],
+
+	# MÍSTICO — SUCESSO EXTREMO
+	"parede_mistico_sucesso_extremo": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você fecha os olhos e sente a energia que distorce o espaço diante de si. A ilusão se revela por completo: não existe parede alguma. Por um breve instante, você também percebe uma segunda presença escondida além da passagem."
+		}
+	],
+
+	# BANDIDAGEM — FALHA CRÍTICA
+	"parede_bandidagem_falha_critica": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você examina as frestas e passa os dedos pela superfície. Um mecanismo oculto dispara sob sua mão. Um estalo ecoa pela sala, seguido por um ruído vindo de algum lugar além da parede. Uma flecha perfura seu peito."
+		}
+	],
+
+	# BANDIDAGEM — SUCESSO EXTREMO
+	"parede_bandidagem_sucesso_extremo": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você percebe uma irregularidade quase imperceptível e acompanha o contorno da ilusão com os dedos. Em poucos instantes, encontra o ponto exato em que a magia falha. A passagem se abre diante de você, revelando não apenas o caminho, mas também marcas que indicam que alguém atravessou por ali recentemente."
 		}
 	],
 

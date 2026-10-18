@@ -102,20 +102,17 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ij6vw"]
-size = Vector2(1.6393442, 5.0632896)
+size = Vector2(17, 18)
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=2129393194]
+[node name="Dado" type="CharacterBody2D" unique_id=2129393194 groups=["dado_d6"]]
 input_pickable = true
 script = ExtResource("1_l23i8")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1493194244]
 texture_filter = 1
-position = Vector2(600, 333)
-scale = Vector2(36.3125, 36.3125)
 sprite_frames = SubResource("SpriteFrames_ebjds")
 script = ExtResource("3_vyfop")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=538735764]
-position = Vector2(600, 333)
-scale = Vector2(354.41, -114.74752)
+position = Vector2(0.49999976, 0)
 shape = SubResource("RectangleShape2D_ij6vw")

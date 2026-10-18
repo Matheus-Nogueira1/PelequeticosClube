@@ -117,7 +117,7 @@ func iniciar_empurrao():
 	await fade.finished
 
 	var erro := get_tree().change_scene_to_file(
-		"res://scenes/mapas/Bastilha.tscn"
+		"res://scenes/mapas/CabanaElizabeth.tscn"
 	)
 
 	if erro != OK:

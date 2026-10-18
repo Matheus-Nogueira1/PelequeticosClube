@@ -17,7 +17,9 @@ extends Control
 
 @export var iniciar_intro_automaticamente: bool = true
 @export var fechar_para_selecao: bool = true
+signal dialogo_encerrado
 
+var npc_responsavel: Node = null
 var combatente: CombatenteData = null
 var falas: Array = []
 var indice_atual: int = 0
@@ -63,10 +65,7 @@ func _ready() -> void:
 	else:
 		visible = false
 
-func _input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact") and not ativo:
-		iniciar_dialogo("parede_estranha")
-		get_viewport().set_input_as_handled()
+
 
 func configurar_dialogo(
 	personagem: CombatenteData,
@@ -139,6 +138,21 @@ func iniciar_dialogo(id_dialogo: String) -> void:
 	_esconder_opcoes()
 
 	_mostrar_fala_atual()
+
+func iniciar_dialogo_npc(
+	personagem: CombatenteData,
+	id_dialogo: String,
+	npc: Node
+) -> void:
+	if ativo:
+		return
+
+	combatente = personagem
+	npc_responsavel = npc
+	fechar_para_selecao = false
+	iniciar_intro_automaticamente = false
+
+	iniciar_dialogo(id_dialogo)
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not ativo:
@@ -337,6 +351,8 @@ func _mover_selecao(direcao: int) -> void:
 	_atualizar_selecao_opcao()
 
 
+
+
 func _confirmar_opcao() -> void:
 	if not opcoes_ativas or opcoes_atuais.is_empty():
 		return
@@ -344,78 +360,107 @@ func _confirmar_opcao() -> void:
 	var opcao: Dictionary = opcoes_atuais[indice_opcao_selecionada]
 	var conhecimento: String = String(opcao.get("knowledge", ""))
 
+	# Opções que exigem teste de conhecimento.
 	if not conhecimento.is_empty():
-		var resultado_teste: Dictionary = await _executar_teste_conhecimento(
-			conhecimento
-		)
-
-		if resultado_teste.is_empty():
-			opcoes_ativas = true
+		if combatente == null:
+			dica_label.text = "Não há personagem ativo para realizar o teste."
 			return
-
-		var destino: String
-
-		if bool(resultado_teste["sucesso"]):
-			destino = String(opcao.get("success_dialogue", ""))
-		else:
-			destino = String(opcao.get("failure_dialogue", ""))
-
-		await get_tree().create_timer(1.0).timeout
-
-		if not ativo:
-			return
-
-		if not destino.is_empty():
-			iniciar_dialogo(destino)
-		else:
-			fechar_dialogo()
-
-		return
 
 		if not combatente.tem_especializacao(conhecimento):
 			dica_label.text = "Requer especialização em " + conhecimento + "."
 			return
 
-		var resultado: Dictionary = RolagemD6.calcular_teste_conhecimento(
-			combatente,
+		var resultado_conhecimento: Dictionary = await _executar_teste_conhecimento(
 			conhecimento
 		)
 
-		if resultado.is_empty():
+		if resultado_conhecimento.is_empty():
+			opcoes_ativas = true
 			return
-	
-		print("Resultado do teste de conhecimento: ", resultado)
 
-		var destino_teste: String
+		var categoria_resultado: String = String(
+	resultado_conhecimento.get("categoria", "")
+)
 
-		if bool(resultado_teste["sucesso"]):
-			destino_teste = String(opcao.get("success_dialogue", ""))
-		else:
-			destino_teste = String(opcao.get("failure_dialogue", ""))
+# Falha crítica em Esforço: aplica 1 Estresse ao Torso.
+		if conhecimento == "Esforço" and categoria_resultado == "Falha Crítica":
+			var resultado_estresse: Dictionary = combatente.aplicar_estresse(
+				"Torso",
+				1
+			)
+
+			print(
+				"Falha crítica em Esforço: +1 Estresse no Torso. Estado: ",
+				combatente.estresse_por_regiao["Torso"]["atual"],
+				"/",
+				combatente.estresse_por_regiao["Torso"]["limite"]
+			)
+
+			if not resultado_estresse.is_empty():
+				print("Consequência do Estresse: ", resultado_estresse)
+
+		var id_dialogo_resultado: String = ""
+
+		match categoria_resultado:
+			"Falha Crítica":
+				id_dialogo_resultado = String(
+					opcao.get(
+						"critical_failure_dialogue",
+						opcao.get("failure_dialogue", "")
+					)
+				)
+
+			"Falha Regular":
+				id_dialogo_resultado = String(
+					opcao.get("failure_dialogue", "")
+				)
+
+			"Sucesso Regular":
+				id_dialogo_resultado = String(
+					opcao.get("success_dialogue", "")
+				)
+
+			"Sucesso Extremo":
+				id_dialogo_resultado = String(
+					opcao.get(
+						"extreme_success_dialogue",
+						opcao.get("success_dialogue", "")
+					)
+				)
+
+			_:
+				push_warning(
+					"Categoria de teste desconhecida: "
+					+ categoria_resultado
+				)
+				opcoes_ativas = true
+				return
 
 		await get_tree().create_timer(1.0).timeout
 
 		if not ativo:
-			return	
+			return
 
-		if not destino_teste.is_empty():
-			iniciar_dialogo(destino_teste)
+		if not id_dialogo_resultado.is_empty():
+			iniciar_dialogo(id_dialogo_resultado)
 		else:
 			fechar_dialogo()
 
 		return
 
+	# Opções que não exigem teste de conhecimento.
 	if bool(opcao.get("close_dialogue", false)):
 		fechar_dialogo()
 		return
 
-	var proximo: String = String(opcao.get("next_dialogue", ""))
+	var id_proximo_dialogo: String = String(
+		opcao.get("next_dialogue", "")
+	)
 
-	if not proximo.is_empty():
-		iniciar_dialogo(proximo)
+	if not id_proximo_dialogo.is_empty():
+		iniciar_dialogo(id_proximo_dialogo)
 	else:
 		fechar_dialogo()
-
 
 func _esconder_opcoes() -> void:
 	opcoes_ativas = false
@@ -451,6 +496,8 @@ func fechar_dialogo() -> void:
 		get_tree().change_scene_to_file(
 			"res://scenes/menu/EscolherPersonagem.tscn"
 		)
+
+	dialogo_encerrado.emit()
 
 func _executar_teste_conhecimento(conhecimento: String) -> Dictionary:
 	if combatente == null:
