@@ -78,8 +78,8 @@
 
 ## 📌 Semana 17/10/26
 
-* Design Escolhido caindo e levantando | **EM ANDAMENTO** 🔄
-* Design Escolhido  Tela de combate | **EM ANDAMENTO** 🔄
+* ~~Design Escolhido caindo e levantando~~ | **FINALIZADO** ✅
+* ~~Design Escolhido  Tela de combate~~ | **FINALIZADO** ✅
 * Design da escolha do personagem | **EM ANDAMENTO** 🔄
 * Colisão dos novos mapas | **EM ANDAMENTO** 🔄
 * Remake dos mapas | **EM ANDAMENTO** 🔄
@@ -88,4 +88,4 @@
 * Design da tela de combate | **EM ANDAMENTO** 🔄
 * Implementação dos assets dos inimigos, personagens e npcs | **EM ANDAMENTO** 🔄
 * Decoração do mapa principal | **EM ANDAMENTO** 🔄
-* Linkar dialogos, pericias e combate nos mapas. | **EM ANDAMENTO** 🔄
+* Linkar dialogos, pericias e combate nos mapas. | **FINALIZADO** ✅
