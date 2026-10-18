@@ -76,7 +76,7 @@
 * Criar mecânicas de exploração do mapa | **PENDENTE** ⚠️
 * Melhorar Tela de combate | **PENDENTE** ⚠️
 
-## 📌 Semana 17/02/26
+## 📌 Semana 17/10/26
 
 * Design Escolhido caindo e levantando | **EM ANDAMENTO** 🔄
 * Design Escolhido  Tela de combate | **EM ANDAMENTO** 🔄
