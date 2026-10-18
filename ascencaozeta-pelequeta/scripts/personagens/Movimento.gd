@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@onready var move_speed = 150
+@onready var move_speed = 50
 @onready var break_acc = 2000
 @onready var acc = 1000
 

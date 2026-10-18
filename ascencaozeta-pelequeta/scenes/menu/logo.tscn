@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://g4vcy6enl7id" path="res://scripts/menu/logo.gd" id="1_4qsij"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_w387m"]
-[ext_resource type="Texture2D" uid="uid://bqaw58wxrqnyg" path="res://assets/images/logo/Logo.png" id="3_x5fgo"]
+[ext_resource type="Texture2D" uid="uid://bqaw58wxrqnyg" path="res://assets/logo/Logo.png" id="3_x5fgo"]
 
 [node name="Node" type="Node" unique_id=308286490]
 

@@ -2309,7 +2309,7 @@ tile_set = SubResource("TileSet_5wp78")
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
 position = Vector2(159, 96)
 
-[node name="Camera2D" type="Camera2D" parent="Escolhido" unique_id=755316650]
+[node name="Camera2D2" type="Camera2D" parent="Escolhido" unique_id=755316650]
 position = Vector2(34, 1)
 limit_left = 0
 limit_top = 0
