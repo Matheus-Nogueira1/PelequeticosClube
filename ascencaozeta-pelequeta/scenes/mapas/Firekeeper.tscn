@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://cxk7nna3455te"]
 
 [ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="1_3kl3c"]
+[ext_resource type="Script" uid="uid://bwf48bka7vtv6" path="res://scenes/mapas/firekeeper_intro.gd" id="1_r26ap"]
 [ext_resource type="Texture2D" uid="uid://dhwhe2vbbk8jf" path="res://assets/world/Furniture.png" id="1_unkkh"]
 [ext_resource type="Texture2D" uid="uid://sh8isxje8r2v" path="res://assets/world/tiles.png" id="2_r26ap"]
 [ext_resource type="Texture2D" uid="uid://chc4y1lhpo7ob" path="res://assets/world/Tools.png" id="3_jx1cy"]
@@ -2284,6 +2285,7 @@ sources/6 = SubResource("TileSetAtlasSource_baouo")
 
 [node name="Firekeeper" type="Node2D" unique_id=44442164]
 modulate = Color(2.2241454, 2.2241454, 2.2241454, 1)
+script = ExtResource("1_r26ap")
 
 [node name="Chao" type="TileMapLayer" parent="." unique_id=405713238]
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
@@ -2315,3 +2317,14 @@ limit_left = 0
 limit_top = 0
 limit_right = 320
 limit_bottom = 468
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=875608436]
+
+[node name="BlackScreen" type="ColorRect" parent="CanvasLayer" unique_id=1520530549]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
