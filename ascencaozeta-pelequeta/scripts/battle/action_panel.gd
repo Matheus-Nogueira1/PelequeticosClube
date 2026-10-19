@@ -202,7 +202,7 @@ func _criar_scroll_lista(altura_minima: int = 50) -> VBoxContainer:
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.clip_contents = true
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-
+	scroll.follow_focus = true
 	var lista = VBoxContainer.new()
 	lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lista.add_theme_constant_override("separation", 4)
@@ -277,11 +277,12 @@ func abrir_menu_conhecimentos() -> void:
 
 	if not encontrou_conhecimento:
 		var vazio = Label.new()
-		vazio.text = "Nenhuma conhecimento especializada."
+		vazio.text = "Nenhum conhecimento especializada."
 		vazio.add_theme_font_size_override("font_size", TAMANHO_FONTE)
 		lista.add_child(vazio)
 
-	_criar_botao_voltar(fechar_menu_conhecimentos)
+	var voltar := _criar_botao_voltar(fechar_menu_conhecimentos)
+	_focar_primeiro_botao.call_deferred(lista, voltar)
 
 func fechar_menu_conhecimentos() -> void:
 	_mostrar_menu_principal()
@@ -312,7 +313,8 @@ func abrir_menu_habilidades() -> void:
 	else:
 		_preencher_lista_habilidades(lista, habilidades_disponiveis)
 
-	_criar_botao_voltar(_mostrar_menu_principal)
+	var voltar := _criar_botao_voltar(_mostrar_menu_principal)
+	_focar_primeiro_botao.call_deferred(lista, voltar)
 
 func _obter_habilidades_conhecidas() -> Array:
 	# Resolve os nomes salvos no CombatenteData usando o banco de habilidades.
@@ -501,8 +503,8 @@ func abrir_menu_itens() -> void:
 			)
 			lista.add_child(btn)
 
-	_criar_botao_voltar(_mostrar_menu_principal)
-	_focar_primeiro_botao.call_deferred(lista)
+	var voltar := _criar_botao_voltar(_mostrar_menu_principal)
+	_focar_primeiro_botao.call_deferred(lista, voltar)
 
 func _abrir_detalhes_item(entrada: Dictionary) -> void:
 	var item: ItemData.Item = entrada["item"]
@@ -530,10 +532,12 @@ func _confirmar_item(nome_item: String) -> void:
 	_mostrar_menu_principal()
 	item_escolhido.emit(nome_item)
 
-func _focar_primeiro_botao(container: Node) -> void:
+func _focar_primeiro_botao(container: Node, alternativo: Button = null) -> void:
 	if not is_instance_valid(container):
 		return
 	for filho in container.get_children():
 		if filho is Button and not filho.disabled:
 			filho.grab_focus()
 			return
+	if alternativo != null and is_instance_valid(alternativo):
+		alternativo.grab_focus()

@@ -14,6 +14,8 @@ const TAMANHO_FONTE: int = 8
 signal inimigo_selecionado(inimigo: Dictionary)
 ## Emitido quando um inimigo é deseleccionado
 signal inimigo_deseleccionado
+## Emitido quando o jogador cancela a escolha do alvo (Esc)
+signal selecao_alvo_cancelada
 
 # UI
 @onready var vbox = VBoxContainer.new()
@@ -116,7 +118,8 @@ func _criar_botao_inimigo(inimigo: Dictionary) -> void:
 	botao.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	UiUtil.aplicar(botao, TAMANHO_FONTE)
 	botao.toggle_mode = true
-	botao.mouse_filter = Control.MOUSE_FILTER_STOP
+	botao.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	botao.focus_mode = Control.FOCUS_NONE
 	botao.pressed.connect(_on_botao_inimigo_pressionado.bind(inimigo))
 	
 	lista_inimigos.add_child(botao)
@@ -199,10 +202,12 @@ func desativar_seletor_alvo() -> void:
 	modo_seletor_ativo = false
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	
-	# Desmarcar todos
+	# Desmarcar todos e travar mouse e teclado nos cards
 	for botao in botoes_inimigos.values():
 		botao.button_pressed = false
 		botao.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		botao.release_focus()
+		botao.focus_mode = Control.FOCUS_NONE
 
 func _on_botao_inimigo_pressionado(inimigo: Dictionary) -> void:
 	"""Chamado quando um botão de inimigo é pressionado"""
@@ -221,6 +226,16 @@ func _on_botao_inimigo_pressionado(inimigo: Dictionary) -> void:
 	
 	# Desativar seletor após seleção
 	desativar_seletor_alvo()
+
+func _unhandled_input(event: InputEvent) -> void:
+	# Esc cancela a escolha do alvo e devolve o jogador ao menu de ações.
+	if not modo_seletor_ativo:
+		return
+
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		desativar_seletor_alvo()
+		selecao_alvo_cancelada.emit()
 
 func obter_inimigo_selecionado() -> Dictionary:
 	"""Retorna o inimigo atualmente selecionado"""

@@ -152,6 +152,7 @@ func _conectar_sinais_paineis() -> void:
 
 	if enemy_panel:
 		enemy_panel.inimigo_selecionado.connect(_on_inimigo_selecionado)
+		enemy_panel.selecao_alvo_cancelada.connect(_on_alvo_cancelado)
 
 # ============================================================================
 # FLUXO DE TURNO
@@ -190,6 +191,7 @@ func _avancar_turno() -> void:
 		alvo_selecionado.clear()
 	else:
 		party_panel.remover_destaque_turno()
+		action_panel.desabilitar_acoes()
 		# TODO: IA para inimigos
 		await get_tree().create_timer(0.3).timeout
 		_executar_turno_inimigo()
@@ -471,6 +473,90 @@ func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 
 	_finalizar_acao()
 
+func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
+	"""Rastro: igual ao Duelo, mas só revela as informações do inimigo."""
+	if alvo == null:
+		return
+
+	var conhecimento = ConhecimentoData.new()
+	var resultado: Dictionary = conhecimento.testar_conhecimento(
+		combatente_ativo,
+		"Rastro"
+	)
+
+	log_panel.registrar_evento(
+		"Rastro: D6 %d → %d (%s)" % [
+			int(resultado.get("dado", 0)),
+			int(resultado.get("resultado_final", 0)),
+			String(resultado.get("resultado", "?"))
+		],
+		"info"
+	)
+
+	if bool(resultado.get("sucesso", false)):
+		alvo.analisado_por_duelo = true
+		log_panel.registrar_evento(
+			"%s examinou %s. Proteção atual: %d" % [
+				combatente_ativo.nome,
+				alvo.nome,
+				alvo.obter_protecao_atual()
+			],
+			"info"
+		)
+		enemy_panel.atualizar_inimigo(
+			alvo.para_dictionary()
+		)
+	else:
+		log_panel.registrar_evento(
+			"%s não percebeu nada de útil em %s." % [
+				combatente_ativo.nome,
+				alvo.nome
+			],
+			"info"
+		)
+
+	_finalizar_acao()
+
+func _tentar_fugir() -> void:
+	"""Bandidagem: em sucesso foge da batalha e volta ao mapa. Falha gasta o turno."""
+	var conhecimento = ConhecimentoData.new()
+	var resultado: Dictionary = conhecimento.testar_conhecimento(
+		combatente_ativo,
+		"Bandidagem"
+	)
+
+	log_panel.registrar_evento(
+		"%s tenta fugir (Bandidagem): D6 %d → %d (%s)" % [
+			combatente_ativo.nome,
+			int(resultado.get("dado", 0)),
+			int(resultado.get("resultado_final", 0)),
+			String(resultado.get("resultado", "?"))
+		],
+		"acao"
+	)
+
+	if bool(resultado.get("sucesso", false)):
+		log_panel.registrar_evento(
+			"%s escapou da batalha!" % combatente_ativo.nome,
+			"sucesso"
+		)
+		_finalizar_combate("Fuga")
+		return
+
+	log_panel.registrar_evento(
+		"%s não encontrou uma saída." % combatente_ativo.nome,
+		"aviso"
+	)
+	_finalizar_acao()
+
+func _on_alvo_cancelado() -> void:
+	"""Esc durante a escolha do alvo: volta ao menu de ações"""
+	conhecimento_pendente = ""
+	acao_em_progresso = false
+	regioes_selecionadas.clear()
+	log_panel.registrar_evento("Seleção de alvo cancelada.", "aviso")
+	action_panel.habilitar_acoes()
+
 func _on_conhecimento_escolhida(nome_conhecimento: String) -> void:
 
 	if combatente_ativo == null:
@@ -478,20 +564,24 @@ func _on_conhecimento_escolhida(nome_conhecimento: String) -> void:
 
 	match nome_conhecimento:
 
-		"Duelo":
-
-			conhecimento_pendente = "Duelo"
+		"Duelo", "Rastro":
+			conhecimento_pendente = nome_conhecimento
 
 			log_panel.registrar_evento(
-				"Selecione o alvo do Duelo.",
+				"Selecione o alvo de %s. (Esc cancela)" % nome_conhecimento,
 				"acao"
 			)
 
+			# Esconde o menu de ações: a escolha agora é só o alvo.
+			action_panel.desabilitar_acoes()
 			enemy_panel.ativar_seletor_alvo()
+
+		"Bandidagem":
+			_tentar_fugir()
 
 		_:
 			log_panel.registrar_evento(
-				"Perícia %s ainda não implementada." % nome_conhecimento,
+				"Conhecimento %s ainda não implementado." % nome_conhecimento,
 				"info"
 			)
 
@@ -554,7 +644,7 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 	# PERÍCIAS QUE PRECISAM DE ALVO
 	# =====================================================
 
-	if conhecimento_pendente == "Duelo":
+	if conhecimento_pendente == "Duelo" or conhecimento_pendente == "Rastro":
 
 		var alvo: CombatenteData = null
 
@@ -566,9 +656,13 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 		if alvo == null:
 			return
 
+		var conhecimento_usado := conhecimento_pendente
 		conhecimento_pendente = ""
 
-		_executar_conhecimento_duelo(alvo)
+		if conhecimento_usado == "Rastro":
+			_executar_conhecimento_rastro(alvo)
+		else:
+			_executar_conhecimento_duelo(alvo)
 
 		return
 
