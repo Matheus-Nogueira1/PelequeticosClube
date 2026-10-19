@@ -862,10 +862,9 @@ script = ExtResource("2_22mqn")
 [node name="Walk" type="AnimatedSprite2D" parent="." unique_id=275653830]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_d0u6y")
-animation = &"IluminarEsquerda"
+animation = &"walk_down"
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=94897179]
-position = Vector2(-0.6666667, -0.6666667)
 sprite_frames = SubResource("SpriteFrames_yf5fn")
 animation = &"shadow"
 
@@ -875,5 +874,6 @@ position = Vector2(0, 8.666667)
 shape = SubResource("CircleShape2D_mgf8l")
 
 [node name="Levantar" type="AnimatedSprite2D" parent="." unique_id=1267546188]
+visible = false
 sprite_frames = SubResource("SpriteFrames_g4v7s")
 animation = &"Levantar"

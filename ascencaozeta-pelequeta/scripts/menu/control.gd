@@ -1,3 +1,4 @@
+
 extends Control
 
 @onready var slots: Array[Node] = $CenterContainer/HBoxContainer.get_children()
@@ -30,7 +31,38 @@ func _ready() -> void:
 
 	selected_index = clampi(selected_index, 0, slots.size() - 1)
 
+	configurar_titulo()
 	update_visual(true)
+
+
+func configurar_titulo() -> void:
+	# Vermelho intenso, inspirado nas molduras góticas.
+	name_label.add_theme_color_override(
+		"font_color",
+		Color("#ff202b")
+	)
+
+	name_label.add_theme_color_override(
+		"font_outline_color",
+		Color("#260205")
+	)
+
+	name_label.add_theme_constant_override("outline_size", 4)
+
+	name_label.add_theme_color_override(
+		"font_shadow_color",
+		Color("#a0000c")
+	)
+
+	name_label.add_theme_constant_override("shadow_offset_x", 2)
+	name_label.add_theme_constant_override("shadow_offset_y", 3)
+
+	# Centraliza o título dentro do espaço do Label.
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+
+	# Espaçamento entre os caracteres.
+	name_label.add_theme_constant_override("character_spacing", 4)
 
 
 func _input(event: InputEvent) -> void:
@@ -55,13 +87,14 @@ func _input(event: InputEvent) -> void:
 func obter_personagem_selecionado() -> Dictionary:
 	return PersonagensData.obter_dados_apresentacao(
 		character_ids[selected_index]
-	)	
+	)
+
 
 func update_visual(skip_animation: bool = false) -> void:
 	update_name(skip_animation)
 	update_description(skip_animation)
 
-	# Atualiza apenas a transparência dos personagens.
+	# Atualiza a transparência dos personagens.
 	for i in range(slots.size()):
 		var slot: Control = slots[i] as Control
 
@@ -86,13 +119,17 @@ func update_visual(skip_animation: bool = false) -> void:
 
 		tween.tween_property(slot, "modulate", target_color, 0.2)
 
+
 func update_name(skip_animation: bool = false) -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
 	var novo_nome: String = dados["nome"]
 
+	# Reaplica o estilo para garantir que permaneça consistente.
+	configurar_titulo()
+
 	if skip_animation:
 		name_label.text = novo_nome
-		name_label.modulate.a = 1.0
+		name_label.modulate = Color.WHITE
 		return
 
 	if name_label.has_meta("tween"):
@@ -106,10 +143,13 @@ func update_name(skip_animation: bool = false) -> void:
 	name_label.set_meta("tween", tween)
 
 	tween.tween_property(name_label, "modulate:a", 0.0, 0.1)
+
 	tween.tween_callback(func() -> void:
 		name_label.text = novo_nome
 	)
+
 	tween.tween_property(name_label, "modulate:a", 1.0, 0.15)
+
 
 func update_description(skip_animation: bool = false) -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
@@ -131,24 +171,27 @@ func update_description(skip_animation: bool = false) -> void:
 	description_label.set_meta("tween", tween)
 
 	tween.tween_property(description_label, "modulate:a", 0.0, 0.1)
+
 	tween.tween_callback(func() -> void:
 		description_label.text = novo_texto
 	)
+
 	tween.tween_property(description_label, "modulate:a", 1.0, 0.2)
+
 
 func select_character() -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
 	var nome_personagem: String = character_ids[selected_index]
-	
+
 	print("Personagem selecionado: ", dados["nome"])
 	print("Identificador interno: ", nome_personagem)
-	
+
 	GrupoAtual.definir_personagem_principal(nome_personagem)
-	
+
 	if GrupoAtual.obter_personagem_principal() == null:
 		push_error("Falha ao definir o personagem principal.")
 		return
-	
+
 	get_tree().change_scene_to_file(
 		"res://scenes/mapas/world.tscn"
 	)
