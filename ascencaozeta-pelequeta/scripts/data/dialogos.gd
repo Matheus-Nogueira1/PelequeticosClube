@@ -98,6 +98,16 @@ const CONVERSAS: Dictionary = {
 			"text": "Recebeu 1 de estresse."
 		}
 	],
+	"elizbeth_sussurros": [
+		{
+			"speaker": "Elizabeth",
+			"text": "Quando derrota um inimigo, você recebe as almas dele. Eu posso transforma-lás em poder."
+		},
+		{
+			"speaker": "Elizabeth",
+			"text": "Se aproxime. Toque a escuridão dentro de mim. Alimente-se dessas almas sem soberania"
+		}
+	],
 #BASTILHA INTERAÇÔES
 
 "parede_estranha": [

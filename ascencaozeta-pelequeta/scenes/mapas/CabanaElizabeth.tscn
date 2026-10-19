@@ -2475,6 +2475,7 @@ iniciar_intro_automaticamente = false
 fechar_para_selecao = false
 
 [node name="Elizabeth" parent="." unique_id=1698368650 instance=ExtResource("9_dc1to")]
+modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
 z_index = 1
 z_as_relative = false
 position = Vector2(279, 90)
@@ -2484,6 +2485,7 @@ caminho_dica_interacao = NodePath("../Escolhido/Camera2D/CanvasLayer/CaixaDialog
 position = Vector2(182, 192)
 
 [node name="Dummy" parent="." unique_id=406659815 instance=ExtResource("12_ffjnq")]
+modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
 position = Vector2(316, 175)
 scale = Vector2(0.8, 0.8)
 
