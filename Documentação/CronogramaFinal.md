@@ -34,15 +34,15 @@ Criação de interação com o cenário
 #
 - **NPC's:** 🔴 *NÍVEL DE PRIORIDADE*
   
-Interação com o "Dummy" 
+~~Interação com o "Dummy"~~
 
-Interação com a "FireKeeper"
+~~Interação com a "FireKeeper"~~
 #
 - **Mapa da cabana:** 🟡 *NÍVEL DE PRIORIDADE*
 
 ~~Criação do design do mapa~~
 
-Colisão dos objetos
+~~Colisão dos objetos~~
 
 #
 - **Inimigos:** 🟡 *NÍVEL DE PRIORIDADE*
@@ -57,7 +57,7 @@ Linkar personagens
 #
 - **Menu** 🟢 *NÍVEL DE PRIORIDADE*
   
-Programar Tela de menu
+~~Programar Tela de menu~~
 
 ~~Design Tela Menu~~
 
