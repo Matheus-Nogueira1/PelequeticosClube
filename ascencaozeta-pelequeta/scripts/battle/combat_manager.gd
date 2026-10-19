@@ -3,6 +3,7 @@ class_name CombatManager
 
 # Importações
 const RolagemDadosD6 = preload("res://scripts/battle/rolagens-dados-d6.gd")
+const CENA_MAPA: String = "res://scenes/mapas/CabanaElizabeth.tscn"
 
 # Tipos de ações conforme OBLIVIO
 enum ActionType {
@@ -35,7 +36,7 @@ var ordem_turno: Array[CombatenteData] = []
 var indice_turno_atual := -1
 var combatente_ativo: CombatenteData = null
 var combate_ativo: bool = false
-var pericia_pendente := ""
+var conhecimento_pendente := ""
 
 # Estado da ação atual
 var acao_em_progresso: bool = false
@@ -104,7 +105,9 @@ func _setup_exemplo() -> void:
 			"[CombatManager] Nenhum personagem principal foi definido em GrupoAtual."
 		)
 		return
-
+		# Se desmaiou fora do combate (ex.: Estresse em diálogo), acorda com 1 a menos.
+	if escolhido.desmaiado:
+		escolhido.reviver()
 	combatentes_jogador.append(escolhido)
 
 	# Criar o Dummy reutilizando temporariamente os dados da Carcaça.
@@ -136,10 +139,11 @@ func _conectar_sinais_paineis() -> void:
 		action_panel.acao_atacar.connect(_iniciar_ataque)
 		action_panel.acao_habilidade.connect(_iniciar_habilidade)
 		action_panel.acao_item.connect(_iniciar_item)
-		action_panel.pericia_escolhida.connect(_on_pericia_escolhida)
+		action_panel.conhecimento_escolhida.connect(_on_conhecimento_escolhida)
 		action_panel.habilidade_escolhida.connect(_on_habilidade_escolhida)
 		action_panel.turno_passado.connect(_on_turno_passado)
 		action_panel.habilidade_sobrecarga.connect(_ativar_sobrecarga)
+		action_panel.item_escolhido.connect(_on_item_escolhido)
 
 	if regional_selector:
 		regional_selector.regiao_selecionada.connect(_on_regiao_selecionada)
@@ -261,7 +265,7 @@ func _iniciar_ataque() -> void:
 	regional_selector.ativar_para_ataque(combatente_ativo)
 	regional_selector.modo = "selecionar_ataque"
 
-func _iniciar_pericia() -> void:
+func _iniciar_conhecimento() -> void:
 	"""Inicia uso de perícia"""
 	if acao_em_progresso or combatente_ativo.tipo != "jogador":
 		return
@@ -270,7 +274,7 @@ func _iniciar_pericia() -> void:
 	log_panel.registrar_evento("Menu de perícias aberto...", "acao")
 
 	# TODO: Mostrar menu de perícias disponíveis
-	action_panel.mostrar_menu_pericias(combatente_ativo.para_dictionary())
+	action_panel.mostrar_menu_conhecimentoss(combatente_ativo.para_dictionary())
 
 func _iniciar_habilidade() -> void:
 	"""Inicia uso de habilidade especial"""
@@ -353,13 +357,55 @@ func _iniciar_item() -> void:
 
 	# TODO: Mostrar inventário
 	action_panel.mostrar_menu_itens(combatente_ativo.para_dictionary())
-func _executar_pericia_duelo(alvo: CombatenteData) -> void:
+
+func _on_item_escolhido(nome_item: String) -> void:
+	if combatente_ativo == null or combatente_ativo.tipo != "jogador":
+		return
+
+	var item: ItemData.Item = ItemData.obter_item(nome_item)
+	if item == null or not ItemData.tem_item(combatente_ativo, nome_item):
+		log_panel.registrar_evento("Item indisponível.", "aviso")
+		action_panel.habilitar_acoes()
+		return
+
+	# Beta: o Frasco Estus age na região com mais estresse.
+	var regiao_alvo := ""
+	var maior_estresse := 0
+	for regiao in combatente_ativo.estresse_por_regiao.keys():
+		var atual: int = combatente_ativo.estresse_por_regiao[regiao]["atual"]
+		if atual > maior_estresse:
+			maior_estresse = atual
+			regiao_alvo = regiao
+
+	if regiao_alvo == "":
+		log_panel.registrar_evento(
+			"%s não tem estresse para recuperar." % combatente_ativo.nome,
+			"aviso"
+		)
+		action_panel.habilitar_acoes()
+		return
+
+	var resultado: Dictionary = ItemData.usar_item(combatente_ativo, item, regiao_alvo)
+	if not resultado.get("sucesso", false):
+		log_panel.registrar_evento(
+			String(resultado.get("mensagem", "Falha ao usar o item.")),
+			"aviso"
+		)
+		action_panel.habilitar_acoes()
+		return
+
+	ItemData.remover_item(combatente_ativo, nome_item)
+	log_panel.registrar_evento(String(resultado["mensagem"]), "sucesso")
+	party_panel.atualizar_personagem(combatente_ativo.para_dictionary())
+	_finalizar_acao()
+
+func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 	if alvo == null:
 		return
 
-	var pericia = PericiaData.new()
+	var conhecimento = ConhecimentoData.new()
 
-	var resultado = pericia.executar_duelo(
+	var resultado = conhecimento.executar_duelo(
 		combatente_ativo,
 		alvo
 	)
@@ -425,16 +471,16 @@ func _executar_pericia_duelo(alvo: CombatenteData) -> void:
 
 	_finalizar_acao()
 
-func _on_pericia_escolhida(nome_pericia: String) -> void:
+func _on_conhecimento_escolhida(nome_conhecimento: String) -> void:
 
 	if combatente_ativo == null:
 		return
 
-	match nome_pericia:
+	match nome_conhecimento:
 
 		"Duelo":
 
-			pericia_pendente = "Duelo"
+			conhecimento_pendente = "Duelo"
 
 			log_panel.registrar_evento(
 				"Selecione o alvo do Duelo.",
@@ -445,7 +491,7 @@ func _on_pericia_escolhida(nome_pericia: String) -> void:
 
 		_:
 			log_panel.registrar_evento(
-				"Perícia %s ainda não implementada." % nome_pericia,
+				"Perícia %s ainda não implementada." % nome_conhecimento,
 				"info"
 			)
 
@@ -508,7 +554,7 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 	# PERÍCIAS QUE PRECISAM DE ALVO
 	# =====================================================
 
-	if pericia_pendente == "Duelo":
+	if conhecimento_pendente == "Duelo":
 
 		var alvo: CombatenteData = null
 
@@ -520,9 +566,9 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 		if alvo == null:
 			return
 
-		pericia_pendente = ""
+		conhecimento_pendente = ""
 
-		_executar_pericia_duelo(alvo)
+		_executar_conhecimento_duelo(alvo)
 
 		return
 
@@ -636,7 +682,13 @@ func _processar_ataque(
 		party_panel.atualizar_personagem(
 			atacante.para_dictionary()
 		)
+		_verificar_fim_combate()
+
+		if not combate_ativo:
+			return
+
 		_finalizar_acao()
+		return
 		return
 
 	# ============================================================
@@ -829,7 +881,26 @@ func _finalizar_combate(resultado: String) -> void:
 
 	# TODO: Tela de resultado, experience, loot
 	print("[CombatManager] Combate finalizado com resultado: %s" % resultado)
+	log_panel.registrar_evento("Retornando ao mapa...", "info")
+	_voltar_ao_mapa(resultado)
 
+func _voltar_ao_mapa(resultado: String) -> void:
+	action_panel.desabilitar_acoes()
+	enemy_panel.desativar_seletor_alvo()
+
+	await get_tree().create_timer(2.5).timeout
+
+	var principal: CombatenteData = GrupoAtual.obter_personagem_principal()
+	if principal != null:
+		# O Estresse acumulado é mantido ao voltar ao mapa.
+		principal.limpar_efeitos_combate()
+		# Só na derrota o personagem descansa por completo.
+		if resultado == "Derrota":
+			principal.recuperar_apos_combate()
+
+	var erro := get_tree().change_scene_to_file(CENA_MAPA)
+	if erro != OK:
+		push_error("[CombatManager] Não foi possível voltar ao mapa. Erro: %s" % erro)
 # ============================================================================
 # UTILIDADES
 # ============================================================================

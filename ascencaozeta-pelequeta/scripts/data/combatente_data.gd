@@ -448,6 +448,31 @@ func reviver() -> void:
 	"""Revive o combatente desmaiado removendo 1 Torso (pode agir novamente)"""
 	var torso = estresse_por_regiao["Torso"]
 	torso["atual"] = max(0, torso["atual"] - 1)
+	desmaiado = false
+
+## Reduz o estresse de uma região (usado por itens como o Frasco Estus)
+func aliviar_estresse(regiao: String, quantidade: int) -> void:
+	if not estresse_por_regiao.has(regiao):
+		return
+	var dados: Dictionary = estresse_por_regiao[regiao]
+	dados["atual"] = max(0, dados["atual"] - quantidade)
+
+## Descanso: zera o estresse e acorda o combatente ao voltar ao mapa
+func recuperar_apos_combate() -> void:
+	for regiao in estresse_por_regiao.keys():
+		estresse_por_regiao[regiao]["atual"] = 0
+	desmaiado = false
+	reducao_protecao_temporaria = 0
+	bonus_duelo_protecao = 0
+	atacante_que_quebrou_protecao = ""
+	analisado_por_duelo = false
+
+## Limpa só os efeitos temporários do combate, mantendo o Estresse acumulado
+func limpar_efeitos_combate() -> void:
+	reducao_protecao_temporaria = 0
+	bonus_duelo_protecao = 0
+	atacante_que_quebrou_protecao = ""
+	analisado_por_duelo = false
 
 ## Verifica se personagem está desmaiado (TODAS regiões no limite)
 func verificar_desmaio() -> bool:
@@ -487,6 +512,8 @@ func para_dictionary() -> Dictionary:
 		"fardos": fardos,
 		"regioes_perdidas": regioes_perdidas,
 		"numero_desmaios_total": numero_desmaios_total,
+		"proteses": proteses,
+		"habilidade_sobrecarga_ativa": habilidade_sobrecarga_ativa,
 		"morto": morto
 	}
 ## Cria a partir de um Dictionary

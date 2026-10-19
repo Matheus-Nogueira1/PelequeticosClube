@@ -34,6 +34,33 @@ static func criar_estus_flask(quantidade: int = 1) -> Item:
 	}
 	return item
 
+## Retorna o Item correspondente ao nome salvo no inventário (null se não existir)
+static func obter_item(nome_item: String) -> Item:
+	match nome_item.strip_edges().to_lower():
+		"frasco estus":
+			return criar_estus_flask()
+	return null
+
+## Agrupa os consumíveis do inventário: [{"nome", "item", "quantidade"}]
+static func listar_consumiveis(combatente: CombatenteData) -> Array[Dictionary]:
+	var resultado: Array[Dictionary] = []
+	var contagem: Dictionary = {}
+
+	for nome_item in combatente.inventario:
+		contagem[nome_item] = int(contagem.get(nome_item, 0)) + 1
+
+	for nome_item in contagem.keys():
+		var item: Item = obter_item(nome_item)
+		if item == null or item.tipo != TipoItem.CONSUMIVEL:
+			continue
+		resultado.append({
+			"nome": nome_item,
+			"item": item,
+			"quantidade": contagem[nome_item]
+		})
+
+	return resultado
+
 ## Usa o item no combatente
 static func usar_item(combatente: CombatenteData, item: Item, alvo_regiao: String = "Torso") -> Dictionary:
 	"""

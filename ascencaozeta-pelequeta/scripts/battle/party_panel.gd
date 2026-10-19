@@ -1,6 +1,6 @@
 extends PanelContainer
 class_name PartyPanel
-
+const TAMANHO_FONTE: int = 8
 # UI
 @onready var vbox = VBoxContainer.new()
 @onready var label_titulo = Label.new()
@@ -25,13 +25,15 @@ func _criar_layout() -> void:
 	
 	# Título
 	label_titulo.text = "Party"
-	label_titulo.add_theme_font_size_override("font_size", 18)
+	label_titulo.add_theme_font_size_override("font_size", TAMANHO_FONTE+1)
 	vbox.add_child(label_titulo)
 	
 	# Container de scroll para lista
 	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll_container.clip_contents = true
-	
+	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	lista_personagens.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lista_personagens.add_theme_constant_override("separation", 4)
 	scroll_container.add_child(lista_personagens)
 	
@@ -92,7 +94,8 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 		return
 	
 	var card = PanelContainer.new()
-	card.custom_minimum_size = Vector2(0, 50)
+	card.custom_minimum_size = Vector2(0, 0)
+	card.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	
 	var vbox_card = VBoxContainer.new()
 	vbox_card.add_theme_constant_override("separation", 2)
@@ -104,7 +107,8 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 	if personagem.has("status") and not personagem["status"].is_empty():
 		status_text += " [%s]" % ", ".join(personagem["status"])
 	label_nome.text = status_text
-	label_nome.add_theme_font_size_override("font_size", 18)
+	label_nome.add_theme_font_size_override("font_size", TAMANHO_FONTE+1)
+	label_nome.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	vbox_card.add_child(label_nome)
 	
 	# ESTRESSE POR REGIÃO (OBLIVIO display)
@@ -112,12 +116,13 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 	label_regioes.bbcode_enabled = true
 	label_regioes.fit_content = true
 	label_regioes.scroll_active = false
-	label_regioes.add_theme_font_size_override("font_size", 7)
+	label_regioes.add_theme_font_size_override("normal_font_size", TAMANHO_FONTE)
 	vbox_card.add_child(label_regioes)
 	
 	# INDICADORES DE PRÓTESE E REGIÕES PERDIDAS
 	var label_status_especial = Label.new()
-	label_status_especial.add_theme_font_size_override("font_size", 15)
+	label_status_especial.add_theme_font_size_override("font_size", TAMANHO_FONTE)
+	label_status_especial.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label_status_especial.add_theme_color_override("font_color", Color.LIGHT_CYAN)
 	vbox_card.add_child(label_status_especial)
 	
@@ -162,10 +167,9 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 						est_atual,
 						est_limite
 					]
-					
-					# Colorir se esgotado ou perdido
+
 					if est_limite == 0:
-						regiao_display += " (PERDIDO)"
+						regiao_display = "%s PERDIDO" % regiao
 					elif est_atual >= est_limite:
 						regioes_esgotadas += 1
 						regiao_display = "[color=red]%s[/color]" % regiao_display
@@ -182,14 +186,13 @@ func _criar_card_personagem(personagem: Dictionary) -> void:
 				status_especial += "⚡SOBRECARGA "
 			if p.has("proteses") and not p["proteses"].is_empty():
 				status_especial += "[PR: %s]" % ", ".join(p["proteses"].keys())
-			if p.has("regioes_perdidas") and not p["regioes_perdidas"].is_empty():
-				status_especial += " [PERDIDO: %s]" % ", ".join(p["regioes_perdidas"])
 			
 			label_status_especial.text = status_especial
 	}
 	
 	lista_personagens.add_child(card)
 	cards_personagens[personagem["nome"]] = card_wrapper
+	card_wrapper["atualizar"].call(personagem)
 
 # ============================================================================
 # INDICADORES DE TURNO

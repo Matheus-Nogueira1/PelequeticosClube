@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var move_speed = 150
 @onready var break_acc = 2000
 @onready var acc = 1000
+var travado: bool = false
 
 # Positivo y = Baixo | Negativo y = Cima
 # Positivo x = Direita | Negativo x = Esquerda
@@ -20,10 +21,19 @@ func update_anim():
 	$Shadow.play("shadow")
 	velocity.length()
 
+func travar(valor: bool) -> void:
+	travado = valor
+	if valor:
+		velocity = Vector2.ZERO
+		$Walk.stop()
+
 func _physics_process(delta):
+	if travado:
+		velocity = Vector2.ZERO
+		return
 	update_move(delta)
 	update_anim()
-	
+
 func update_move(delta):
 	if Input.is_action_pressed("right"):
 		if velocity.x < 0:

@@ -2,7 +2,7 @@
 ## 10 Conhecimentos com testes D6 + atributo base + treino
 ## Zona de Acerto: 1=crítico falha, 2-3=falha normal, 4-5=sucesso, 6=sucesso extremo
 
-class_name PericiaData
+class_name ConhecimentoData
 extends RefCounted
 
 ## Mapa de Conhecimentos OBLIVIO para seus atributos base

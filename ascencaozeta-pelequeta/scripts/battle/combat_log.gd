@@ -18,6 +18,8 @@ func _ready() -> void:
 	clear()
 	bbcode_enabled = true
 	scroll_following = true
+	add_theme_font_size_override("normal_font_size", 8)
+	add_theme_font_size_override("bold_font_size", 8)
 
 
 # ============================================================================

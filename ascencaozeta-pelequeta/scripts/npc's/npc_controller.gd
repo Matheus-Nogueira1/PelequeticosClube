@@ -15,7 +15,7 @@ class_name NPCController
 var jogador_proximo: bool = false
 var dialogo_em_andamento: bool = false
 var jogador_atual: Node2D = null
-@export var caminho_dica_interacao: NodePath = "CaixaDialogo/	PanelContainer/MarginContainer/Panel/VBoxContainer/DicaLabel"
+@export var caminho_dica_interacao: NodePath = "CaixaDialogo/PanelContainer/MarginContainer/Panel/VBoxContainer/DicaLabel"
 
 @onready var dica_interacao: Label = get_node_or_null(
 	caminho_dica_interacao

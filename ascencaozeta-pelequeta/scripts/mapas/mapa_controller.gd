@@ -38,7 +38,12 @@ func inicializar_mapa() -> void:
 			"Mapa %s: Dado não foi encontrado."
 			% nome_mapa
 		)
-
+	else:
+		# O dado só aparece durante testes e não pode bloquear o jogador.
+		var colisao_dado := dado.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		if colisao_dado != null:
+			colisao_dado.disabled = true
+		(dado as CanvasItem).visible = false
 	mapa_inicializado = true
 	print("Mapa inicializado: ", nome_mapa)
 

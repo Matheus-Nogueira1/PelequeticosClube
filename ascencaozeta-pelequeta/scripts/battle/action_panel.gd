@@ -12,21 +12,21 @@ signal acao_habilidade
 signal acao_item
 signal turno_passado
 signal habilidade_sobrecarga
-signal pericia_escolhida(nome_pericia: String)
+signal conhecimento_escolhida(nome_conhecimento: String)
 signal habilidade_escolhida(nome_habilidade: String)
-
+signal item_escolhido(nome_item: String)
 ## ===== REFERÊNCIAS DA UI =====
 ## A interface é criada por código para preservar a cena atual. As telas internas
 ## reaproveitam o mesmo VBoxContainer, o que permite trocar Menu Principal,
 ## Listas e Detalhes sem depender de menus flutuantes.
 @onready var vbox = VBoxContainer.new()
-
+const TAMANHO_FONTE: int = 8
+var grid_principal: GridContainer
 var botao_atacar: Button
-var botao_pericia: Button
+var botao_conhecimento: Button
 var botao_habilidade: Button
 var botao_item: Button
 var botao_passar: Button
-var spacer_principal: Control
 
 ## ===== ESTADO DO PAINEL =====
 ## Guarda o combatente ativo e os nós temporários da tela atual. A lista de nós
@@ -40,10 +40,11 @@ var controles_tela_atual: Array[Node] = []
 
 enum EstadoMenu {
 	PRINCIPAL,
-	PERICIAS,
+	CONHECIMENTOS,
 	HABILIDADES,
 	DETALHE_HABILIDADE,
-	ITENS
+	ITENS,
+	DETALHE_ITEM
 }
 
 var estado_menu := EstadoMenu.PRINCIPAL
@@ -54,59 +55,64 @@ func _ready() -> void:
 
 ## ===== CRIAÇÃO DA UI =====
 ## Bloco responsável apenas por montar os controles fixos do Menu Principal.
-## As telas de Perícias, Habilidades e futuramente Consumíveis são criadas em
+## As telas de Conhecimentos, Habilidades e futuramente Consumíveis são criadas em
 ## blocos separados para manter o fluxo de navegação fácil de manter.
 
 func _criar_layout() -> void:
-	# Cria o layout base dos botões de ação do turno.
-	vbox.add_theme_constant_override("separation", 4)
+	# Cria o layout base dos botões de ação do turno (grid 2 colunas).
+	vbox.add_theme_constant_override("separation", 2)
 	add_child(vbox)
+
+	grid_principal = GridContainer.new()
+	grid_principal.columns = 2
+	grid_principal.add_theme_constant_override("h_separation", 2)
+	grid_principal.add_theme_constant_override("v_separation", 2)
+	vbox.add_child(grid_principal)
 
 	botao_atacar = _criar_botao(
 		"ATACAR",
 		"Selecione regiões e alvo",
 		_on_atacar_pressionado
 	)
-	vbox.add_child(botao_atacar)
+	grid_principal.add_child(botao_atacar)
 
-	botao_pericia = _criar_botao(
-		"PERÍCIA",
+	botao_conhecimento = _criar_botao(
+		"CONHECIMENTO",
 		"Habilidades treinadas",
-		_on_pericia_pressionado
+		_on_conhecimento_pressionado
 	)
-	vbox.add_child(botao_pericia)
+	grid_principal.add_child(botao_conhecimento)
 
 	botao_habilidade = _criar_botao(
 		"HABILIDADE",
 		"Poderes especiais",
 		_on_habilidade_pressionada
 	)
-	vbox.add_child(botao_habilidade)
+	grid_principal.add_child(botao_habilidade)
 
 	botao_item = _criar_botao(
 		"ITEM",
 		"Usar do inventário",
 		_on_item_pressionado
 	)
-	vbox.add_child(botao_item)
-
-	spacer_principal = Control.new()
-	vbox.add_child(spacer_principal)
+	grid_principal.add_child(botao_item)
 
 	botao_passar = _criar_botao(
-		"PASSAR TURNO",
+		"PASSAR",
 		"Finaliza o turno",
 		_on_passar_turno
 	)
-	vbox.add_child(botao_passar)
+	grid_principal.add_child(botao_passar)
 
 func _criar_botao(texto: String, p_tooltip_text: String, callback: Callable) -> Button:
-	# Cria botões com o mesmo tamanho e conexão, evitando divergência visual entre telas.
 	var btn = Button.new()
 	btn.text = texto
 	btn.tooltip_text = p_tooltip_text
 	btn.pressed.connect(callback)
-	btn.custom_minimum_size = Vector2(0, 2)
+	btn.custom_minimum_size = Vector2(0, 12)
+	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	btn.clip_text = true
+	UiUtil.aplicar(btn, TAMANHO_FONTE)
 	return btn
 
 ## ===== ATIVAÇÃO / DESATIVAÇÃO =====
@@ -124,14 +130,24 @@ func ativar_para(combatente: Dictionary, ref_combatente: CombatenteData = null) 
 	call_deferred("_focar_botao")
 
 func _focar_botao() -> void:
-	botao_atacar.grab_focus()
+	if botao_atacar != null and botao_atacar.is_visible_in_tree():
+		botao_atacar.grab_focus()
+
+func _mostrar_menu_principal() -> void:
+	estado_menu = EstadoMenu.PRINCIPAL
+	_limpar_tela_contextual()
+	grid_principal.show()
+	call_deferred("_focar_botao")
+
+func _ocultar_menu_principal() -> void:
+	grid_principal.hide()
 
 func habilitar_acoes() -> void:
 	# Reabre o painel no estado principal e libera os comandos do turno atual.
 	acoes_habilitadas = true
 	_mostrar_menu_principal()
 	botao_atacar.disabled = false
-	botao_pericia.disabled = false
+	botao_conhecimento.disabled = false
 	botao_habilidade.disabled = false
 	botao_item.disabled = false
 	botao_passar.disabled = false
@@ -143,7 +159,7 @@ func desabilitar_acoes() -> void:
 	acoes_habilitadas = false
 	_limpar_tela_contextual()
 	botao_atacar.disabled = true
-	botao_pericia.disabled = true
+	botao_conhecimento.disabled = true
 	botao_habilidade.disabled = true
 	botao_item.disabled = true
 	botao_passar.disabled = true
@@ -152,26 +168,8 @@ func desabilitar_acoes() -> void:
 
 ## ===== NAVEGAÇÃO BASE =====
 ## Estas funções controlam quais partes da interface ficam visíveis. O mesmo
-## modelo é usado por Perícias e Habilidades e deixa a futura tela de Itens
+## modelo é usado por Conhecimentos e Habilidades e deixa a futura tela de Itens
 ## Consumíveis preparada para entrar sem menus flutuantes.
-
-func _mostrar_menu_principal() -> void:
-	estado_menu = EstadoMenu.PRINCIPAL
-	_limpar_tela_contextual()
-	botao_atacar.show()
-	botao_pericia.show()
-	botao_habilidade.show()
-	botao_item.show()
-	spacer_principal.show()
-	botao_passar.show()
-
-func _ocultar_menu_principal() -> void:
-	botao_atacar.hide()
-	botao_pericia.hide()
-	botao_habilidade.hide()
-	botao_item.hide()
-	spacer_principal.hide()
-	botao_passar.hide()
 
 func _limpar_tela_contextual() -> void:
 	# Remove somente os nós criados pelas subtelas, preservando os botões fixos.
@@ -185,7 +183,7 @@ func _limpar_tela_contextual() -> void:
 func _criar_titulo_tela(texto: String) -> Label:
 	var label = Label.new()
 	label.text = texto
-	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_font_size_override("font_size", TAMANHO_FONTE+1)
 	vbox.add_child(label)
 	controles_tela_atual.append(label)
 	return label
@@ -203,6 +201,7 @@ func _criar_scroll_lista(altura_minima: int = 50) -> VBoxContainer:
 	scroll.custom_minimum_size = Vector2(0, altura_minima)
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.clip_contents = true
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 
 	var lista = VBoxContainer.new()
 	lista.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -223,24 +222,21 @@ func _criar_label_info(texto: String) -> Label:
 
 ## ===== CALLBACKS DO MENU PRINCIPAL =====
 ## Cada botão inicia um fluxo diferente. Ataque e Item ainda delegam ao
-## CombatManager; Perícias e Habilidades navegam dentro do ActionPanel.
+## CombatManager; Conhecimentos e Habilidades navegam dentro do ActionPanel.
 
 func _on_atacar_pressionado() -> void:
 	# Inicia o fluxo externo: selecionar regiões, selecionar alvo e processar ataque.
 	desabilitar_acoes()
 	acao_atacar.emit()
 
-func _on_pericia_pressionado() -> void:
-	abrir_menu_pericias()
+func _on_conhecimento_pressionado() -> void:
+	abrir_menu_conhecimentos()
 
 func _on_habilidade_pressionada() -> void:
 	abrir_menu_habilidades()
 
 func _on_item_pressionado() -> void:
-	# Itens ainda usam o fluxo antigo, mas a estrutura contextual já está pronta
-	# para receber uma lista rolável de consumíveis no mesmo padrão das habilidades.
-	desabilitar_acoes()
-	acao_item.emit()
+	abrir_menu_itens()
 
 func _on_passar_turno() -> void:
 	# Finaliza voluntariamente o turno do combatente ativo.
@@ -248,55 +244,53 @@ func _on_passar_turno() -> void:
 	turno_passado.emit()
 
 func _on_botao_duelo_pressed() -> void:
-	pericia_escolhida.emit("Duelo")
+	conhecimento_escolhida.emit("Duelo")
 
-## ===== TELA DE PERÍCIAS =====
+## ===== TELA DE CONHECIMENTOS =====
 ## Mantém a filosofia já existente: o jogador sai do Menu Principal, escolhe uma
-## perícia conhecida e o ActionPanel emite um sinal sem decidir a regra.
+## conhecimento conhecida e o ActionPanel emite um sinal sem decidir a regra.
 
-func abrir_menu_pericias() -> void:
+func abrir_menu_conhecimentos() -> void:
 	if combatente_ref == null:
 		print("[ActionPanel] Combatente não possui referência")
 		return
 
-	estado_menu = EstadoMenu.PERICIAS
+	estado_menu = EstadoMenu.CONHECIMENTOS
 	_ocultar_menu_principal()
 	_limpar_tela_contextual()
-	_criar_titulo_tela("Perícias")
+	_criar_titulo_tela("Conhecimentos")
 
-	var lista = _criar_scroll_lista()
-	var encontrou_pericia := false
+	var lista = _criar_scroll_lista(70)
+	var encontrou_conhecimento := false
 
-	for pericia in combatente_ref.conhecimentos_treino.keys():
-		var treino = combatente_ref.conhecimentos_treino[pericia]
-		if treino <= 0:
-			continue
-
-		encontrou_pericia = true
+	for conhecimento in combatente_ref.conhecimentos_especializados:
+		var bonus: int = combatente_ref.calcular_bonus_conhecimento(conhecimento)
+		encontrou_conhecimento = true
 		var btn := _criar_botao(
-			"%s (+%d)" % [pericia, treino],
-			"Usar perícia %s" % pericia,
+			"%s (+%d)" % [conhecimento, bonus],
+			"Usar conhecimento %s" % conhecimento,
 			func():
-				pericia_escolhida.emit(pericia)
-				fechar_menu_pericias()
+				conhecimento_escolhida.emit(conhecimento)
+				fechar_menu_conhecimentos()
 		)
 		lista.add_child(btn)
 
-	if not encontrou_pericia:
+	if not encontrou_conhecimento:
 		var vazio = Label.new()
-		vazio.text = "Nenhuma perícia treinada."
+		vazio.text = "Nenhuma conhecimento especializada."
+		vazio.add_theme_font_size_override("font_size", TAMANHO_FONTE)
 		lista.add_child(vazio)
 
-	_criar_botao_voltar(fechar_menu_pericias)
+	_criar_botao_voltar(fechar_menu_conhecimentos)
 
-func fechar_menu_pericias() -> void:
+func fechar_menu_conhecimentos() -> void:
 	_mostrar_menu_principal()
 
 ## ===== TELA DE HABILIDADES =====
 ## Fluxo implementado:
 ## Menu Principal -> Lista de Habilidades -> Detalhes -> Confirmar Uso.
 ## Nenhuma etapa usa menus flutuantes; tudo é composto no próprio painel para manter
-## consistência visual com Perícias e facilitar reuso por Itens Consumíveis.
+## consistência visual com Conhecimentos e facilitar reuso por Itens Consumíveis.
 
 func abrir_menu_habilidades() -> void:
 	if combatente_ref == null:
@@ -351,7 +345,7 @@ func _preencher_lista_habilidades(lista: VBoxContainer, habilidades_disponiveis:
 
 		var secao = Label.new()
 		secao.text = HabilidadeData.tipo_habilidade_para_texto(tipo_habilidade).to_upper()
-		secao.add_theme_font_size_override("font_size", 14)
+		secao.add_theme_font_size_override("font_size", TAMANHO_FONTE)
 		lista.add_child(secao)
 
 		for habilidade in habilidades_do_tipo:
@@ -384,7 +378,7 @@ func _abrir_detalhes_habilidade(habilidade) -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela(habilidade.nome)
 
-	var detalhes = _criar_scroll_lista(240)
+	var detalhes = _criar_scroll_lista(70)
 	_adicionar_linha_detalhe(detalhes, "Tipo", HabilidadeData.tipo_habilidade_para_texto(habilidade.tipo_habilidade))
 	_adicionar_linha_detalhe(detalhes, "Custo de PA", str(habilidade.custo_pa))
 	_adicionar_linha_detalhe(detalhes, "Persona de origem", _texto_ou_padrao(habilidade.persona_origem, "Não informada"))
@@ -441,6 +435,8 @@ func _adicionar_linha_detalhe(container: VBoxContainer, rotulo: String, valor: S
 	label.bbcode_enabled = true
 	label.fit_content = true
 	label.scroll_active = false
+	label.add_theme_font_size_override("normal_font_size", TAMANHO_FONTE)
+	label.add_theme_font_size_override("bold_font_size", TAMANHO_FONTE)
 	label.text = "[b]%s:[/b] %s" % [rotulo, valor]
 	container.add_child(label)
 
@@ -464,20 +460,80 @@ func _confirmar_sobrecarga() -> void:
 ## Métodos mantidos para chamadas externas antigas. Eles agora redirecionam para
 ## o fluxo interno sem menus flutuantes.
 
-func mostrar_menu_pericias(_combatente: Dictionary) -> void:
-	abrir_menu_pericias()
+func mostrar_menu_conhecimentos(_combatente: Dictionary) -> void:
+	abrir_menu_conhecimentos()
 
 func mostrar_menu_habilidades(_combatente: Dictionary) -> void:
 	abrir_menu_habilidades()
 
-func mostrar_menu_itens(combatente: Dictionary) -> void:
-	# Stub preservado. A futura implementação deve seguir a mesma estrutura:
-	# Menu Principal -> Lista rolável de consumíveis -> Detalhes -> Confirmar Uso.
+func mostrar_menu_itens(_combatente: Dictionary) -> void:
+	abrir_menu_itens()
+
+## ===== TELA DE ITENS =====
+## Menu Principal -> Lista de consumíveis -> Detalhes -> Usar.
+## Mesmo padrão de Habilidades; o CombatManager aplica o efeito.
+
+func abrir_menu_itens() -> void:
 	if combatente_ref == null:
 		print("[ActionPanel] Combatente não possui referência")
 		return
 
-	print("[ActionPanel] Menu de itens para %s" % combatente["nome"])
-	# TODO: Criar lista rolável de itens consumíveis.
-	# TODO: Exibir custo de ação, quantidade e descrição antes de confirmar.
-	# TODO: Retornar item selecionado ao CombatManager por sinal próprio.
+	estado_menu = EstadoMenu.ITENS
+	_ocultar_menu_principal()
+	_limpar_tela_contextual()
+	_criar_titulo_tela("Itens")
+
+	var lista = _criar_scroll_lista(40)
+	var consumiveis: Array[Dictionary] = ItemData.listar_consumiveis(combatente_ref)
+
+	if consumiveis.is_empty():
+		var vazio = Label.new()
+		vazio.text = "Nenhum item utilizável."
+		vazio.add_theme_font_size_override("font_size", TAMANHO_FONTE)
+		lista.add_child(vazio)
+	else:
+		for entrada in consumiveis:
+			var item: ItemData.Item = entrada["item"]
+			var btn := _criar_botao(
+				"%s x%d" % [item.nome, entrada["quantidade"]],
+				item.descricao,
+				_abrir_detalhes_item.bind(entrada)
+			)
+			lista.add_child(btn)
+
+	_criar_botao_voltar(_mostrar_menu_principal)
+	_focar_primeiro_botao.call_deferred(lista)
+
+func _abrir_detalhes_item(entrada: Dictionary) -> void:
+	var item: ItemData.Item = entrada["item"]
+	estado_menu = EstadoMenu.DETALHE_ITEM
+	_limpar_tela_contextual()
+	_criar_titulo_tela(item.nome)
+
+	var detalhes = _criar_scroll_lista(40)
+	_adicionar_linha_detalhe(detalhes, "Quantidade", str(entrada["quantidade"]))
+	_adicionar_linha_detalhe(detalhes, "Efeito", item.descricao)
+
+	var confirmar = _criar_botao(
+		"USAR",
+		"Usa o item e finaliza o turno",
+		_confirmar_item.bind(String(entrada["nome"]))
+	)
+	vbox.add_child(confirmar)
+	controles_tela_atual.append(confirmar)
+
+	_criar_botao_voltar(abrir_menu_itens)
+	confirmar.grab_focus()
+
+func _confirmar_item(nome_item: String) -> void:
+	print("[ActionPanel] Item confirmado: %s" % nome_item)
+	_mostrar_menu_principal()
+	item_escolhido.emit(nome_item)
+
+func _focar_primeiro_botao(container: Node) -> void:
+	if not is_instance_valid(container):
+		return
+	for filho in container.get_children():
+		if filho is Button and not filho.disabled:
+			filho.grab_focus()
+			return

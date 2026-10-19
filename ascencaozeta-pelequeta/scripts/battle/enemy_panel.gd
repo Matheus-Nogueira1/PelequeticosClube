@@ -1,6 +1,6 @@
 extends PanelContainer
 class_name EnemyPanel
-
+const TAMANHO_FONTE: int = 8
 ## PAINEL DE INIMIGOS
 ## Mostra lista dos inimigos com:
 ## - Nome de cada inimigo
@@ -42,14 +42,17 @@ func _criar_layout() -> void:
 	
 	# Título
 	label_titulo.text = "Inimigos"
-	label_titulo.add_theme_font_size_override("font_size", 18)
+	label_titulo.add_theme_font_size_override("font_size", 10)
 	label_titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	vbox.add_child(label_titulo)
 	
 	# Container de scroll para lista
 	scroll_container.clip_contents = true
 	scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
-	
+	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	lista_inimigos.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	lista_inimigos.add_theme_constant_override("separation", 2)
 	lista_inimigos.mouse_filter = Control.MOUSE_FILTER_PASS
 	scroll_container.add_child(lista_inimigos)
@@ -105,14 +108,13 @@ func limpar_inimigos() -> void:
 func _criar_botao_inimigo(inimigo: Dictionary) -> void:
 	"""Cria um botão visual para um inimigo"""
 	var botao = Button.new()
-	botao.add_theme_font_size_override(
-	"font_size",
-	20
-	)
+	
 	botao.alignment = HORIZONTAL_ALIGNMENT_LEFT
 	botao.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
 	botao.text = _formatar_texto_inimigo(inimigo)
-	botao.custom_minimum_size = Vector2(0, 120)
+	botao.custom_minimum_size = Vector2(0, 0)
+	botao.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	UiUtil.aplicar(botao, TAMANHO_FONTE)
 	botao.toggle_mode = true
 	botao.mouse_filter = Control.MOUSE_FILTER_STOP
 	botao.pressed.connect(_on_botao_inimigo_pressionado.bind(inimigo))
@@ -121,88 +123,33 @@ func _criar_botao_inimigo(inimigo: Dictionary) -> void:
 	botoes_inimigos[inimigo["nome"]] = botao
 
 func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
-	var nome = inimigo["nome"]
-
+	var nome: String = inimigo["nome"]
 	var estresse_total := 0
 	var limite_total := 0
-	var analisado = false
-	if inimigo.has("analisado_por_duelo"):
-		analisado = inimigo["analisado_por_duelo"]
-	if not analisado:
-
-		for regiao_data in inimigo["estresse_por_regiao"].values():
-			estresse_total += regiao_data["atual"]
-			limite_total += regiao_data["limite"]
-		var barra = _criar_barra_estresse(
-			estresse_total,
-			limite_total
-		)
-		return """
-	%s
-
-	ESTRESSE %d/%d
-	%s
-
-	PROTEÇÃO ???
-
-	Torso ............. ??/?
-	Braço Direito ..... ??/?
-	Braço Esquerdo .... ??/?
-	Perna Direita ..... ??/?
-	Perna Esquerda .... ??/?
-	""" % [
-			nome,
-			estresse_total,
-			limite_total,
-			barra
-		]
 	for regiao_data in inimigo["estresse_por_regiao"].values():
 		estresse_total += regiao_data["atual"]
 		limite_total += regiao_data["limite"]
-	var barra = _criar_barra_estresse(
-		estresse_total,
-		limite_total
-	)
+
+	var analisado: bool = bool(inimigo.get("analisado_por_duelo", false))
+	var barra := _criar_barra_estresse(estresse_total, limite_total)
+	var texto := "%s\nESTR %d/%d\n%s\n" % [nome, estresse_total, limite_total, barra]
+
+	if not analisado:
+		texto += "PROT ???\n"
+		for regiao in CombatenteData.REGIOES:
+			texto += "%s ??/?\n" % regiao
+		return texto
+
 	var protecao_base: int = inimigo["atributo_protecao"]
-	var reducao: int = 0
-	if inimigo.has("reducao_protecao_temporaria"):
-		reducao = inimigo["reducao_protecao_temporaria"]
-	var protecao_atual: int = max(
-		0,
-		protecao_base - reducao
-	)
-	var torso = inimigo["estresse_por_regiao"]["Torso"]
-	var bd = inimigo["estresse_por_regiao"]["Braço Direito"]
-	var be = inimigo["estresse_por_regiao"]["Braço Esquerdo"]
-	var pd = inimigo["estresse_por_regiao"]["Perna Direita"]
-	var pe = inimigo["estresse_por_regiao"]["Perna Esquerda"]
+	var reducao: int = int(inimigo.get("reducao_protecao_temporaria", 0))
+	var protecao_atual: int = max(0, protecao_base - reducao)
+	texto += "PROT %d/%d\n" % [protecao_atual, protecao_base]
 
-	return """
-%s
+	for regiao in CombatenteData.REGIOES:
+		var dados: Dictionary = inimigo["estresse_por_regiao"][regiao]
+		texto += "%s %d/%d\n" % [regiao, dados["atual"], dados["limite"]]
+	return texto
 
-ESTRESSE %d/%d
-%s
-
-PROTEÇÃO %d/%d
-
-Torso ............. %d/%d
-Braço Direito ..... %d/%d
-Braço Esquerdo .... %d/%d
-Perna Direita ..... %d/%d
-Perna Esquerda .... %d/%d
-""" % [
-		nome,
-		estresse_total,
-		limite_total,
-		barra,
-		protecao_atual,
-		protecao_base,
-		torso["atual"], torso["limite"],
-		bd["atual"], bd["limite"],
-		be["atual"], be["limite"],
-		pd["atual"], pd["limite"],
-		pe["atual"], pe["limite"]
-	]
 func _criar_barra_saude(atual: int, maximo: int) -> String:
 	"""Cria uma barra de saúde em texto ASCII"""
 	var tamanho_barra = 10
@@ -242,6 +189,7 @@ func ativar_seletor_alvo() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	for botao in botoes_inimigos.values():
 		botao.focus_mode = Control.FOCUS_ALL
+		botao.mouse_filter = Control.MOUSE_FILTER_STOP
 	await get_tree().process_frame
 	if botoes_inimigos.size() > 0:
 		botoes_inimigos.values()[0].grab_focus()

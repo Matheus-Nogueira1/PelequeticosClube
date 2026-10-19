@@ -1,5 +1,6 @@
 extends PanelContainer
 class_name RegionalSelector
+const TAMANHO_FONTE: int = 8
 
 # Sinais para comunicação com CombatManager
 signal regiao_selecionada(nome_regiao: String, indice: int)
@@ -41,60 +42,61 @@ func _ready() -> void:
 
 func _criar_layout() -> void:
 	"""Cria o layout do seletor de regiões"""
-	vbox.add_theme_constant_override("separation", 8)
+	vbox.add_theme_constant_override("separation", 2)
 	add_child(vbox)
-	
-	# Título
+
 	label_titulo.text = "Selecione Regiões"
-	label_titulo.add_theme_font_size_override("font_size", 16)
+	label_titulo.add_theme_font_size_override("font_size", TAMANHO_FONTE + 1)
 	vbox.add_child(label_titulo)
-	
-	# Grid de regiões
+
 	grid_regioes.columns = 2
-	grid_regioes.add_theme_constant_override("h_separation", 4)
-	grid_regioes.add_theme_constant_override("v_separation", 4)
-	
+	grid_regioes.add_theme_constant_override("h_separation", 2)
+	grid_regioes.add_theme_constant_override("v_separation", 2)
+
 	for i in range(regioes.size()):
 		var botao = _criar_botao_regiao(regioes[i], i)
 		botao.focus_mode = Control.FOCUS_ALL
 		botoes_regiao.append(botao)
 		grid_regioes.add_child(botao)
-	
+
 	vbox.add_child(grid_regioes)
-	
-	# Label informativo (mostra estresse)
+
 	label_info.text = "Clique para selecionar"
-	label_info.add_theme_font_size_override("font_size", 10)
+	label_info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label_info.add_theme_font_size_override("font_size", TAMANHO_FONTE)
 	vbox.add_child(label_info)
-	
-	# Espaçador
-	var spacer = Control.new()
-	spacer.custom_minimum_size.y = 4
-	vbox.add_child(spacer)
-	
-	# Botões de ação
+
 	var hbox_botoes = HBoxContainer.new()
-	hbox_botoes.add_theme_constant_override("separation", 4)
-	
+	hbox_botoes.add_theme_constant_override("separation", 2)
+
 	var botao_confirmar = Button.new()
 	botao_confirmar.text = "✓ Confirmar"
+	botao_confirmar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	botao_confirmar.clip_text = true
 	botao_confirmar.pressed.connect(_on_confirmar)
+	UiUtil.aplicar(botao_confirmar, TAMANHO_FONTE)
 	hbox_botoes.add_child(botao_confirmar)
-	
+
 	var botao_cancelar = Button.new()
 	botao_cancelar.text = "✗ Cancelar"
+	botao_cancelar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	botao_cancelar.clip_text = true
 	botao_cancelar.pressed.connect(_on_cancelar)
+	UiUtil.aplicar(botao_cancelar, TAMANHO_FONTE)
 	hbox_botoes.add_child(botao_cancelar)
-	
+
 	vbox.add_child(hbox_botoes)
 
 func _criar_botao_regiao(nome: String, indice: int) -> Button:
 	"""Helper para criar botão de região"""
 	var botao = Button.new()
 	botao.text = nome
-	botao.custom_minimum_size = Vector2(100, 32)
+	botao.custom_minimum_size = Vector2(0, 12)
+	botao.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	botao.clip_text = true
 	botao.toggle_mode = true
 	botao.pressed.connect(_on_regiao_clicada.bindv([indice, nome]))
+	UiUtil.aplicar(botao, TAMANHO_FONTE)
 	return botao
 
 # ============================================================================
@@ -122,20 +124,17 @@ func _pode_arriscar_regiao(regiao: String) -> bool:
 	"""Valida se uma região pode ser arriscada em combate"""
 	if combatente_ativo == null:
 		return false
-	
-	# Verifica se é uma região perdida
+
 	if regiao in combatente_ativo.regioes_perdidas:
 		return false
-	
-	# Se tem prótese, verifica se não foi destruída
-	if combatente_ativo.proteses.has(regiao):
-		var protese = combatente_ativo.proteses[regiao]
-		return not protese.destruida
-	
-	var stress = combatente_ativo.estresse_por_regiao[regiao]
+
+	if combatente_ativo.proteses.has(regiao) and combatente_ativo.proteses[regiao].destruida:
+		return false
+
+	var stress: Dictionary = combatente_ativo.estresse_por_regiao[regiao]
 	if stress["atual"] >= stress["limite"]:
 		return false
-		
+
 	return true
 
 func _atualizar_estado_botoes() -> void:
@@ -143,25 +142,14 @@ func _atualizar_estado_botoes() -> void:
 	for i in range(regioes.size()):
 		var regiao = regioes[i]
 		var botao = botoes_regiao[i]
-		var pode_arriscar = _pode_arriscar_regiao(regiao)
-		
-		if not pode_arriscar:
+
+		if not _pode_arriscar_regiao(regiao):
 			botao.disabled = true
-			if regiao in combatente_ativo.regioes_perdidas:
-				botao.text = regioes[i] + " (PERDIDO)"
-				botao.add_theme_color_override("font_disabled_color", Color.RED)
-			elif combatente_ativo.proteses.has(regiao) and combatente_ativo.proteses[regiao].destruida:
-				botao.text = regioes[i] + " (PRÓTESE DESTRUÍDA)"
-				botao.add_theme_color_override("font_disabled_color", Color.DARK_RED)
+			botao.add_theme_color_override("font_disabled_color", Color.RED)
 		else:
 			botao.disabled = false
-			# Se tem prótese, mostrar indicador
-			if combatente_ativo.proteses.has(regiao):
-				botao.text = regioes[i] + " [PR]"
-				botao.add_theme_color_override("font_disabled_color", Color.YELLOW)
-			else:
-				botao.text = regioes[i]
-				botao.remove_theme_color_override("font_disabled_color")
+			botao.text = _obter_nome_visual_regiao(regiao)
+			botao.remove_theme_color_override("font_disabled_color")
 
 
 func desativar() -> void:

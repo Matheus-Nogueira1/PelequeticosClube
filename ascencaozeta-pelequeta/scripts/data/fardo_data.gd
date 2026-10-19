@@ -189,8 +189,8 @@ static func testar_ataque_cardiaco(combatente: CombatenteData) -> Dictionary:
 	Teste de Esforço contra Ataque Cardíaco
 	Falha = morte instantânea
 	"""
-	var pericia_data = PericiaData.new()
-	var resultado = pericia_data.testar_conhecimento(combatente, "Esforço", 0)
+	var conhecimento_data = ConhecimentoData.new()
+	var resultado = conhecimento_data.testar_conhecimento(combatente, "Esforço", 0)
 	
 	var sobrevive = resultado["sucesso"]
 	

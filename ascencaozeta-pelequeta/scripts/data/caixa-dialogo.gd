@@ -5,7 +5,7 @@ extends Control
 @onready var dica_label: Label = %DicaLabel
 
 @onready var dialogue_box: Control = %DialogueBox
-
+@onready var painel_fala: Control = %Panel
 @onready var light_button: Button = %LightButton
 @onready var darkness_button: Button = %DarknessButton
 @onready var darkness_button_2: Button = %DarknessButton2
@@ -31,7 +31,7 @@ var botoes_opcoes: Array[Button] = []
 var rotulo_opcoes: Label = null
 var indice_opcao_selecionada: int = 0
 var opcoes_ativas: bool = false
-
+var rolando_teste: bool = false
 
 func _ready() -> void:
 	print("CaixaDialogo pronta")
@@ -89,13 +89,19 @@ func _configurar_interface_opcoes() -> void:
 		darkness_button_2
 	]
 
-	for botao in botoes:
+	for i in range(botoes.size()):
+		var botao: Button = botoes[i]
 		botoes_opcoes.append(botao)
 		botao.hide()
 		botao.focus_mode = Control.FOCUS_NONE
-
+		botao.pressed.connect(_on_botao_opcao_pressionado.bind(i))
+		botao.mouse_entered.connect(_on_botao_opcao_hover.bind(i))
+	
 	rotulo_opcoes.hide()
 	dialogue_box.hide()
+	# Limpa os textos de exemplo que vêm da cena.
+	nome_label.text = ""
+	texto_label.text = ""
 
 func iniciar_dialogo(id_dialogo: String) -> void:
 	print("Abrindo diálogo:", id_dialogo)
@@ -114,6 +120,8 @@ func iniciar_dialogo(id_dialogo: String) -> void:
 
 	indice_atual = 0
 	ativo = true
+	rolando_teste = false
+	_travar_jogador(true)
 	visible = true
 	dica_label.show()
 	# O painel padrão permanece visível; apenas as opções ficam ocultas.
@@ -139,7 +147,8 @@ func iniciar_dialogo_npc(
 func _unhandled_input(event: InputEvent) -> void:
 	if not ativo:
 		return
-
+	if rolando_teste:
+		return
 	if opcoes_ativas:
 		if event.is_action_pressed("ui_up"):
 			_mover_selecao(-1)
@@ -216,7 +225,7 @@ func _mostrar_fala_atual() -> void:
 	if not opcoes.is_empty():
 		_exibir_opcoes(opcoes)
 	else:
-		dica_label.text = "Enter: avançar | Esc: fechar"
+		dica_label.text = "E/Enter: avançar | Esc: fechar"
 
 
 func _escrever_texto(texto: String) -> void:
@@ -258,7 +267,9 @@ func _exibir_opcoes(opcoes: Array) -> void:
 	opcoes_ativas = true
 
 	dialogue_box.visible = true
-
+	rotulo_opcoes.text = texto_label.text
+	rotulo_opcoes.show()
+	painel_fala.hide()
 	for i in range(botoes_opcoes.size()):
 		var botao: Button = botoes_opcoes[i]
 
@@ -288,7 +299,7 @@ func _exibir_opcoes(opcoes: Array) -> void:
 
 	_atualizar_selecao_opcao()
 
-	dica_label.text = "↑/↓: escolher | Enter: confirmar"
+	dica_label.text = "↑/↓: escolher | E/Enter: confirmar"
 
 
 func _atualizar_selecao_opcao() -> void:
@@ -317,9 +328,9 @@ func _atualizar_selecao_opcao() -> void:
 		if not disponivel:
 			dica_label.text = "Requer especialização em " + conhecimento + "."
 		else:
-			dica_label.text = "↑/↓: escolher | Enter: testar " + conhecimento
+			dica_label.text = "↑/↓: escolher | E/Enter: testar " + conhecimento
 	else:
-		dica_label.text = "↑/↓: escolher | Enter: confirmar"
+		dica_label.text = "↑/↓: escolher | E/Enter: confirmar"
 
 
 func _mover_selecao(direcao: int) -> void:
@@ -332,8 +343,25 @@ func _mover_selecao(direcao: int) -> void:
 
 	_atualizar_selecao_opcao()
 
+func _on_botao_opcao_hover(indice: int) -> void:
+	# Passar o mouse move a seleção (o ▶), igual às setas.
+	if not opcoes_ativas or indice >= opcoes_atuais.size():
+		return
 
+	if botoes_opcoes[indice].disabled:
+		return
 
+	indice_opcao_selecionada = indice
+	_atualizar_selecao_opcao()
+
+func _on_botao_opcao_pressionado(indice: int) -> void:
+	# Clique do mouse seleciona e confirma a opção.
+	if not opcoes_ativas or indice >= opcoes_atuais.size():
+		return
+
+	indice_opcao_selecionada = indice
+	_atualizar_selecao_opcao()
+	_confirmar_opcao()
 
 func _confirmar_opcao() -> void:
 	if not opcoes_ativas or opcoes_atuais.is_empty():
@@ -381,6 +409,20 @@ func _confirmar_opcao() -> void:
 			if not resultado_estresse.is_empty():
 				print("Consequência do Estresse: ", resultado_estresse)
 
+				# Falha em opção com "failure_stress": aplica Estresse ao Torso.
+		var estresse_falha: int = int(opcao.get("failure_stress", 0))
+
+		if estresse_falha > 0 and categoria_resultado in ["Falha Regular", "Falha Crítica"]:
+			combatente.aplicar_estresse("Torso", estresse_falha)
+
+			print(
+				"Falha em %s: +%d Estresse no Torso. Estado: %d/%d" % [
+					conhecimento,
+					estresse_falha,
+					combatente.estresse_por_regiao["Torso"]["atual"],
+					combatente.estresse_por_regiao["Torso"]["limite"]
+				]
+			)
 		var id_dialogo_resultado: String = ""
 
 		match categoria_resultado:
@@ -415,11 +457,14 @@ func _confirmar_opcao() -> void:
 					"Categoria de teste desconhecida: "
 					+ categoria_resultado
 				)
+				rolando_teste = false
 				opcoes_ativas = true
 				return
 
 		await get_tree().create_timer(1.0).timeout
-
+		var dado_oculto := get_tree().get_first_node_in_group("dado_d6") as CanvasItem
+		if dado_oculto != null:
+			dado_oculto.visible = false
 		if not ativo:
 			return
 
@@ -446,6 +491,8 @@ func _confirmar_opcao() -> void:
 
 func _esconder_opcoes() -> void:
 	opcoes_ativas = false
+	if painel_fala != null:
+		painel_fala.show()
 	opcoes_atuais.clear()
 
 	if dialogue_box != null:
@@ -467,6 +514,10 @@ func _avancar_dialogo() -> void:
 
 func fechar_dialogo() -> void:
 	ativo = false
+	rolando_teste = false
+	_travar_jogador(false)
+	nome_label.text = ""
+	texto_label.text = ""
 	escrevendo = false
 	pular_escrita = false
 	visible = false
@@ -480,6 +531,12 @@ func fechar_dialogo() -> void:
 		)
 
 	dialogo_encerrado.emit()
+
+func _travar_jogador(travar: bool) -> void:
+	# Trava ou libera o movimento de quem estiver no grupo "player".
+	for jogador in get_tree().get_nodes_in_group("player"):
+		if jogador.has_method("travar"):
+			jogador.travar(travar)
 
 func _executar_teste_conhecimento(conhecimento: String) -> Dictionary:
 	if combatente == null:
@@ -499,12 +556,26 @@ func _executar_teste_conhecimento(conhecimento: String) -> Dictionary:
 		dica_label.text = "Não foi possível realizar o teste."
 		return {}
 
-	# Impede que o jogador confirme a opção novamente durante a rolagem.
+	# Fecha o painel de opções e volta para o painel da fala (com a dica visível).
+	dialogue_box.hide()
+	painel_fala.show()
+
+	# Impede qualquer confirmação até o resultado ser mostrado.
 	opcoes_ativas = false
+	rolando_teste = true
 
 	var dado_visual := get_tree().get_first_node_in_group("dado_d6") as RolagemD6
 
 	if dado_visual != null:
+		dado_visual.visible = true
+		var camera := get_viewport().get_camera_2d()
+		if camera != null:
+			dado_visual.global_position = camera.get_screen_center_position() + Vector2(0, -20)
+
+		dica_label.text = "ENTER ou E: rolar o dado"
+		await dado_visual.aguardar_confirmacao()
+
+		dica_label.text = "Rolando..."
 		await dado_visual.rodar_e_mostrar_face(int(resultado["dado"]))
 	else:
 		push_warning("Nenhum nó do dado foi encontrado no grupo 'dado_d6'.")
@@ -528,7 +599,7 @@ func mostrar_dica_interacao() -> void:
 		return
 
 	visible = true
-	dica_label.text = "ENTER — Conversar"
+	dica_label.text = "E ou ENTER — Conversar"
 	dica_label.show()
 
 

@@ -19,8 +19,23 @@ const CONVERSAS: Dictionary = {
 		{"speaker": "Testemunha", "text": "Quando confirmarem, os dados vão rolar."}
 	],
 	"Escolhido-inicio": [
-		{"speaker": "Testemunha", "text": "Escolham as regiões que vão arriscar."},
-		{"speaker": "Testemunha", "text": "Quando confirmarem, os dados vão rolar."}
+		{"speaker": "Testemunha", "text": "Escolhido"},
+		{"speaker": "Escolhido", "text": "Esse é o meu nome?"},
+		{"speaker": "???", "text": "Consegue me ouvir?"},
+		{"speaker": "Escolhido", "text": "Quem é você?"},
+		{"speaker": "???", "text": "Ah... não se lembra?"},
+		{"speaker": "Escolhido", "text": "Acho que.. eu estava em algum tipo de museu, ou biblíoteca, ou templo algo assim..."},
+		{"speaker": "???", "text": "Foi nesse lugar em que nos encontramos."},
+		{"speaker": "Escolhido", "text": "Que estranho... não me lembro do seu nome"},
+		{"speaker": "???", "text": "Chama"},
+		{"speaker": "Escolhido", "text": "Te chamar?"},
+		{"speaker": "Chama", "text": "Idiota. Eu sou Chama"},
+		{"speaker": "Escolhido", "text": "Que nome estranho"},
+		{"speaker": "Escolhido", "text": "É um prazer Chama"},
+		{"speaker": "Escolhido", "text": "O que eu estava fazendo naquele lugar? Espera, onde a gente tá?"},
+		{"speaker": "Chama", "text": "Não faço a mínima ideia."},
+		{"speaker": "Testemunha", "text": "Você cai de cara em pedregulhos. A dor dura alguns segundos..."},
+		{"speaker": "Testemunha", "text": "Ao se levantar você percebe uma coloração estranha em sua pele. Seus ossos parecem quebrados. E seu braço direito QUEIMA como se estivesse coberto de óleo."},
 	],
 
 #CABANA ELIZABETH
@@ -28,22 +43,61 @@ const CONVERSAS: Dictionary = {
 	"Elizabeth": [
 		{"speaker": "Elizabeth", "text": "Olá Escolhido."},
 		{"speaker": "Elizabeth", "text": "Seja bem vindo a nossa cabana."},
-		{"speaker": "Elizabeth", "text": "Você compreende o motivo dessa reunião?", "options":
-		[{"text": "Onde estou?"}, 
-		{"text": "Quem é você?"},
-		{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso"}]}
+		{"speaker": "Elizabeth", "text": "Você compreende o motivo dessa reunião?", "options": [
+			{"text": "Onde estou?", "next_dialogue": "elizabeth_onde"},
+			{"text": "Quem é você?", "next_dialogue": "elizabeth_quem"},
+			{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso", "failure_dialogue": "elizabeth_social_falha", "failure_stress": 1}
+		]}
+	],
+	"elizabeth_menu": [
+		{"speaker": "Elizabeth", "text": "Mais alguma coisa que queira saber?", "options": [
+			{"text": "Onde estou?", "next_dialogue": "elizabeth_onde"},
+			{"text": "Quem é você?", "next_dialogue": "elizabeth_quem"},
+			{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso", "failure_dialogue": "elizabeth_social_falha", "failure_stress": 1}
+		]}
+	],
+	"elizabeth_onde": [
+		{"speaker": "Elizabeth", "text": "Esta é a minha cabana, no fundo do abismo. É o único lugar onde o fogo ainda não se apagou."},
+		{"speaker": "Elizabeth", "text": "Você é o Escolhido, deve acabar com toda essa escuridão.", "options": [
+			{"text": "Voltar", "next_dialogue": "elizabeth_menu"},
+			{"text": "Encerrar", "close_dialogue": true}
+		]}
+	],
+	"elizabeth_quem": [
+		{"speaker": "Elizabeth", "text": "Me chamo Elizabeth. Serei sua guia nessa loga jornada."},
+		{"speaker": "Elizabeth", "text": "Quem chega até aqui carrega uma chama. Eu só ajudo a mantê-la acesa.", "options": [
+			{"text": "Voltar", "next_dialogue": "elizabeth_menu"},
+			{"text": "Encerrar", "close_dialogue": true}
+		]}
 	],
 	"elizabeth_social_sucesso": [
 		{
 			"speaker": "Escolhido",
-			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda. Como recompensa terei as respostas que procuro, acertei?"
+			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda. Como recompensa terei as respostas que tanto procuro, acertei?"
 		},
 		{
 			"speaker": "Elizabeth",
 			"text": "Na mosca."
 		}
 	],
-
+	"elizabeth_social_falha": [
+		{
+			"speaker": "Escolhido",
+			"text": "Bom, talvez você esteja se sentindo sozinha nessa pequena cabana no meio do nada não é?"
+		},
+		{
+			"speaker": "Elizabeth",
+			"text": "A chama sempre me guia e para sempre irá me guiar. Sua missão não envolve se deitar comigo."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "Você tropeça nas próprias palavras e o olhar de Elizabeth endurece. Uma pontada de tensão aperta seu peito."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "Recebeu 1 de estresse."
+		}
+	],
 #BASTILHA INTERAÇÔES
 
 "parede_estranha": [
