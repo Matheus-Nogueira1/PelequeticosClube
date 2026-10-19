@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://pupmbn2fmc7k"]
 
-[ext_resource type="Texture2D" uid="uid://tsbf2a0vcf6q" path="res://assets/images/player/Walk_Escolhido_Template.png" id="2_0qvx1"]
+[ext_resource type="Texture2D" uid="uid://tsbf2a0vcf6q" path="res://assets/Player/ESCOLHIDO/Walk_Escolhido_Template.png" id="2_0qvx1"]
 [ext_resource type="Script" uid="uid://m6si84mho71r" path="res://scripts/personagens/Movimento.gd" id="2_22mqn"]
-[ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/images/player/Shadow.png" id="2_tw08g"]
+[ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/Player/Base/Shadow.png" id="2_tw08g"]
+[ext_resource type="Texture2D" uid="uid://bhgm4kl5otivt" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_Levantando-Sheet.png" id="4_80tg0"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_22mqn"]
 atlas = ExtResource("2_0qvx1")
@@ -265,6 +266,84 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_mgf8l"]
 radius = 6.0369244
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ne1j0"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fhty4"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pmhvr"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m5186"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lvu46"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1n6x5"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ydqmb"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1w1jg"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_anawv"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(256, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_alr1a"]
+atlas = ExtResource("4_80tg0")
+region = Rect2(288, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_g4v7s"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ne1j0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fhty4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pmhvr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m5186")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lvu46")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1n6x5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ydqmb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1w1jg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_anawv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_alr1a")
+}],
+"loop": 1,
+"name": &"Levantar",
+"speed": 5.0
+}]
+
 [node name="Escolhido" type="CharacterBody2D" unique_id=188751351]
 y_sort_enabled = true
 script = ExtResource("2_22mqn")
@@ -283,3 +362,8 @@ animation = &"shadow"
 y_sort_enabled = true
 position = Vector2(0, 8.666667)
 shape = SubResource("CircleShape2D_mgf8l")
+
+[node name="Levantar" type="AnimatedSprite2D" parent="." unique_id=1267546188]
+visible = false
+sprite_frames = SubResource("SpriteFrames_g4v7s")
+animation = &"Levantar"
