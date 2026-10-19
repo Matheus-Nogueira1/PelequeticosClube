@@ -147,7 +147,13 @@ func rolar_teste_conhecimento_d6(
 		"falha": categoria in ["Falha Regular", "Falha Crítica"]
 	}
 
-func rolar_teste_combate_d6(regioes_arriscadas: Array, protecao_alvo: int, dano_arma: int, atributo_dano: int) -> Dictionary:
+func rolar_teste_combate_d6(
+	regioes_arriscadas: Array,
+	protecao_alvo: int,
+	dano_arma: int,
+	atributo_dano: int,
+	resultados_dados: Array = []
+) -> Dictionary:
 	var quantidade = clamp(regioes_arriscadas.size(), 1, 5)
 	regioes_arriscadas = regioes_arriscadas.slice(0, quantidade)
 
@@ -158,8 +164,15 @@ func rolar_teste_combate_d6(regioes_arriscadas: Array, protecao_alvo: int, dano_
 	var falhas_criticas = 0
 	var estresse_gerado = 0
 
-	for regiao in regioes_arriscadas:
-		var dado = randi_range(1, 6)
+	for indice in range(regioes_arriscadas.size()):
+		var regiao: String = regioes_arriscadas[indice]
+		var dado: int
+
+		if indice < resultados_dados.size():
+			dado = clampi(int(resultados_dados[indice]), 1, 6)
+		else:
+			dado = randi_range(1, 6)
+
 		var categoria = avaliar_resultado_d6(dado)
 		var acertos = 0
 

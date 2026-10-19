@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://8x7ih6p7xxqo" path="res://assets/Inimigos/Dummy_Template_Dodge-Sheet.png" id="14_j6so4"]
 [ext_resource type="Texture2D" uid="uid://cb08borecgw6v" path="res://assets/Inimigos/Dummy_Template_Hit-Sheet.png" id="15_iphor"]
 [ext_resource type="Texture2D" uid="uid://bknmpatpexsxl" path="res://assets/Inimigos/Dummy_Template_Morrendo-Sheet.png" id="16_acp53"]
+[ext_resource type="PackedScene" uid="uid://dnyfv6ohwdxhc" path="res://scenes/battle/seletor-corpo.tscn" id="19_omrhf"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f0agn"]
 atlas = ExtResource("4_m1xb0")
@@ -1166,7 +1167,7 @@ metadata/_edit_lock_ = true
 position = Vector2(60, 70)
 
 [node name="PlayerVisual" type="Node2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants" unique_id=2078291229]
-position = Vector2(-15, 50)
+position = Vector2(-6, 10)
 
 [node name="AnimationEscolhido" type="AnimatedSprite2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants/PlayerVisual" unique_id=1384800493]
 y_sort_enabled = true
@@ -1207,6 +1208,9 @@ size_flags_horizontal = 3
 size_flags_vertical = 8
 script = ExtResource("5_8we11")
 metadata/_edit_lock_ = true
+
+[node name="Control" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=1775997112 instance=ExtResource("19_omrhf")]
+layout_mode = 2
 
 [node name="EnemyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1029187186]
 unique_name_in_owner = true

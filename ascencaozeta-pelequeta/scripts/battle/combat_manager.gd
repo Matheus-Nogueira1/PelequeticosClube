@@ -4,7 +4,12 @@ class_name CombatManager
 # Importações
 const RolagemDadosD6 = preload("res://scripts/battle/rolagens-dados-d6.gd")
 const CENA_MAPA: String = "res://scenes/mapas/CabanaElizabeth.tscn"
+const CENA_DADO_D6: PackedScene = preload(
+	"res://scenes/testes/rolagem-dado.tscn"
+)
 
+var dados_visuais: Array[RolagemD6] = []
+var dados_em_animacao: bool = false
 # Tipos de ações conforme OBLIVIO
 enum ActionType {
 	ACAO_REGULAR,    # Ação simples (atacar, perícia básica)
@@ -766,12 +771,22 @@ func _processar_ataque(
 	else:
 		if animacao_inimigo != null:
 			await animacao_inimigo.tocar_ataque()
+	# Exibe os dados e guarda os resultados reais da rolagem.
+	var resultados_dados: Array[int] = await _rolar_dados_visuais(regioes)
+
+	if resultados_dados.is_empty():
+		push_error("[CombatManager] Não foi possível concluir a rolagem dos dados.")
+		_finalizar_acao()
+		return
+
+	# A lógica utiliza exatamente os resultados mostrados na animação.
 	var rolagem = RolagemDadosD6.new()
-	var resultado_combate = rolagem.rolar_teste_combate_d6(
+	var resultado_combate: Dictionary = rolagem.rolar_teste_combate_d6(
 		regioes,
 		2,
 		2,
-		atacante.atributo_dano
+		atacante.atributo_dano,
+		resultados_dados
 	)
 
 	# ============================================================
@@ -1109,3 +1124,59 @@ func remover_status(combatente: Dictionary, status_nome: String) -> void:
 	combatente["status"] = combatente["status"].filter(
 		func(s): return s["nome"] != status_nome
 	)
+
+func _limpar_dados_visuais() -> void:
+	# Remove os dados da rolagem anterior.
+	for dado in dados_visuais:
+		if is_instance_valid(dado):
+			dado.queue_free()
+
+	dados_visuais.clear()
+
+
+func _rolar_dados_visuais(regioes: Array[String]) -> Array[int]:
+	# Impede duas rolagens visuais simultâneas.
+	if dados_em_animacao:
+		return []
+
+	dados_em_animacao = true
+	_limpar_dados_visuais()
+
+	var quantidade: int = clampi(regioes.size(), 1, 5)
+	var resultados: Array[int] = []
+
+	# Sorteia os resultados que serão usados também pelas regras.
+	for i in range(quantidade):
+		resultados.append(randi_range(1, 6))
+
+	# Cria os dados dentro do Battlefield.
+	var largura: float = 16.0
+	var espacamento: float = 23.0
+	var largura_total: float = (quantidade - 1) * espacamento
+	var inicio_x: float = -largura_total / 2.0
+
+	for i in range(quantidade):
+		var instancia: Node = CENA_DADO_D6.instantiate()
+		var dado := instancia as RolagemD6
+
+		if dado == null:
+			push_error("A cena do dado não possui o script RolagemD6.")
+			instancia.queue_free()
+			continue
+
+		battlefield.add_child(dado)
+
+		dado.position = Vector2(
+			battlefield.size.x / 2.0 + inicio_x + i * espacamento,
+			battlefield.size.y / 2.0
+		)
+
+		dado.scale = Vector2(1.25, 1.25)
+		dados_visuais.append(dado)
+
+	# Anima cada dado com o resultado previamente sorteado.
+	for i in range(dados_visuais.size()):
+		await dados_visuais[i].rodar_e_mostrar_face(resultados[i])
+
+	dados_em_animacao = false
+	return resultados
