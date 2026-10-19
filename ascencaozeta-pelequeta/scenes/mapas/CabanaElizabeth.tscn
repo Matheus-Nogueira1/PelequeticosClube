@@ -2287,7 +2287,7 @@ sources/4 = SubResource("TileSetAtlasSource_mec70")
 sources/5 = SubResource("TileSetAtlasSource_mbqut")
 sources/6 = SubResource("TileSetAtlasSource_baouo")
 
-[node name="Firekeeper" type="Node2D" unique_id=44442164]
+[node name="Cabana" type="Node2D" unique_id=44442164]
 modulate = Color(2.2241454, 2.2241454, 2.2241454, 1)
 script = ExtResource("1_qc65n")
 
@@ -2339,3 +2339,14 @@ position = Vector2(182, 192)
 
 [node name="Dummy" parent="." unique_id=406659815 instance=ExtResource("12_ffjnq")]
 position = Vector2(316, 175)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1066443925]
+
+[node name="BlackScreen" type="ColorRect" parent="CanvasLayer" unique_id=877608353]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

@@ -240,7 +240,7 @@ func iniciar_empurrao():
 
 	# Vai para a Cabana Elizabeth.
 	var erro = get_tree().change_scene_to_file(
-		"res://scenes/mapas/Firekeeper.tscn"
+		"res://scenes/mapas/CabanaElizabeth.tscn"
 	)
 
 	if erro != OK:

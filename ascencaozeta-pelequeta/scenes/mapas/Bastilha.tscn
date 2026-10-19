@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://dic48gv5fbj3b"]
 
 [ext_resource type="Texture2D" uid="uid://v3r2qydmoih8" path="res://assets/world/mainlevbuild.png" id="1_2ca7b"]
+[ext_resource type="Script" uid="uid://bwf48bka7vtv6" path="res://scenes/mapas/firekeeper_intro.gd" id="1_hqgmy"]
 [ext_resource type="Texture2D" uid="uid://crwlh4g6c3lsq" path="res://assets/world/decorative.png" id="2_cl456"]
 [ext_resource type="Texture2D" uid="uid://2yu6qthhwxqq" path="res://assets/world/items-Recovered.png" id="3_efs1e"]
 [ext_resource type="Texture2D" uid="uid://b1wvsoi73h1wt" path="res://assets/world/EfigieHumana.png" id="4_hqgmy"]
@@ -3342,6 +3343,7 @@ sources/13 = SubResource("TileSetAtlasSource_7iboo")
 
 [node name="Bastilhateste" type="Node2D" unique_id=2124024045]
 modulate = Color(2.154521, 2.154521, 2.154521, 1)
+script = ExtResource("1_hqgmy")
 metadata/_edit_horizontal_guides_ = [-34.0]
 metadata/_edit_lock_ = true
 
