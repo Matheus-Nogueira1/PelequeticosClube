@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dnyfv6ohwdxhc"]
 
-[ext_resource type="Script" uid="uid://ci8sfp72i0jvr" path="res://scripts/battle/seletor-corpo.gd" id="1_r2xsd"]
-[ext_resource type="Script" uid="uid://degebnrp74wd7" path="res://scripts/battle/dados.gd" id="3_obwo6"]
-[ext_resource type="SpriteFrames" uid="uid://cjuxjuc2sqlj6" path="res://assets/decoracao/new_sprite_frames.tres" id="4_r2xsd"]
-[ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/animações/click-dados-d6.gd" id="5_k5gy5"]
-[ext_resource type="LabelSettings" uid="uid://c4uyji3i1damp" path="res://fonts/Descrição.tres" id="5_vsbia"]
+[ext_resource type="Script" uid="uid://ci8sfp72i0jvr" path="res://scripts/battle/seletor-corpo.gd" id="1_lvect"]
+[ext_resource type="Script" uid="uid://degebnrp74wd7" path="res://scripts/battle/dados.gd" id="2_7w6bq"]
+[ext_resource type="SpriteFrames" uid="uid://cjuxjuc2sqlj6" path="res://assets/decoracao/new_sprite_frames.tres" id="3_r4lpc"]
+[ext_resource type="Script" uid="uid://clqudknqk5key" path="res://scripts/animações/click-dados-d6.gd" id="4_vhdjn"]
+[ext_resource type="LabelSettings" uid="uid://c4uyji3i1damp" path="res://fonts/Descrição.tres" id="5_5bmik"]
 
 [node name="Control" type="Control" unique_id=1775997112]
 clip_contents = true
@@ -14,7 +14,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_r2xsd")
+script = ExtResource("1_lvect")
 
 [node name="Dado5" type="TextureButton" parent="." unique_id=89519910]
 layout_mode = 1
@@ -23,15 +23,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -33.0
+offset_right = 60.0
+offset_bottom = -33.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_stretch_ratio = 0.0
-script = ExtResource("3_obwo6")
+script = ExtResource("2_7w6bq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Dado5" unique_id=78574818]
 texture_filter = 1
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("3_r4lpc")
+script = ExtResource("4_vhdjn")
 
 [node name="LabelRolar" type="Label" parent="Dado5" unique_id=1686698399]
 layout_mode = 1
@@ -47,7 +51,7 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 1
 text = "ENTER - para rolar"
-label_settings = ExtResource("5_vsbia")
+label_settings = ExtResource("5_5bmik")
 
 [node name="Dado4" type="TextureButton" parent="." unique_id=1840499809]
 layout_mode = 1
@@ -56,14 +60,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -79.0
+offset_top = -38.0
+offset_right = -79.0
+offset_bottom = -38.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_obwo6")
+script = ExtResource("2_7w6bq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Dado4" unique_id=832630026]
 texture_filter = 1
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("3_r4lpc")
+script = ExtResource("4_vhdjn")
 
 [node name="LabelRolar" type="Label" parent="Dado4" unique_id=1715079472]
 layout_mode = 1
@@ -79,7 +87,7 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 1
 text = "ENTER - para rolar"
-label_settings = ExtResource("5_vsbia")
+label_settings = ExtResource("5_5bmik")
 
 [node name="Dado3" type="TextureButton" parent="." unique_id=587896560]
 layout_mode = 1
@@ -88,14 +96,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = -77.0
+offset_top = 42.0
+offset_right = -77.0
+offset_bottom = 42.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_obwo6")
+script = ExtResource("2_7w6bq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Dado3" unique_id=68722154]
 texture_filter = 1
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("3_r4lpc")
+script = ExtResource("4_vhdjn")
 
 [node name="LabelRolar" type="Label" parent="Dado3" unique_id=1127480467]
 layout_mode = 1
@@ -111,7 +123,7 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 1
 text = "ENTER - para rolar"
-label_settings = ExtResource("5_vsbia")
+label_settings = ExtResource("5_5bmik")
 
 [node name="Dado2" type="TextureButton" parent="." unique_id=1963910781]
 layout_mode = 1
@@ -120,14 +132,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = 78.0
+offset_top = 35.0
+offset_right = 78.0
+offset_bottom = 35.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_obwo6")
+script = ExtResource("2_7w6bq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Dado2" unique_id=289641268]
 texture_filter = 1
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("3_r4lpc")
+script = ExtResource("4_vhdjn")
 
 [node name="LabelRolar" type="Label" parent="Dado2" unique_id=2108011556]
 layout_mode = 1
@@ -143,7 +159,7 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 1
 text = "ENTER - para rolar"
-label_settings = ExtResource("5_vsbia")
+label_settings = ExtResource("5_5bmik")
 
 [node name="Dado1" type="TextureButton" parent="." unique_id=1444340003]
 layout_mode = 1
@@ -154,12 +170,12 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("3_obwo6")
+script = ExtResource("2_7w6bq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Dado1" unique_id=3528452]
 texture_filter = 1
-sprite_frames = ExtResource("4_r2xsd")
-script = ExtResource("5_k5gy5")
+sprite_frames = ExtResource("3_r4lpc")
+script = ExtResource("4_vhdjn")
 
 [node name="LabelRolar" type="Label" parent="Dado1" unique_id=1321965793]
 layout_mode = 1
@@ -175,4 +191,4 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 1
 text = "ENTER - para rolar"
-label_settings = ExtResource("5_vsbia")
+label_settings = ExtResource("5_5bmik")
