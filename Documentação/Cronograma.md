@@ -80,7 +80,7 @@
 
 * ~~Design Escolhido caindo e levantando~~ | **FINALIZADO** ✅
 * ~~Design Escolhido  Tela de combate~~ | **FINALIZADO** ✅
-* Design da escolha do personagem | **EM ANDAMENTO** 🔄
+* ~~Design da escolha do personagem~~ | **FINALIZADO** ✅
 * ~~Colisão dos novos mapas~~ |  **FINALIZADO** ✅
 * ~~Remake dos mapas~~ | **FINALIZADO** ✅
 --------------------------------------------------
