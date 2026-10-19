@@ -57,17 +57,19 @@ func obter_personagem_selecionado() -> Dictionary:
 		character_ids[selected_index]
 	)	
 
-
 func update_visual(skip_animation: bool = false) -> void:
 	update_name(skip_animation)
 	update_description(skip_animation)
 
 	# Atualiza apenas a transparência dos personagens.
-	# Não altera posição, escala ou dimensões.
 	for i in range(slots.size()):
 		var slot: Control = slots[i] as Control
 
 		if slot == null:
+			continue
+
+		if skip_animation:
+			slot.modulate = Color.WHITE if i == selected_index else Color(0.45, 0.45, 0.45, 1.0)
 			continue
 
 		if slot.has_meta("tween"):
@@ -80,24 +82,18 @@ func update_visual(skip_animation: bool = false) -> void:
 		tween.set_ease(Tween.EASE_OUT)
 		slot.set_meta("tween", tween)
 
-		var target_color: Color
+		var target_color: Color = Color.WHITE if i == selected_index else Color(0.45, 0.45, 0.45, 1.0)
 
-		if i == selected_index:
-			target_color = Color.WHITE
-		else:
-			target_color = Color(0.45, 0.45, 0.45, 1.0)
-
-		if skip_animation:
-			slot.modulate = target_color
-		else:
-			tween.tween_property(
-				slot, "modulate", target_color, 0.2
-			)
-
+		tween.tween_property(slot, "modulate", target_color, 0.2)
 
 func update_name(skip_animation: bool = false) -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
 	var novo_nome: String = dados["nome"]
+
+	if skip_animation:
+		name_label.text = novo_nome
+		name_label.modulate.a = 1.0
+		return
 
 	if name_label.has_meta("tween"):
 		var old_tween = name_label.get_meta("tween")
@@ -109,20 +105,20 @@ func update_name(skip_animation: bool = false) -> void:
 	tween.set_ease(Tween.EASE_OUT)
 	name_label.set_meta("tween", tween)
 
-	if skip_animation:
+	tween.tween_property(name_label, "modulate:a", 0.0, 0.1)
+	tween.tween_callback(func() -> void:
 		name_label.text = novo_nome
-		name_label.modulate.a = 1.0
-	else:
-		tween.tween_property(name_label, "modulate:a", 0.0, 0.1)
-		tween.tween_callback(func() -> void:
-			name_label.text = novo_nome
-		)
-		tween.tween_property(name_label, "modulate:a", 1.0, 0.15)
-
+	)
+	tween.tween_property(name_label, "modulate:a", 1.0, 0.15)
 
 func update_description(skip_animation: bool = false) -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
 	var novo_texto: String = dados["descricao"]
+
+	if skip_animation:
+		description_label.text = novo_texto
+		description_label.modulate.a = 1.0
+		return
 
 	if description_label.has_meta("tween"):
 		var old_tween = description_label.get_meta("tween")
@@ -134,21 +130,11 @@ func update_description(skip_animation: bool = false) -> void:
 	tween.set_ease(Tween.EASE_OUT)
 	description_label.set_meta("tween", tween)
 
-	if skip_animation:
+	tween.tween_property(description_label, "modulate:a", 0.0, 0.1)
+	tween.tween_callback(func() -> void:
 		description_label.text = novo_texto
-		description_label.modulate.a = 1.0
-	else:
-		tween.tween_property(
-			description_label, "modulate:a", 0.0, 0.1
-		)
-		tween.tween_callback(func() -> void:
-			description_label.text = novo_texto
-		)
-		tween.tween_property(
-			description_label, "modulate:a", 1.0, 0.2
-		)
-
-
+	)
+	tween.tween_property(description_label, "modulate:a", 1.0, 0.2)
 
 func select_character() -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
