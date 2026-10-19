@@ -82,10 +82,10 @@
 * ~~Design Escolhido  Tela de combate~~ | **FINALIZADO** ✅
 * Design da escolha do personagem | **EM ANDAMENTO** 🔄
 * Colisão dos novos mapas | **EM ANDAMENTO** 🔄
-* Remake dos mapas | **EM ANDAMENTO** 🔄
+* ~~Remake dos mapas~~ | **FINALIZADO** ✅
 --------------------------------------------------
-* Implementação do remake tela de menu | **EM ANDAMENTO** 🔄
+* Implementação do remake tela de menu | **FINALIZADO** ✅
 * Design da tela de combate | **EM ANDAMENTO** 🔄
 * Implementação dos assets dos inimigos, personagens e npcs | **EM ANDAMENTO** 🔄
 * Decoração do mapa principal | **EM ANDAMENTO** 🔄
-* Linkar dialogos, pericias e combate nos mapas. | **FINALIZADO** ✅
+* ~~Linkar dialogos, pericias e combate nos mapas.~~ | **FINALIZADO** ✅
