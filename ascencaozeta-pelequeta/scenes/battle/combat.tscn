@@ -29,50 +29,65 @@ theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
+metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=702596601]
 layout_mode = 2
 theme_override_constants/separation = 2
+metadata/_edit_lock_ = true
 
 [node name="TopBar" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1418944177]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_vertical = 3
+metadata/_edit_lock_ = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar" unique_id=1418944178]
 layout_mode = 2
 theme_override_constants/separation = 2
+metadata/_edit_lock_ = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer" unique_id=1367544077]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 2
+metadata/_edit_lock_ = true
 
 [node name="PartyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1169267679]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(84, 0)
 layout_mode = 2
 script = ExtResource("2_osi8t")
+metadata/_edit_lock_ = true
 
 [node name="Battlefield" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=468784180]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+metadata/_edit_lock_ = true
 
 [node name="BattleFieldContent" type="Control" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=98674895]
 unique_name_in_owner = true
 layout_mode = 2
+metadata/_edit_lock_ = true
 
 [node name="Background" type="TextureRect" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/BattleFieldContent" unique_id=215613320]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
 
 [node name="Combatants" type="Node2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=208666540]
+position = Vector2(60, 70)
 
 [node name="PlayerVisual" type="Node2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants" unique_id=2078291229]
+position = Vector2(-15, 50)
 
 [node name="EnemyVisual" type="Node2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants" unique_id=1088173290]
+position = Vector2(44, -27)
 
 [node name="RegionalPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=2041982078]
 unique_name_in_owner = true
@@ -80,6 +95,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 script = ExtResource("4_sa5k0")
+metadata/_edit_lock_ = true
 
 [node name="ActionPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=424074914]
 unique_name_in_owner = true
@@ -87,17 +103,20 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 script = ExtResource("5_8we11")
+metadata/_edit_lock_ = true
 
 [node name="EnemyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1029187186]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(92, 0)
 layout_mode = 2
 script = ExtResource("3_4gnb8")
+metadata/_edit_lock_ = true
 
 [node name="LogPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=602699646]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
+metadata/_edit_lock_ = true
 
 [node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/LogPanel" unique_id=1241593587]
 layout_mode = 2
