@@ -5,7 +5,7 @@ class_name CombatManager
 const RolagemDadosD6 = preload("res://scripts/battle/rolagens-dados-d6.gd")
 const CENA_MAPA: String = "res://scenes/mapas/CabanaElizabeth.tscn"
 const CENA_DADO_D6: PackedScene = preload(
-	"res://scenes/testes/rolagem-dado.tscn"
+    "res://scenes/testes/rolagem-dado.tscn"
 )
 
 var dados_visuais: Array[RolagemD6] = []
@@ -759,6 +759,59 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 # ============================================================================
 # PROCESSAMENTO DE ATAQUE
 # ============================================================================
+func _limpar_dados_visuais() -> void:
+	for dado in dados_visuais:
+		if is_instance_valid(dado):
+			dado.queue_free()
+
+	dados_visuais.clear()
+
+
+func _rolar_dados_visuais(regioes: Array[String]) -> Array[int]:
+	if dados_em_animacao:
+		return []
+
+	dados_em_animacao = true
+	_limpar_dados_visuais()
+
+	var quantidade: int = clampi(regioes.size(), 1, 5)
+	var resultados: Array[int] = []
+
+	# Sorteia uma única vez. Os mesmos valores serão usados no combate.
+	for i in range(quantidade):
+		resultados.append(randi_range(1, 6))
+
+	var espacamento: float = 23.0
+	var largura_total: float = (quantidade - 1) * espacamento
+	var inicio_x: float = -largura_total / 2.0
+
+	for i in range(quantidade):
+		var instancia := CENA_DADO_D6.instantiate()
+		var dado := instancia as RolagemD6
+
+		if dado == null:
+			push_error(
+                "[CombatManager] A cena do dado não possui o script RolagemD6."
+			)
+			instancia.queue_free()
+			_limpar_dados_visuais()
+			dados_em_animacao = false
+			return []
+
+		battlefield.add_child(dado)
+		dado.position = Vector2(
+			battlefield.size.x / 2.0 + inicio_x + i * espacamento,
+			battlefield.size.y / 2.0 - 40.0
+		)
+		dado.scale = Vector2(1.25, 1.25)
+		dados_visuais.append(dado)
+
+	# Anima todos os dados; cada face corresponde ao resultado sorteado.
+	for i in range(dados_visuais.size()):
+		await dados_visuais[i].rodar_e_mostrar_face(resultados[i])
+
+	dados_em_animacao = false
+	return resultados
 
 func _processar_ataque(
 	atacante: CombatenteData,
@@ -776,6 +829,7 @@ func _processar_ataque(
 
 	if resultados_dados.is_empty():
 		push_error("[CombatManager] Não foi possível concluir a rolagem dos dados.")
+		_limpar_dados_visuais()
 		_finalizar_acao()
 		return
 
@@ -983,6 +1037,7 @@ func _processar_ataque(
 	_finalizar_acao()
 	return
 func _finalizar_acao() -> void:
+	_limpar_dados_visuais()
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
 	enemy_panel.desativar_seletor_alvo()
@@ -1124,59 +1179,3 @@ func remover_status(combatente: Dictionary, status_nome: String) -> void:
 	combatente["status"] = combatente["status"].filter(
 		func(s): return s["nome"] != status_nome
 	)
-
-func _limpar_dados_visuais() -> void:
-	# Remove os dados da rolagem anterior.
-	for dado in dados_visuais:
-		if is_instance_valid(dado):
-			dado.queue_free()
-
-	dados_visuais.clear()
-
-
-func _rolar_dados_visuais(regioes: Array[String]) -> Array[int]:
-	# Impede duas rolagens visuais simultâneas.
-	if dados_em_animacao:
-		return []
-
-	dados_em_animacao = true
-	_limpar_dados_visuais()
-
-	var quantidade: int = clampi(regioes.size(), 1, 5)
-	var resultados: Array[int] = []
-
-	# Sorteia os resultados que serão usados também pelas regras.
-	for i in range(quantidade):
-		resultados.append(randi_range(1, 6))
-
-	# Cria os dados dentro do Battlefield.
-	var largura: float = 16.0
-	var espacamento: float = 23.0
-	var largura_total: float = (quantidade - 1) * espacamento
-	var inicio_x: float = -largura_total / 2.0
-
-	for i in range(quantidade):
-		var instancia: Node = CENA_DADO_D6.instantiate()
-		var dado := instancia as RolagemD6
-
-		if dado == null:
-			push_error("A cena do dado não possui o script RolagemD6.")
-			instancia.queue_free()
-			continue
-
-		battlefield.add_child(dado)
-
-		dado.position = Vector2(
-			battlefield.size.x / 2.0 + inicio_x + i * espacamento,
-			battlefield.size.y / 2.0
-		)
-
-		dado.scale = Vector2(1.25, 1.25)
-		dados_visuais.append(dado)
-
-	# Anima cada dado com o resultado previamente sorteado.
-	for i in range(dados_visuais.size()):
-		await dados_visuais[i].rodar_e_mostrar_face(resultados[i])
-
-	dados_em_animacao = false
-	return resultados
