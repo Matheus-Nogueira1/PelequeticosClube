@@ -32,6 +32,8 @@ var rotulo_opcoes: Label = null
 var indice_opcao_selecionada: int = 0
 var opcoes_ativas: bool = false
 var rolando_teste: bool = false
+var aguardando_opcoes: bool = false
+var opcoes_pendentes: Array = []
 
 func _ready() -> void:
 	print("CaixaDialogo pronta")
@@ -188,6 +190,9 @@ func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
 		if escrevendo:
 			pular_escrita = true
+		elif aguardando_opcoes:
+			aguardando_opcoes = false
+			_exibir_opcoes(opcoes_pendentes)
 		else:
 			_avancar_dialogo()
 
@@ -223,7 +228,10 @@ func _mostrar_fala_atual() -> void:
 	var opcoes: Array = fala.get("options", [])
 
 	if not opcoes.is_empty():
-		_exibir_opcoes(opcoes)
+		# Espera o jogador ler a fala antes de trocar pelas opções.
+		opcoes_pendentes = opcoes
+		aguardando_opcoes = true
+		dica_label.text = "E/Enter: continuar"
 	else:
 		dica_label.text = "E/Enter: avançar | Esc: fechar"
 
@@ -491,6 +499,7 @@ func _confirmar_opcao() -> void:
 
 func _esconder_opcoes() -> void:
 	opcoes_ativas = false
+	aguardando_opcoes = false
 	if painel_fala != null:
 		painel_fala.show()
 	opcoes_atuais.clear()
