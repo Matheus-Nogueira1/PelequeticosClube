@@ -34,7 +34,25 @@ func tocar_animacao(nome: StringName) -> void:
 
 
 func tocar_ataque() -> void:
-	tocar_animacao(ANIMACAO_ATAQUE)
+	if sprite == null or morto:
+		return
+
+	if not sprite.sprite_frames.has_animation(ANIMACAO_ATAQUE):
+		push_warning(
+			"[CombatantAnimation] Animação Atacando inexistente."
+		)
+		return
+
+	# O ataque deve tocar apenas uma vez.
+	sprite.sprite_frames.set_animation_loop(ANIMACAO_ATAQUE, false)
+	sprite.play(ANIMACAO_ATAQUE)
+
+	# Espera a animação terminar antes de continuar o combate.
+	await sprite.animation_finished
+
+	# Não interrompe uma animação de morte que tenha começado nesse intervalo.
+	if not morto:
+		sprite.stop()
 
 
 func tocar_esquiva() -> void:

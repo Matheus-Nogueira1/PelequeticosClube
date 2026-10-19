@@ -762,10 +762,10 @@ func _processar_ataque(
 ) -> void:
 	if atacante.tipo == "jogador":
 		if animacao_jogador != null:
-			animacao_jogador.tocar_ataque()
+			await animacao_jogador.tocar_ataque()
 	else:
 		if animacao_inimigo != null:
-			animacao_inimigo.tocar_ataque()
+			await animacao_inimigo.tocar_ataque()
 	var rolagem = RolagemDadosD6.new()
 	var resultado_combate = rolagem.rolar_teste_combate_d6(
 		regioes,
@@ -832,16 +832,19 @@ func _processar_ataque(
 			"%s não consegue concluir o ataque." % atacante.nome,
 			"critico"
 		)
-		party_panel.atualizar_personagem(
-			atacante.para_dictionary()
-		)
-		_verificar_fim_combate()
+
+		if atacante.morto:
+			await _derrotar_combatente(atacante)
+		else:
+			party_panel.atualizar_personagem(
+				atacante.para_dictionary()
+			)
+			_verificar_fim_combate()
 
 		if not combate_ativo:
 			return
 
 		_finalizar_acao()
-		return
 		return
 
 	# ============================================================
@@ -957,7 +960,7 @@ func _processar_ataque(
 	)
 
 	if alvo.morto:
-		_derrotar_combatente(alvo)
+		await _derrotar_combatente(alvo)
 
 	if not combate_ativo:
 		return
@@ -988,24 +991,40 @@ func _avaliar_categoria_resultado(dado: int) -> String:
 # ============================================================================
 # SISTEMA DE COMBATENTES
 # ============================================================================
-
 func _derrotar_combatente(combatente: CombatenteData) -> void:
 	if not ordem_turno.has(combatente):
 		return
+
+	# Executa a animação de morte antes de remover o personagem.
+	if combatente.tipo == "jogador":
+		if animacao_jogador != null:
+			await animacao_jogador.tocar_morte()
+	else:
+		if animacao_inimigo != null:
+			await animacao_inimigo.tocar_morte()
+
 	log_panel.registrar_evento(
 		"⚠️ %s foi derrotado!" % combatente.nome,
 		"critico"
 	)
+
 	var indice_removido = ordem_turno.find(combatente)
 	ordem_turno.erase(combatente)
+
 	if indice_removido <= indice_turno_atual:
 		indice_turno_atual -= 1
+
 	if combatente.tipo == "inimigo":
 		combatentes_inimigo.erase(combatente)
-		enemy_panel.remover_inimigo(combatente.para_dictionary())
+		enemy_panel.remover_inimigo(
+			combatente.para_dictionary()
+		)
 	else:
 		combatentes_jogador.erase(combatente)
-		party_panel.remover_personagem(combatente.para_dictionary())
+		party_panel.remover_personagem(
+			combatente.para_dictionary()
+		)
+
 	_verificar_fim_combate()
 
 	if not combate_ativo:

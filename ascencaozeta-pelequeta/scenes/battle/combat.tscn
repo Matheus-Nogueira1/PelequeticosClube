@@ -465,7 +465,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_f8vfn")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Atacando",
 "speed": 5.0
 }, {
@@ -494,7 +494,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_e1piq")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Dodge",
 "speed": 5.0
 }, {
@@ -529,7 +529,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_q5kbp")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Hit",
 "speed": 5.0
 }, {
@@ -651,7 +651,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mt000")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Morrendo",
 "speed": 5.0
 }, {
@@ -963,7 +963,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5of7p")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Atacando",
 "speed": 5.0
 }, {
@@ -1007,7 +1007,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8vewt")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Dodge",
 "speed": 5.0
 }, {
@@ -1042,7 +1042,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_yhuth")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Hit",
 "speed": 5.0
 }, {
@@ -1074,7 +1074,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_rdrkw")
 }],
-"loop": 1,
+"loop": 0,
 "name": &"Morrendo",
 "speed": 5.0
 }]
@@ -1171,7 +1171,7 @@ position = Vector2(-15, 50)
 [node name="AnimationEscolhido" type="AnimatedSprite2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants/PlayerVisual" unique_id=1384800493]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ba8p4")
-animation = &"Atacando"
+animation = &"walk_up"
 
 [node name="Shadow" type="AnimatedSprite2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants/PlayerVisual" unique_id=501550323]
 sprite_frames = SubResource("SpriteFrames_0nysw")
