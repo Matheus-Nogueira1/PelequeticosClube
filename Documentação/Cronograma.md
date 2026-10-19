@@ -35,7 +35,7 @@
 ## 📌 Semana 18/03/26
 
 * ~~Preparar cenários~~ | **FINALIZADO** ✅
-* Preparar inimigos | **PENDENTE** ⚠️
+* ~~Preparar inimigos~~ | **FINALIZADO** ✅
 * ~~Preparar tela de combate~~ | **FINALIZADO** ✅
 * ~~Preparar mecânica de diálogos~~ | **FINALIZADO** ✅
 * ~~Preparar projeto online no Git~~ | **FINALIZADO** ✅
@@ -49,7 +49,7 @@
 ## 📌 Semana 22/04/26
 
 * ~~Finalizar documentaçãO~~ | **FINALIZADO** ✅
-* Preparar design do combate | **EM ANDAMENTO** 🔄
+* ~~Preparar design do combate~~ | **FINALIZADO** ✅
 * ~~Preparar mapa~~ | **FINALIZADO** ✅
 
 ## 📌 Semana 12/05/26
@@ -68,24 +68,24 @@
 * ~~Finalização da primeira Etapa do mapa principal~~ | **FINALIZADO** ✅
 * Melhoria na decoração e interação de objetos dos mapas | **PENDENTE** ⚠️
 * ~~Criação do próximo mapa~~ | **FINALIZADO** ✅
-* Inserção dos primeiros inimigos e NPC's no próximo mapa | **PENDENTE** ⚠️
+* ~~Inserção dos primeiros inimigos e NPC's no próximo mapa~~ | **FINALIZADO** ✅
 
 ## 📌 Semana 24/09/26
 
-* Finalizar segundo mapa | **EM ANDAMENTO** 🔄
-* Criar mecânicas de exploração do mapa | **PENDENTE** ⚠️
-* Melhorar Tela de combate | **PENDENTE** ⚠️
+* ~~Finalizar segundo mapa~~ | **FINALIZADO** ✅
+* ~~Criar mecânicas de exploração do mapa~~ | **FINALIZADO** ✅
+* ~~Melhorar Tela de combate~~ | **FINALIZADO** ✅
 
 ## 📌 Semana 17/10/26
 
 * ~~Design Escolhido caindo e levantando~~ | **FINALIZADO** ✅
 * ~~Design Escolhido  Tela de combate~~ | **FINALIZADO** ✅
-* Design da escolha do personagem | **EM ANDAMENTO** 🔄
-* Colisão dos novos mapas | **EM ANDAMENTO** 🔄
+* ~~Design da escolha do personagem~~ | **FINALIZADO** ✅
+* ~~Colisão dos novos mapas~~ |  **FINALIZADO** ✅
 * ~~Remake dos mapas~~ | **FINALIZADO** ✅
 --------------------------------------------------
-* Implementação do remake tela de menu | **FINALIZADO** ✅
+* ~~Implementação do remake tela de menu~~ | **FINALIZADO** ✅
 * Design da tela de combate | **EM ANDAMENTO** 🔄
-* Implementação dos assets dos inimigos, personagens e npcs | **EM ANDAMENTO** 🔄
+* ~~Implementação dos assets dos inimigos, personagens e npcs~~ | **FINALIZADO** ✅
 * Decoração do mapa principal | **EM ANDAMENTO** 🔄
 * ~~Linkar dialogos, pericias e combate nos mapas.~~ | **FINALIZADO** ✅
