@@ -29,6 +29,17 @@ signal turno_passado
 @onready var action_panel = %ActionPanel
 @onready var log_panel: CombatLog = $MarginContainer/VBoxContainer/LogPanel/RichTextLabel
 
+@onready var player_visual: Node = %Battlefield.find_child(
+	"PlayerVisual", true, false
+)
+@onready var enemy_visual: Node = %Battlefield.find_child(
+	"EnemyVisual", true, false
+)
+
+var animacao_jogador: CombatenteAnimation
+var animacao_inimigo: CombatenteAnimation
+
+
 # Estado do combate
 var combatentes_jogador: Array[CombatenteData] = []
 var combatentes_inimigo: Array[CombatenteData] = []
@@ -46,6 +57,7 @@ var alvo_selecionado: Dictionary = {}
 
 func _ready() -> void:
 	_conectar_sinais_paineis()
+	_inicializar_animacoes()
 	_inicializar_combate()
 
 # ============================================================================
@@ -89,6 +101,7 @@ func _inicializar_combate() -> void:
 
 	# Começar primeiro turno
 	_avancar_turno()
+
 
 func _setup_exemplo() -> void:
 	"""Prepara o encontro inicial: personagem selecionado contra Dummy."""
@@ -153,6 +166,46 @@ func _conectar_sinais_paineis() -> void:
 	if enemy_panel:
 		enemy_panel.inimigo_selecionado.connect(_on_inimigo_selecionado)
 		enemy_panel.selecao_alvo_cancelada.connect(_on_alvo_cancelado)
+
+
+func _buscar_sprite_animado(
+	raiz: Node,
+	nome_no: String
+) -> AnimatedSprite2D:
+	if raiz == null:
+		return null
+
+	var encontrado: Node = raiz.find_child(nome_no, true, false)
+
+	if encontrado is AnimatedSprite2D:
+		return encontrado as AnimatedSprite2D
+
+	push_warning(
+		"[CombatManager] AnimatedSprite2D '%s' não encontrado." % nome_no
+	)
+	return null
+
+
+func _inicializar_animacoes() -> void:
+	var sprite_jogador := _buscar_sprite_animado(
+		player_visual, "AnimationEscolhido"
+	)
+	var sprite_inimigo := _buscar_sprite_animado(
+		enemy_visual, "AnimationDummy"
+	)
+
+	if sprite_jogador != null:
+		animacao_jogador = CombatenteAnimation.new()
+		animacao_jogador.name = "AnimacaoJogador"
+		add_child(animacao_jogador)
+		animacao_jogador.configurar(sprite_jogador)
+
+	if sprite_inimigo != null:
+		animacao_inimigo = CombatenteAnimation.new()
+		animacao_inimigo.name = "AnimacaoInimigo"
+		add_child(animacao_inimigo)
+		animacao_inimigo.configurar(sprite_inimigo)
+
 
 # ============================================================================
 # FLUXO DE TURNO
@@ -707,6 +760,12 @@ func _processar_ataque(
 	alvo: CombatenteData,
 	regioes: Array[String]
 ) -> void:
+	if atacante.tipo == "jogador":
+		if animacao_jogador != null:
+			animacao_jogador.tocar_ataque()
+	else:
+		if animacao_inimigo != null:
+			animacao_inimigo.tocar_ataque()
 	var rolagem = RolagemDadosD6.new()
 	var resultado_combate = rolagem.rolar_teste_combate_d6(
 		regioes,
@@ -850,6 +909,12 @@ func _processar_ataque(
 				"info"
 			)
 			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
+			if alvo.tipo == "jogador":
+				if animacao_jogador != null:
+					animacao_jogador.tocar_dano()
+			else:
+				if animacao_inimigo != null:
+					animacao_inimigo.tocar_dano()
 			var resultado_estresse = alvo.aplicar_estresse(
 				"Torso",
 				dano_total
