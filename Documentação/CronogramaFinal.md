@@ -1,13 +1,9 @@
-# Cronograma 26/08/2026
+# Cronograma ~~26/08/2026~~ 23/10/2026
 ## Introdução:
-Estamos chegando nos momentos finais do prazo, onde devemos apresentar algo relevante sobre o projeto, seguindo abaixo o que devemos finalizar durante esse 1 mês.
+~~Estamos chegando nos momentos finais do prazo, onde devemos apresentar algo relevante sobre o projeto, seguindo abaixo o que devemos finalizar durante esse 1 mês.~~
+Após nossa grandiosa apresentação do primeiro executável, nesse momento precisamos polir tudo e adicionar mais horas de gameplay para um beta-test aberto até a última apresentação.
 
 ## O que deverá ser feito durante esse 1 mês?
-- **Logo "PELECO PRODUCTIONS":** 🟢 *NÍVEL DE PRIORIDADE*
- 
-~~Preparar o design da logo do projeto~~
-
-~~Inseri-la como a primeira tela do jogo~~ 
 
 #
 - **A "Velha do Poço":** 🔴 *NÍVEL DE PRIORIDADE*
@@ -67,6 +63,12 @@ Tela Créditos
 
 ~~Botão Sair~~
 #
+- **Logo "PELECO PRODUCTIONS":** 🟢 *NÍVEL DE PRIORIDADE*
+ 
+~~Preparar o design da logo do projeto~~
+
+~~Inseri-la como a primeira tela do jogo~~ 
+
 - **Aseprite** 🟡 *NÍVEL DE PRIORIDADE*
 
 Separar as sprites por layer ( Recomendação Xzerow )
