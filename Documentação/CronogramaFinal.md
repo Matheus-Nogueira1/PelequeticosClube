@@ -53,7 +53,7 @@ Criação de interação com o cenário
   
 Terminar design
 
-Linkar personagens
+~~Linkar personagens~~
 #
 - **Menu** 🟢 *NÍVEL DE PRIORIDADE*
   
