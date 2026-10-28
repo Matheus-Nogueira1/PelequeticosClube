@@ -339,12 +339,16 @@ static func criar_grupo_completo(personagem_principal: String) -> Array[Combaten
 	"""
 	var grupo: Array[CombatenteData] = []
 	
+	var principal: CombatenteData = obter_personagem(personagem_principal)
+	if principal == null:
+		return grupo # GrupoAtual já trata grupo vazio com push_error
+	
 	# Adiciona como primeiro (principal)
-	grupo.append(obter_personagem(personagem_principal))
+	grupo.append(principal)
 	
 	# Adiciona os outros como party
 	for personagem in obter_todos_personagens():
-		if personagem.nome != personagem_principal:
+		if personagem.nome != principal.nome:
 			grupo.append(personagem)
 	
 	return grupo

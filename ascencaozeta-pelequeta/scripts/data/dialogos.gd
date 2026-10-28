@@ -109,8 +109,8 @@ const CONVERSAS: Dictionary = {
 		}
 	],
 #BASTILHA INTERAÇÔES
-
-"parede_estranha": [
+	# Parede falsa 1
+	"parede_estranha": [
 	{
 		"speaker": "Testemunha",
 		"text": "Era pra ter mais uma porta aqui, mas uma parede estranha parece bloquear a passagem...",
@@ -159,41 +159,56 @@ const CONVERSAS: Dictionary = {
 		{
 			"speaker": "Testemunha",
 			"text": "Você concentra toda a sua força e avança sem hesitar. No instante do impacto, a parede se desfaz como fumaça. Você atravessa a ilusão com tanta força que chega ao outro lado antes mesmo de perceber que a passagem estava livre."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "+1 de coragem."
 		}
 	],
-
 	# MÍSTICO — FALHA CRÍTICA
 	"parede_mistico_falha_critica": [
 		{
 			"speaker": "Testemunha",
 			"text": "Você aproxima a mão da parede e tenta sentir sua essência. Por um instante, algo responde ao seu toque. Uma presença fria percorre seu braço, e a sensação desaparece antes que você consiga compreender o que despertou."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "-1 de coragem."
 		}
 	],
-
 	# MÍSTICO — SUCESSO EXTREMO
 	"parede_mistico_sucesso_extremo": [
 		{
 			"speaker": "Testemunha",
 			"text": "Você fecha os olhos e sente a energia que distorce o espaço diante de si. A ilusão se revela por completo: não existe parede alguma. Por um breve instante, você também percebe uma segunda presença escondida além da passagem."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "Recebeu 1 de estresse."
 		}
 	],
-
 	# BANDIDAGEM — FALHA CRÍTICA
 	"parede_bandidagem_falha_critica": [
 		{
 			"speaker": "Testemunha",
 			"text": "Você examina as frestas e passa os dedos pela superfície. Um mecanismo oculto dispara sob sua mão. Um estalo ecoa pela sala, seguido por um ruído vindo de algum lugar além da parede. Uma flecha perfura seu peito."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "Recebeu 1 de estresse."
 		}
 	],
-
 	# BANDIDAGEM — SUCESSO EXTREMO
 	"parede_bandidagem_sucesso_extremo": [
 		{
 			"speaker": "Testemunha",
 			"text": "Você percebe uma irregularidade quase imperceptível e acompanha o contorno da ilusão com os dedos. Em poucos instantes, encontra o ponto exato em que a magia falha. A passagem se abre diante de você, revelando não apenas o caminho, mas também marcas que indicam que alguém atravessou por ali recentemente."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "+1 de coragem."
 		}
 	],
-
 	"parede_esforco_sucesso": [
 		{
 			"speaker": "Testemunha",
@@ -236,6 +251,147 @@ const CONVERSAS: Dictionary = {
 		}
 	],
 
+	# Porta trancada 
+	"porta_trancada": [
+	{
+		"speaker": "Testemunha",
+		"text": "Você",
+		"options": [
+			{
+				"text": "Usar Esforço",
+				"knowledge": "Esforço",
+				"success_dialogue": "porta_trancada_esforco_sucesso",
+				"failure_dialogue": "porta_trancada_esforco_falha",
+				"critical_failure_dialogue": "porta_trancada_esforco_falha_critica",
+				"extreme_success_dialogue": "porta_trancada_esforco_sucesso_extremo"
+			},
+			{
+				"text": "Usar Místico",
+				"knowledge": "Místico",
+				"success_dialogue": "porta_trancada_mistico_sucesso",
+				"failure_dialogue": "porta_trancada_mistico_falha",
+				"critical_failure_dialogue": "porta_trancada_mistico_falha_critica",
+				"extreme_success_dialogue": "porta_trancada_mistico_sucesso_extremo"
+			},
+			{
+				"text": "Usar Bandidagem",
+				"knowledge": "Bandidagem",
+				"success_dialogue": "porta_trancada_bandidagem_sucesso",
+				"failure_dialogue": "porta_trancada_bandidagem_falha",
+				"critical_failure_dialogue": "porta_trancada_bandidagem_falha_critica",
+				"extreme_success_dialogue": "porta_trancada_bandidagem_sucesso_extremo"
+			}
+		]
+	}
+],
+	# ESFORÇO — FALHA CRÍTICA
+	"porta_trancada_esforco_falha_critica": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você prepara um golpe com toda a sua força, o golpe é TÃO poderoso que desgasta a sua arma. A porta resiste."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "Sua arma está quebrada."
+		}
+	],
+
+	# ESFORÇO — SUCESSO EXTREMO
+	"porta_trancada_esforco_sucesso_extremo": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você concentra toda a sua força e avança sem hesitar. No instante do impacto, as correntes explodem. Você arrombou a porta."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "+1 recurso."
+		}
+	],
+	# MÍSTICO — FALHA CRÍTICA
+	"porta_trancada_mistico_falha_critica": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você utiliza do arcano para forçar a porta. Por um instante, algo responde ao seu toque. Uma presença fria percorre seu braço, e a sensação desaparece antes que você consiga compreender o que despertou."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "-1 de coragem."
+		}
+	],
+	# MÍSTICO — SUCESSO EXTREMO
+	"porta_trancada_mistico_sucesso_extremo": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você fecha os olhos e sente a energia que distorce o espaço diante de si. As correntes explodem em contato com o seu arcano."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "+1 recurso"
+		}
+	],
+	# BANDIDAGEM — FALHA CRÍTICA
+	"porta_trancada_bandidagem_falha_critica": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você examina as correntes e passa os dedos pela porta. O barulho ecoa nessa bastilha maldita. Você sente alguém te observando. As correntes se mantém."
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "-1 de coragem."
+		}
+	],
+	# BANDIDAGEM — SUCESSO EXTREMO
+	"porta_trancada_bandidagem_sucesso_extremo": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você percebe uma oportunidade de aplicar seus truques e facilmente desconecta a corrente dessa porta. Com uma agilidade incomum. "
+		},
+		{
+			"speaker": "Testemunha",
+			"text": "+1 recurso."
+		}
+	],
+	"porta_trancada_esforco_sucesso": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você concentra toda a sua força e avança sem hesitar. No instante do impacto, as correntes cedem."
+		}
+	],
+
+	"porta_trancada_esforco_falha": [
+		{
+			"speaker": "Parede Estranha",
+			"text": "Você prepara um golpe com toda a sua força, o golpe é TÃO poderoso que quase desgasta a sua arma. A porta resiste."
+		}
+	],
+
+	"porta_trancada_mistico_sucesso": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você fecha os olhos e sente a energia que distorce o espaço diante de si. As correntes cedem em contato com o seu arcano."
+		}
+	],
+
+	"porta_trancada_mistico_falha": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você utiliza do arcano para forçar a porta. Por um instante, algo responde ao seu toque. Uma presença fria percorre seu braço, e a sensação desaparece antes que você consiga compreender o que despertou."
+		}
+	],
+
+	"porta_trancada_bandidagem_sucesso": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você percebe uma oportunidade de aplicar seus truques e facilmente desconecta a corrente dessa porta."
+		}
+	],
+
+	"porta_trancada_bandidagem_falha": [
+		{
+			"speaker": "Testemunha",
+			"text": "Você examina as correntes e passa os dedos pela porta. O barulho ecoa nessa bastilha maldita. As correntes se mantém."
+		}
+	],
 
 	# Exemplo de diálogo com opções e teste de conhecimento.
 	"porta_ritual": [

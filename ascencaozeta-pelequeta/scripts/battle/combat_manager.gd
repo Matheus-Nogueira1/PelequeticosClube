@@ -842,7 +842,8 @@ func _processar_ataque(
 		atacante.atributo_dano,
 		resultados_dados
 	)
-
+	# O nó não está na árvore e só serviu para calcular o resultado.
+	rolagem.free()
 	# ============================================================
 	# LOG DAS REGIÕES
 	# ============================================================

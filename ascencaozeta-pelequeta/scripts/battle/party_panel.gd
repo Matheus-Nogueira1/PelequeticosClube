@@ -66,15 +66,15 @@ func remover_personagem(personagem: Dictionary) -> void:
 	"""Remove um personagem do painel (derrotado)"""
 	var chave = personagem["nome"]
 	if chave in cards_personagens:
-		cards_personagens[chave].queue_free()
+		cards_personagens[chave]["node"].queue_free()
 		cards_personagens.erase(chave)
 	
 	personagens = personagens.filter(func(p): return p["nome"] != chave)
 
 func limpar_personagens() -> void:
 	"""Remove todos os personagens"""
-	for card in cards_personagens.values():
-		card.queue_free()
+	for card_info in cards_personagens.values():
+		card_info["node"].queue_free()
 	cards_personagens.clear()
 	personagens.clear()
 	personagem_ativo_atual.clear()
