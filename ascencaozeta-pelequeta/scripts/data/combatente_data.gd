@@ -322,27 +322,22 @@ func aplicar_estresse(regiao: String, estresse_quantidade: int) -> Dictionary:
 				
 				
 		return resultado
-	# Regiões normais - CAP no limite (não marca como perdida permanentemente)
-	if regiao_stress["atual"] >= regiao_stress["limite"]:
-		regiao_stress["atual"] = regiao_stress["limite"]
+	# Regiões normais: o que passar do limite transborda para o Torso.
+	var limite: int = regiao_stress["limite"]
+	if regiao_stress["atual"] >= limite:
+		var excesso: int = regiao_stress["atual"] - limite
+		regiao_stress["atual"] = limite
 		resultado = {
 			"regiao_esgotada": true,
 			"regiao": regiao,
 			"mensagem": "%s não pode mais ser arriscado." % regiao
 		}
-		return resultado
-		# Apenas bloqueia seleção enquanto esgotada - pode recuperar depois
-	
-	var excesso = regiao_stress["atual"] - regiao_stress["limite"]
-	if excesso > 0:
-		regiao_stress["atual"] = regiao_stress["limite"]
-		var torso_stress = estresse_por_regiao["Torso"]
-		torso_stress["atual"] += excesso
-		
-		if torso_stress["atual"] >= torso_stress["limite"]:
-			torso_stress["atual"] = torso_stress["limite"]
-			resultado = processar_limite_torso()
-			
+		if excesso > 0:
+			# Reaproveita o ramo do Torso (limite, desmaio e Fardo).
+			var resultado_torso: Dictionary = aplicar_estresse("Torso", excesso)
+			# merge sem sobrescrever: mantém a mensagem da região esgotada
+			# e acrescenta chaves como "resultado_fardo" ou "derrotado".
+			resultado.merge(resultado_torso)
 	return resultado
 
 ## ===== CÁLCULOS =====

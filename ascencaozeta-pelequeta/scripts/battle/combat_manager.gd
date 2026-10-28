@@ -465,9 +465,11 @@ func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 
 	var conhecimento = ConhecimentoData.new()
 
+	var dado_visual: int = await _rolar_dado_conhecimento("Duelo")
 	var resultado = conhecimento.executar_duelo(
 		combatente_ativo,
-		alvo
+		alvo,
+		dado_visual
 	)
 
 	match resultado["resultado"]:
@@ -535,11 +537,13 @@ func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 	"""Rastro: igual ao Duelo, mas só revela as informações do inimigo."""
 	if alvo == null:
 		return
-
 	var conhecimento = ConhecimentoData.new()
+	var dado_visual: int = await _rolar_dado_conhecimento("Rastro")
 	var resultado: Dictionary = conhecimento.testar_conhecimento(
 		combatente_ativo,
-		"Rastro"
+		"Rastro",
+		0,
+		dado_visual
 	)
 
 	log_panel.registrar_evento(
@@ -809,9 +813,19 @@ func _rolar_dados_visuais(regioes: Array[String]) -> Array[int]:
 	# Anima todos os dados; cada face corresponde ao resultado sorteado.
 	for i in range(dados_visuais.size()):
 		await dados_visuais[i].rodar_e_mostrar_face(resultados[i])
-
+	# Pausa para o jogador ver a face final antes de _finalizar_acao()
+	# liberar os dados.
+	await get_tree().create_timer(0.8).timeout
 	dados_em_animacao = false
 	return resultados
+
+func _rolar_dado_conhecimento(nome: String) -> int:
+	"""Anima 1 dado e devolve o valor bruto (0 se a rolagem falhar)."""
+	var rotulo: Array[String] = [nome]
+	var valores: Array[int] = await _rolar_dados_visuais(rotulo)
+	if valores.is_empty():
+		return 0
+	return valores[0]
 
 func _processar_ataque(
 	atacante: CombatenteData,

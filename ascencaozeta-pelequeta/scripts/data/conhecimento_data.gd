@@ -34,7 +34,7 @@ const CONHECIMENTOS_DESCRICOES = {
 }
 
 ## Testa um Conhecimento OBLIVIO (D6 + atributo base + treino + especialização)
-func testar_conhecimento(combatente: CombatenteData, conhecimento: String, _dificuldade: int = 0) -> Dictionary:
+func testar_conhecimento(combatente: CombatenteData, conhecimento: String, _dificuldade: int = 0, dado_fixo: int = 0) -> Dictionary:
 	# Validar conhecimento
 	if not CONHECIMENTOS_ATRIBUTOS.has(conhecimento):
 		return {
@@ -49,36 +49,38 @@ func testar_conhecimento(combatente: CombatenteData, conhecimento: String, _difi
 	if combatente.tem_especializacao(conhecimento):
 		bonus_especializacao = 2
 	
-	# Rolar D6
-	var dado = randi_range(1, 6)
-	var resultado_final = dado
-	if combatente.tem_especializacao(conhecimento):
-		resultado_final += 2
-	resultado_final = clampi(resultado_final, 1, 6)
-	
-	# ZONA DE ACERTO OBLIVIO 2.2:
-	# 1 = Falha Crítica (algo extremamente ruim acontece)
-	# 2-3 = Falha Regular (não acontece como esperado)
-	# 4-5 = Sucesso Regular (o que era esperado acontece)
-	# 6 = Sucesso Extremo (algo adicional favorável acontece)
-	
+	# Dado bruto (1-6). dado_fixo permite usar o valor já mostrado na animação.
+	var dado: int = randi_range(1, 6)
+	if dado_fixo >= 1 and dado_fixo <= 6:
+		dado = dado_fixo
+
+	# Mesma regra de RolagemD6.calcular_teste_conhecimento:
+	# bônus vem de calcular_bonus_conhecimento (sem limite de +2)
+	# e 6 bruto força Sucesso Extremo.
+	var bonus_total: int = combatente.calcular_bonus_conhecimento(conhecimento)
+	var resultado_final: int = dado + bonus_total
+	var categoria: String
+	if dado == 6:
+		categoria = "Sucesso Extremo"
+	else:
+		categoria = RolagemD6.avaliar_resultado_d6(resultado_final)
+
+	# Converte para os nomes que os chamadores atuais já esperam.
 	var resultado: String
 	var sucesso: bool
-	
-	match resultado_final:
-		1:
+	match categoria:
+		"Falha Crítica":
 			resultado = "Falha Crítica"
 			sucesso = false
-		2, 3:
+		"Falha Regular":
 			resultado = "Falha"
 			sucesso = false
-		4, 5:
+		"Sucesso Regular":
 			resultado = "Sucesso"
 			sucesso = true
-		6:
+		_:
 			resultado = "Sucesso Extremo"
 			sucesso = true
-	
 	return {
 		"conhecimento": conhecimento,
 		"personagem": combatente.nome,
@@ -86,6 +88,7 @@ func testar_conhecimento(combatente: CombatenteData, conhecimento: String, _difi
 		"resultado_final": resultado_final,
 		"especializado": combatente.tem_especializacao(conhecimento),
 		"bonus_especializacao": bonus_especializacao,
+		"bonus_total": bonus_total,
 		"resultado": resultado,
 		"sucesso": sucesso
 	}
@@ -112,14 +115,11 @@ func obter_descricao(conhecimento: String) -> String:
 	return "Conhecimento desconhecido"	
 
 ## Retorna executar Duelo
-func executar_duelo(
-	combatente: CombatenteData,
-	_alvo: CombatenteData
-) -> Dictionary:
+func executar_duelo(combatente: CombatenteData, _alvo: CombatenteData, dado_fixo: int = 0) -> Dictionary:
 	var resultado_teste = testar_conhecimento(
 		combatente,
 		"Duelo"
-	)
+	)	
 	match resultado_teste["resultado"]:
 		"Falha Crítica":
 			return {
