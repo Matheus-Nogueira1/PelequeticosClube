@@ -100,6 +100,7 @@
 * Organizar scripts, cenas e documentação do projeto | **EM ANDAMENTO** 🔄
 * Testar o jogo completo e corrigir problemas encontrados | **PENDENTE** ⚠️
 * Preparar versão estável para a apresentação de novembro | **PENDENTE** ⚠️
+* Melhorar UI | **PENDENTE** ⚠️
 
 ### Observações:
 * Priorizar bugs e problemas que impedem o funcionamento correto do jogo.
