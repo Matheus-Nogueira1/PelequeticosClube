@@ -60,7 +60,9 @@ func testar_conhecimento(combatente: CombatenteData, conhecimento: String, _difi
 	var bonus_total: int = combatente.calcular_bonus_conhecimento(conhecimento)
 	var resultado_final: int = dado + bonus_total
 	var categoria: String
-	if dado == 6:
+	if dado == 1:
+		categoria = "Falha Crítica"
+	elif dado == 6:
 		categoria = "Sucesso Extremo"
 	else:
 		categoria = RolagemD6.avaliar_resultado_d6(resultado_final)
@@ -118,8 +120,10 @@ func obter_descricao(conhecimento: String) -> String:
 func executar_duelo(combatente: CombatenteData, _alvo: CombatenteData, dado_fixo: int = 0) -> Dictionary:
 	var resultado_teste = testar_conhecimento(
 		combatente,
-		"Duelo"
-	)	
+		"Duelo",
+		0,
+		dado_fixo
+	)
 	match resultado_teste["resultado"]:
 		"Falha Crítica":
 			return {

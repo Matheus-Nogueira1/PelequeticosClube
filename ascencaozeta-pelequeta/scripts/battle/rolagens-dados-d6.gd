@@ -130,6 +130,8 @@ func rolar_teste_conhecimento_d6(
 
 	if dado == 1:
 		categoria = "Falha Crítica"
+	elif dado == 6:
+		categoria = "Sucesso Extremo"
 	else:
 		categoria = avaliar_resultado_d6(total)
 

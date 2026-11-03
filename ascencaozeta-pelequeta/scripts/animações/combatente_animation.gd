@@ -56,11 +56,31 @@ func tocar_ataque() -> void:
 
 
 func tocar_esquiva() -> void:
-	tocar_animacao(ANIMACAO_ESQUIVA)
+	if sprite == null or morto:
+		return
+
+	if not sprite.sprite_frames.has_animation(ANIMACAO_ESQUIVA):
+		push_warning("[CombatenteAnimation] Animação Dodge inexistente.")
+		return
+
+	# Toca uma vez e espera o fim, como tocar_ataque().
+	sprite.sprite_frames.set_animation_loop(ANIMACAO_ESQUIVA, false)
+	sprite.play(ANIMACAO_ESQUIVA)
+	await sprite.animation_finished
 
 
 func tocar_dano() -> void:
-	tocar_animacao(ANIMACAO_DANO)
+	if sprite == null or morto:
+		return
+
+	if not sprite.sprite_frames.has_animation(ANIMACAO_DANO):
+		push_warning("[CombatenteAnimation] Animação Hit inexistente.")
+		return
+
+	# Toca uma vez e espera o fim, como ataque e esquiva.
+	sprite.sprite_frames.set_animation_loop(ANIMACAO_DANO, false)
+	sprite.play(ANIMACAO_DANO)
+	await sprite.animation_finished
 
 
 func tocar_morte() -> void:

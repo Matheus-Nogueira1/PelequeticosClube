@@ -827,17 +827,20 @@ func _rolar_dado_conhecimento(nome: String) -> int:
 		return 0
 	return valores[0]
 
+# ============================================================
+# PROCESSAMENTO DO ATAQUE
+# Sequência: (1) rola e anima os dados, um por região arriscada
+# -> (2) calcula o resultado D6 -> (3) aplica Estresse de falhas
+# no atacante -> (4) anima o ataque -> (5) compara sucessos com a
+# Proteção ATUAL do alvo: quebrou = dano no Torso + animação de
+# dano; não teve acerto = esquiva. Os campos de dano de
+# rolar_teste_combate_d6 NÃO são usados (Proteção fixa em 2).
+# ============================================================
 func _processar_ataque(
 	atacante: CombatenteData,
 	alvo: CombatenteData,
 	regioes: Array[String]
 ) -> void:
-	if atacante.tipo == "jogador":
-		if animacao_jogador != null:
-			await animacao_jogador.tocar_ataque()
-	else:
-		if animacao_inimigo != null:
-			await animacao_inimigo.tocar_ataque()
 	# Exibe os dados e guarda os resultados reais da rolagem.
 	var resultados_dados: Array[int] = await _rolar_dados_visuais(regioes)
 
@@ -856,6 +859,7 @@ func _processar_ataque(
 		atacante.atributo_dano,
 		resultados_dados
 	)
+	
 	# O nó não está na árvore e só serviu para calcular o resultado.
 	rolagem.free()
 	# ============================================================
@@ -895,16 +899,18 @@ func _processar_ataque(
 				],
 				"aviso"
 			)
-			if not resultado_estresse.is_empty():
+			# Região esgotada já foi logada acima; evita duplicar
+			# e evita erro quando a chave não existe (ex.: inimigo).
+			if resultado_estresse.has("mensagem") and not resultado_estresse.has("regiao_esgotada"):
 				log_panel.registrar_evento(
 					resultado_estresse["mensagem"],
 					"critico"
 				)
-				if resultado_estresse.has("resultado_fardo"):
-					log_panel.registrar_evento(
-						resultado_estresse["resultado_fardo"]["mensagem"],
-						"critico"
-					)
+			if resultado_estresse.has("resultado_fardo"):
+				log_panel.registrar_evento(
+					resultado_estresse["resultado_fardo"]["mensagem"],
+					"critico"
+				)
 
 	# ============================================================
 	# APÓS TODAS AS FALHAS
@@ -936,13 +942,17 @@ func _processar_ataque(
 	# ============================================================
 
 	var sucessos = resultado_combate["total_sucessos"]
-	if sucessos <= 0:
+	# Com os dados já mostrados, o atacante executa a animação.
+	await _animar_atacante(atacante)
+	# Proteção do alvo neste ataque (0 = já quebrada, ex.: Duelo extremo).
+	var protecao_atual: int = alvo.obter_protecao_atual()
+	if sucessos <= 0 and protecao_atual > 0:
 		log_panel.registrar_evento(
 			"Nenhum sucesso obtido.",
 			"info"
 		)
+		await _animar_esquiva(alvo)
 	else:
-		var protecao_atual = alvo.obter_protecao_atual()
 		log_panel.registrar_evento(
 			"Proteção de %s: %d/%d" % [
 				alvo.nome,
@@ -996,12 +1006,7 @@ func _processar_ataque(
 				"info"
 			)
 			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
-			if alvo.tipo == "jogador":
-				if animacao_jogador != null:
-					animacao_jogador.tocar_dano()
-			else:
-				if animacao_inimigo != null:
-					animacao_inimigo.tocar_dano()
+			await _animar_dano(alvo)
 			var resultado_estresse = alvo.aplicar_estresse(
 				"Torso",
 				dano_total
@@ -1051,6 +1056,25 @@ func _processar_ataque(
 
 	_finalizar_acao()
 	return
+
+# Animação do atacante: só roda depois da rolagem visual.
+func _animar_atacante(atacante: CombatenteData) -> void:
+	var anim: CombatenteAnimation = animacao_jogador if atacante.tipo == "jogador" else animacao_inimigo
+	if anim != null:
+		await anim.tocar_ataque()
+
+# Reação do alvo ao dano: o fluxo só continua quando o Hit termina.
+func _animar_dano(alvo: CombatenteData) -> void:
+	var anim: CombatenteAnimation = animacao_jogador if alvo.tipo == "jogador" else animacao_inimigo
+	if anim != null:
+		await anim.tocar_dano()
+
+# Esquiva do alvo: usada quando a Proteção não foi quebrada.
+func _animar_esquiva(alvo: CombatenteData) -> void:
+	var anim: CombatenteAnimation = animacao_jogador if alvo.tipo == "jogador" else animacao_inimigo
+	if anim != null:
+		await anim.tocar_esquiva()
+
 func _finalizar_acao() -> void:
 	_limpar_dados_visuais()
 	acao_em_progresso = false
