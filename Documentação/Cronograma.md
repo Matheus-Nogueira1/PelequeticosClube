@@ -101,6 +101,10 @@
 * Testar o jogo completo e corrigir problemas encontrados | **PENDENTE** ⚠️
 * Preparar versão estável para a apresentação de novembro | **PENDENTE** ⚠️
 * Melhorar UI | **PENDENTE** ⚠️
+--------------------------------------------------
+* Sprite de NPC's | **EM ANDAMENTO** 🔄
+* Sprite de Inimigos | **PENDENTE** ⚠️
+* Assets de decoração | **PENDENTE** ⚠️
 
 ### Observações:
 * Priorizar bugs e problemas que impedem o funcionamento correto do jogo.
