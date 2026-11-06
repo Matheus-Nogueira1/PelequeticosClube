@@ -4,9 +4,8 @@ const TAMANHO_FONTE: int = 8
 # UI
 @onready var vbox = VBoxContainer.new()
 @onready var label_titulo = Label.new()
-@onready var scroll_container = ScrollContainer.new()
 @onready var lista_personagens = VBoxContainer.new()
-
+@onready var scroll_container = ScrollTeclado.new()
 var personagens: Array[Dictionary] = []
 var cards_personagens: Dictionary = {}  # nome -> card node
 var personagem_ativo_atual: Dictionary = {}

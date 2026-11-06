@@ -7,7 +7,9 @@ const CENA_MAPA: String = "res://scenes/mapas/CabanaElizabeth.tscn"
 const CENA_DADO_D6: PackedScene = preload(
     "res://scenes/testes/rolagem-dado.tscn"
 )
-
+const CENA_RESULTADO: PackedScene = preload(
+	"res://scenes/battle/resultado_combate.tscn"
+)
 var dados_visuais: Array[RolagemD6] = []
 var dados_em_animacao: bool = false
 # Tipos de ações conforme OBLIVIO
@@ -25,6 +27,7 @@ signal combate_iniciado
 signal combate_finalizado(vencedor: String)
 signal estado_atualizado
 signal turno_passado
+signal leitura_confirmada
 
 # Painéis da cena
 @onready var party_panel = %PartyPanel
@@ -33,14 +36,15 @@ signal turno_passado
 @onready var regional_selector = %RegionalPanel
 @onready var action_panel = %ActionPanel
 @onready var log_panel: CombatLog = %ComunicacaoLog
-
+@onready var comunicacao_panel: Control = %ComunicacaoPanel
 @onready var player_visual: Node = %Battlefield.find_child(
 	"PlayerVisual", true, false
 )
 @onready var enemy_visual: Node = %Battlefield.find_child(
 	"EnemyVisual", true, false
 )
-
+@onready var campo_batalha: Control = %BattleFieldContent
+@onready var dica_continuar: Control = get_node_or_null("%DicaContinuar") as Control
 var animacao_jogador: CombatenteAnimation
 var animacao_inimigo: CombatenteAnimation
 
@@ -53,15 +57,18 @@ var indice_turno_atual := -1
 var combatente_ativo: CombatenteData = null
 var combate_ativo: bool = false
 var conhecimento_pendente := ""
-
+var fardos_iniciais: int = 0
+var resumo_resultado: Array[String] = []
 # Estado da ação atual
 var acao_em_progresso: bool = false
 var regioes_selecionadas: Array[String] = []
 var alvo_selecionado: Dictionary = {}
-
+var aguardando_leitura: bool = false
 
 func _ready() -> void:
 	_conectar_sinais_paineis()
+	_conectar_alternancia_paineis()
+	_conectar_cliques_campo()
 	_inicializar_animacoes()
 	_inicializar_combate()
 
@@ -134,6 +141,7 @@ func _setup_exemplo() -> void:
 	if escolhido.desmaiado:
 		escolhido.reviver()
 	combatentes_jogador.append(escolhido)
+	fardos_iniciais = escolhido.fardos.size()
 
 	# Criar o Dummy reutilizando temporariamente os dados da Carcaça.
 	var dummy: CombatenteData = InimigoData.criar_carcaca()
@@ -1090,6 +1098,10 @@ func _finalizar_acao() -> void:
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
 	enemy_panel.desativar_seletor_alvo()
+	# O jogador confirma a leitura da comunicação antes de o controle voltar.
+	await _aguardar_leitura()
+	if not combate_ativo:
+		return
 	action_panel.habilitar_acoes()
 	_avancar_turno()
 
@@ -1106,6 +1118,62 @@ func _avaliar_categoria_resultado(dado: int) -> String:
 			return "Falha Crítica"
 		_:
 			return "Indefinido"
+
+# ============================================================
+# LEITURA DA COMUNICAÇÃO E CLIQUES NO CAMPO
+# Depois de uma ação, a comunicação fica na tela até o jogador
+# confirmar (Enter/Espaço ou clique no campo ou na caixa).
+# Com a escolha de alvo aberta, um clique no campo a cancela.
+# ============================================================
+func _conectar_cliques_campo() -> void:
+	campo_batalha.gui_input.connect(_on_campo_gui_input)
+	log_panel.gui_input.connect(_on_campo_gui_input)
+
+
+func _on_campo_gui_input(event: InputEvent) -> void:
+	var clique := event as InputEventMouseButton
+	if clique == null or not clique.pressed or clique.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if aguardando_leitura:
+		_confirmar_leitura()
+	elif enemy_panel.modo_seletor_ativo:
+		enemy_panel.cancelar_selecao_alvo()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if aguardando_leitura and event.is_action_pressed("ui_accept") and not event.is_echo():
+		get_viewport().set_input_as_handled()
+		_confirmar_leitura()
+
+
+func _aguardar_leitura() -> void:
+	if not combate_ativo:
+		return
+	action_panel.desabilitar_acoes()
+	aguardando_leitura = true
+	_definir_dica_leitura(true)
+	await leitura_confirmada
+	_definir_dica_leitura(false)
+
+
+func _confirmar_leitura() -> void:
+	if not aguardando_leitura:
+		return
+	aguardando_leitura = false
+	leitura_confirmada.emit()
+
+
+func _definir_dica_leitura(ativa: bool) -> void:
+	if dica_continuar != null:
+		dica_continuar.visible = ativa
+
+
+# Variante para ações que não terminam o turno (habilidade, item
+# inválido, Sobrecarga): lê a mensagem e devolve o ActionPanel.
+func _devolver_acoes_apos_leitura() -> void:
+	await _aguardar_leitura()
+	if combate_ativo:
+		action_panel.habilitar_acoes()
 
 # ============================================================================
 # SISTEMA DE COMBATENTES
@@ -1169,6 +1237,8 @@ func _finalizar_combate(resultado: String) -> void:
 	if not combate_ativo:
 		return
 	combate_ativo = false
+	# O resumo é capturado antes da linha de encerramento, que repetiria o título.
+	resumo_resultado = log_panel.obter_resumo(6)
 	log_panel.registrar_evento(
 		"═══ COMBATE FINALIZADO: %s ═══" % resultado,
 		"critico"
@@ -1186,7 +1256,7 @@ func _voltar_ao_mapa(resultado: String) -> void:
 	enemy_panel.desativar_seletor_alvo()
 
 	await get_tree().create_timer(2.5).timeout
-
+	await _mostrar_resultado(resultado)
 	var principal: CombatenteData = GrupoAtual.obter_personagem_principal()
 	if principal != null:
 		# O Estresse acumulado é mantido ao voltar ao mapa.
@@ -1228,3 +1298,62 @@ func remover_status(combatente: Dictionary, status_nome: String) -> void:
 	combatente["status"] = combatente["status"].filter(
 		func(s): return s["nome"] != status_nome
 	)
+
+# ============================================================
+# ALTERNÂNCIA DOS PAINÉIS INFERIORES
+# ComunicacaoPanel ocupa a mesma região de ActionPanel e
+# RegionalPanel e só aparece quando nenhum dos dois está visível.
+# É o único ponto que controla a visibilidade da comunicação.
+# O ActionPanel continua dono do próprio estado.
+# ============================================================
+func _conectar_alternancia_paineis() -> void:
+	comunicacao_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	action_panel.visibility_changed.connect(_sincronizar_paineis_inferiores)
+	regional_selector.visibility_changed.connect(_sincronizar_paineis_inferiores)
+	_sincronizar_paineis_inferiores()
+
+
+func _sincronizar_paineis_inferiores() -> void:
+	comunicacao_panel.visible = not (action_panel.visible or regional_selector.visible)
+
+
+# ============================================================
+# TELA DE RESULTADOS
+# ============================================================
+# Abre a tela de resultados e espera o jogador confirmar.
+func _mostrar_resultado(resultado: String) -> void:
+	var instancia := CENA_RESULTADO.instantiate()
+	var tela := instancia as ResultadoCombate
+	if tela == null:
+		push_error("[CombatManager] resultado_combate.tscn sem o script ResultadoCombate.")
+		instancia.queue_free()
+		return
+
+	var camada := CanvasLayer.new()
+	camada.layer = 10
+	add_child(camada)
+	camada.add_child(tela)
+	tela.configurar(_montar_dados_resultado(resultado))
+
+	await tela.confirmado
+	camada.queue_free()
+
+
+# Contrato de dados da tela. "almas" e "itens" ficam de fora
+# até existirem sistemas definidos para eles.
+func _montar_dados_resultado(resultado: String) -> Dictionary:
+	return {
+		"resultado": resultado,
+		"resumo": resumo_resultado,
+		"fardos": _fardos_obtidos()
+	}
+
+# Fardos adquiridos nesta batalha (compara com o estado inicial).
+func _fardos_obtidos() -> Array[String]:
+	var nomes: Array[String] = []
+	var principal: CombatenteData = GrupoAtual.obter_personagem_principal()
+	if principal == null:
+		return nomes
+	for i in range(fardos_iniciais, principal.fardos.size()):
+		nomes.append(String(principal.fardos[i].nome))
+	return nomes

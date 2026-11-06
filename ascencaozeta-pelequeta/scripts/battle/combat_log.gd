@@ -15,7 +15,8 @@ const MAX_LINHAS_VISIBLES = 50
 const TEMPO_SCROLL_DELAY = 0.0
 # Tipos de evento que compõem o resumo da tela de resultados.
 const TIPOS_RESUMO: Array[String] = ["critico", "dano", "sucesso"]
-
+const COR_ATAQUE: String = "yellow"
+const COR_DANO: String = "red"
 # Registro interno: guarda todos os eventos, exibidos ou não.
 var historico: Array[Dictionary] = []
 func _ready() -> void:
@@ -154,6 +155,8 @@ func _get_icon_por_tipo(tipo: String) -> String:
 		"critico":    return "✗"
 		"movimento":  return "🚶"
 		_:            return "•"
+		"ataque":     return COR_ATAQUE
+		"dano":       return COR_DANO
 
 func _get_cor_por_categoria(categoria: String) -> String:
 	"""Retorna cor baseada na categoria de resultado de combate"""
@@ -194,3 +197,13 @@ func _limpar_overflow() -> void:
 func limpar_log() -> void:
 	"""Limpa todo o conteúdo do log"""
 	clear()
+
+# Rolagem por teclado (a caixa não recebe foco): PageUp/PageDown.
+func _unhandled_key_input(event: InputEvent) -> void:
+	if not is_visible_in_tree():
+		return
+	var barra := get_v_scroll_bar()
+	if event.is_action_pressed("ui_page_up", true):
+		barra.value -= barra.page * 0.9
+	elif event.is_action_pressed("ui_page_down", true):
+		barra.value += barra.page * 0.9

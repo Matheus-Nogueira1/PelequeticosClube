@@ -20,7 +20,7 @@ signal selecao_alvo_cancelada
 # UI
 @onready var vbox = VBoxContainer.new()
 @onready var label_titulo = Label.new()
-@onready var scroll_container = ScrollContainer.new()
+@onready var scroll_container = ScrollTeclado.new()
 @onready var lista_inimigos = VBoxContainer.new()
 
 var inimigos: Array[Dictionary] = []
@@ -58,7 +58,7 @@ func _criar_layout() -> void:
 	lista_inimigos.add_theme_constant_override("separation", 2)
 	lista_inimigos.mouse_filter = Control.MOUSE_FILTER_PASS
 	scroll_container.add_child(lista_inimigos)
-	
+	scroll_container.follow_focus = true
 	vbox.add_child(scroll_container)
 	
 	# Começar desativado
@@ -234,6 +234,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	if event.is_action_pressed("ui_cancel"):
 		get_viewport().set_input_as_handled()
+		cancelar_selecao_alvo()
 		desativar_seletor_alvo()
 		selecao_alvo_cancelada.emit()
 
@@ -251,3 +252,10 @@ func atualizar_todos(inimigos_novos: Array[Dictionary]) -> void:
 	
 	for inimigo in inimigos_novos:
 		adicionar_inimigo(inimigo)
+
+# Cancela a escolha do alvo (Esc ou clique no campo de batalha).
+func cancelar_selecao_alvo() -> void:
+	if not modo_seletor_ativo:
+		return
+	desativar_seletor_alvo()
+	selecao_alvo_cancelada.emit()

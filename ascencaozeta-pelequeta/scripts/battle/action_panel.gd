@@ -20,6 +20,7 @@ signal item_escolhido(nome_item: String)
 ## reaproveitam o mesmo VBoxContainer, o que permite trocar Menu Principal,
 ## Listas e Detalhes sem depender de menus flutuantes.
 @onready var vbox = VBoxContainer.new()
+
 const TAMANHO_FONTE: int = 8
 var grid_principal: GridContainer
 var botao_atacar: Button
@@ -197,7 +198,7 @@ func _criar_botao_voltar(callback: Callable) -> Button:
 
 func _criar_scroll_lista(altura_minima: int = 50) -> VBoxContainer:
 	# A lista rolável evita que muitas habilidades ou itens estourem o painel.
-	var scroll = ScrollContainer.new()
+	var scroll = ScrollTeclado.new()
 	scroll.custom_minimum_size = Vector2(0, altura_minima)
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.clip_contents = true
