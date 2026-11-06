@@ -1,0 +1,167 @@
+<mxfile host="app.diagrams.net" agent="ChatGPT">
+  <diagram id="dark-omission-architecture" name="Arquitetura Dark Omission">
+    <mxGraphModel dx="1272" dy="659" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=none;strokeColor=none;fontColor=#172033;fontSize=28;fontStyle=1;" value="DARK OMISSION — Arquitetura atual do projeto" vertex="1">
+          <mxGeometry height="50" width="1200" x="40" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=none;strokeColor=none;fontColor=#475569;fontSize=13;" value="Visão lógica derivada da estrutura e dos scripts presentes no repositório GitHub (branch main)." vertex="1">
+          <mxGeometry height="28" width="1250" x="42" y="72" as="geometry" />
+        </mxCell>
+        <mxCell id="g_ui" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;align=left;spacingTop=12;spacingLeft=14;fontColor=#334155;fontSize=16;fontStyle=1;" value="CAMADA DE APRESENTAÇÃO — CENAS / INTERFACE" vertex="1">
+          <mxGeometry height="640" width="320" x="35" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="g_flow" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;align=left;spacingTop=12;spacingLeft=14;fontColor=#334155;fontSize=16;fontStyle=1;" value="FLUXO DE JOGO / ORQUESTRAÇÃO" vertex="1">
+          <mxGeometry height="640" width="340" x="390" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="g_world" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;align=left;spacingTop=12;spacingLeft=14;fontColor=#334155;fontSize=16;fontStyle=1;" value="EXPLORAÇÃO E INTERAÇÃO" vertex="1">
+          <mxGeometry height="640" width="340" x="765" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="g_data" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8fafc;strokeColor=#cbd5e1;strokeWidth=2;dashed=1;dashPattern=8 4;verticalAlign=top;align=left;spacingTop=12;spacingLeft=14;fontColor=#334155;fontSize=16;fontStyle=1;" value="MODELO DE DOMÍNIO / DADOS" vertex="1">
+          <mxGeometry height="640" width="600" x="1140" y="125" as="geometry" />
+        </mxCell>
+        <mxCell id="menu" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#0c4a6e;fontSize=14;" value="Menu principal&lt;br&gt;&lt;b&gt;Menu.tscn&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;2&#39;&gt;tittle_screen.gd&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="255" x="65" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="select" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#0c4a6e;fontSize=14;" value="Seleção de personagem&lt;br&gt;&lt;b&gt;EscolherPersonagem.tscn&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;2&#39;&gt;PersonagensData&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="255" x="65" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="battle_ui" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#0c4a6e;fontSize=14;" value="Interface de combate&lt;br&gt;&lt;b&gt;combat.tscn&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;2&#39;&gt;PartyPanel · EnemyPanel · ActionPanel&lt;br&gt;RegionalSelector · CombatLog&lt;/font&gt;" vertex="1">
+          <mxGeometry height="112" width="255" x="65" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="dialog_ui" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f2fe;strokeColor=#0284c7;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#0c4a6e;fontSize=14;" value="Caixa de diálogo&lt;br&gt;&lt;b&gt;caixa-dialogo.tscn&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Diálogos e opções narrativas&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="255" x="65" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="ui_note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#94a3b8;strokeWidth=1;verticalAlign=middle;align=left;spacing=10;fontColor=#334155;fontSize=12;" value="As cenas .tscn compõem a interface e instanciam scripts por nó. A interface de batalha emite sinais; as regras ficam no gerenciador." vertex="1">
+          <mxGeometry height="55" width="255" x="65" y="695" as="geometry" />
+        </mxCell>
+        <mxCell id="autoload" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe4e6;strokeColor=#e11d48;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#881337;fontSize=13;" value="Autoloads (globais)&lt;br&gt;&lt;b&gt;project.godot&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Global · GrupoAtual · Dialogos&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="280" x="420" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="menu_flow" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#3b0764;fontSize=14;" value="Fluxo inicial&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Menu → Seleção de personagem&lt;br&gt;define personagem escolhido&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="280" x="420" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="combat_manager" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#3b0764;fontSize=14;" value="CombatManager&lt;br&gt;&lt;b&gt;combat_manager.gd&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Turnos · iniciativa · ações&lt;br&gt;alvos · resolução do combate&lt;/font&gt;" vertex="1">
+          <mxGeometry height="112" width="280" x="420" y="435" as="geometry" />
+        </mxCell>
+        <mxCell id="signals" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede9fe;strokeColor=#7c3aed;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#3b0764;fontSize=14;" value="Sinais entre componentes&lt;br&gt;&lt;font size=&#39;2&#39;&gt;ActionPanel / RegionalSelector / EnemyPanel&lt;br&gt;→ CombatManager → atualização dos painéis&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="280" x="420" y="595" as="geometry" />
+        </mxCell>
+        <mxCell id="flow_note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#94a3b8;strokeWidth=1;verticalAlign=middle;align=left;spacing=10;fontColor=#334155;fontSize=12;" value="Estado atual observado: o combate inicializa a party a partir de GrupoAtual e cria um Dummy de teste como inimigo." vertex="1">
+          <mxGeometry height="55" width="280" x="420" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="world_scene" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#14532d;fontSize=14;" value="Exploração / mapa&lt;br&gt;&lt;b&gt;world.tscn&lt;/b&gt;&lt;br&gt;&lt;font size=&#39;2&#39;&gt;TileMap · cenário · jogador&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="280" x="795" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="world_script" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#14532d;fontSize=14;" value="World.gd&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Instancia personagem conforme&lt;br&gt;Global.selected_character&lt;br&gt;e abre caixas de diálogo&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="280" x="795" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="map_controller" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#14532d;fontSize=14;" value="MapaController&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Inicialização do mapa&lt;br&gt;referências do jogador / diálogo&lt;br&gt;introdução Firekeeper&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="280" x="795" y="445" as="geometry" />
+        </mxCell>
+        <mxCell id="npc" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dcfce7;strokeColor=#16a34a;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#14532d;fontSize=14;" value="NPCController&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Detecção de proximidade&lt;br&gt;interação (E) · início de diálogo&lt;/font&gt;" vertex="1">
+          <mxGeometry height="82" width="280" x="795" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="world_note" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f1f5f9;strokeColor=#94a3b8;strokeWidth=1;verticalAlign=middle;align=left;spacing=10;fontColor=#334155;fontSize=12;" value="Cenas presentes: Bastilha, CabanaElizabeth, Firekeeper e world. Personagens e NPCs são cenas instanciáveis." vertex="1">
+          <mxGeometry height="65" width="280" x="795" y="700" as="geometry" />
+        </mxCell>
+        <mxCell id="character_data" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#78350f;fontSize=13;" value="CombatenteData&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Atributos fixos e derivados&lt;br&gt;estresse por região · PA · conhecimentos&lt;br&gt;habilidades · inventário · fardos · próteses&lt;/font&gt;" vertex="1">
+          <mxGeometry height="125" width="250" x="1175" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="character_catalog" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#78350f;fontSize=13;" value="PersonagensData&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Criação de personagens / party&lt;br&gt;dados de apresentação e atributos&lt;/font&gt;" vertex="1">
+          <mxGeometry height="100" width="250" x="1460" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="enemy_data" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#78350f;fontSize=13;" value="InimigoData&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Templates de inimigos&lt;br&gt;Carcaça · Goblin · Orc&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="250" x="1175" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="item_data" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#78350f;fontSize=13;" value="ItemData&lt;br&gt;&lt;font size=&#39;2&#39;&gt;Tipos de item · consumíveis&lt;br&gt;Frasco Estus · uso por região&lt;/font&gt;" vertex="1">
+          <mxGeometry height="90" width="250" x="1460" y="350" as="geometry" />
+        </mxCell>
+        <mxCell id="combat_support" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#78350f;fontSize=13;" value="Dados de combate&lt;br&gt;&lt;font size=&#39;2&#39;&gt;ArmaData · HabilidadeData&lt;br&gt;ConhecimentoData · FardoData&lt;br&gt;ProteseData&lt;/font&gt;" vertex="1">
+          <mxGeometry height="105" width="250" x="1175" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="dice" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef3c7;strokeColor=#d97706;strokeWidth=2;verticalAlign=middle;align=center;fontColor=#78350f;fontSize=13;" value="Rolagem D6&lt;br&gt;&lt;font size=&#39;2&#39;&gt;RolagemD6 · animação do dado&lt;br&gt;resultados e testes de combate&lt;/font&gt;" vertex="1">
+          <mxGeometry height="105" width="250" x="1460" y="490" as="geometry" />
+        </mxCell>
+        <mxCell id="legend" parent="1" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fillColor=none;strokeColor=none;fontColor=#475569;fontSize=13;" value="Legenda: &lt;font color=&quot;#0284c7&quot;&gt;&lt;b&gt;Azul&lt;/b&gt;&lt;/font&gt; interface · &lt;font color=&quot;#7c3aed&quot;&gt;&lt;b&gt;Roxo&lt;/b&gt;&lt;/font&gt; orquestração · &lt;font color=&quot;#16a34a&quot;&gt;&lt;b&gt;Verde&lt;/b&gt;&lt;/font&gt; exploração · &lt;font color=&quot;#d97706&quot;&gt;&lt;b&gt;Amarelo&lt;/b&gt;&lt;/font&gt; dados · &lt;font color=&quot;#e11d48&quot;&gt;&lt;b&gt;Rosa&lt;/b&gt;&lt;/font&gt; autoload · &lt;font color=&quot;#ea580c&quot;&gt;&lt;b&gt;Laranja tracejado&lt;/b&gt;&lt;/font&gt; escopo documentado&amp;nbsp;" vertex="1">
+          <mxGeometry height="38" width="1650" x="42" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" edge="1" parent="1" source="menu" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284c7;strokeWidth=2;endArrow=block;endFill=1;" target="menu_flow" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" edge="1" parent="1" source="menu_flow" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=2;endArrow=block;endFill=1;" target="select" value="seleção">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" edge="1" parent="1" source="select" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#e11d48;strokeWidth=2;endArrow=block;endFill=1;" target="autoload" value="define personagem">
+          <mxGeometry relative="1" x="-0.0596" y="21" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e4" edge="1" parent="1" source="autoload" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#e11d48;strokeWidth=2;endArrow=block;endFill=1;" target="combat_manager" value="GrupoAtual / Dialogos">
+          <mxGeometry relative="1" x="0.2486" y="80" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="combat_manager" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=2;endArrow=block;endFill=1;" target="battle_ui" value="controla / atualiza">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="battle_ui" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#0284c7;strokeWidth=2;endArrow=block;endFill=1;" target="signals" value="sinais de ação">
+          <mxGeometry relative="1" x="-0.0258" y="36" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="signals" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#7c3aed;strokeWidth=2;endArrow=block;endFill=1;" target="combat_manager" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="world_scene" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16a34a;strokeWidth=2;endArrow=block;endFill=1;" target="world_script" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" edge="1" parent="1" source="world_script" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16a34a;strokeWidth=2;endArrow=block;endFill=1;" target="map_controller" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e10" edge="1" parent="1" source="npc" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16a34a;strokeWidth=2;endArrow=block;endFill=1;" target="dialog_ui" value="inicia diálogo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" edge="1" parent="1" source="map_controller" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#16a34a;strokeWidth=2;endArrow=block;endFill=1;" target="world_scene" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" edge="1" parent="1" source="world_script" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#e11d48;strokeWidth=2;endArrow=block;endFill=1;" target="autoload" value="Global / GrupoAtual">
+          <mxGeometry relative="1" x="-0.1022" y="-30" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e13" edge="1" parent="1" source="combat_manager" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d97706;strokeWidth=2;endArrow=block;endFill=1;" target="character_data" value="lê / altera">
+          <mxGeometry relative="1" x="-0.1349" y="31" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e14" edge="1" parent="1" source="combat_manager" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d97706;strokeWidth=2;endArrow=block;endFill=1;" target="enemy_data" value="instancia inimigo">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" edge="1" parent="1" source="combat_manager" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d97706;strokeWidth=2;endArrow=block;endFill=1;" target="dice" value="solicita rolagens">
+          <mxGeometry relative="1" x="-0.2113" y="-39" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" edge="1" parent="1" source="character_catalog" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d97706;strokeWidth=2;endArrow=block;endFill=1;" target="character_data" value="cria dados">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e17" edge="1" parent="1" source="item_data" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d97706;strokeWidth=2;endArrow=block;endFill=1;" target="character_data" value="opera inventário">
+          <mxGeometry relative="1" x="0.56" y="-10" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e18" edge="1" parent="1" source="combat_support" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#d97706;strokeWidth=2;endArrow=block;endFill=1;" target="character_data" value="complementa dados">
+          <mxGeometry relative="1" x="-0.3514" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e19" edge="1" parent="1" source="dialog_ui" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#e11d48;strokeWidth=2;endArrow=block;endFill=1;" target="autoload" value="Dialogos">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
