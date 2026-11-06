@@ -104,6 +104,8 @@ script = ExtResource("1_qmlk1")
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_d0u6y")
 animation = &"Interagir"
+frame = 9
+frame_progress = 0.8627127
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=94897179]
 position = Vector2(-0.6666667, -0.6666667)

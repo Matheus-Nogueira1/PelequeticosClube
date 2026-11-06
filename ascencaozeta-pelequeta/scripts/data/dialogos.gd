@@ -53,22 +53,16 @@ const CONVERSAS: Dictionary = {
 		{"speaker": "Elizabeth", "text": "Mais alguma coisa que queira saber?", "options": [
 			{"text": "Onde estou?", "next_dialogue": "elizabeth_onde"},
 			{"text": "Quem é você?", "next_dialogue": "elizabeth_quem"},
-			{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso", "failure_dialogue": "elizabeth_social_falha", "failure_stress": 1}
+			{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso", "failure_dialogue": "elizabeth_social_falha", "failure_stress": 1},
 		]}
 	],
 	"elizabeth_onde": [
 		{"speaker": "Elizabeth", "text": "Esta é a minha cabana, no fundo do abismo. É o único lugar onde o fogo ainda não se apagou."},
-		{"speaker": "Elizabeth", "text": "Você é o Escolhido, deve acabar com toda essa escuridão.", "options": [
-			{"text": "Voltar", "next_dialogue": "elizabeth_menu"},
-			{"text": "Encerrar", "close_dialogue": true}
-		]}
+		{"speaker": "Elizabeth", "text": "Você é o Escolhido, deve acabar com toda essa escuridão."},
 	],
 	"elizabeth_quem": [
 		{"speaker": "Elizabeth", "text": "Me chamo Elizabeth. Serei sua guia nessa loga jornada."},
-		{"speaker": "Elizabeth", "text": "Quem chega até aqui carrega uma chama. Eu só ajudo a mantê-la acesa.", "options": [
-			{"text": "Voltar", "next_dialogue": "elizabeth_menu"},
-			{"text": "Encerrar", "close_dialogue": true}
-		]}
+		{"speaker": "Elizabeth", "text": "Quem chega até aqui carrega uma chama. Eu só ajudo a mantê-la acesa."},
 	],
 	"elizabeth_social_sucesso": [
 		{

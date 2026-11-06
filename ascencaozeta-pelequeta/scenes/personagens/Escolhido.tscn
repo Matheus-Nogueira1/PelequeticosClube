@@ -458,7 +458,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"Atacando",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -487,7 +487,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"Dodge",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -862,7 +862,8 @@ script = ExtResource("2_22mqn")
 [node name="Walk" type="AnimatedSprite2D" parent="." unique_id=275653830]
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_d0u6y")
-animation = &"walk_down"
+animation = &"Dodge"
+frame_progress = 0.4818989
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=94897179]
 sprite_frames = SubResource("SpriteFrames_yf5fn")
