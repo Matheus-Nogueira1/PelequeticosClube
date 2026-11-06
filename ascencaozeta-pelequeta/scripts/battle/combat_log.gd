@@ -13,7 +13,11 @@ class_name CombatLog
 
 const MAX_LINHAS_VISIBLES = 50
 const TEMPO_SCROLL_DELAY = 0.0
+# Tipos de evento que compõem o resumo da tela de resultados.
+const TIPOS_RESUMO: Array[String] = ["critico", "dano", "sucesso"]
 
+# Registro interno: guarda todos os eventos, exibidos ou não.
+var historico: Array[Dictionary] = []
 func _ready() -> void:
 	clear()
 	bbcode_enabled = true
@@ -21,13 +25,17 @@ func _ready() -> void:
 	add_theme_font_size_override("normal_font_size", 8)
 	add_theme_font_size_override("bold_font_size", 8)
 
-
 # ============================================================================
 # EVENTOS GERAIS
 # ============================================================================
 
-func registrar_evento(mensagem: String, tipo: String = "normal") -> void:
-	"""Registra um evento genérico com cor baseada no tipo"""
+func registrar_evento(mensagem: String, tipo: String = "normal", exibir: bool = true) -> void:
+	"""Registra o evento (resumo final) e, se exibir, apresenta na caixa"""
+	# 1) Registro: independe da apresentação.
+	historico.append({"mensagem": mensagem, "tipo": tipo})
+	# 2) Apresentação.
+	if not exibir:
+		return
 	var cor = _get_cor_por_tipo(tipo)
 	var icon = _get_icon_por_tipo(tipo)
 	
@@ -36,8 +44,17 @@ func registrar_evento(mensagem: String, tipo: String = "normal") -> void:
 	
 	# Scroll automático
 	scroll_to_line(get_line_count() - 1)
-	
-	
+
+# Últimas linhas relevantes para o resumo final.
+func obter_resumo(max_linhas: int = 6) -> Array[String]:
+	var relevantes: Array[String] = []
+	for evento in historico:
+		if evento["tipo"] in TIPOS_RESUMO:
+			relevantes.append(String(evento["mensagem"]))
+	var resumo: Array[String] = []
+	for i in range(maxi(0, relevantes.size() - max_linhas), relevantes.size()):
+		resumo.append(relevantes[i])
+	return resumo
 
 func registrar_ataque(dados: Dictionary) -> void:
 	"""

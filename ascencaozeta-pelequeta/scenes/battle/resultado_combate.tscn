@@ -1,0 +1,154 @@
+[gd_scene format=3 uid="uid://cu0xgbk72m5ob"]
+
+[ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_1m5vr"]
+
+[node name="ResultadoCombate" type="Control" unique_id=1743797320]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="FundoEscurecido" type="ColorRect" parent="." unique_id=398240641]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+metadata/_edit_lock_ = true
+
+[node name="Centro" type="CenterContainer" parent="." unique_id=1519784979]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_lock_ = true
+
+[node name="PainelPrincipal" type="PanelContainer" parent="Centro" unique_id=293333491]
+custom_minimum_size = Vector2(288, 168)
+layout_mode = 2
+theme = ExtResource("1_1m5vr")
+
+[node name="Margem" type="MarginContainer" parent="Centro/PainelPrincipal" unique_id=1171690250]
+custom_minimum_size = Vector2(6, 6)
+layout_mode = 2
+
+[node name="Conteudo" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=2095879267]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="TituloResultado" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=1621315594]
+layout_mode = 2
+text = "Titulo"
+horizontal_alignment = 1
+
+[node name="Subtitulo" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=728247296]
+layout_mode = 2
+text = "Subtitulo"
+horizontal_alignment = 1
+
+[node name="SeparadorTopo" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=941481907]
+layout_mode = 2
+
+[node name="PainelClassificacao" type="HBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=915428533]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Rank" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/PainelClassificacao" unique_id=1669576952]
+layout_mode = 2
+text = "Rank"
+
+[node name="DetalhesPontuacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/PainelClassificacao" unique_id=1399447676]
+layout_mode = 2
+
+[node name="NomeClassificacao" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/PainelClassificacao/DetalhesPontuacao" unique_id=146034132]
+layout_mode = 2
+text = "S"
+
+[node name="Pontuacao" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/PainelClassificacao/DetalhesPontuacao" unique_id=2044573188]
+layout_mode = 2
+text = "1000"
+
+[node name="SeparadorTopo2" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=1789611503]
+layout_mode = 2
+
+[node name="Estatisticas" type="GridContainer" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=482564248]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/h_separation = 2
+columns = 2
+
+[node name="DanoCausado" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1440706954]
+layout_mode = 2
+
+[node name="DanoRecebido" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1636563433]
+layout_mode = 2
+
+[node name="CuraEfetiva" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=2000701569]
+layout_mode = 2
+
+[node name="AliadosDesmaiados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1677625679]
+layout_mode = 2
+
+[node name="AliadosReanimados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=463541814]
+layout_mode = 2
+
+[node name="BonusRecuperacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=463895986]
+layout_mode = 2
+
+[node name="SeparadorTopo3" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=213398506]
+layout_mode = 2
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=396089815]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Relatorio" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2" unique_id=1246554287]
+layout_mode = 2
+
+[node name="SecaoAcontecimentos" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1161286405]
+layout_mode = 2
+text = "Acontecimentos"
+
+[node name="Resumo" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=887013464]
+layout_mode = 2
+text = "Explodiu tudo
+e etc
+tlgd"
+
+[node name="SecaoFardos" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=357088394]
+layout_mode = 2
+text = "Fardos"
+
+[node name="Fardos" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1049645284]
+layout_mode = 2
+text = "Perda da perna
+entre outros
+tlgd"
+
+[node name="SecaoRecompensas" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1448420922]
+layout_mode = 2
+text = "Recompensas"
+
+[node name="Recompensas" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=252691253]
+layout_mode = 2
+text = "Ganhou municao
+recurso
+arma
+armadura
+etc"
+
+[node name="SeparadorRodape" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1742774075]
+layout_mode = 2
+
+[node name="Dica" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=2136816923]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "aperta ai "

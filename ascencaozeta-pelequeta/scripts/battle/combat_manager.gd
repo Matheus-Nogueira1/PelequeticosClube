@@ -32,7 +32,7 @@ signal turno_passado
 @onready var battlefield = %Battlefield
 @onready var regional_selector = %RegionalPanel
 @onready var action_panel = %ActionPanel
-@onready var log_panel: CombatLog = $MarginContainer/VBoxContainer/LogPanel/RichTextLabel
+@onready var log_panel: CombatLog = %ComunicacaoLog
 
 @onready var player_visual: Node = %Battlefield.find_child(
 	"PlayerVisual", true, false
@@ -102,6 +102,13 @@ func _inicializar_combate() -> void:
 	ordem_turno.sort_custom(func(a, b): return a.iniciativa > b.iniciativa)
 
 	combate_ativo = true
+	log_panel.registrar_evento(
+	"Combate iniciado: %s contra %s." % [
+		combatentes_jogador[0].nome,
+		combatentes_inimigo[0].nome
+	],
+	"turno"
+)
 	combate_iniciado.emit()
 
 	# Começar primeiro turno
@@ -754,7 +761,10 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 		return
 
 	enemy_panel.desativar_seletor_alvo()
-
+	log_panel.registrar_evento(
+		"%s ataca %s." % [combatente_ativo.nome, alvo.nome],
+		"acao"
+	)
 	_processar_ataque(
 		combatente_ativo,
 		alvo,

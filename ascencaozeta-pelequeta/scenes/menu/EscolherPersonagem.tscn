@@ -7,7 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://d1fsa5i0xk5gv" path="res://assets/Player/MOB/MobBase.png" id="5_ayp0l"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="6_gipqf"]
 [ext_resource type="LabelSettings" uid="uid://ch5kik1mpjmso" path="res://fonts/Titulos.tres" id="7_jog0g"]
-[ext_resource type="LabelSettings" uid="uid://c4uyji3i1damp" path="res://fonts/Descrição.tres" id="8_ru14h"]
+[ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="8_ru14h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tjwpk"]
 bg_color = Color(0.03, 0.03, 0.03, 0.85)
@@ -163,13 +163,12 @@ grow_vertical = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Description" type="Label" parent="DescriptionPanel/VBoxContainer" unique_id=1890970100]
+[node name="Description" type="RichTextLabel" parent="DescriptionPanel/VBoxContainer" unique_id=313375948]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_fonts/font = ExtResource("6_gipqf")
-theme_override_font_sizes/font_size = 5
+theme = ExtResource("8_ru14h")
 text = "Cleptomaníaco, Imperdoável e Inesquecível.
 Um borrão indistinguível guiado por uma motivação que nunca lhe pertenceu. Causado por uma origem tomada a força e fadado a destinos impossíveis de alcançar. Foi escolhido para totalizar a vontade dos maculados, contudo tornou-se imperdoável para todos que o antepuseram."
-label_settings = ExtResource("8_ru14h")
-autowrap_mode = 2
+tab_size = 0
+justification_flags = 160

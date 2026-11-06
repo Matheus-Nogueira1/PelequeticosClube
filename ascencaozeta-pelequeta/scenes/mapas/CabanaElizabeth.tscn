@@ -2462,7 +2462,7 @@ scale = Vector2(0.9, 0.9)
 [node name="Camera2D" type="Camera2D" parent="Escolhido" unique_id=755316650]
 ignore_rotation = false
 limit_left = -26
-limit_top = -12
+limit_top = -2
 limit_right = 347
 limit_bottom = 468
 
@@ -2492,6 +2492,7 @@ scale = Vector2(0.8, 0.8)
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1066443925]
 
 [node name="BlackScreen" type="ColorRect" parent="CanvasLayer" unique_id=877608353]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

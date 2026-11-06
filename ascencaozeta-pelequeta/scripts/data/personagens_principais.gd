@@ -19,15 +19,16 @@ static func obter_dados_apresentacao(nome: String) -> Dictionary:
 				"nome": "Escolhido",
 				"descricao": "Cleptomaníaco, Imperdoável, Inesquecível.\n
 				Uma existência sem forma, movida por uma vontade que jamais lhe pertenceu.
-				\nNascido de uma origem usurpada, percorre caminhos que não escolheu, perseguindo destinos que lhe serão negados. Foi escolhido para reunir os anseios e pecados dos maculados, mas tornou-se uma ruína imperdoável para aqueles que o moldaram. 
+				\nNascido de uma origem usurpada, percorre caminhos que não escolheu, perseguindo destinos que lhe serão negados. Foi escolhido para reunir os anseios e pecados dos maculados, mas tornou-se uma ruína imperdoável para aqueles que o moldaram.\n
 				Talvez sua busca por propósito seja apenas outra prisão, há vidas que não nascem para encontrar sentido, mas para descobrir, tarde demais, que sempre caminharam em direção à própria queda."
 			}
 
 		"jp", "jpdamaldade", "jp da maldade", "JP", "JP da maldade":
 			return {
 				"nome": "JP da Maldade",
-				"descricao": "Sortudo, Atirador e Vingativo\nUm atirador de pontaria certeira, que encontra na chuva e no frio o cenário perfeito para caçar suas presas.
-				Paciente e estratégico, aguarda o momento certo para atacar, guiado pela sorte e pela vingança.
+				"descricao": "Sortudo, Atirador e Vingativo.\n
+				Um atirador de pontaria certeira, que encontra na chuva e no frio o cenário perfeito para caçar suas presas.
+				Paciente e estratégico, aguarda o momento certo para atacar, guiado pela sorte e pela vingança.\n
 				Por trás de sua precisão, esconde-se uma mente atormentada por dúvidas e feridas do passado.
 				Em busca de respostas, descobrirá que nem mesmo suas flechas podem atingir aquilo que precisa enfrentar: a si mesmo.
 				\nPois, às vezes, a única cura é a própria aceitação."
@@ -36,8 +37,11 @@ static func obter_dados_apresentacao(nome: String) -> Dictionary:
 		"mob":
 			return {
 				"nome": "Mob",
-				"descricao": "Prisioneiro, Corajoso e Bondoso\nUm homem cuja liberdade lhe foi roubada, condenado a uma vida de cárcere e tormento em uma fazenda. Contudo, um dia, o abismo clamou por seu nome, e sua sentença tornou-se um chamado. Uma nova motivação percorre suas veias, bombeando em seu coração o desejo de proteger aqueles que um dia o acolheram. Teve sua liberdade tomada à força, mas agora vive cada dia ao máximo, aproveitando cada fragmento da liberdade que lhe foi concedida. 
-				\nOutrora acorrentado pelo próprio destino, hoje nada poderá detê-lo, pois, acima de tudo, carrega consigo um propósito inabalável proteger aqueles que agora chama de família."
+				"descricao": "Prisioneiro, Corajoso e Bondoso.\n
+				Um homem cuja liberdade lhe foi roubada, condenado a uma vida de cárcere e tormento em uma fazenda. Contudo, um dia, o abismo clamou por seu nome, e sua sentença tornou-se um chamado.\n
+				Uma nova motivação percorre suas veias, bombeando em seu coração o desejo de proteger aqueles que um dia o acolheram. 
+				Teve sua liberdade tomada à força, mas agora vive cada dia ao máximo, aproveitando cada fragmento da liberdade que lhe foi concedida.\n
+				Outrora acorrentado pelo próprio destino, hoje nada poderá detê-lo, pois, acima de tudo, carrega consigo um propósito inabalável proteger aqueles que agora chama de família."
 			}
 
 	return {

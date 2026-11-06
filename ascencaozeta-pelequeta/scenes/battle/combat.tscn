@@ -1099,6 +1099,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_osi8t")
 script = ExtResource("1_vcae8")
+metadata/_edit_lock_ = true
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1040740590]
 layout_mode = 1
@@ -1208,19 +1209,18 @@ size_flags_vertical = 8
 script = ExtResource("5_8we11")
 metadata/_edit_lock_ = true
 
+[node name="ComunicacaoPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=2127077464]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="ComunicacaoLog" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/ComunicacaoPanel" unique_id=1241593587]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("6_hrcy2")
+
 [node name="EnemyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1029187186]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(92, 0)
 layout_mode = 2
 script = ExtResource("3_4gnb8")
 metadata/_edit_lock_ = true
-
-[node name="LogPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=602699646]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
-layout_mode = 2
-metadata/_edit_lock_ = true
-
-[node name="RichTextLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer/LogPanel" unique_id=1241593587]
-layout_mode = 2
-script = ExtResource("6_hrcy2")

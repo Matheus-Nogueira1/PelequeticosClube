@@ -130,10 +130,15 @@ func _init(p_nome: String, p_tipo: String) -> void:
 
 ## Calcula todos os Atributos Mutáveis baseado nos Atributos Fixos
 func _calcular_atributos_mutaveis() -> void:
+	@warning_ignore("integer_division")
 	atributo_folego = (atributo_carne + atributo_determinacao) / 2
+	@warning_ignore("integer_division")
 	atributo_dano = (atributo_forca + atributo_carne) / 2
+	@warning_ignore("integer_division")
 	atributo_coragem = (atributo_determinacao + atributo_mente) / 2
+	@warning_ignore("integer_division")
 	atributo_protecao = (atributo_carne + atributo_fuga) / 2
+	@warning_ignore("integer_division")
 	atributo_velocidade = (atributo_fuga + atributo_determinacao) / 2
 
 ## Atualiza atributo fixo e recalcula os mutáveis

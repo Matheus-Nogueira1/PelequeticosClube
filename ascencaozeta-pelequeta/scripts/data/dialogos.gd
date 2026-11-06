@@ -49,22 +49,20 @@ const CONVERSAS: Dictionary = {
 			{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso", "failure_dialogue": "elizabeth_social_falha", "failure_stress": 1}
 		]}
 	],
-	"elizabeth_menu": [
-		{"speaker": "Elizabeth", "text": "Mais alguma coisa que queira saber?", "options": [
-			{"text": "Onde estou?", "next_dialogue": "elizabeth_onde"},
-			{"text": "Quem é você?", "next_dialogue": "elizabeth_quem"},
-			{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso", "failure_dialogue": "elizabeth_social_falha", "failure_stress": 1},
-		]}
-	],
 	"elizabeth_onde": [
 		{"speaker": "Elizabeth", "text": "Esta é a minha cabana, no fundo do abismo. É o único lugar onde o fogo ainda não se apagou."},
 		{"speaker": "Elizabeth", "text": "Você é o Escolhido, deve acabar com toda essa escuridão."},
+		{"speaker": "Elizabeth", "text": "No canto daquela parede amadeirada há um boneco para treinamento."},
+		{"speaker": "Elizabeth", "text": "Mostre do que é capaz e retorne paara mim. Seus esforços eu recompensarei."},
 	],
 	"elizabeth_quem": [
 		{"speaker": "Elizabeth", "text": "Me chamo Elizabeth. Serei sua guia nessa loga jornada."},
 		{"speaker": "Elizabeth", "text": "Quem chega até aqui carrega uma chama. Eu só ajudo a mantê-la acesa."},
+		{"speaker": "Elizabeth", "text": "No canto daquela parede amadeirada há um boneco para treinamento."},
+		{"speaker": "Elizabeth", "text": "Mostre do que é capaz e retorne paara mim. Seus esforços eu recompensarei."},
+		
 	],
-	"elizabeth_social_sucesso": [
+	"elizabeth_social_sucesso_extremo": [
 		{
 			"speaker": "Escolhido",
 			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda. Como recompensa terei as respostas que tanto procuro, acertei?"
@@ -72,6 +70,16 @@ const CONVERSAS: Dictionary = {
 		{
 			"speaker": "Elizabeth",
 			"text": "Na mosca."
+		}
+	],
+	"elizabeth_social_sucesso": [
+		{
+			"speaker": "Escolhido",
+			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda."
+		},
+		{
+			"speaker": "Elizabeth",
+			"text": "Certo."
 		}
 	],
 	"elizabeth_social_falha": [

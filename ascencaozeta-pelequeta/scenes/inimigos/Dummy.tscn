@@ -187,7 +187,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_5of7p")
 }],
-"loop": 2,
+"loop": 1,
 "name": &"Atacando",
 "speed": 10.0
 }, {
@@ -231,7 +231,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_8vewt")
 }],
-"loop": 0,
+"loop": 1,
 "name": &"Dodge",
 "speed": 10.0
 }, {
@@ -329,9 +329,7 @@ script = ExtResource("1_hm17y")
 y_sort_enabled = true
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_d0u6y")
-animation = &"Dodge"
-frame = 12
-frame_progress = 1.0
+animation = &"Atacando"
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=94897179]
 position = Vector2(1.1920929e-07, 4.285714)
