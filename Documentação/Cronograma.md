@@ -101,6 +101,8 @@
 * Testar o jogo completo e corrigir problemas encontrados | **PENDENTE** ⚠️
 * Preparar versão estável para a apresentação de novembro | **PENDENTE** ⚠️
 * Melhorar UI | **PENDENTE** ⚠️
+* Preparar Sound Effects | **PENDENTE** ⚠️
+* Preparar Soundtrack | **PENDENTE** ⚠️
 --------------------------------------------------
 * Sprite de NPC's | **EM ANDAMENTO** 🔄
 * Sprite de Inimigos | **PENDENTE** ⚠️
