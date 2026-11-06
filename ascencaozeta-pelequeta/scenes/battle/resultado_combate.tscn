@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_1m5vr"]
 [ext_resource type="Script" uid="uid://lsj60cuw40sx" path="res://scripts/battle/resultado_combate.gd" id="1_il254"]
-[ext_resource type="LabelSettings" uid="uid://ch5kik1mpjmso" path="res://fonts/Titulos.tres" id="2_0r4ac"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="3_hld0v"]
 [ext_resource type="LabelSettings" uid="uid://c4uyji3i1damp" path="res://fonts/Descrição.tres" id="3_il254"]
 [ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="5_hld0v"]
 
@@ -17,6 +17,19 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.31764707, 0.28627452, 0.21176471, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_2elm4"]
+font = ExtResource("3_hld0v")
+font_size = 10
+font_color = Color(1, 0.47843137, 0, 1)
+outline_size = 2
+outline_color = Color(0.5411765, 0, 0, 1)
+shadow_size = 2
+shadow_color = Color(0.46666667, 0, 0, 0.43137255)
+
+[sub_resource type="LabelSettings" id="LabelSettings_ah0u3"]
+font = ExtResource("3_hld0v")
+font_size = 5
 
 [node name="ResultadoCombate" type="Control" unique_id=1743797320]
 layout_mode = 3
@@ -65,14 +78,14 @@ theme_override_constants/separation = 4
 unique_name_in_owner = true
 layout_mode = 2
 text = "Titulo"
-label_settings = ExtResource("2_0r4ac")
+label_settings = SubResource("LabelSettings_2elm4")
 horizontal_alignment = 1
 
 [node name="Subtitulo" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=728247296]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Subtitulo"
-label_settings = ExtResource("3_il254")
+label_settings = SubResource("LabelSettings_ah0u3")
 horizontal_alignment = 1
 
 [node name="SeparadorTopo" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=941481907]
@@ -108,16 +121,18 @@ theme_override_constants/h_separation = 2
 columns = 2
 
 [node name="DanoCausado" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1440706954]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="DanoRecebido" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1636563433]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="CuraEfetiva" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=2000701569]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="DanoRecebido" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1636563433]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -128,6 +143,7 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="AliadosReanimados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=463541814]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -142,51 +158,51 @@ theme = ExtResource("1_1m5vr")
 layout_mode = 2
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=396089815]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("5_hld0v")
 
-[node name="Relatorio" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2" unique_id=1246554287]
+[node name="Relatorio" type="HBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2" unique_id=286323610]
 layout_mode = 2
+size_flags_horizontal = 3
 
-[node name="SecaoAcontecimentos" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1161286405]
+[node name="VBoxContainer" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1598323854]
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SecaoAcontecimentos" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer" unique_id=1161286405]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
 text = "Acontecimentos"
 label_settings = ExtResource("3_il254")
 
-[node name="Resumo" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=887013464]
+[node name="Resumo" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer" unique_id=887013464]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 3
+theme = ExtResource("1_1m5vr")
 text = "Explodiu tudo
 e etc
 tlgd"
 fit_content = true
 scroll_active = false
 
-[node name="SecaoFardos" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=357088394]
-unique_name_in_owner = true
+[node name="VBoxContainer2" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1459733838]
 layout_mode = 2
-text = "Fardos"
-label_settings = ExtResource("3_il254")
+size_flags_horizontal = 3
 
-[node name="Fardos" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1049645284]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Perda da perna
-entre outros
-tlgd"
-fit_content = true
-scroll_active = false
-
-[node name="SecaoRecompensas" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1448420922]
+[node name="SecaoRecompensas" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer2" unique_id=1448420922]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Recompensas"
 label_settings = ExtResource("3_il254")
 
-[node name="Recompensas" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=252691253]
+[node name="Recompensas" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer2" unique_id=252691253]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("1_1m5vr")
 text = "Ganhou municao
 recurso
 arma
@@ -195,10 +211,34 @@ etc"
 fit_content = true
 scroll_active = false
 
-[node name="SeparadorRodape" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1742774075]
+[node name="VBoxContainer3" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1270614505]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SecaoFardos" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer3" unique_id=357088394]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Fardos"
+label_settings = ExtResource("3_il254")
+
+[node name="Fardos" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer3" unique_id=1049645284]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_1m5vr")
+text = "Perda da perna
+entre outros
+tlgd"
+fit_content = true
+scroll_active = false
+
+[node name="SeparadorRodape" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=1742774075]
 layout_mode = 2
 
-[node name="Dica" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=2136816923]
+[node name="Dica" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=2136816923]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "aperta ai "
@@ -207,3 +247,4 @@ label_settings = ExtResource("3_il254")
 [node name="BotaoContinuar" type="Button" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=140466228]
 unique_name_in_owner = true
 layout_mode = 2
+text = "Continuar"

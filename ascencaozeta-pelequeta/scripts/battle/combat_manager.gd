@@ -595,11 +595,23 @@ func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 	_finalizar_acao()
 
 func _tentar_fugir() -> void:
-	"""Bandidagem: em sucesso foge da batalha e volta ao mapa. Falha gasta o turno."""
+	"""Bandidagem: em sucesso foge da batalha e volta ao mapa."""
+
 	var conhecimento = ConhecimentoData.new()
+
+	# Rola visualmente o D6 e utiliza exatamente esse resultado no teste.
+	var dado_visual: int = await _rolar_dado_conhecimento("Bandidagem")
+
+	if dado_visual < 1 or dado_visual > 6:
+		push_error("[CombatManager] Falha ao realizar a rolagem visual de Bandidagem.")
+		action_panel.habilitar_acoes()
+		return
+
 	var resultado: Dictionary = conhecimento.testar_conhecimento(
 		combatente_ativo,
-		"Bandidagem"
+		"Bandidagem",
+		0,
+		dado_visual
 	)
 
 	log_panel.registrar_evento(
@@ -624,6 +636,7 @@ func _tentar_fugir() -> void:
 		"%s não encontrou uma saída." % combatente_ativo.nome,
 		"aviso"
 	)
+
 	_finalizar_acao()
 
 func _on_alvo_cancelado() -> void:
