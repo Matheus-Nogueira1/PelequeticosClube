@@ -116,7 +116,6 @@ func _inicializar_combate() -> void:
 		combatentes_inimigo[0].nome
 	],
 	"turno",
-	false
 )
 	combate_iniciado.emit()
 
@@ -166,7 +165,6 @@ func _calcular_iniciativa() -> void:
 		log_panel.registrar_evento(
 			"%s iniciativa: %d" % [combatente.nome, combatente.iniciativa],
 			"info",
-			false
 		)
 
 func _conectar_sinais_paineis() -> void:
@@ -262,7 +260,6 @@ func _avancar_turno() -> void:
 		log_panel.registrar_evento(
 			"🎯 Turno de %s!" % combatente_ativo.nome,
 			"turno",
-			false
 		)
 		# Limpar seleções apenas ao iniciar turno do jogador
 		alvo_selecionado.clear()
@@ -724,7 +721,7 @@ func _on_selecao_cancelada() -> void:
 func _on_turno_passado() -> void:
 	"""Chamado quando o jogador clica em PASSAR TURNO"""
 	if combatente_ativo and combatente_ativo.tipo == "jogador":
-		log_panel.registrar_evento("Turno passado.", "info", false)
+		log_panel.registrar_evento("Turno passado.", "info")
 		action_panel.desabilitar_acoes()
 		turno_finalizado.emit(combatente_ativo)
 		await get_tree().create_timer(1.0).timeout
@@ -1038,7 +1035,6 @@ func _processar_ataque(
 					dano_total
 				],
 				"info",
-				false
 			)
 			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
 			await _animar_dano(alvo)
