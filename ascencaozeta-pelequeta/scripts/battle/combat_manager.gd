@@ -44,7 +44,7 @@ signal leitura_confirmada
 	"EnemyVisual", true, false
 )
 @onready var campo_batalha: Control = %BattleFieldContent
-@onready var dica_continuar: Control = get_node_or_null("%DicaContinuar") as Control
+@onready var dica_continuar: Label = get_node_or_null("%DicaContinuar") as Label
 var animacao_jogador: CombatenteAnimation
 var animacao_inimigo: CombatenteAnimation
 
@@ -59,6 +59,7 @@ var combate_ativo: bool = false
 var conhecimento_pendente := ""
 var fardos_iniciais: int = 0
 var resumo_resultado: Array[String] = []
+var _frame_confirmacao: int = -1
 # Estado da ação atual
 var acao_em_progresso: bool = false
 var regioes_selecionadas: Array[String] = []
@@ -114,7 +115,8 @@ func _inicializar_combate() -> void:
 		combatentes_jogador[0].nome,
 		combatentes_inimigo[0].nome
 	],
-	"turno"
+	"turno",
+	false
 )
 	combate_iniciado.emit()
 
@@ -163,7 +165,8 @@ func _calcular_iniciativa() -> void:
 		combatente.iniciativa = combatente.atributo_velocidade
 		log_panel.registrar_evento(
 			"%s iniciativa: %d" % [combatente.nome, combatente.iniciativa],
-			"info"
+			"info",
+			false
 		)
 
 func _conectar_sinais_paineis() -> void:
@@ -258,7 +261,8 @@ func _avancar_turno() -> void:
 		enemy_panel.desativar_seletor_alvo()
 		log_panel.registrar_evento(
 			"🎯 Turno de %s!" % combatente_ativo.nome,
-			"turno"
+			"turno",
+			false
 		)
 		# Limpar seleções apenas ao iniciar turno do jogador
 		alvo_selecionado.clear()
@@ -280,7 +284,8 @@ func _restaurar_protecoes(combatente: CombatenteData) -> void:
 			log_panel.registrar_evento(
 				"A proteção de %s foi restaurada." %
 				alvo.nome,
-				"info"
+				"info",
+				false
 			)
 	for alvo in combatentes_inimigo:
 		if alvo.atacante_que_quebrou_protecao == combatente.nome:
@@ -292,7 +297,8 @@ func _restaurar_protecoes(combatente: CombatenteData) -> void:
 			log_panel.registrar_evento(
 				"A proteção de %s foi restaurada." %
 				alvo.nome,
-				"info"
+				"info",
+				false
 			)
 
 func _encontrar_proximo_combatente() -> CombatenteData:
@@ -334,7 +340,7 @@ func _iniciar_ataque() -> void:
 
 	acao_em_progresso = true
 	action_panel.desabilitar_acoes()
-	log_panel.registrar_evento("Selecione as regiões de ataque...", "acao")
+	log_panel.registrar_evento("Selecione as regiões de ataque...", "acao", false)
 
 	# Ativar seletor de corpo com validação de Próteses/Regiões Perdidas/Sobrecarga
 	regional_selector.ativar_para_ataque(combatente_ativo)
@@ -346,7 +352,7 @@ func _iniciar_conhecimento() -> void:
 		return
 
 	acao_em_progresso = true
-	log_panel.registrar_evento("Menu de perícias aberto...", "acao")
+	log_panel.registrar_evento("Menu de perícias aberto...", "acao", false)
 
 	# TODO: Mostrar menu de perícias disponíveis
 	action_panel.mostrar_menu_conhecimentoss(combatente_ativo.para_dictionary())
@@ -357,7 +363,7 @@ func _iniciar_habilidade() -> void:
 		return
 
 	acao_em_progresso = true
-	log_panel.registrar_evento("Menu de habilidades aberto...", "acao")
+	log_panel.registrar_evento("Menu de habilidades aberto...", "acao", false)
 
 	# A seleção visual fica no ActionPanel para manter o mesmo fluxo das Perícias:
 	# Menu Principal -> Lista -> Detalhes -> Confirmar Uso.
@@ -377,7 +383,7 @@ func _ativar_sobrecarga() -> void:
 		"critico"
 	)
 
-	action_panel.habilitar_acoes()
+	await _devolver_acoes_apos_leitura()
 
 func _on_habilidade_escolhida(nome_habilidade: String) -> void:
 	# Recebe apenas habilidades confirmadas na tela de detalhes do ActionPanel.
@@ -398,7 +404,7 @@ func _on_habilidade_escolhida(nome_habilidade: String) -> void:
 			resultado["erro"],
 			"aviso"
 		)
-		action_panel.habilitar_acoes()
+		await _devolver_acoes_apos_leitura()
 		return
 
 	acao_em_progresso = false
@@ -420,7 +426,7 @@ func _on_habilidade_escolhida(nome_habilidade: String) -> void:
 	party_panel.atualizar_personagem(
 		combatente_ativo.para_dictionary()
 	)
-	action_panel.habilitar_acoes()
+	await _devolver_acoes_apos_leitura()
 
 func _iniciar_item() -> void:
 	"""Inicia uso de item"""
@@ -428,7 +434,7 @@ func _iniciar_item() -> void:
 		return
 
 	acao_em_progresso = true
-	log_panel.registrar_evento("Menu de itens aberto...", "acao")
+	log_panel.registrar_evento("Menu de itens aberto...", "acao", false)
 
 	# TODO: Mostrar inventário
 	action_panel.mostrar_menu_itens(combatente_ativo.para_dictionary())
@@ -440,7 +446,7 @@ func _on_item_escolhido(nome_item: String) -> void:
 	var item: ItemData.Item = ItemData.obter_item(nome_item)
 	if item == null or not ItemData.tem_item(combatente_ativo, nome_item):
 		log_panel.registrar_evento("Item indisponível.", "aviso")
-		action_panel.habilitar_acoes()
+		await _devolver_acoes_apos_leitura()
 		return
 
 	# Beta: o Frasco Estus age na região com mais estresse.
@@ -457,7 +463,7 @@ func _on_item_escolhido(nome_item: String) -> void:
 			"%s não tem estresse para recuperar." % combatente_ativo.nome,
 			"aviso"
 		)
-		action_panel.habilitar_acoes()
+		await _devolver_acoes_apos_leitura()
 		return
 
 	var resultado: Dictionary = ItemData.usar_item(combatente_ativo, item, regiao_alvo)
@@ -466,7 +472,7 @@ func _on_item_escolhido(nome_item: String) -> void:
 			String(resultado.get("mensagem", "Falha ao usar o item.")),
 			"aviso"
 		)
-		action_panel.habilitar_acoes()
+		await _devolver_acoes_apos_leitura()
 		return
 
 	ItemData.remover_item(combatente_ativo, nome_item)
@@ -644,7 +650,7 @@ func _on_alvo_cancelado() -> void:
 	conhecimento_pendente = ""
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
-	log_panel.registrar_evento("Seleção de alvo cancelada.", "aviso")
+	log_panel.registrar_evento("Seleção de alvo cancelada.", "aviso", false)
 	action_panel.habilitar_acoes()
 
 func _on_conhecimento_escolhida(nome_conhecimento: String) -> void:
@@ -659,7 +665,8 @@ func _on_conhecimento_escolhida(nome_conhecimento: String) -> void:
 
 			log_panel.registrar_evento(
 				"Selecione o alvo de %s. (Esc cancela)" % nome_conhecimento,
-				"acao"
+				"acao",
+				false
 			)
 
 			# Esconde o menu de ações: a escolha agora é só o alvo.
@@ -672,7 +679,8 @@ func _on_conhecimento_escolhida(nome_conhecimento: String) -> void:
 		_:
 			log_panel.registrar_evento(
 				"Conhecimento %s ainda não implementado." % nome_conhecimento,
-				"info"
+				"info",
+				false
 			)
 
 # ============================================================================
@@ -686,7 +694,8 @@ func _on_regiao_selecionada(nome_regiao: String, indice: int) -> void:
 
 		log_panel.registrar_evento(
 			"⚡ Sobrecarga: %s arriscada novamente!" % nome_regiao,
-			"critico"
+			"critico",
+			false
 		)
 
 	else:
@@ -698,8 +707,8 @@ func _on_regiao_selecionada(nome_regiao: String, indice: int) -> void:
 func _on_regioes_confirmadas(regioes: Array[String]) -> void:
 	"""Chamado quando o jogador confirma as regiões selecionadas"""
 	regioes_selecionadas = regioes.duplicate()
-	log_panel.registrar_evento("Regiões confirmadas: %s" % ", ".join(regioes_selecionadas), "acao")
-	log_panel.registrar_evento("Selecione o inimigo alvo...", "acao")
+	log_panel.registrar_evento("Regiões confirmadas: %s" % ", ".join(regioes_selecionadas), "acao", false)
+	log_panel.registrar_evento("Selecione o inimigo alvo...", "acao", false)
 	regional_selector.desativar()
 	enemy_panel.ativar_seletor_alvo()
 
@@ -708,14 +717,14 @@ func _on_selecao_cancelada() -> void:
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
 	alvo_selecionado.clear()
-	log_panel.registrar_evento("Seleção de regiões cancelada.", "aviso")
+	log_panel.registrar_evento("Seleção de regiões cancelada.", "aviso", false)
 	regional_selector.desativar()
 	action_panel.habilitar_acoes()
 
 func _on_turno_passado() -> void:
 	"""Chamado quando o jogador clica em PASSAR TURNO"""
 	if combatente_ativo and combatente_ativo.tipo == "jogador":
-		log_panel.registrar_evento("Turno passado.", "info")
+		log_panel.registrar_evento("Turno passado.", "info", false)
 		action_panel.desabilitar_acoes()
 		turno_finalizado.emit(combatente_ativo)
 		await get_tree().create_timer(1.0).timeout
@@ -726,7 +735,8 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 	if not inimigo_dict.has("nome"):
 		log_panel.registrar_evento(
 			"Inimigo inválido selecionado!",
-			"aviso"
+			"aviso",
+			false
 		)
 		return
 
@@ -763,7 +773,8 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 	if regioes_selecionadas.is_empty():
 		log_panel.registrar_evento(
 			"Nenhuma região selecionada! Confirme antes de selecionar alvo.",
-			"aviso"
+			"aviso",
+			false
 		)
 		return
 
@@ -777,13 +788,14 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 	if alvo == null:
 		log_panel.registrar_evento(
 			"Alvo não encontrado.",
-			"aviso"
+			"aviso",
+			false
 		)
 		return
 
 	enemy_panel.desativar_seletor_alvo()
 	log_panel.registrar_evento(
-		"%s ataca %s." % [combatente_ativo.nome, alvo.nome],
+		"%s atacou %s.." % [combatente_ativo.nome, alvo.nome],
 		"acao"
 	)
 	_processar_ataque(
@@ -896,7 +908,7 @@ func _processar_ataque(
 	# ============================================================
 	# LOG DAS REGIÕES
 	# ============================================================
-
+	var linhas_falha: Array[String] = []
 	for res_regiao in resultado_combate["resultados_por_regiao"]:
 		log_panel.registrar_evento(
 			"Região: %s → D6: %d (%s)" % [
@@ -904,7 +916,8 @@ func _processar_ataque(
 				res_regiao["dado"],
 				res_regiao["categoria"]
 			],
-			"ataque"
+			"ataque",
+			false
 		)
 		if res_regiao["categoria"] in ["Falha Regular", "Falha Crítica"]:
 			var estresse_gerado := 1
@@ -914,35 +927,29 @@ func _processar_ataque(
 				res_regiao["regiao"],
 				estresse_gerado
 			)
-			if resultado_estresse.has("regiao_esgotada"):
-				log_panel.registrar_evento(
-					"%s: %s" % [
-						atacante.nome,
-						resultado_estresse["mensagem"]
-					],
-					"aviso"
-				)
+			linhas_falha.append("%s sofreu %d de estresse em %s." % [
+				atacante.nome,
+				estresse_gerado,
+				res_regiao["regiao"]
+			])
 			log_panel.registrar_evento(
 				"%s sofre %d de estresse em %s (ataque falhou)" % [
 					atacante.nome,
 					estresse_gerado,
 					res_regiao["regiao"]
 				],
-				"aviso"
+				"aviso",
+				false
 			)
-			# Região esgotada já foi logada acima; evita duplicar
-			# e evita erro quando a chave não existe (ex.: inimigo).
-			if resultado_estresse.has("mensagem") and not resultado_estresse.has("regiao_esgotada"):
-				log_panel.registrar_evento(
-					resultado_estresse["mensagem"],
-					"critico"
-				)
+			if resultado_estresse.has("regiao_esgotada"):
+				linhas_falha.append("%s: %s" % [atacante.nome, resultado_estresse["mensagem"]])
+			elif resultado_estresse.has("mensagem"):
+				linhas_falha.append(String(resultado_estresse["mensagem"]))
 			if resultado_estresse.has("resultado_fardo"):
-				log_panel.registrar_evento(
-					resultado_estresse["resultado_fardo"]["mensagem"],
-					"critico"
-				)
-
+				linhas_falha.append(String(resultado_estresse["resultado_fardo"]["mensagem"]))
+	# Consequências das falhas do atacante, numa única mensagem.
+	if not linhas_falha.is_empty():
+		log_panel.registrar_evento("\n".join(linhas_falha), "aviso")
 	# ============================================================
 	# APÓS TODAS AS FALHAS
 	# VERIFICA SE O ATACANTE AINDA CONSEGUE CONTINUAR
@@ -990,12 +997,13 @@ func _processar_ataque(
 				protecao_atual,
 				alvo.atributo_protecao
 			],
-			"info"
+			"info",
+			false
 		)
-		log_panel.registrar_evento(
-			"Sucessos obtidos: %d" % sucessos,
-			"info"
-		)
+		var texto_acertos: String = "1 acerto obtido!"
+		if sucessos != 1:
+			texto_acertos = "%d acertos obtidos!" % sucessos
+		log_panel.registrar_evento(texto_acertos, "sucesso")
 		if sucessos < protecao_atual:
 			var protecao_antes = protecao_atual
 
@@ -1012,17 +1020,12 @@ func _processar_ataque(
 			)
 		else:
 			alvo.atacante_que_quebrou_protecao = atacante.nome
+			log_panel.registrar_evento(
+				"Proteção quebrada!",
+				"critico"
+			)
 			var dano_atributo = atacante.atributo_dano
 			var dano_arma = 0
-			log_panel.registrar_evento(
-				"Proteção quebrada!" ,
-				"critico"
-			)
-
-			log_panel.registrar_evento(
-				"Proteção: %d → 0" % protecao_atual,
-				"critico"
-			)
 			if atacante.arma_equipada != "":
 				dano_arma = ArmaData.rolar_dano_arma(
 					atacante.arma_equipada
@@ -1034,28 +1037,26 @@ func _processar_ataque(
 					dano_arma,
 					dano_total
 				],
-				"info"
+				"info",
+				false
 			)
 			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
 			await _animar_dano(alvo)
+			var torso_antes: int = alvo.estresse_por_regiao["Torso"]["atual"]
 			var resultado_estresse = alvo.aplicar_estresse(
 				"Torso",
 				dano_total
 			)
+			var dano_efetivo: int = alvo.estresse_por_regiao["Torso"]["atual"] - torso_antes
 			log_panel.registrar_evento(
-				"%s causou %d de estresse em %s." % [
-					atacante.nome,
-					dano_total,
-					alvo.nome
-				],
+				"%s sofreu %d pontos de dano." % [alvo.nome, dano_efetivo],
 				"dano"
 			)
-			if not resultado_estresse.is_empty():
-				if resultado_estresse.has("resultado_fardo"):
-					log_panel.registrar_evento(
-						resultado_estresse["resultado_fardo"]["mensagem"],
-						"critico"
-					)
+			if resultado_estresse.has("resultado_fardo"):
+				log_panel.registrar_evento(
+					resultado_estresse["resultado_fardo"]["mensagem"],
+					"critico"
+				)
 
 	# ============================================================
 	# RESUMO
@@ -1068,7 +1069,8 @@ func _processar_ataque(
 			resultado_combate["falhas_regulares"],
 			resultado_combate["falhas_criticas"]
 		],
-		"info"
+		"info",
+		false
 	)
 	party_panel.atualizar_personagem(atacante.para_dictionary())
 	if alvo.tipo == "jogador":
@@ -1162,24 +1164,51 @@ func _unhandled_input(event: InputEvent) -> void:
 func _aguardar_leitura() -> void:
 	if not combate_ativo:
 		return
-	action_panel.desabilitar_acoes()
-	aguardando_leitura = true
-	_definir_dica_leitura(true)
-	await leitura_confirmada
-	_definir_dica_leitura(false)
+	await _apresentar_pendentes()
 
+# Apresenta a fila uma mensagem por vez. Sem pendências, não espera.
+func _apresentar_pendentes() -> void:
+	var mensagens: Array[Dictionary] = log_panel.retirar_pendentes()
+	if mensagens.is_empty():
+		return
+	action_panel.desabilitar_acoes()
+	for i in range(mensagens.size()):
+		log_panel.mostrar_mensagem(
+			String(mensagens[i]["mensagem"]),
+			String(mensagens[i]["tipo"])
+		)
+		_definir_dica_leitura(true, i, mensagens.size())
+		aguardando_leitura = true
+		await leitura_confirmada
+	_definir_dica_leitura(false)
 
 func _confirmar_leitura() -> void:
 	if not aguardando_leitura:
 		return
+	# Um clique ou tecla faz uma única coisa por vez.
+	var frame: int = Engine.get_process_frames()
+	if frame == _frame_confirmacao:
+		return
+	_frame_confirmacao = frame
+
+	# Primeiro gesto durante a digitação: completa o texto.
+	if log_panel.escrevendo:
+		log_panel.pular_escrita = true
+		return
+
 	aguardando_leitura = false
 	leitura_confirmada.emit()
 
-
-func _definir_dica_leitura(ativa: bool) -> void:
-	if dica_continuar != null:
-		dica_continuar.visible = ativa
-
+func _definir_dica_leitura(ativa: bool, indice: int = 0, total: int = 0) -> void:
+	if dica_continuar == null:
+		return
+	dica_continuar.visible = ativa
+	if not ativa:
+		return
+	if indice < total - 1:
+		dica_continuar.text = "(%d/%d) E/Enter ou clique: avançar" % [indice + 1, total]
+	else:
+		dica_continuar.text = "E/Enter ou clique: continuar"
 
 # Variante para ações que não terminam o turno (habilidade, item
 # inválido, Sobrecarga): lê a mensagem e devolve o ActionPanel.
@@ -1254,21 +1283,22 @@ func _finalizar_combate(resultado: String) -> void:
 	resumo_resultado = log_panel.obter_resumo(6)
 	log_panel.registrar_evento(
 		"═══ COMBATE FINALIZADO: %s ═══" % resultado,
-		"critico"
+		"critico",
+		false
 	)
 
 	combate_finalizado.emit(resultado)
 
 	# TODO: Tela de resultado, experience, loot
 	print("[CombatManager] Combate finalizado com resultado: %s" % resultado)
-	log_panel.registrar_evento("Retornando ao mapa...", "info")
+	log_panel.registrar_evento("Retornando ao mapa...", "info", false)
 	_voltar_ao_mapa(resultado)
 
 func _voltar_ao_mapa(resultado: String) -> void:
 	action_panel.desabilitar_acoes()
 	enemy_panel.desativar_seletor_alvo()
 
-	await get_tree().create_timer(2.5).timeout
+	await _apresentar_pendentes()
 	await _mostrar_resultado(resultado)
 	var principal: CombatenteData = GrupoAtual.obter_personagem_principal()
 	if principal != null:

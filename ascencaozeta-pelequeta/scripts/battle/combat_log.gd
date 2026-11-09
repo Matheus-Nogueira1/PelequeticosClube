@@ -17,8 +17,16 @@ const TEMPO_SCROLL_DELAY = 0.0
 const TIPOS_RESUMO: Array[String] = ["critico", "dano", "sucesso"]
 const COR_ATAQUE: String = "yellow"
 const COR_DANO: String = "red"
+# Velocidade da digitação (a mesma da caixa de diálogo).
+const VELOCIDADE_ESCRITA: float = 0.05
+
+var escrevendo: bool = false
+var pular_escrita: bool = false
 # Registro interno: guarda todos os eventos, exibidos ou não.
 var historico: Array[Dictionary] = []
+# Fila do que será apresentado ao jogador, uma mensagem por vez.
+# Separada do histórico, que guarda tudo e alimenta o resumo final.
+var fila_apresentacao: Array[Dictionary] = []
 func _ready() -> void:
 	clear()
 	bbcode_enabled = true
@@ -31,26 +39,18 @@ func _ready() -> void:
 # ============================================================================
 
 func registrar_evento(mensagem: String, tipo: String = "normal", exibir: bool = true) -> void:
-	"""Registra o evento (resumo final) e, se exibir, apresenta na caixa"""
-	# 1) Registro: independe da apresentação.
-	historico.append({"mensagem": mensagem, "tipo": tipo})
-	# 2) Apresentação.
-	if not exibir:
-		return
-	var cor = _get_cor_por_tipo(tipo)
-	var icon = _get_icon_por_tipo(tipo)
-	
-	var texto = "[color=%s]%s %s[/color]\n" % [cor, icon, mensagem]
-	append_text(texto)
-	
-	# Scroll automático
-	scroll_to_line(get_line_count() - 1)
+	"""Registra o evento e, se exibir, enfileira para a apresentação sequencial"""
+	# 1) Registro completo: independe da apresentação.
+	historico.append({"mensagem": mensagem, "tipo": tipo, "apresentado": exibir})
+	# 2) Fila de apresentação ao jogador (consumida pelo CombatManager).
+	if exibir:
+		fila_apresentacao.append({"mensagem": mensagem, "tipo": tipo})
 
 # Últimas linhas relevantes para o resumo final.
 func obter_resumo(max_linhas: int = 6) -> Array[String]:
 	var relevantes: Array[String] = []
 	for evento in historico:
-		if evento["tipo"] in TIPOS_RESUMO:
+		if evento["tipo"] in TIPOS_RESUMO and evento.get("apresentado", true):
 			relevantes.append(String(evento["mensagem"]))
 	var resumo: Array[String] = []
 	for i in range(maxi(0, relevantes.size() - max_linhas), relevantes.size()):
@@ -207,3 +207,39 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		barra.value -= barra.page * 0.9
 	elif event.is_action_pressed("ui_page_down", true):
 		barra.value += barra.page * 0.9
+
+# Entrega e esvazia a fila de apresentação.
+func retirar_pendentes() -> Array[Dictionary]:
+	var pendentes: Array[Dictionary] = []
+	pendentes.append_array(fila_apresentacao)
+	fila_apresentacao.clear()
+	return pendentes
+
+# Mostra uma única mensagem com efeito de digitação.
+# Termina quando o texto está completo (ou quando pular_escrita é ativado).
+func mostrar_mensagem(mensagem: String, tipo: String = "normal") -> void:
+	clear()
+	append_text("[color=%s]%s[/color]" % [_get_cor_por_tipo(tipo), mensagem])
+	visible_characters = 0
+	escrevendo = true
+	pular_escrita = false
+
+	# O texto sem BBCode define o ritmo e as pausas da digitação.
+	var plano: String = get_parsed_text()
+	for i in range(plano.length()):
+		if pular_escrita:
+			break
+		visible_characters = i + 1
+
+		var pausa: float = VELOCIDADE_ESCRITA
+		var caractere: String = plano.substr(i, 1)
+		if caractere == "." or caractere == "!" or caractere == "?":
+			pausa += 0.20
+		elif caractere == "," or caractere == ":" or caractere == ";":
+			pausa += 0.10
+
+		await get_tree().create_timer(pausa).timeout
+
+	visible_characters = -1
+	escrevendo = false
+	pular_escrita = false

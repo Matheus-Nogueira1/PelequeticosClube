@@ -46,7 +46,7 @@ const CONVERSAS: Dictionary = {
 		{"speaker": "Elizabeth", "text": "Você compreende o motivo dessa reunião?", "options": [
 			{"text": "Onde estou?", "next_dialogue": "elizabeth_onde"},
 			{"text": "Quem é você?", "next_dialogue": "elizabeth_quem"},
-			{"text": "Usar Social", "knowledge": "Social", "success_dialogue": "elizabeth_social_sucesso", "failure_dialogue": "elizabeth_social_falha", "failure_stress": 1}
+			{"text": "Usar Social", "knowledge": "Social", "extreme_success_dialogue": "elizabeth_social_sucesso_extremo", "success_dialogue": "elizabeth_social_sucesso", "failure_dialogue": "elizabeth_social_falha", "failure_stress": 1}
 		]}
 	],
 	"elizabeth_onde": [
