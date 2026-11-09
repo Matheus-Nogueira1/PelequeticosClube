@@ -107,6 +107,7 @@
 * Sprite de NPC's | **EM ANDAMENTO** 🔄
 * Sprite de Inimigos | **PENDENTE** ⚠️
 * Assets de decoração | **PENDENTE** ⚠️
+* Assets de UI | **PENDENTE** ⚠️
 
 ### Observações:
 * Priorizar bugs e problemas que impedem o funcionamento correto do jogo.
