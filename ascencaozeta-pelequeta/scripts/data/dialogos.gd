@@ -56,10 +56,10 @@ const CONVERSAS: Dictionary = {
 		{"speaker": "Elizabeth", "text": "Mostre do que é capaz e retorne paara mim. Seus esforços eu recompensarei."},
 	],
 	"elizabeth_quem": [
-		{"speaker": "Elizabeth", "text": "Me chamo Elizabeth. Serei sua guia nessa loga jornada."},
+		{"speaker": "Elizabeth", "text": "Me chamo Elizabeth. Serei sua guia nessa longa jornada."},
 		{"speaker": "Elizabeth", "text": "Quem chega até aqui carrega uma chama. Eu só ajudo a mantê-la acesa."},
 		{"speaker": "Elizabeth", "text": "No canto daquela parede amadeirada há um boneco para treinamento."},
-		{"speaker": "Elizabeth", "text": "Mostre do que é capaz e retorne paara mim. Seus esforços eu recompensarei."},
+		{"speaker": "Elizabeth", "text": "Mostre do que é capaz e retorne para mim. Seus esforços eu recompensarei."},
 		
 	],
 	"elizabeth_social_sucesso_extremo": [

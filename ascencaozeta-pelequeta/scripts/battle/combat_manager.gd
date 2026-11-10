@@ -117,9 +117,12 @@ func _inicializar_combate() -> void:
 	],
 	"turno",
 )
+	_anunciar_ordem_iniciativa()
 	combate_iniciado.emit()
 
 	# Começar primeiro turno
+	# O primeiro turno só começa depois da apresentação inicial.
+	await _apresentar_pendentes()
 	_avancar_turno()
 
 
@@ -162,10 +165,6 @@ func _calcular_iniciativa() -> void:
 	"""Cada combatente compara sua velociadade com os outros"""
 	for combatente in ordem_turno:
 		combatente.iniciativa = combatente.atributo_velocidade
-		log_panel.registrar_evento(
-			"%s iniciativa: %d" % [combatente.nome, combatente.iniciativa],
-			"info",
-		)
 
 func _conectar_sinais_paineis() -> void:
 	"""Conecta os sinais dos painéis ao CombatManager"""
@@ -247,25 +246,36 @@ func _avancar_turno() -> void:
 	if not combatente_proxximo:
 		print("[CombatManager] Nenhum combatente disponível - possível empate")
 		return
-
+	
 	combatente_ativo = combatente_proxximo
 	_restaurar_protecoes(combatente_ativo)
 	turno_iniciado.emit(combatente_ativo)
-
+	
 	# Ativar painel de ações se for personagem jogador
 	if combatente_ativo.tipo == "jogador":
-		action_panel.ativar_para(combatente_ativo.para_dictionary(), combatente_ativo)
 		party_panel.indicar_personagem_ativo(combatente_ativo.para_dictionary())
 		enemy_panel.desativar_seletor_alvo()
-		log_panel.registrar_evento(
-			"🎯 Turno de %s!" % combatente_ativo.nome,
-			"turno",
-		)
 		# Limpar seleções apenas ao iniciar turno do jogador
 		alvo_selecionado.clear()
+		log_panel.registrar_evento(
+			"🎯 Turno de %s!" % combatente_ativo.nome,
+			"turno"
+		)
+		# O jogador lê o aviso antes de receber o controle.
+		await _apresentar_pendentes()
+		if not combate_ativo:
+			return
+		action_panel.ativar_para(combatente_ativo.para_dictionary(), combatente_ativo)
 	else:
 		party_panel.remover_destaque_turno()
 		action_panel.desabilitar_acoes()
+		log_panel.registrar_evento(
+			"Turno de %s." % combatente_ativo.nome,
+			"turno"
+		)
+		await _apresentar_pendentes()
+		if not combate_ativo:
+			return
 		# TODO: IA para inimigos
 		await get_tree().create_timer(0.3).timeout
 		_executar_turno_inimigo()
@@ -599,6 +609,11 @@ func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 
 func _tentar_fugir() -> void:
 	"""Bandidagem: em sucesso foge da batalha e volta ao mapa."""
+	if acao_em_progresso:
+		return
+	acao_em_progresso = true
+	# Bloqueia o ActionPanel antes da rolagem (ele ficava ativo durante a animação).
+	action_panel.desabilitar_acoes()
 
 	var conhecimento = ConhecimentoData.new()
 
@@ -607,7 +622,8 @@ func _tentar_fugir() -> void:
 
 	if dado_visual < 1 or dado_visual > 6:
 		push_error("[CombatManager] Falha ao realizar a rolagem visual de Bandidagem.")
-		action_panel.habilitar_acoes()
+		acao_em_progresso = false
+		await _devolver_acoes_apos_leitura()
 		return
 
 	var resultado: Dictionary = conhecimento.testar_conhecimento(
@@ -721,10 +737,15 @@ func _on_selecao_cancelada() -> void:
 func _on_turno_passado() -> void:
 	"""Chamado quando o jogador clica em PASSAR TURNO"""
 	if combatente_ativo and combatente_ativo.tipo == "jogador":
-		log_panel.registrar_evento("Turno passado.", "info")
+		log_panel.registrar_evento(
+			"%s passou o turno." % combatente_ativo.nome,
+			"turno"
+		)
 		action_panel.desabilitar_acoes()
 		turno_finalizado.emit(combatente_ativo)
-		await get_tree().create_timer(1.0).timeout
+		await _apresentar_pendentes()
+		if not combate_ativo:
+			return
 		_avancar_turno()
 
 func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
@@ -811,19 +832,25 @@ func _limpar_dados_visuais() -> void:
 	dados_visuais.clear()
 
 
-func _rolar_dados_visuais(regioes: Array[String]) -> Array[int]:
+func _rolar_dados_visuais(regioes: Array[String], valores_fixos: Array[int] = []) -> Array[int]:
 	if dados_em_animacao:
 		return []
 
 	dados_em_animacao = true
 	_limpar_dados_visuais()
 
-	var quantidade: int = clampi(regioes.size(), 1, 5)
 	var resultados: Array[int] = []
 
-	# Sorteia uma única vez. Os mesmos valores serão usados no combate.
-	for i in range(quantidade):
-		resultados.append(randi_range(1, 6))
+	if valores_fixos.is_empty():
+		# Sorteia uma única vez. Os mesmos valores serão usados no combate.
+		for i in range(clampi(regioes.size(), 1, 5)):
+			resultados.append(randi_range(1, 6))
+	else:
+		# Valores já sorteados (ex.: dano da arma): só anima, sem novo sorteio.
+		for i in range(mini(valores_fixos.size(), 5)):
+			resultados.append(valores_fixos[i])
+
+	var quantidade: int = resultados.size()
 
 	var espacamento: float = 23.0
 	var largura_total: float = (quantidade - 1) * espacamento
@@ -866,6 +893,15 @@ func _rolar_dado_conhecimento(nome: String) -> int:
 	if valores.is_empty():
 		return 0
 	return valores[0]
+
+# Anima os dados de dano da arma com os valores JÁ sorteados.
+# O sprite só tem faces 1 a 6: armas de outras faces (ex.: d10) não animam.
+func _rolar_dados_dano_visuais(nome_arma: String, valores: Array[int]) -> void:
+	var arma = ArmaData.obter_arma(nome_arma)
+	if arma == null or arma.dano_faces != 6 or valores.is_empty():
+		return
+	var sem_rotulos: Array[String] = []
+	await _rolar_dados_visuais(sem_rotulos, valores)
 
 # ============================================================
 # PROCESSAMENTO DO ATAQUE
@@ -1021,21 +1057,28 @@ func _processar_ataque(
 				"Proteção quebrada!",
 				"critico"
 			)
-			var dano_atributo = atacante.atributo_dano
-			var dano_arma = 0
+
+			# Apresenta ataque, acertos e quebra ANTES da rolagem de dano.
+			await _apresentar_pendentes()
+
+			# Sorteia o dano da arma uma vez; a animação mostra esses mesmos valores.
+			var dano_atributo: int = atacante.atributo_dano
+			var dados_arma: Array[int] = []
+			var dano_arma: int = 0
 			if atacante.arma_equipada != "":
-				dano_arma = ArmaData.rolar_dano_arma(
-					atacante.arma_equipada
-				)
-			var dano_total = dano_atributo + dano_arma
+				dados_arma = ArmaData.rolar_dados_arma(atacante.arma_equipada)
+				for valor in dados_arma:
+					dano_arma += valor
+				await _rolar_dados_dano_visuais(atacante.arma_equipada, dados_arma)
+			var dano_total: int = dano_atributo + dano_arma
+
+			# Só depois da rolagem: dano base e dano da arma.
 			log_panel.registrar_evento(
-				"Dano Base: %d | Dano Arma: %d | Total: %d" % [
-					dano_atributo,
-					dano_arma,
-					dano_total
-				],
-				"info",
+				"Dano base: %d | Dano da arma: %d" % [dano_atributo, dano_arma],
+				"info"
 			)
+			await _apresentar_pendentes()
+
 			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
 			await _animar_dano(alvo)
 			var torso_antes: int = alvo.estresse_por_regiao["Torso"]["atual"]
@@ -1053,7 +1096,6 @@ func _processar_ataque(
 					resultado_estresse["resultado_fardo"]["mensagem"],
 					"critico"
 				)
-
 	# ============================================================
 	# RESUMO
 	# ============================================================
@@ -1177,6 +1219,7 @@ func _apresentar_pendentes() -> void:
 		aguardando_leitura = true
 		await leitura_confirmada
 	_definir_dica_leitura(false)
+	log_panel.limpar_apresentacao()
 
 func _confirmar_leitura() -> void:
 	if not aguardando_leitura:
@@ -1396,3 +1439,11 @@ func _fardos_obtidos() -> Array[String]:
 	for i in range(fardos_iniciais, principal.fardos.size()):
 		nomes.append(String(principal.fardos[i].nome))
 	return nomes
+
+# Anuncia a ordem real de atuação (a mesma usada por _avancar_turno).
+func _anunciar_ordem_iniciativa() -> void:
+	var linhas: Array[String] = []
+	for i in range(ordem_turno.size()):
+		var combatente: CombatenteData = ordem_turno[i]
+		linhas.append("%d. %s (Velocidade %d)" % [i + 1, combatente.nome, combatente.iniciativa])
+	log_panel.registrar_evento("Ordem de atuação:\n" + "\n".join(linhas), "turno")

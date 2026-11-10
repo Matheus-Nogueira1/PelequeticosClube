@@ -36,8 +36,8 @@ static func criar_boladefogo() -> Arma:
 static func criar_tacogigante() -> Arma:
 	var arma = Arma.new()
 	arma.nome = "TacoGigante"
-	arma.dano_dados = 1
-	arma.dano_faces = 10
+	arma.dano_dados = 2
+	arma.dano_faces = 6
 	arma.alcance = "Longo"
 	arma.propriedades = [
 		"RECARGA",
@@ -57,11 +57,18 @@ static func obter_arma(nome_arma: String) -> Arma:
 			return criar_tacogigante()
 	return null
 
-static func rolar_dano_arma(nome_arma: String) -> int:
+# Sorteia cada dado da arma e devolve os valores individuais.
+static func rolar_dados_arma(nome_arma: String) -> Array[int]:
+	var resultados: Array[int] = []
 	var arma = obter_arma(nome_arma)
 	if arma == null:
-		return 0
-	var dano := 0
+		return resultados
 	for i in range(arma.dano_dados):
-		dano += randi_range(1, arma.dano_faces)
+		resultados.append(randi_range(1, arma.dano_faces))
+	return resultados
+
+static func rolar_dano_arma(nome_arma: String) -> int:
+	var dano := 0
+	for valor in rolar_dados_arma(nome_arma):
+		dano += valor
 	return dano

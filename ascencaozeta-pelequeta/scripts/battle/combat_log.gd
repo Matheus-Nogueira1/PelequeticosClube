@@ -142,7 +142,10 @@ func _get_cor_por_tipo(tipo: String) -> String:
 		"aviso":      return "orange"
 		"critico":    return "red"
 		"movimento":  return "lightblue"
+		"ataque":     return COR_ATAQUE
+		"dano":       return COR_DANO
 		_:            return "white"
+
 
 func _get_icon_por_tipo(tipo: String) -> String:
 	"""Retorna ícone baseado no tipo de evento"""
@@ -155,8 +158,6 @@ func _get_icon_por_tipo(tipo: String) -> String:
 		"critico":    return "✗"
 		"movimento":  return "🚶"
 		_:            return "•"
-		"ataque":     return COR_ATAQUE
-		"dano":       return COR_DANO
 
 func _get_cor_por_categoria(categoria: String) -> String:
 	"""Retorna cor baseada na categoria de resultado de combate"""
@@ -243,3 +244,8 @@ func mostrar_mensagem(mensagem: String, tipo: String = "normal") -> void:
 	visible_characters = -1
 	escrevendo = false
 	pular_escrita = false
+
+# Limpa só o que está na tela. Histórico e fila não são afetados.
+func limpar_apresentacao() -> void:
+	clear()
+	visible_characters = -1
