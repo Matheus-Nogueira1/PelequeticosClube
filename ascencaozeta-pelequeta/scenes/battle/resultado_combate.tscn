@@ -38,8 +38,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_1m5vr")
 script = ExtResource("1_il254")
-metadata/_edit_lock_ = true
 
 [node name="FundoEscurecido" type="ColorRect" parent="." unique_id=398240641]
 layout_mode = 1
@@ -49,7 +49,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.003921569)
-metadata/_edit_lock_ = true
 
 [node name="Centro" type="CenterContainer" parent="." unique_id=1519784979]
 layout_mode = 1
@@ -58,10 +57,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_lock_ = true
 
 [node name="PainelPrincipal" type="PanelContainer" parent="Centro" unique_id=293333491]
-custom_minimum_size = Vector2(288, 168)
+custom_minimum_size = Vector2(250, 150)
 layout_mode = 2
 theme = ExtResource("1_1m5vr")
 theme_override_styles/panel = SubResource("StyleBoxFlat_6q2kx")
@@ -70,115 +68,119 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_6q2kx")
 custom_minimum_size = Vector2(6, 6)
 layout_mode = 2
 
-[node name="Conteudo" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=2095879267]
+[node name="Classificação" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=2095879267]
 layout_mode = 2
 theme_override_constants/separation = 4
+alignment = 1
 
-[node name="TituloResultado" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=1621315594]
+[node name="TituloResultado" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação" unique_id=1621315594]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Titulo"
 label_settings = SubResource("LabelSettings_2elm4")
 horizontal_alignment = 1
 
-[node name="Subtitulo" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=728247296]
+[node name="Subtitulo" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação" unique_id=728247296]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Subtitulo"
 label_settings = SubResource("LabelSettings_ah0u3")
 horizontal_alignment = 1
 
-[node name="SeparadorTopo" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=941481907]
+[node name="SeparadorTopo" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Classificação" unique_id=941481907]
 layout_mode = 2
 
-[node name="PainelClassificacao" type="HBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=915428533]
+[node name="PainelClassificacao" type="HBoxContainer" parent="Centro/PainelPrincipal/Margem/Classificação" unique_id=915428533]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Rank" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/PainelClassificacao" unique_id=1669576952]
+[node name="Rank" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao" unique_id=1669576952]
 layout_mode = 2
 text = "Rank"
 
-[node name="DetalhesPontuacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/PainelClassificacao" unique_id=1399447676]
+[node name="DetalhesPontuacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao" unique_id=1399447676]
 layout_mode = 2
 
-[node name="NomeClassificacao" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/PainelClassificacao/DetalhesPontuacao" unique_id=146034132]
+[node name="NomeClassificacao" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=146034132]
 layout_mode = 2
 text = "S"
 
-[node name="Pontuacao" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/PainelClassificacao/DetalhesPontuacao" unique_id=2044573188]
+[node name="Pontuacao" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=2044573188]
 layout_mode = 2
 text = "1000"
 
-[node name="SeparadorTopo2" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=1789611503]
+[node name="Estatisticas" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=1720680864]
 layout_mode = 2
 
-[node name="Estatisticas" type="GridContainer" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=482564248]
+[node name="Estatisticas" type="GridContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=482564248]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/h_separation = 2
-columns = 2
+columns = 3
 
-[node name="DanoCausado" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1440706954]
+[node name="DanoCausado" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=1440706954]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="CuraEfetiva" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=2000701569]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="DanoRecebido" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1636563433]
+[node name="CuraEfetiva" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=2000701569]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="AliadosDesmaiados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=1677625679]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="AliadosReanimados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=463541814]
+[node name="DanoRecebido" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=1636563433]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BonusRecuperacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/Estatisticas" unique_id=463895986]
+[node name="AliadosDesmaiados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=1677625679]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="AliadosReanimados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=463541814]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BonusRecuperacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=463895986]
+custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_1m5vr")
 
-[node name="SeparadorTopo3" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=213398506]
+[node name="SeparadorTopo3" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=213398506]
 layout_mode = 2
 
-[node name="ScrollContainer2" type="ScrollContainer" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=396089815]
+[node name="ScrollContainer2" type="ScrollContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=396089815]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("5_hld0v")
 
-[node name="Relatorio" type="HBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2" unique_id=286323610]
+[node name="Relatorio" type="HBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2" unique_id=286323610]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1598323854]
+[node name="VBoxContainer" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1598323854]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SecaoAcontecimentos" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer" unique_id=1161286405]
+[node name="SecaoAcontecimentos" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer" unique_id=1161286405]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Acontecimentos"
 label_settings = ExtResource("3_il254")
 
-[node name="Resumo" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer" unique_id=887013464]
+[node name="Resumo" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer" unique_id=887013464]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -189,17 +191,17 @@ tlgd"
 fit_content = true
 scroll_active = false
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1459733838]
+[node name="VBoxContainer2" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1459733838]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SecaoRecompensas" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer2" unique_id=1448420922]
+[node name="SecaoRecompensas" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer2" unique_id=1448420922]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Recompensas"
 label_settings = ExtResource("3_il254")
 
-[node name="Recompensas" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer2" unique_id=252691253]
+[node name="Recompensas" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer2" unique_id=252691253]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("1_1m5vr")
@@ -211,11 +213,11 @@ etc"
 fit_content = true
 scroll_active = false
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio" unique_id=1270614505]
+[node name="VBoxContainer3" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1270614505]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SecaoFardos" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer3" unique_id=357088394]
+[node name="SecaoFardos" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer3" unique_id=357088394]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -223,7 +225,7 @@ size_flags_vertical = 1
 text = "Fardos"
 label_settings = ExtResource("3_il254")
 
-[node name="Fardos" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Conteudo/ScrollContainer2/Relatorio/VBoxContainer3" unique_id=1049645284]
+[node name="Fardos" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer3" unique_id=1049645284]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -235,16 +237,11 @@ tlgd"
 fit_content = true
 scroll_active = false
 
-[node name="SeparadorRodape" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=1742774075]
+[node name="SeparadorTopo4" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=2084922192]
 layout_mode = 2
 
-[node name="Dica" type="Label" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=2136816923]
-layout_mode = 2
-size_flags_horizontal = 4
-text = "aperta ai "
-label_settings = ExtResource("3_il254")
-
-[node name="BotaoContinuar" type="Button" parent="Centro/PainelPrincipal/Margem/Conteudo" unique_id=140466228]
+[node name="BotaoContinuar" type="Button" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=140466228]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 8
 text = "Continuar"
