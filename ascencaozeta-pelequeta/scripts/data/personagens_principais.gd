@@ -226,7 +226,7 @@ static func criar_escolhido() -> CombatenteData:
 ## PERSONAGEM 3: JPdaMaldade - Quem Manda
 ## ============================================================================
 static func criar_JP() -> CombatenteData:
-	var JP = CombatenteData.new("JPdaMaldade", "jogador")
+	var JP = CombatenteData.new("JP da Maldade", "jogador")
 	var sobrecarga_ativa: bool = false
 	
 	## ATRIBUTOS FIXOS OBLIVIO
@@ -314,6 +314,28 @@ static func criar_JP() -> CombatenteData:
 ## ============================================================================
 ## FUNÇÕES UTILITÁRIAS
 ## ============================================================================
+## Id estável do personagem jogável (aceita todas as variantes de nome).
+## Devolve "" se o nome não for de um personagem jogável.
+static func normalizar_id(nome: String) -> String:
+	match nome.strip_edges().to_lower().replace(" ", ""):
+		"escolhido":
+			return "escolhido"
+		"jp", "jpdamaldade":
+			return "jp"
+		"mob":
+			return "mob"
+	return ""
+
+## Nome exibido ao jogador para cada id.
+static func nome_exibicao(id: String) -> String:
+	match id:
+		"escolhido":
+			return "Escolhido"
+		"jp":
+			return "JP da Maldade"
+		"mob":
+			return "Mob"
+	return id
 
 ## Retorna lista de todos os personagens principais
 static func obter_todos_personagens() -> Array[CombatenteData]:
@@ -325,14 +347,13 @@ static func obter_todos_personagens() -> Array[CombatenteData]:
 
 ## Retorna um personagem específico pelo nome
 static func obter_personagem(nome: String) -> CombatenteData:
-	match nome.strip_edges().to_lower():
+	match normalizar_id(nome):
 		"mob":
 			return criar_mob()
 		"escolhido":
 			return criar_escolhido()
-		"jp", "jp da maldade", "jpdamaldade":
+		"jp":
 			return criar_JP()
-
 	return null
 
 ## Cria grupo completo com um personagem como principal

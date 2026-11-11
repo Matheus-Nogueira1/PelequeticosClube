@@ -1,6 +1,6 @@
 
 extends Control
-
+@export var paleta: PaletaDialogo
 @onready var slots: Array[Node] = $CenterContainer/HBoxContainer.get_children()
 @onready var name_label: Label = $CharacterName
 @onready var description_label: RichTextLabel = $DescriptionPanel/VBoxContainer/Description
@@ -16,6 +16,10 @@ var selected_index: int = 1
 
 
 func _ready() -> void:
+	# O Titulos.tres é compartilhado com outras telas: a cor por personagem
+	# só pode alterar uma CÓPIA dele.
+	if name_label.label_settings != null:
+		name_label.label_settings = name_label.label_settings.duplicate()
 	await get_tree().process_frame
 
 	if slots.is_empty():
@@ -36,12 +40,6 @@ func _ready() -> void:
 
 
 func configurar_titulo() -> void:
-	# Vermelho intenso, inspirado nas molduras góticas.
-	name_label.add_theme_color_override(
-		"font_color",
-		Color("#ff202b")
-	)
-
 	name_label.add_theme_color_override(
 		"font_outline_color",
 		Color("#260205")
@@ -61,8 +59,7 @@ func configurar_titulo() -> void:
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
-	# Espaçamento entre os caracteres.
-	name_label.add_theme_constant_override("character_spacing", 4)
+
 
 
 func _input(event: InputEvent) -> void:
@@ -127,8 +124,11 @@ func update_name(skip_animation: bool = false) -> void:
 	# Reaplica o estilo para garantir que permaneça consistente.
 	configurar_titulo()
 
+	var id_atual: String = character_ids[selected_index]
+
 	if skip_animation:
 		name_label.text = novo_nome
+		aplicar_cor_nome(id_atual)
 		name_label.modulate = Color.WHITE
 		return
 
@@ -146,6 +146,7 @@ func update_name(skip_animation: bool = false) -> void:
 
 	tween.tween_callback(func() -> void:
 		name_label.text = novo_nome
+		aplicar_cor_nome(id_atual)
 	)
 
 	tween.tween_property(name_label, "modulate:a", 1.0, 0.15)
@@ -195,3 +196,12 @@ func select_character() -> void:
 	get_tree().change_scene_to_file(
 		"res://scenes/mapas/world.tscn"
 	)
+
+# Aplica a cor do personagem ao nome. Sem paleta, mantém a cor atual.
+func aplicar_cor_nome(id_personagem: String) -> void:
+	if paleta == null:
+		return
+	var cor: Color = paleta.cor_do_falante(paleta.resolver_chave(id_personagem))
+	if name_label.label_settings != null:
+		name_label.label_settings.font_color = cor
+	name_label.add_theme_color_override("font_color", cor)

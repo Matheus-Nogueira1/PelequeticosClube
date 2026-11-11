@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="PaletaDialogo" format=3 uid="uid://mo1727c788of"]
+
+[ext_resource type="Script" uid="uid://cmjas8o0iqxle" path="res://scripts/data/paleta_dialogo.gd" id="1_rmesq"]
+
+[resource]
+script = ExtResource("1_rmesq")
+cores = Dictionary[String, Color]({
+"chama": Color(0.8156863, 0.39215687, 0, 1),
+"elizabeth": Color(0.6911666, 0.10883749, 0.60451126, 1),
+"escolhido": Color(1, 0.47843137, 0, 1),
+"jp": Color(0.18431373, 0.7490196, 0.30980393, 1),
+"misterio": Color(0.65882355, 0.65882355, 0.6901961, 1),
+"mob": Color(0.8509804, 0.2901961, 0.22745098, 1),
+"testemunha": Color(0.6039216, 0.37254903, 0.8156863, 1)
+})
+apelidos = Dictionary[String, String]({
+"???": "misterio"
+})
+metadata/_custom_type_script = "uid://cmjas8o0iqxle"

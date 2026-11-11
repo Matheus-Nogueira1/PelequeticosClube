@@ -9,9 +9,10 @@ extends Control
 @onready var light_button: Button = %LightButton
 @onready var darkness_button: Button = %DarknessButton
 @onready var darkness_button_2: Button = %DarknessButton2
-
+@onready var painel_dialogo: PanelContainer = $PanelContainer
 @export var iniciar_intro_automaticamente: bool = true
 @export var fechar_para_selecao: bool = true
+@export var paleta: PaletaDialogo
 signal dialogo_encerrado
 
 var npc_responsavel: Node = null
@@ -37,7 +38,10 @@ var opcoes_pendentes: Array = []
 
 func _ready() -> void:
 	print("CaixaDialogo pronta")
-
+	# O Titulos.tres é compartilhado com outras telas: a cor por personagem
+	# só pode alterar uma CÓPIA dele.
+	if nome_label.label_settings != null:
+		nome_label.label_settings = nome_label.label_settings.duplicate()
 	if nome_label == null or texto_label == null or dica_label == null:
 		push_error("Um ou mais nodes da caixa de diálogo não foram encontrados.")
 		return
@@ -52,7 +56,9 @@ func _ready() -> void:
 
 
 	_configurar_interface_opcoes()
-
+	painel_dialogo.hide()
+	dica_label.hide()
+	visible = false
 	# Se o diálogo foi configurado por outro script, usa essa configuração.
 	if dialogo_configurado:
 		iniciar_dialogo(dialogo_configurado_id)
@@ -125,6 +131,7 @@ func iniciar_dialogo(id_dialogo: String) -> void:
 	rolando_teste = false
 	_travar_jogador(true)
 	visible = true
+	painel_dialogo.show()
 	dica_label.show()
 	# O painel padrão permanece visível; apenas as opções ficam ocultas.
 	_esconder_opcoes()
@@ -217,7 +224,11 @@ func _mostrar_fala_atual() -> void:
 
 	var fala: Dictionary = falas[indice_atual]
 
-	nome_label.text = String(fala.get("speaker", ""))
+	var falante: String = String(fala.get("speaker", "")).replace(
+		"{jogador}", _nome_do_jogador()
+	)
+	nome_label.text = falante
+	_aplicar_cor_do_nome(falante)
 	_esconder_opcoes()
 
 	await _escrever_texto(String(fala.get("text", "")))
@@ -235,6 +246,21 @@ func _mostrar_fala_atual() -> void:
 	else:
 		dica_label.text = "E/Enter: avançar | Esc: fechar"
 
+# Nome exibido do personagem escolhido (usado pelo token {jogador}).
+func _nome_do_jogador() -> String:
+	if combatente == null:
+		return ""
+	return PersonagensData.nome_exibicao(
+		PersonagensData.normalizar_id(combatente.nome)
+	)
+
+
+# Aplica a cor do falante ao nome. Sem paleta, mantém a cor atual.
+func _aplicar_cor_do_nome(falante: String) -> void:
+	if paleta == null or nome_label.label_settings == null:
+		return
+	var chave: String = paleta.resolver_chave(falante)
+	nome_label.label_settings.font_color = paleta.cor_do_falante(chave)
 
 func _escrever_texto(texto: String) -> void:
 	escrevendo = true
@@ -469,7 +495,7 @@ func _confirmar_opcao() -> void:
 				opcoes_ativas = true
 				return
 
-		await get_tree().create_timer(1.0).timeout
+		await get_tree().create_timer(5.0).timeout
 		var dado_oculto := get_tree().get_first_node_in_group("dado_d6") as CanvasItem
 		if dado_oculto != null:
 			dado_oculto.visible = false
@@ -529,6 +555,7 @@ func fechar_dialogo() -> void:
 	texto_label.text = ""
 	escrevendo = false
 	pular_escrita = false
+	painel_dialogo.hide()
 	visible = false
 	falas.clear()
 	indice_atual = 0
@@ -608,6 +635,8 @@ func mostrar_dica_interacao() -> void:
 		return
 
 	visible = true
+	painel_dialogo.hide()
+
 	dica_label.text = "E ou ENTER — Conversar"
 	dica_label.show()
 
@@ -617,4 +646,5 @@ func ocultar_dica_interacao() -> void:
 		return
 
 	dica_label.hide()
+	painel_dialogo.hide()
 	visible = false

@@ -76,14 +76,14 @@ alignment = 1
 [node name="TituloResultado" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação" unique_id=1621315594]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Titulo"
+text = "CLASSIFICAÇÃO"
 label_settings = SubResource("LabelSettings_2elm4")
 horizontal_alignment = 1
 
 [node name="Subtitulo" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação" unique_id=728247296]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Subtitulo"
+text = "PELECOMANIAC"
 label_settings = SubResource("LabelSettings_ah0u3")
 horizontal_alignment = 1
 
@@ -104,13 +104,14 @@ layout_mode = 2
 
 [node name="NomeClassificacao" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=146034132]
 layout_mode = 2
-text = "S"
+text = "P"
 
 [node name="Pontuacao" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=2044573188]
 layout_mode = 2
-text = "1000"
+text = "10000"
 
 [node name="Estatisticas" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=1720680864]
+visible = false
 layout_mode = 2
 
 [node name="Estatisticas" type="GridContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=482564248]

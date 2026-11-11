@@ -10,7 +10,7 @@ const CONVERSAS: Dictionary = {
 		{"speaker": "Testemunha", "text": "Em um universo repleto de dor e arrependimento quem será o salvador das pobres almas perdidas?"},
 		{"speaker": "Testemunha", "text": "Aqueles que possuem o fogo terão sua glória."}
 	],
-	"DonMaldade-inicio": [
+	"JP-inicio": [
 		{"speaker": "Testemunha", "text": "Escolham as regiões que vão arriscar."},
 		{"speaker": "Testemunha", "text": "Quando confirmarem, os dados vão rolar."}
 	],
@@ -64,8 +64,12 @@ const CONVERSAS: Dictionary = {
 	],
 	"elizabeth_social_sucesso_extremo": [
 		{
-			"speaker": "Escolhido",
-			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda. Como recompensa terei as respostas que tanto procuro, acertei?"
+			"speaker": "{jogador}",
+			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda."
+		},
+		{
+			"speaker": "{jogador}",
+			"text": "Como recompensa terei as respostas que tanto procuro, acertei?"
 		},
 		{
 			"speaker": "Elizabeth",
@@ -74,7 +78,7 @@ const CONVERSAS: Dictionary = {
 	],
 	"elizabeth_social_sucesso": [
 		{
-			"speaker": "Escolhido",
+			"speaker": "{jogador}",
 			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda."
 		},
 		{
@@ -84,7 +88,7 @@ const CONVERSAS: Dictionary = {
 	],
 	"elizabeth_social_falha": [
 		{
-			"speaker": "Escolhido",
+			"speaker": "{jogador}",
 			"text": "Bom, talvez você esteja se sentindo sozinha nessa pequena cabana no meio do nada não é?"
 		},
 		{
