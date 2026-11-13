@@ -299,7 +299,7 @@ static func criar_JP() -> CombatenteData:
 		"Dar uma mãozinha"  ## Habilidade Principal
 	] as Array[String]
 	## Ativa a habilidade Sobrecarga (Ir Além) - JP pode arriscar múltiplas vezes a mesma região
-	JP.habilidade_sobrecarga_ativa = true
+	JP.possui_sobrecarga = true
 	
 	## ITENS INICIAIS
 	# TODO: Adicionar itens iniciais

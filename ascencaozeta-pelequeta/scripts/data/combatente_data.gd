@@ -113,6 +113,7 @@ var limite_estresse_maximo_reducao: int = 0    # Redução permanente por Mal da
 ## Chave = nome da região, Valor = Protese object
 var proteses: Dictionary = {}                   # Próteses por região
 var habilidade_sobrecarga_ativa: bool = false  # Ir Além - permite arriscar múltiplas vezes mesma região
+var possui_sobrecarga: bool = false             # Tem a habilidade (só o JP)
 
 ## Flags de efeitos de Fardos
 var tem_covardia: bool = false                  # -2x Coragem em testes
@@ -473,6 +474,7 @@ func limpar_efeitos_combate() -> void:
 	bonus_duelo_protecao = 0
 	atacante_que_quebrou_protecao = ""
 	analisado_por_duelo = false
+	habilidade_sobrecarga_ativa = false
 
 ## Verifica se personagem está desmaiado (TODAS regiões no limite)
 func verificar_desmaio() -> bool:

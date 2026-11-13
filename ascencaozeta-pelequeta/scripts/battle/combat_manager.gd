@@ -37,6 +37,7 @@ signal leitura_confirmada
 @onready var action_panel = %ActionPanel
 @onready var log_panel: CombatLog = %ComunicacaoLog
 @onready var comunicacao_panel: Control = %ComunicacaoPanel
+@onready var indicador_sobrecarga: Control = get_node_or_null("%IndicadorSobrecarga") as Control
 @onready var player_visual: Node = %Battlefield.find_child(
 	"PlayerVisual", true, false
 )
@@ -241,13 +242,14 @@ func _avancar_turno() -> void:
 	# Não limpar alvo_selecionado aqui - será limpo apenas quando mudar de turno de verdade
 
 	# Procurar próximo combatente vivo
-	var combatente_proxximo = _encontrar_proximo_combatente()
+	var combatente_proximo = _encontrar_proximo_combatente()
 
-	if not combatente_proxximo:
+	if not combatente_proximo:
 		print("[CombatManager] Nenhum combatente disponível - possível empate")
 		return
 	
-	combatente_ativo = combatente_proxximo
+	combatente_ativo = combatente_proximo
+	_atualizar_indicador_sobrecarga()
 	_restaurar_protecoes(combatente_ativo)
 	turno_iniciado.emit(combatente_ativo)
 	
@@ -378,19 +380,28 @@ func _iniciar_habilidade() -> void:
 	action_panel.mostrar_menu_habilidades(combatente_ativo.para_dictionary())
 
 func _ativar_sobrecarga() -> void:
-	if combatente_ativo == null:
+	if combatente_ativo == null or combatente_ativo.habilidade_sobrecarga_ativa:
 		return
 
 	combatente_ativo.habilidade_sobrecarga_ativa = true
-
 	acao_em_progresso = false
+	party_panel.atualizar_personagem(combatente_ativo.para_dictionary())
+	_atualizar_indicador_sobrecarga()
 
 	log_panel.registrar_evento(
 		"⚡ %s entrou em SOBRECARGA!" % combatente_ativo.nome,
 		"critico"
 	)
-
 	await _devolver_acoes_apos_leitura()
+
+
+# Mostra o indicador visual (nó do editor) enquanto a Sobrecarga estiver ativa.
+func _atualizar_indicador_sobrecarga() -> void:
+	if indicador_sobrecarga != null:
+		indicador_sobrecarga.visible = (
+			combatente_ativo != null
+			and combatente_ativo.habilidade_sobrecarga_ativa
+		)
 
 func _on_habilidade_escolhida(nome_habilidade: String) -> void:
 	# Recebe apenas habilidades confirmadas na tela de detalhes do ActionPanel.

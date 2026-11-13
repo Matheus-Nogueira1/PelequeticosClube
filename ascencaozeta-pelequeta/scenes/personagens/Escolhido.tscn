@@ -860,13 +860,13 @@ y_sort_enabled = true
 script = ExtResource("2_22mqn")
 
 [node name="Walk" type="AnimatedSprite2D" parent="." unique_id=275653830]
+z_index = 1
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_d0u6y")
 animation = &"walk_down"
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=94897179]
-z_index = -1
-position = Vector2(-2, 0)
+position = Vector2(-1, 0)
 sprite_frames = SubResource("SpriteFrames_yf5fn")
 animation = &"shadow"
 

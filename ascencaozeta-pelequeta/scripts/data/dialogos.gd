@@ -35,9 +35,34 @@ const CONVERSAS: Dictionary = {
 		{"speaker": "Escolhido", "text": "O que eu estava fazendo naquele lugar? Espera, onde a gente tá?"},
 		{"speaker": "Chama", "text": "Não faço a mínima ideia."},
 		{"speaker": "Testemunha", "text": "Você cai de cara em pedregulhos. A dor dura alguns segundos..."},
-		{"speaker": "Testemunha", "text": "Ao se levantar você percebe uma coloração estranha em sua pele. Seus ossos parecem quebrados. E seu braço direito QUEIMA como se estivesse coberto de óleo."},
+		{"speaker": "Testemunha", "text": "Ao se levantar você percebe uma coloração estranha em sua pele. Seus ossos parecem quebrados."},
+		{"speaker": "Testemunha", "text": "Seu braço direito QUEIMA como se estivesse coberto de óleo."},
 	],
 
+# VELHA DO POÇO
+	"velha_poco": [
+		{"speaker": "Velha", "text": "Olá viajante."},
+		{"speaker": "Velha", "text": "Procura respostas? Alívio? Amor? Um propósito?."},
+		{"speaker": "Velha", "text": "O poço guarda todos os teus segredos.", "options": [
+			{"text": "Todos meus segredos?", "next_dialogue": "velha_segredo"},
+			{"text": "Quem é você?", "next_dialogue": "velha_quem"},
+			{"text": "Só estou de passagem.", "next_dialogue": "velha_final"}
+		]}
+	],
+	"velha_segredo": [
+		{"speaker": "Velha", "text": "O poço guarda TODAS as respostas que precisa."},
+		{"speaker": "Testemunha", "text": "Você se distrai olhando para o poço. Algo parece chamar o seu corpo..."}
+	],
+	"velha_quem": [
+		{"speaker": "Velha", "text": "Uma observadora."},
+		{"speaker": "Velha", "text": "Ninguém nunca volta pelo mesmo caminho."},
+		{"speaker": "Testemunha", "text": "Você se distrai olhando para o poço. Algo parece chamar o seu corpo..."}
+	],
+	"velha_final": [
+		{"speaker": "Velha", "text": "De passagem? Todos dizem isso na beira do poço."},
+		{"speaker": "Velha", "text": "Não sente o chamado?."},
+		{"speaker": "Testemunha", "text": "Você se distrai olhando para o poço. Algo parece chamar o seu corpo..."}
+	],
 #CABANA ELIZABETH
 
 	"Elizabeth": [

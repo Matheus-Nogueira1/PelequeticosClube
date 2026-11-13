@@ -102,9 +102,8 @@ func _on_start_btn_pressed() -> void:
 		fade_overlay, "modulate:a", 1.0, 1.2
 	)
 	await tween.finished
-
 	get_tree().change_scene_to_file(
-		"res://scenes/menu/caixa-dialogo.tscn"
+		"res://scenes/menu/intro.tscn"
 	)
 
 

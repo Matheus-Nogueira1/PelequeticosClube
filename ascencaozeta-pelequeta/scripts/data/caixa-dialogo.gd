@@ -27,6 +27,7 @@ var pular_escrita: bool = false
 var dialogo_configurado: bool = false
 var dialogo_configurado_id: String = ""
 
+var estilos_normais: Array[StyleBox] = []
 var opcoes_atuais: Array = []
 var botoes_opcoes: Array[Button] = []
 var rotulo_opcoes: Label = null
@@ -88,7 +89,7 @@ func configurar_dialogo(
 
 func _configurar_interface_opcoes() -> void:
 	botoes_opcoes.clear()
-
+	estilos_normais.clear()
 	rotulo_opcoes = %Label
 
 	var botoes: Array[Button] = [
@@ -100,6 +101,7 @@ func _configurar_interface_opcoes() -> void:
 	for i in range(botoes.size()):
 		var botao: Button = botoes[i]
 		botoes_opcoes.append(botao)
+		estilos_normais.append(botao.get_theme_stylebox("normal"))
 		botao.hide()
 		botao.focus_mode = Control.FOCUS_NONE
 		botao.pressed.connect(_on_botao_opcao_pressionado.bind(i))
@@ -349,7 +351,7 @@ func _atualizar_selecao_opcao() -> void:
 			botao.text = "▶ " + texto
 		else:
 			botao.text = texto
-
+		_marcar_botao(i, i == indice_opcao_selecionada)
 	var selecionada: Dictionary = opcoes_atuais[indice_opcao_selecionada]
 	var conhecimento: String = String(selecionada.get("knowledge", ""))
 
@@ -647,3 +649,40 @@ func ocultar_dica_interacao() -> void:
 	dica_label.hide()
 	painel_dialogo.hide()
 	visible = false
+
+# Destaca o botão selecionado com o estilo "hover_pressed" do tema.
+# Os demais voltam ao estilo normal e não mudam com o hover do mouse
+# (a seleção já acompanha o mouse por _on_botao_opcao_hover).
+func _marcar_botao(indice: int, selecionado: bool) -> void:
+	var botao: Button = botoes_opcoes[indice]
+	if selecionado:
+		var destaque: StyleBox = botao.get_theme_stylebox("hover_pressed")
+		botao.add_theme_stylebox_override("normal", destaque)
+		botao.add_theme_stylebox_override("hover", destaque)
+		botao.add_theme_stylebox_override("disabled", destaque)
+	else:
+		botao.add_theme_stylebox_override("normal", estilos_normais[indice])
+		botao.add_theme_stylebox_override("hover", estilos_normais[indice])
+		botao.remove_theme_stylebox_override("disabled")
+
+# Clique do mouse avança a fala. Com opções na tela, os botões
+# cuidam dos cliques (aqui não se faz nada).
+func _input(event: InputEvent) -> void:
+	if not ativo or rolando_teste or opcoes_ativas:
+		return
+
+	var clique := event as InputEventMouseButton
+	if clique == null or not clique.pressed or clique.button_index != MOUSE_BUTTON_LEFT:
+		return
+
+	if escrevendo:
+		pular_escrita = true
+	elif aguardando_opcoes:
+		aguardando_opcoes = false
+		_exibir_opcoes(opcoes_pendentes)
+	else:
+		_avancar_dialogo()
+
+	var viewport_atual := get_viewport()
+	if viewport_atual != null:
+		viewport_atual.set_input_as_handled()

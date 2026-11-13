@@ -95,6 +95,7 @@ func _criar_botao_regiao(nome: String, indice: int) -> Button:
 	botao.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	botao.clip_text = true
 	botao.toggle_mode = true
+	botao.theme_type_variation = &"BotaoRegiao"
 	botao.pressed.connect(_on_regiao_clicada.bindv([indice, nome]))
 	UiUtil.aplicar(botao, TAMANHO_FONTE)
 	return botao
@@ -226,28 +227,14 @@ func _atualizar_visual_botao(indice: int) -> void:
 
 	var nome_base = _obter_nome_visual_regiao(regioes[indice])
 
+	# Mantém o estado "pressionado" igual à contagem: com Sobrecarga o
+	# toggle nativo desmarcaria o botão no segundo clique (x2).
+	botao.set_pressed_no_signal(selecionadas[indice] > 0)
+
 	if selecionadas[indice] > 0:
 		botao.text = "%s x%d" % [nome_base, selecionadas[indice]]
-
-		botao.add_theme_color_override(
-			"font_color",
-			Color.BLACK
-		)
-
-		botao.add_theme_color_override(
-			"font_focus_color",
-			Color.BLACK
-		)
 	else:
 		botao.text = nome_base
-
-		botao.remove_theme_color_override(
-			"font_color"
-		)
-
-		botao.remove_theme_color_override(
-			"font_focus_color"
-		)
 
 func _atualizar_info_label() -> void:
 	var total := contar_selecionadas()

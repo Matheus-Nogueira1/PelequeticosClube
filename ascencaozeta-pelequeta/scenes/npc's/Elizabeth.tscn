@@ -101,6 +101,7 @@ y_sort_enabled = true
 script = ExtResource("1_qmlk1")
 
 [node name="Walk" type="AnimatedSprite2D" parent="." unique_id=275653830]
+z_index = 1
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_d0u6y")
 animation = &"Interagir"

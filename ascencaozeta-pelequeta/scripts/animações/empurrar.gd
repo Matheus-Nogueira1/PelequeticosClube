@@ -5,7 +5,15 @@ var player_near := false
 var player: CharacterBody2D = null
 var interacting := false
 var cutscene_started := false
-
+const DIALOGO_VELHA: String = "velha_poco"
+# Diálogo inicial do personagem, que toca durante a queda.
+const DIALOGO_QUEDA: Dictionary = {
+	"escolhido": "Escolhido-inicio",
+	"jp": "JP-inicio",
+	"mob": "Mob-inicio"
+}
+@export var amplitude_balanco: float = 10.0
+@export var duracao_balanco: float = 0.9
 
 func _ready():
 	player_near = false
@@ -28,7 +36,6 @@ func _on_body_exited(body):
 		player_near = false
 		player = null
 		interacting = false
-		$"../UI/DialogueBox".visible = false
 
 
 func _process(_delta):
@@ -39,23 +46,8 @@ func _process(_delta):
 
 func interact():
 	interacting = true
-	$"../UI/DialogueBox".visible = true
-	print("Abriu o diálogo!")
-
-
-func _on_light_button_pressed():
-	if not interacting or not player_near or player == null:
-		return
-
+	await _executar_dialogo(DIALOGO_VELHA)
 	iniciar_empurrao()
-
-
-func _on_darkness_button_pressed():
-	if not interacting or not player_near or player == null:
-		return
-
-	iniciar_empurrao()
-
 
 # Vira um sprite na direção desejada.
 # Considera que o sprite original olha para a direita.
@@ -110,8 +102,6 @@ func iniciar_empurrao():
 
 	cutscene_started = true
 	interacting = true
-
-	$"../UI/DialogueBox".visible = false
 
 	# Guarda a referência do jogador.
 	var player_ref = player
@@ -185,7 +175,7 @@ func iniciar_empurrao():
 	falling_player.position = get_viewport_rect().size / 2.0
 	falling_player.offset = Vector2.ZERO
 	falling_player.rotation = 0.0
-	falling_player.scale = Vector2(3.0, 3.0)
+	falling_player.scale = Vector2(2.0, 2.0)
 
 	# Animação de queda: uma única reprodução.
 	falling_player.sprite_frames.set_animation_loop(
@@ -213,7 +203,7 @@ func iniciar_empurrao():
 	queda.tween_property(
 		falling_player,
 		"position",
-		falling_player.position + Vector2(0, 100),
+		falling_player.position + Vector2(0, 20),
 		duracao_queda
 	).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
@@ -235,8 +225,14 @@ func iniciar_empurrao():
 	await falling_player.animation_finished
 	await queda.finished
 
-	# Pequena pausa antes de trocar de cena.
-	await get_tree().create_timer(0.15).timeout
+	# Queda contínua: o personagem balança enquanto o diálogo inicial toca.
+	var balanco := _balancar_queda(falling_player)
+	var id_personagem: String = "escolhido"
+	var principal: CombatenteData = GrupoAtual.obter_personagem_principal()
+	if principal != null:
+		id_personagem = PersonagensData.normalizar_id(principal.nome)
+	await _executar_dialogo(String(DIALOGO_QUEDA.get(id_personagem, "Escolhido-inicio")))
+	balanco.kill()
 
 	# Vai para a Cabana Elizabeth.
 	var erro = get_tree().change_scene_to_file(
@@ -248,3 +244,29 @@ func iniciar_empurrao():
 			"Não foi possível abrir Firekeeper.tscn. Erro: "
 			+ str(erro)
 		)
+
+# Apresenta um diálogo pela caixa oficial e espera o fim.
+# Sem caixa ou sem diálogo, segue adiante para não travar o fluxo.
+func _executar_dialogo(id_dialogo: String) -> void:
+	var caixa := get_tree().get_first_node_in_group("dialogue_box")
+	if caixa == null or Dialogos.get_conversa(id_dialogo).is_empty():
+		push_warning("Velha: diálogo '%s' indisponível." % id_dialogo)
+		return
+	caixa.configurar_dialogo(
+		GrupoAtual.obter_personagem_principal(), id_dialogo, false
+	)
+	await caixa.dialogo_encerrado
+
+
+# Balanço contínuo de um lado para o outro enquanto o personagem cai.
+func _balancar_queda(sprite: AnimatedSprite2D) -> Tween:
+	var base_x: float = sprite.position.x
+	var balanco := create_tween()
+	balanco.set_loops()
+	balanco.set_trans(Tween.TRANS_SINE)
+	balanco.set_ease(Tween.EASE_IN_OUT)
+	balanco.tween_property(sprite, "position:x", base_x - amplitude_balanco, duracao_balanco)
+	balanco.parallel().tween_property(sprite, "rotation", deg_to_rad(6.0), duracao_balanco)
+	balanco.tween_property(sprite, "position:x", base_x + amplitude_balanco, duracao_balanco)
+	balanco.parallel().tween_property(sprite, "rotation", deg_to_rad(18.0), duracao_balanco)
+	return balanco

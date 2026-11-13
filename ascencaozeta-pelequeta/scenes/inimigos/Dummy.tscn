@@ -315,7 +315,7 @@ animations = [{
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mgf8l"]
-radius = 6.0369244
+radius = 12.857494
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_qunvf"]
 radius = 6.0369244
@@ -324,15 +324,28 @@ radius = 6.0369244
 y_sort_enabled = true
 scale = Vector2(0.7, 0.7)
 script = ExtResource("1_hm17y")
+cena_combate = null
+caminho_area_interacao = null
+
+[node name="EfeitoEncontro" type="CanvasLayer" parent="." unique_id=565756178]
+
+[node name="Flash" type="ColorRect" parent="EfeitoEncontro" unique_id=1670393505]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 
 [node name="AnimationDummy" type="AnimatedSprite2D" parent="." unique_id=275653830]
+z_index = 1
 y_sort_enabled = true
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_d0u6y")
 animation = &"Atacando"
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=94897179]
-z_index = -1
 position = Vector2(1.1920929e-07, 4.285714)
 scale = Vector2(1.0833333, 1)
 sprite_frames = SubResource("SpriteFrames_yf5fn")

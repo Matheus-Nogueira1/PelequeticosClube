@@ -37,20 +37,19 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tjt66")
 paleta = ExtResource("2_0oumd")
+metadata/_edit_lock_ = true
 
 [node name="BackGround" type="TextureRect" parent="." unique_id=1301064228]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -5.0
-offset_top = -7.0
-offset_right = -5.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_ru14h")
 expand_mode = 2
 stretch_mode = 6
+metadata/_edit_lock_ = true
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=49951984]
 layout_mode = 1
@@ -59,66 +58,30 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+metadata/_edit_lock_ = true
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=766001410]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-theme_override_constants/separation = 40
+theme_override_constants/separation = 12
 alignment = 1
 
-[node name="Player1" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=1146593757]
-custom_minimum_size = Vector2(0, 70)
+[node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1886063957]
 layout_mode = 2
 size_flags_horizontal = 4
-size_flags_vertical = 4
-
-[node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer/Player1" unique_id=1886063957]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.32900003
-anchor_bottom = 0.32900003
-offset_left = -27.0
-offset_top = -16.030003
-offset_right = 5.0
-offset_bottom = 15.969997
-grow_vertical = 2
+size_flags_vertical = 0
 texture = ExtResource("3_wetd2")
 stretch_mode = 5
 
-[node name="Player2" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=883764063]
+[node name="TextureRect2" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1555085370]
 layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer/Player2" unique_id=1555085370]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -21.0
-offset_top = -29.0
-offset_right = 11.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 2
+size_flags_vertical = 0
 texture = ExtResource("4_mrfmh")
 stretch_mode = 5
 
-[node name="Player3" type="Panel" parent="CenterContainer/HBoxContainer" unique_id=1105994070]
+[node name="TextureRect3" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1605036739]
 layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="CenterContainer/HBoxContainer/Player3" unique_id=1605036739]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -16.0
-offset_top = -29.0
-offset_right = 16.0
-offset_bottom = 3.0
-grow_horizontal = 2
-grow_vertical = 2
+size_flags_vertical = 0
 texture = ExtResource("5_ayp0l")
 stretch_mode = 5
 

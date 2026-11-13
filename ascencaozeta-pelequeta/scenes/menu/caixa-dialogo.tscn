@@ -28,7 +28,7 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -80.0
+offset_top = -85.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxEmpty_g4v7s")
@@ -96,7 +96,7 @@ offset_top = 10.0
 offset_bottom = 23.0
 grow_horizontal = 2
 text = "Você procura a luz ou a escuridão?"
-label_settings = ExtResource("2_2upoj")
+label_settings = ExtResource("4_aydvo")
 horizontal_alignment = 1
 vertical_alignment = 1
 

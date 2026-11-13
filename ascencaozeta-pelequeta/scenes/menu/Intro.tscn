@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://njj6fibk22tn"]
+
+[ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="1_qbt75"]
+
+[node name="Intro" type="Control" unique_id=934840135]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Fundo" type="ColorRect" parent="." unique_id=737407413]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CaixaDialogo" parent="." unique_id=1996844437 instance=ExtResource("1_qbt75")]
+layout_mode = 1

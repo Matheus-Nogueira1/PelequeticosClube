@@ -307,7 +307,7 @@ func abrir_menu_habilidades() -> void:
 	var lista = _criar_scroll_lista(50)
 	var habilidades_disponiveis = _obter_habilidades_conhecidas()
 
-	if habilidades_disponiveis.is_empty() and not combatente_ref.habilidade_sobrecarga_ativa:
+	if habilidades_disponiveis.is_empty() and not combatente_ref.possui_sobrecarga:
 		var vazio = Label.new()
 		vazio.text = "Nenhuma habilidade disponível."
 		lista.add_child(vazio)
@@ -355,9 +355,12 @@ func _preencher_lista_habilidades(lista: VBoxContainer, habilidades_disponiveis:
 			var btn = _criar_botao_habilidade(habilidade)
 			lista.add_child(btn)
 
-	if combatente_ref.habilidade_sobrecarga_ativa:
+	if combatente_ref.possui_sobrecarga:
+		var rotulo: String = "SOBRECARGA (Ir Além)"
+		if combatente_ref.habilidade_sobrecarga_ativa:
+			rotulo = "SOBRECARGA ATIVA"
 		var btn_sobrecarga = _criar_botao(
-			"SOBRECARGA (Ir Além)",
+			rotulo,
 			"Permite arriscar a mesma região mais de uma vez",
 			_abrir_detalhes_sobrecarga
 		)
@@ -415,6 +418,11 @@ func _abrir_detalhes_sobrecarga() -> void:
 	_adicionar_linha_detalhe(detalhes, "Custo de PA", "0")
 	_adicionar_linha_detalhe(detalhes, "Persona de origem", combatente_ref.nome)
 	_adicionar_linha_detalhe(detalhes, "Alcance", "Pessoal")
+	var ativa: bool = combatente_ref.habilidade_sobrecarga_ativa
+	_adicionar_linha_detalhe(
+		detalhes, "Estado",
+		"ATIVA até o fim do combate" if ativa else "Inativa"
+	)
 	_adicionar_linha_detalhe(
 		detalhes,
 		"Descrição",
@@ -429,8 +437,9 @@ func _abrir_detalhes_sobrecarga() -> void:
 	vbox.add_child(confirmar)
 	controles_tela_atual.append(confirmar)
 
-	_criar_botao_voltar(abrir_menu_habilidades)
-	confirmar.grab_focus()
+	confirmar.disabled = ativa
+	var voltar := _criar_botao_voltar(abrir_menu_habilidades)
+	(voltar if ativa else confirmar).grab_focus()
 
 func _adicionar_linha_detalhe(container: VBoxContainer, rotulo: String, valor: String) -> void:
 	# Usa RichTextLabel para suportar descrições longas sem quebrar o painel.
