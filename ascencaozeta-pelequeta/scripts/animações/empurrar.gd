@@ -15,7 +15,7 @@ const DIALOGO_QUEDA: Dictionary = {
 @export var amplitude_balanco: float = 10.0
 @export var duracao_balanco: float = 0.9
 
-func _ready():
+func _ready() -> void:
 	player_near = false
 	player = null
 	interacting = false
@@ -24,18 +24,34 @@ func _ready():
 	$InteractionArea.body_entered.connect(_on_body_entered)
 	$InteractionArea.body_exited.connect(_on_body_exited)
 
+func _on_body_entered(body: Node2D) -> void:
+	if not body.is_in_group("player"):
+		return
 
-func _on_body_entered(body):
-	if body is CharacterBody2D:
-		player_near = true
-		player = body
+	if cutscene_started:
+		return
+
+	player_near = true
+	player = body as CharacterBody2D
+
+	var caixa := get_tree().get_first_node_in_group("dialogue_box")
+
+	if caixa != null:
+		caixa.mostrar_dica_interacao()
 
 
-func _on_body_exited(body):
-	if body == player and not cutscene_started:
-		player_near = false
-		player = null
-		interacting = false
+func _on_body_exited(body: Node2D) -> void:
+	if body != player:
+		return
+
+	player_near = false
+	player = null
+	interacting = false
+
+	var caixa := get_tree().get_first_node_in_group("dialogue_box")
+
+	if caixa != null and not cutscene_started:
+		caixa.ocultar_dica_interacao()
 
 
 func _process(_delta):
@@ -44,10 +60,29 @@ func _process(_delta):
 			interact()
 
 
-func interact():
+func interact() -> void:
+	if interacting or cutscene_started:
+		return
+
+	if not player_near or player == null:
+		return
+
 	interacting = true
+
+	var caixa := get_tree().get_first_node_in_group("dialogue_box")
+
+	if caixa != null:
+		caixa.ocultar_dica_interacao()
+
 	await _executar_dialogo(DIALOGO_VELHA)
-	iniciar_empurrao()
+
+	if not is_inside_tree():
+		return
+
+	if player_near and player != null:
+		iniciar_empurrao()
+	else:
+		interacting = false
 
 # Vira um sprite na direção desejada.
 # Considera que o sprite original olha para a direita.
@@ -231,7 +266,10 @@ func iniciar_empurrao():
 	var principal: CombatenteData = GrupoAtual.obter_personagem_principal()
 	if principal != null:
 		id_personagem = PersonagensData.normalizar_id(principal.nome)
-	await _executar_dialogo(String(DIALOGO_QUEDA.get(id_personagem, "Escolhido-inicio")))
+	await _executar_dialogo(
+		String(DIALOGO_QUEDA.get(id_personagem, "Escolhido-inicio")),
+		falling_player
+	)
 	balanco.kill()
 
 	# Vai para a Cabana Elizabeth.
@@ -247,14 +285,32 @@ func iniciar_empurrao():
 
 # Apresenta um diálogo pela caixa oficial e espera o fim.
 # Sem caixa ou sem diálogo, segue adiante para não travar o fluxo.
-func _executar_dialogo(id_dialogo: String) -> void:
+func _executar_dialogo(
+	id_dialogo: String,
+	referencia_visual: Node2D = null
+) -> void:
 	var caixa := get_tree().get_first_node_in_group("dialogue_box")
-	if caixa == null or Dialogos.get_conversa(id_dialogo).is_empty():
+
+	if caixa == null:
+		push_warning("Velha: CaixaDialogo não encontrada.")
+		return
+
+	if Dialogos.get_conversa(id_dialogo).is_empty():
 		push_warning("Velha: diálogo '%s' indisponível." % id_dialogo)
 		return
+
+	if referencia_visual == null:
+		referencia_visual = player
+
+	if referencia_visual != null:
+		caixa.posicionar_por_personagem(referencia_visual)
+
 	caixa.configurar_dialogo(
-		GrupoAtual.obter_personagem_principal(), id_dialogo, false
+		GrupoAtual.obter_personagem_principal(),
+		id_dialogo,
+		false
 	)
+
 	await caixa.dialogo_encerrado
 
 

@@ -36,6 +36,7 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_g4v7s")
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1620628418]
 layout_mode = 2
 theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 10
 theme_override_constants/margin_right = 20
 theme_override_constants/margin_bottom = 15
 
@@ -74,7 +75,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 theme = ExtResource("1_6hdhh")
 theme_override_fonts/normal_font = ExtResource("3_uf2yu")
-theme_override_font_sizes/normal_font_size = 14
+theme_override_font_sizes/normal_font_size = 12
 text = "Exemplo do textooo
 abulelele
 nqjkdqk

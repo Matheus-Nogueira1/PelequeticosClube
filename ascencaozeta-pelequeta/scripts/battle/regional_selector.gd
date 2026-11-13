@@ -139,18 +139,29 @@ func _pode_arriscar_regiao(regiao: String) -> bool:
 	return true
 
 func _atualizar_estado_botoes() -> void:
-	"""Atualiza o estado visual dos botões (habilitado/desabilitado)"""
-	for i in range(regioes.size()):
-		var regiao = regioes[i]
-		var botao = botoes_regiao[i]
+	var total_riscos := contar_selecionadas()
+	var limite_atingido := total_riscos >= 5
 
-		if not _pode_arriscar_regiao(regiao):
-			botao.disabled = true
-			botao.add_theme_color_override("font_disabled_color", Color.RED)
+	for i in range(regioes.size()):
+		var regiao: String = regioes[i]
+		var botao: Button = botoes_regiao[i]
+
+		var regiao_invalida := not _pode_arriscar_regiao(regiao)
+
+		botao.disabled = regiao_invalida or limite_atingido
+
+		if regiao_invalida:
+			botao.add_theme_color_override(
+				"font_disabled_color",
+				Color.RED
+			)
 		else:
-			botao.disabled = false
-			botao.text = _obter_nome_visual_regiao(regiao)
 			botao.remove_theme_color_override("font_disabled_color")
+
+		botao.text = _obter_nome_visual_regiao(regiao)
+
+		if selecionadas[i] > 0:
+			botao.text += " x%d" % selecionadas[i]
 
 
 func desativar() -> void:
@@ -192,6 +203,7 @@ func _on_regiao_clicada(indice: int, nome_regiao: String) -> void:
 
 	_atualizar_visual_botao(indice)
 	_atualizar_info_label()
+	_atualizar_estado_botoes()
 
 	regiao_selecionada.emit(nome_regiao, indice)
 
@@ -250,16 +262,18 @@ func _atualizar_info_label() -> void:
 	label_info.text = "Riscos: %s (%d/5)" % [texto, total]
 
 func _resetar_selecao() -> void:
-	"""Reseta toda a seleção"""
 	selecionadas = [0, 0, 0, 0, 0]
 	regioes_finais.clear()
-	
+
 	for botao in botoes_regiao:
 		botao.button_pressed = false
 		botao.remove_theme_color_override("font_color")
 		botao.remove_theme_color_override("font_focus_color")
-	
+
 	label_info.text = "Clique para selecionar"
+
+	if is_node_ready() and combatente_ativo != null:
+		_atualizar_estado_botoes()
 
 # ============================================================================
 # UTILIDADES

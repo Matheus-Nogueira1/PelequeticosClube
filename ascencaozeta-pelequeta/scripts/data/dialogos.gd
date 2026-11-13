@@ -90,7 +90,11 @@ const CONVERSAS: Dictionary = {
 	"elizabeth_social_sucesso_extremo": [
 		{
 			"speaker": "{jogador}",
-			"text": "Eu entendo. Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda."
+			"text": "Eu entendo."
+		},
+		{
+			"speaker": "{jogador}",
+			"text": "Esse mundo parece tomado pela escuridão, como você está sozinha nesta cabana, precisa da minha ajuda."
 		},
 		{
 			"speaker": "{jogador}",

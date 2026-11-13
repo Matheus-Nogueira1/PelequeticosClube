@@ -650,6 +650,49 @@ func ocultar_dica_interacao() -> void:
 	painel_dialogo.hide()
 	visible = false
 
+func posicionar_por_personagem(personagem: Node2D) -> void:
+	if personagem == null:
+		return
+
+	var posicao_y: float
+
+	# Elementos dentro de CanvasLayer já usam coordenadas da tela.
+	if personagem.get_parent() is CanvasLayer:
+		posicao_y = personagem.global_position.y
+	else:
+		var transformacao := get_viewport().get_canvas_transform()
+		posicao_y = (transformacao * personagem.global_position).y
+
+	var metade_tela := get_viewport_rect().size.y / 2.0
+
+	_definir_posicao_dialogo(posicao_y > metade_tela)
+
+func _definir_posicao_dialogo (no_topo: bool) -> void:
+	if no_topo:
+		# Caixa no topo.
+		painel_dialogo.anchor_top = 0.0
+		painel_dialogo.anchor_bottom = 0.0
+		painel_dialogo.offset_top = 0.0
+		painel_dialogo.offset_bottom = 85.0
+
+		# Dica fica logo abaixo da caixa.
+		dica_label.anchor_top = 0.0
+		dica_label.anchor_bottom = 0.0
+		dica_label.offset_top = 85.0
+		dica_label.offset_bottom = 97.0
+	else:
+		# Posição original: rodapé.
+		painel_dialogo.anchor_top = 1.0
+		painel_dialogo.anchor_bottom = 1.0
+		painel_dialogo.offset_top = -85.0
+		painel_dialogo.offset_bottom = 0.0
+
+		# Dica na parte inferior da tela.
+		dica_label.anchor_top = 1.0
+		dica_label.anchor_bottom = 1.0
+		dica_label.offset_top = -12.0
+		dica_label.offset_bottom = 0.0
+
 # Destaca o botão selecionado com o estilo "hover_pressed" do tema.
 # Os demais voltam ao estilo normal e não mudam com o hover do mouse
 # (a seleção já acompanha o mouse por _on_botao_opcao_hover).
