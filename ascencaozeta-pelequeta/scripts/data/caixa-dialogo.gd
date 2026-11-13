@@ -605,8 +605,7 @@ func _executar_teste_conhecimento(conhecimento: String) -> Dictionary:
 	if dado_visual != null:
 		dado_visual.visible = true
 		var camera := get_viewport().get_camera_2d()
-		if camera != null:
-			dado_visual.global_position = camera.get_screen_center_position() + Vector2(0, -20)
+
 
 		dica_label.text = "ENTER ou E: rolar o dado"
 		await dado_visual.aguardar_confirmacao()

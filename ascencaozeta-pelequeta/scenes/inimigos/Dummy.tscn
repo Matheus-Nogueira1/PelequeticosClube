@@ -332,6 +332,7 @@ sprite_frames = SubResource("SpriteFrames_d0u6y")
 animation = &"Atacando"
 
 [node name="Shadow" type="AnimatedSprite2D" parent="." unique_id=94897179]
+z_index = -1
 position = Vector2(1.1920929e-07, 4.285714)
 scale = Vector2(1.0833333, 1)
 sprite_frames = SubResource("SpriteFrames_yf5fn")

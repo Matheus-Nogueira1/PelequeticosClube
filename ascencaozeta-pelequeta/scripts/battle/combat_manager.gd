@@ -872,7 +872,7 @@ func _rolar_dados_visuais(regioes: Array[String], valores_fixos: Array[int] = []
 		battlefield.add_child(dado)
 		dado.position = Vector2(
 			battlefield.size.x / 2.0 + inicio_x + i * espacamento,
-			battlefield.size.y / 2.0 - 40.0
+			battlefield.size.y / 2.0 - 80.0
 		)
 		dado.scale = Vector2(1.25, 1.25)
 		dados_visuais.append(dado)
@@ -1245,9 +1245,9 @@ func _definir_dica_leitura(ativa: bool, indice: int = 0, total: int = 0) -> void
 	if not ativa:
 		return
 	if indice < total - 1:
-		dica_continuar.text = "(%d/%d) E/Enter ou clique: avançar" % [indice + 1, total]
+		dica_continuar.text = "(%d/%d) E/Enter ou cliquer" % [indice + 1, total]
 	else:
-		dica_continuar.text = "E/Enter ou clique: continuar"
+		dica_continuar.text = "E/Enter ou clique"
 
 # Variante para ações que não terminam o turno (habilidade, item
 # inválido, Sobrecarga): lê a mensagem e devolve o ActionPanel.

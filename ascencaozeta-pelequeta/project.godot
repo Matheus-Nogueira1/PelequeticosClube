@@ -31,7 +31,7 @@ GrupoAtual="*uid://ovlxyn8ur3so"
 
 window/size/viewport_width=320
 window/size/viewport_height=192
-window/size/mode=3
+window/size/mode=2
 window/stretch/mode="canvas_items"
 
 [input]
@@ -90,7 +90,6 @@ rendering_device/driver.windows="d3d12"
 renderer/rendering_method="mobile"
 textures/decals/filter=0
 textures/light_projectors/filter=0
-environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 2d/snap/snap_2d_transforms_to_pixel=true
 2d/snap/snap_2d_vertices_to_pixel=true
 textures/size/resizable=true

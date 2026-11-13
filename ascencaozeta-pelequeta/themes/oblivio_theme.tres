@@ -3,11 +3,14 @@
 [ext_resource type="StyleBox" uid="uid://ba47awknelvda" path="res://themes/Oblivioflat.tres" id="1_bp8bq"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="1_ob7co"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i7jdq"]
+bg_color = Color(0.29803923, 0.05882353, 0.10980392, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uev7f"]
 bg_color = Color(0.2971768, 0.058990076, 0.109204955, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ujig"]
-bg_color = Color(0.297152, 0.05904501, 0.109162144, 1)
+bg_color = Color(0.59648657, 0.04212573, 0.057633832, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icaiv"]
 bg_color = Color(0.05882353, 0.019607844, 0.043137256, 1)
@@ -15,12 +18,17 @@ bg_color = Color(0.05882353, 0.019607844, 0.043137256, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2uid"]
 bg_color = Color(0.49019608, 0.02745098, 0.039215688, 1)
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ffjnq"]
+
 [resource]
 default_font = ExtResource("1_ob7co")
 default_font_size = 14
+Button/styles/focus = SubResource("StyleBoxFlat_i7jdq")
 Button/styles/hover = SubResource("StyleBoxFlat_uev7f")
 Button/styles/hover_pressed = SubResource("StyleBoxFlat_1ujig")
 Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_icaiv")
 Button/styles/normal = ExtResource("1_bp8bq")
 Button/styles/pressed = SubResource("StyleBoxFlat_m2uid")
 Panel/styles/panel = ExtResource("1_bp8bq")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_ffjnq")
+TabBar/styles/button_pressed = null
