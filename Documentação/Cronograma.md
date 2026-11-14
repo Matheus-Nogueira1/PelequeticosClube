@@ -92,20 +92,20 @@
 
 ## 📌 Semana 23/10/26
 
-* Corrigir bugs e inconsistências das mecânicas de combate | **EM ANDAMENTO** 🔄
+* Corrigir bugs e inconsistências das mecânicas de combate | **FINALIZADO** ✅
 * Finalizar integração dos dados, animações e resultados do combate | **EM ANDAMENTO** 🔄
 * Finalizar design da tela de combate | **EM ANDAMENTO** 🔄
 * Finalizar decoração e interações do mapa principal (Bastilha) | **PENDENTE** ⚠️
-* Revisar diálogos, NPCs e interações dos mapas | **EM ANDAMENTO** 🔄
+* Revisar diálogos, NPCs e interações dos mapas | **FINALIZADO** ✅
 * Organizar scripts, cenas e documentação do projeto | **EM ANDAMENTO** 🔄
 * Testar o jogo completo e corrigir problemas encontrados | **PENDENTE** ⚠️
 * Preparar versão estável para a apresentação de novembro | **PENDENTE** ⚠️
-* Melhorar UI | **PENDENTE** ⚠️
+* Melhorar UI | **EM ANDAMENTO** 🔄
 * Preparar Sound Effects | **PENDENTE** ⚠️
 * Preparar Soundtrack | **PENDENTE** ⚠️
 --------------------------------------------------
 * Sprite de NPC's | **EM ANDAMENTO** 🔄
-* Sprite de Inimigos | **PENDENTE** ⚠️
+* Sprite de Inimigos | **EM ANDAMENTO** 🔄
 * Assets de decoração | **PENDENTE** ⚠️
 * Assets de UI | **PENDENTE** ⚠️
 
