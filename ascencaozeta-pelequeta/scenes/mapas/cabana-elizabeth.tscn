@@ -1,20 +1,20 @@
 [gd_scene format=4 uid="uid://b1mak0l3ariyh"]
 
-[ext_resource type="Script" uid="uid://dqto5x8723p20" path="res://scripts/mapas/mapa_controller.gd" id="1_qc65n"]
-[ext_resource type="Texture2D" uid="uid://dhwhe2vbbk8jf" path="res://assets/world/Furniture.png" id="2_ffjnq"]
-[ext_resource type="Texture2D" uid="uid://sh8isxje8r2v" path="res://assets/world/tiles.png" id="3_112in"]
-[ext_resource type="Texture2D" uid="uid://chc4y1lhpo7ob" path="res://assets/world/Tools.png" id="4_ni0ew"]
-[ext_resource type="Texture2D" uid="uid://bbj83tcsss14s" path="res://assets/world/Pan.png" id="5_gmj8u"]
-[ext_resource type="Texture2D" uid="uid://d0dped4wv2xiq" path="res://assets/world/Meat.png" id="6_k33s1"]
-[ext_resource type="Texture2D" uid="uid://v3r2qydmoih8" path="res://assets/world/mainlevbuild.png" id="7_3mug2"]
-[ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="8_8ydgf"]
-[ext_resource type="PackedScene" uid="uid://dqlkhnmctas0" path="res://scenes/npc's/Elizabeth.tscn" id="9_dc1to"]
-[ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="10_tfhua"]
-[ext_resource type="PackedScene" uid="uid://cckmocpmkwsuy" path="res://scenes/menu/rolagem-dado.tscn" id="11_yl0f2"]
-[ext_resource type="PackedScene" uid="uid://dx72kckk1qgbn" path="res://scenes/inimigos/Dummy.tscn" id="12_ffjnq"]
+[ext_resource type="Script" uid="uid://dqto5x8723p20" path="res://scripts/mapas/mapa_controller.gd" id="1_13qt3"]
+[ext_resource type="Texture2D" uid="uid://dhwhe2vbbk8jf" path="res://assets/world/Furniture.png" id="2_qblg1"]
+[ext_resource type="Texture2D" uid="uid://sh8isxje8r2v" path="res://assets/world/tiles.png" id="3_xky23"]
+[ext_resource type="Texture2D" uid="uid://chc4y1lhpo7ob" path="res://assets/world/Tools.png" id="4_i5aww"]
+[ext_resource type="Texture2D" uid="uid://bbj83tcsss14s" path="res://assets/world/Pan.png" id="5_yje51"]
+[ext_resource type="Texture2D" uid="uid://d0dped4wv2xiq" path="res://assets/world/Meat.png" id="6_ibf32"]
+[ext_resource type="Texture2D" uid="uid://v3r2qydmoih8" path="res://assets/world/mainlevbuild.png" id="7_r56jl"]
+[ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/escolhido.tscn" id="8_yqtqu"]
+[ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="9_63qcu"]
+[ext_resource type="PackedScene" uid="uid://cckmocpmkwsuy" path="res://scenes/menu/rolagem-dado.tscn" id="10_8p1a1"]
+[ext_resource type="PackedScene" uid="uid://dqlkhnmctas0" path="res://scenes/npc's/elizabeth.tscn" id="11_fmova"]
+[ext_resource type="PackedScene" uid="uid://dx72kckk1qgbn" path="res://scenes/inimigos/dummy.tscn" id="12_q1eat"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_om33r"]
-texture = ExtResource("2_ffjnq")
+texture = ExtResource("2_qblg1")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -427,7 +427,7 @@ texture = ExtResource("2_ffjnq")
 33:36/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qhxem"]
-texture = ExtResource("3_112in")
+texture = ExtResource("3_xky23")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -932,7 +932,7 @@ texture = ExtResource("3_112in")
 7:51/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_hpw1d"]
-texture = ExtResource("4_ni0ew")
+texture = ExtResource("4_i5aww")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -1103,7 +1103,7 @@ texture = ExtResource("4_ni0ew")
 9:16/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mec70"]
-texture = ExtResource("5_gmj8u")
+texture = ExtResource("5_yje51")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -1204,7 +1204,7 @@ texture = ExtResource("5_gmj8u")
 4:10/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_mbqut"]
-texture = ExtResource("6_k33s1")
+texture = ExtResource("6_ibf32")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
@@ -1253,7 +1253,7 @@ texture = ExtResource("6_k33s1")
 3:7/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_baouo"]
-texture = ExtResource("7_3mug2")
+texture = ExtResource("7_r56jl")
 40:0/0 = 0
 41:0/0 = 0
 42:0/0 = 0
@@ -2431,7 +2431,7 @@ sources/6 = SubResource("TileSetAtlasSource_baouo")
 [node name="Cabana" type="Node2D" unique_id=44442164]
 modulate = Color(2.2241454, 2.2241454, 2.2241454, 1)
 y_sort_enabled = true
-script = ExtResource("1_qc65n")
+script = ExtResource("1_13qt3")
 
 [node name="Chao" type="TileMapLayer" parent="." unique_id=405713238]
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
@@ -2453,7 +2453,7 @@ modulate = Color(0.1882353, 0.1882353, 0.1882353, 1)
 tile_map_data = PackedByteArray("AAD//wYAAwAAAAgAAAD//wgAAwAAAAgAAAD//woABQAFAAIAAAATAAQAAQAAAAkAAAATAAUAAQAAAAoAAAATAAYAAQAAAAsAAAATAAcAAQAAAAwAAAAUAAQAAQABAAkAAAAUAAUAAQABAAoAAAAUAAYAAQABAAsAAAAUAAcAAQABAAwAAAAAAAYAAQAJABwAAAAAAAcAAQAJAB0AAAAAAAgAAQAJAB4AAAABAAYAAQALABwAAAABAAcAAQALAB0AAAAQAAQAAQABABgAAAARAAQAAQACABgAAAA=")
 tile_set = SubResource("TileSet_5wp78")
 
-[node name="Escolhido" parent="." unique_id=188751351 groups=["player"] instance=ExtResource("8_8ydgf")]
+[node name="Escolhido" parent="." unique_id=188751351 groups=["player"] instance=ExtResource("8_yqtqu")]
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
 position = Vector2(130, 107)
 scale = Vector2(0.9, 0.9)
@@ -2467,24 +2467,23 @@ limit_bottom = 463
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Escolhido/Camera2D" unique_id=1080641646]
 
-[node name="CaixaDialogo" parent="Escolhido/Camera2D/CanvasLayer" unique_id=1996844437 instance=ExtResource("10_tfhua")]
+[node name="CaixaDialogo" parent="Escolhido/Camera2D/CanvasLayer" unique_id=1996844437 instance=ExtResource("9_63qcu")]
 visible = false
 size_flags_horizontal = 3
 iniciar_intro_automaticamente = false
 fechar_para_selecao = false
 
-[node name="Dado" parent="Escolhido/Camera2D/CanvasLayer" unique_id=2129393194 instance=ExtResource("11_yl0f2")]
-visible = false
+[node name="Dado" parent="Escolhido/Camera2D/CanvasLayer" unique_id=2129393194 instance=ExtResource("10_8p1a1")]
 position = Vector2(163, 62)
 
-[node name="Elizabeth" parent="." unique_id=1698368650 instance=ExtResource("9_dc1to")]
+[node name="Elizabeth" parent="." unique_id=1698368650 instance=ExtResource("11_fmova")]
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
 z_index = 1
 z_as_relative = false
 position = Vector2(279, 90)
 caminho_dica_interacao = NodePath("../Escolhido/Camera2D/CanvasLayer/CaixaDialogo")
 
-[node name="Dummy" parent="." unique_id=406659815 instance=ExtResource("12_ffjnq")]
+[node name="Dummy" parent="." unique_id=406659815 instance=ExtResource("12_q1eat")]
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
 position = Vector2(316, 175)
 scale = Vector2(0.8, 0.8)

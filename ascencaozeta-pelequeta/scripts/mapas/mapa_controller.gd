@@ -5,9 +5,9 @@ class_name MapaController
 @export var nome_mapa: String = "Cabana"
 @export var executar_introducao: bool = true
 
-@onready var jogador: CharacterBody2D = get_node_or_null("Escolhido") as CharacterBody2D
-@onready var caixa_dialogo: Control = get_node_or_null("Escolhido/Camera2D/CanvasLayer/CaixaDialogo") as Control
-@onready var dado: Node = get_node_or_null("Dado")
+@onready var jogador: CharacterBody2D = get_node_or_null("escolhido") as CharacterBody2D
+@onready var caixa_dialogo: Control = get_node_or_null("escolhido/Camera2D/CanvasLayer/CaixaDialogo") as Control
+@onready var dado: Node = get_node_or_null("escolhido/Camera2D/CanvasLayer/Dado")
 
 var mapa_inicializado: bool = false
 var introducao_em_andamento: bool = false

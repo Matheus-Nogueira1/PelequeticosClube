@@ -1167,6 +1167,7 @@ position = Vector2(60, 70)
 position = Vector2(-6, 10)
 
 [node name="AnimationEscolhido" type="AnimatedSprite2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants/PlayerVisual" unique_id=1384800493]
+z_index = 1
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ba8p4")
 animation = &"walk_up"

@@ -565,7 +565,7 @@ func fechar_dialogo() -> void:
 
 	if fechar_para_selecao:
 		get_tree().change_scene_to_file(
-			"res://scenes/menu/EscolherPersonagem.tscn"
+			"res://scenes/menu/escolher-personagem.tscn"
 		)
 
 	dialogo_encerrado.emit()

@@ -1,4 +1,3 @@
-
 extends Node
 
 var grupo: Array[CombatenteData] = []

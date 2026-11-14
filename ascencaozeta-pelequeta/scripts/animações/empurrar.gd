@@ -274,12 +274,12 @@ func iniciar_empurrao():
 
 	# Vai para a Cabana Elizabeth.
 	var erro = get_tree().change_scene_to_file(
-		"res://scenes/mapas/CabanaElizabeth.tscn"
+		"res://scenes/mapas/cabana-elizabeth.tscn"
 	)
 
 	if erro != OK:
 		push_error(
-			"Não foi possível abrir Firekeeper.tscn. Erro: "
+			"Não foi possível abrir cabana-elizabeth.tscn. Erro: "
 			+ str(erro)
 		)
 

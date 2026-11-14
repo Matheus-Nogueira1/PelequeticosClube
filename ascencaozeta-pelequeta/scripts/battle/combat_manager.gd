@@ -3,7 +3,7 @@ class_name CombatManager
 
 # Importações
 const RolagemDadosD6 = preload("res://scripts/battle/rolagens-dados-d6.gd")
-const CENA_MAPA: String = "res://scenes/mapas/CabanaElizabeth.tscn"
+const CENA_MAPA: String = "res://scenes/mapas/cabana-elizabeth.tscn"
 const CENA_DADO_D6: PackedScene = preload(
     "res://scenes/testes/rolagem-dado.tscn"
 )

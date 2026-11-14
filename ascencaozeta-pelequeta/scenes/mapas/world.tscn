@@ -1,13 +1,13 @@
 [gd_scene format=4 uid="uid://don678k6xnkfw"]
 
-[ext_resource type="Script" uid="uid://b6ynscgobaq4f" path="res://scenes/mapas/vento_chao.gd" id="1_qjijs"]
+[ext_resource type="Script" uid="uid://b6ynscgobaq4f" path="res://scripts/animações/vento_chao.gd" id="1_qjijs"]
 [ext_resource type="Texture2D" uid="uid://ddau662gs3yvt" path="res://assets/world/TileMap_Template_MundoUm.png" id="2_0fipq"]
 [ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/Player/Base/Shadow.png" id="4_qjijs"]
 [ext_resource type="Texture2D" uid="uid://brd25mqc18gt8" path="res://assets/Npc/Veia/VeiaEmpurrarTemplate.png" id="5_fprfk"]
 [ext_resource type="Script" uid="uid://bwm3grv8aiupb" path="res://scripts/mapas/fade_inicial.gd" id="5_nx21t"]
 [ext_resource type="Texture2D" uid="uid://0lp03bptho16" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_CaindoCutscene-Sheet.png" id="5_qjijs"]
 [ext_resource type="Script" uid="uid://2nt3e04vjvi1" path="res://scripts/animações/empurrar.gd" id="6_qjijs"]
-[ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/Escolhido.tscn" id="9_fprfk"]
+[ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/escolhido.tscn" id="9_fprfk"]
 [ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="11_y7e1o"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_qjijs"]
