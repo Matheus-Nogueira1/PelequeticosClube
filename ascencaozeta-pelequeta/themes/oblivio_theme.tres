@@ -38,7 +38,19 @@ bg_color = Color(0.05882353, 0.019607844, 0.043137256, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2uid"]
 bg_color = Color(0.49019608, 0.02745098, 0.039215688, 1)
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ffjnq"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43l7w"]
+bg_color = Color(0.0627451, 0.02745098, 0.039215688, 0.6901961)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8hjk4"]
 
 [resource]
 default_font = ExtResource("1_ob7co")
@@ -53,6 +65,6 @@ Button/styles/hover_pressed = SubResource("StyleBoxFlat_1ujig")
 Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_icaiv")
 Button/styles/normal = ExtResource("1_bp8bq")
 Button/styles/pressed = SubResource("StyleBoxFlat_m2uid")
-Panel/styles/panel = ExtResource("1_bp8bq")
-PanelContainer/styles/panel = SubResource("StyleBoxEmpty_ffjnq")
+Panel/styles/panel = SubResource("StyleBoxFlat_43l7w")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_8hjk4")
 TabBar/styles/button_pressed = null

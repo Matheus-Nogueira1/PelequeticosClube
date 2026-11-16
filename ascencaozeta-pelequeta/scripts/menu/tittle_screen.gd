@@ -17,6 +17,8 @@ func _ready() -> void:
 	criar_botao("OPTIONS", Rect2(36, 73, 53, 17), _on_options_btn_pressed)
 	criar_botao("CREDITS", Rect2(36, 105, 53, 17), _on_credits_btn_pressed)
 	criar_botao("EXIT", Rect2(36, 137, 53, 17), _on_quit_btn_pressed)
+	# Teclado: começa com o primeiro botão destacado.
+	botoes_menu[0].grab_focus()
 
 	# Mantém a transição inicial verde.
 	transicao_verde.color = Color("132828")
@@ -44,7 +46,7 @@ func criar_botao(nome: String, area: Rect2, acao: Callable) -> void:
 	botao.name = nome
 	botao.text = ""
 	botao.tooltip_text = ""
-	botao.focus_mode = Control.FOCUS_NONE
+	botao.focus_mode = Control.FOCUS_ALL
 
 	# Coordenadas em pixels da imagem original.
 	botao.set_anchors_preset(Control.PRESET_TOP_LEFT)
@@ -65,6 +67,8 @@ func criar_botao(nome: String, area: Rect2, acao: Callable) -> void:
 	hover.border_color = Color(0.8, 0.15, 0.2, 0.45)
 	hover.set_corner_radius_all(2)
 	botao.add_theme_stylebox_override("hover", hover)
+	# O foco do teclado usa o mesmo destaque do hover do mouse.
+	botao.add_theme_stylebox_override("focus", hover)
 
 	# Clique: um pouco mais escuro, sem aumentar o botão.
 	var pressed := StyleBoxFlat.new()
@@ -76,6 +80,8 @@ func criar_botao(nome: String, area: Rect2, acao: Callable) -> void:
 
 	add_child(botao)
 	botao.pressed.connect(acao)
+	# O mouse move o destaque (um só botão destacado por vez).
+	botao.mouse_entered.connect(botao.grab_focus)
 	botoes_menu.append(botao)
 
 

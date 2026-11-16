@@ -60,6 +60,8 @@ var combate_ativo: bool = false
 var conhecimento_pendente := ""
 var fardos_iniciais: int = 0
 var resumo_resultado: Array[String] = []
+var estatisticas: EstatisticasCombate = EstatisticasCombate.new()
+var resultado_pontuacao: Dictionary = {}
 var _frame_confirmacao: int = -1
 # Estado da ação atual
 var acao_em_progresso: bool = false
@@ -84,6 +86,9 @@ func _inicializar_combate() -> void:
 
 	# TODO: Carregar dados dos personagens e inimigos
 	# Por enquanto, vou usar estrutura de exemplo
+	# Estatísticas novas a cada combate (nada vaza entre combates).
+	estatisticas = EstatisticasCombate.new()
+	resultado_pontuacao = {}
 	_setup_exemplo()
 
 	if combatentes_jogador.is_empty() or combatentes_inimigo.is_empty():
@@ -483,7 +488,7 @@ func _on_item_escolhido(nome_item: String) -> void:
 		)
 		await _devolver_acoes_apos_leitura()
 		return
-
+	var estresse_antes_item: int = combatente_ativo.get_estresse_total()
 	var resultado: Dictionary = ItemData.usar_item(combatente_ativo, item, regiao_alvo)
 	if not resultado.get("sucesso", false):
 		log_panel.registrar_evento(
@@ -492,7 +497,10 @@ func _on_item_escolhido(nome_item: String) -> void:
 		)
 		await _devolver_acoes_apos_leitura()
 		return
-
+	# Cura efetiva = Estresse realmente removido.
+	estatisticas.registrar_cura(
+		estresse_antes_item - combatente_ativo.get_estresse_total()
+	)
 	ItemData.remover_item(combatente_ativo, nome_item)
 	log_panel.registrar_evento(String(resultado["mensagem"]), "sucesso")
 	party_panel.atualizar_personagem(combatente_ativo.para_dictionary())
@@ -967,9 +975,11 @@ func _processar_ataque(
 			var estresse_gerado := 1
 			if res_regiao["categoria"] == "Falha Crítica":
 				estresse_gerado = 2
-			var resultado_estresse = atacante.aplicar_estresse(
+			var resultado_estresse = _aplicar_estresse_registrado(
+				atacante,
 				res_regiao["regiao"],
-				estresse_gerado
+				estresse_gerado,
+				true
 			)
 			linhas_falha.append("%s sofreu %d de estresse em %s." % [
 				atacante.nome,
@@ -1093,7 +1103,8 @@ func _processar_ataque(
 			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
 			await _animar_dano(alvo)
 			var torso_antes: int = alvo.estresse_por_regiao["Torso"]["atual"]
-			var resultado_estresse = alvo.aplicar_estresse(
+			var resultado_estresse = _aplicar_estresse_registrado(
+				alvo,
 				"Torso",
 				dano_total
 			)
@@ -1331,6 +1342,10 @@ func _finalizar_combate(resultado: String) -> void:
 	combate_ativo = false
 	# O resumo é capturado antes da linha de encerramento, que repetiria o título.
 	resumo_resultado = log_panel.obter_resumo(6)
+	# Calculado uma única vez (esta função só roda com combate_ativo).
+	resultado_pontuacao = estatisticas.montar_resultado(
+		ClassificacaoCombate.new(), resultado
+	)
 	log_panel.registrar_evento(
 		"═══ COMBATE FINALIZADO: %s ═══" % resultado,
 		"critico",
@@ -1409,6 +1424,47 @@ func _conectar_alternancia_paineis() -> void:
 func _sincronizar_paineis_inferiores() -> void:
 	comunicacao_panel.visible = not (action_panel.visible or regional_selector.visible)
 
+# ============================================================
+# ESTATÍSTICAS DE COMBATE (pontuação)
+# Único ponto que aplica Estresse e registra o que REALMENTE
+# mudou (variação do total, já com limite e transbordamento).
+# Não usa o CombatLog como fonte.
+# ============================================================
+func _aplicar_estresse_registrado(
+	alvo: CombatenteData,
+	regiao: String,
+	quantidade: int,
+	por_falha: bool = false
+) -> Dictionary:
+	var total_antes: int = alvo.get_estresse_total()
+	var desmaiado_antes: bool = alvo.desmaiado
+	var resultado: Dictionary = alvo.aplicar_estresse(regiao, quantidade)
+	var efetivo: int = alvo.get_estresse_total() - total_antes
+
+	if not por_falha or EstatisticasCombate.CONTAR_ESTRESSE_DE_FALHA:
+		if alvo.tipo == "inimigo":
+			estatisticas.registrar_dano_causado(efetivo)
+		else:
+			estatisticas.registrar_dano_recebido(efetivo)
+
+	# Só a transição real ativo -> desmaiado de um aliado conta
+	# (inclusive quando causada pelas falhas do próprio atacante).
+	if alvo.tipo != "inimigo" and not desmaiado_antes and alvo.desmaiado:
+		estatisticas.registrar_desmaio()
+	return resultado
+
+
+# Reanimação válida: só conta se o aliado estava desmaiado (e vivo)
+# e voltou ao estado ativo. Ainda não é chamada: não existe mecânica
+# de reanimação em combate. Quem a criar deve usar esta função.
+func _reanimar_combatente(alvo: CombatenteData) -> bool:
+	if alvo == null or alvo.morto or not alvo.desmaiado:
+		return false
+	alvo.reviver()
+	if alvo.desmaiado:
+		return false
+	estatisticas.registrar_reanimacao()
+	return true
 
 # ============================================================
 # TELA DE RESULTADOS
@@ -1438,6 +1494,7 @@ func _montar_dados_resultado(resultado: String) -> Dictionary:
 	return {
 		"resultado": resultado,
 		"resumo": resumo_resultado,
+		"estatisticas": resultado_pontuacao,
 		"fardos": _fardos_obtidos()
 	}
 

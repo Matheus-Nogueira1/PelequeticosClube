@@ -2474,6 +2474,7 @@ iniciar_intro_automaticamente = false
 fechar_para_selecao = false
 
 [node name="Dado" parent="Escolhido/Camera2D/CanvasLayer" unique_id=2129393194 instance=ExtResource("10_8p1a1")]
+visible = false
 position = Vector2(163, 62)
 
 [node name="Elizabeth" parent="." unique_id=1698368650 instance=ExtResource("11_fmova")]

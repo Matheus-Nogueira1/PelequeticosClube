@@ -4,7 +4,7 @@ extends Control
 @onready var slots: Array[Node] = $CenterContainer/HBoxContainer.get_children()
 @onready var name_label: Label = $CharacterName
 @onready var description_label: RichTextLabel = $DescriptionPanel/VBoxContainer/Description
-
+var _confirmado: bool = false
 # Ordem visual dos personagens na tela.
 var character_ids: Array[String] = [
 	"Escolhido",
@@ -37,7 +37,13 @@ func _ready() -> void:
 
 	configurar_titulo()
 	update_visual(true)
-
+	# Mouse: a área clicável é o TextureRect de cada personagem.
+	for i in range(slots.size()):
+		var imagem := slots[i].get_node_or_null("TextureRect") as TextureRect
+		if imagem == null:
+			push_warning("EscolherPersonagem: TextureRect não encontrado no slot %d." % i)
+			continue
+		imagem.gui_input.connect(_on_slot_gui_input.bind(i))
 
 func configurar_titulo() -> void:
 	name_label.add_theme_color_override(
@@ -58,9 +64,6 @@ func configurar_titulo() -> void:
 	# Centraliza o título dentro do espaço do Label.
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-
-
-
 
 func _input(event: InputEvent) -> void:
 	if slots.is_empty():
@@ -85,7 +88,6 @@ func obter_personagem_selecionado() -> Dictionary:
 	return PersonagensData.obter_dados_apresentacao(
 		character_ids[selected_index]
 	)
-
 
 func update_visual(skip_animation: bool = false) -> void:
 	update_name(skip_animation)
@@ -115,7 +117,6 @@ func update_visual(skip_animation: bool = false) -> void:
 		var target_color: Color = Color.WHITE if i == selected_index else Color(0.45, 0.45, 0.45, 1.0)
 
 		tween.tween_property(slot, "modulate", target_color, 0.2)
-
 
 func update_name(skip_animation: bool = false) -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
@@ -151,7 +152,6 @@ func update_name(skip_animation: bool = false) -> void:
 
 	tween.tween_property(name_label, "modulate:a", 1.0, 0.15)
 
-
 func update_description(skip_animation: bool = false) -> void:
 	var dados: Dictionary = obter_personagem_selecionado()
 	var novo_texto: String = dados["descricao"]
@@ -179,8 +179,10 @@ func update_description(skip_animation: bool = false) -> void:
 
 	tween.tween_property(description_label, "modulate:a", 1.0, 0.2)
 
-
 func select_character() -> void:
+	if _confirmado:
+		return
+	_confirmado = true
 	var dados: Dictionary = obter_personagem_selecionado()
 	var nome_personagem: String = character_ids[selected_index]
 
@@ -191,6 +193,7 @@ func select_character() -> void:
 
 	if GrupoAtual.obter_personagem_principal() == null:
 		push_error("Falha ao definir o personagem principal.")
+		_confirmado = false
 		return
 
 	get_tree().change_scene_to_file(
@@ -205,3 +208,14 @@ func aplicar_cor_nome(id_personagem: String) -> void:
 	if name_label.label_settings != null:
 		name_label.label_settings.font_color = cor
 	name_label.add_theme_color_override("font_color", cor)
+
+# Mouse: clique escolhe o personagem; clique no já escolhido confirma.
+func _on_slot_gui_input(event: InputEvent, indice: int) -> void:
+	var clique := event as InputEventMouseButton
+	if clique == null or not clique.pressed or clique.button_index != MOUSE_BUTTON_LEFT:
+		return
+	if indice == selected_index:
+		select_character()
+	else:
+		selected_index = indice
+		update_visual()

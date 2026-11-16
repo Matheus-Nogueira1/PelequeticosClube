@@ -11,12 +11,12 @@ content_margin_left = 6.0
 content_margin_top = 6.0
 content_margin_right = 6.0
 content_margin_bottom = 6.0
-bg_color = Color(0.08235294, 0.09019608, 0.105882354, 1)
+bg_color = Color(0.06100855, 0.025840001, 0.03876, 1)
 border_width_left = 1
 border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
-border_color = Color(0.31764707, 0.28627452, 0.21176471, 1)
+border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_2elm4"]
 font = ExtResource("3_hld0v")
@@ -48,7 +48,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.003921569)
+color = Color(1, 1, 1, 0)
 
 [node name="Centro" type="CenterContainer" parent="." unique_id=1519784979]
 layout_mode = 1
@@ -95,18 +95,20 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
-[node name="Rank" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao" unique_id=1669576952]
+[node name="TituloRank" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao" unique_id=1669576952]
 layout_mode = 2
 text = "Rank"
 
 [node name="DetalhesPontuacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao" unique_id=1399447676]
 layout_mode = 2
 
-[node name="NomeClassificacao" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=146034132]
+[node name="Rank" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=146034132]
+unique_name_in_owner = true
 layout_mode = 2
 text = "P"
 
-[node name="Pontuacao" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=2044573188]
+[node name="PontuacaoClassificacao" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=2044573188]
+unique_name_in_owner = true
 layout_mode = 2
 text = "10000"
 
@@ -126,11 +128,29 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/DanoCausado" unique_id=1891351935]
+layout_mode = 2
+text = "Dano Causado"
+
+[node name="DanoCausado" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/DanoCausado" unique_id=1920180867]
+unique_name_in_owner = true
+layout_mode = 2
+text = "111111111111"
+
 [node name="CuraEfetiva" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=2000701569]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/CuraEfetiva" unique_id=1328611106]
+layout_mode = 2
+text = "Cura Efetivada"
+
+[node name="CuraEfetivada" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/CuraEfetiva" unique_id=2106774681]
+unique_name_in_owner = true
+layout_mode = 2
+text = "11111111111"
 
 [node name="DanoRecebido" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=1636563433]
 custom_minimum_size = Vector2(0, 10)
@@ -138,11 +158,29 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
+[node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/DanoRecebido" unique_id=949307816]
+layout_mode = 2
+text = "Dano Recebido"
+
+[node name="DanoRecebido" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/DanoRecebido" unique_id=416243447]
+unique_name_in_owner = true
+layout_mode = 2
+text = "111111111111"
+
 [node name="AliadosDesmaiados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=1677625679]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+
+[node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/AliadosDesmaiados" unique_id=404471980]
+layout_mode = 2
+text = "Desmaios"
+
+[node name="Desmaios" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/AliadosDesmaiados" unique_id=1564464421]
+unique_name_in_owner = true
+layout_mode = 2
+text = "1111111111111"
 
 [node name="AliadosReanimados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=463541814]
 custom_minimum_size = Vector2(0, 10)
@@ -150,12 +188,30 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="BonusRecuperacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=463895986]
+[node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/AliadosReanimados" unique_id=2141367723]
+layout_mode = 2
+text = "Reanimações"
+
+[node name="Reanimacoes" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/AliadosReanimados" unique_id=1130678011]
+unique_name_in_owner = true
+layout_mode = 2
+text = "11111111111"
+
+[node name="Pontuacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=463895986]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_1m5vr")
+
+[node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/Pontuacao" unique_id=1851852866]
+layout_mode = 2
+text = "Pontuação"
+
+[node name="Pontuacao" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/Pontuacao" unique_id=2035044424]
+unique_name_in_owner = true
+layout_mode = 2
+text = "11111111111111"
 
 [node name="SeparadorTopo3" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=213398506]
 layout_mode = 2
@@ -241,8 +297,8 @@ scroll_active = false
 [node name="SeparadorTopo4" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=2084922192]
 layout_mode = 2
 
-[node name="BotaoContinuar" type="Button" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=140466228]
+[node name="BotaoContinuar" type="Button" parent="Centro/PainelPrincipal/Margem" unique_id=140466228]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
-text = "Continuar"
+text = "Ok"

@@ -63,6 +63,7 @@ metadata/_edit_lock_ = true
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer" unique_id=766001410]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
+mouse_filter = 2
 theme_override_constants/separation = 12
 alignment = 1
 
@@ -70,18 +71,24 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
 texture = ExtResource("3_wetd2")
 stretch_mode = 5
 
 [node name="TextureRect2" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1555085370]
 layout_mode = 2
 size_flags_vertical = 0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
 texture = ExtResource("4_mrfmh")
 stretch_mode = 5
 
 [node name="TextureRect3" type="TextureRect" parent="CenterContainer/HBoxContainer" unique_id=1605036739]
 layout_mode = 2
 size_flags_vertical = 0
+mouse_filter = 0
+mouse_default_cursor_shape = 2
 texture = ExtResource("5_ayp0l")
 stretch_mode = 5
 
