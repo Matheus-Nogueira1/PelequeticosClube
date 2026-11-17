@@ -59,7 +59,11 @@ func bonus_recuperacao() -> int:
 
 # O bônus de recuperação já está dentro desta soma: não somar de novo.
 # O ajuste do resultado é somado aqui, uma única vez, antes do piso.
-func pontuacao(classificacao: ClassificacaoCombate = null, resultado: String = "") -> int:
+func pontuacao(
+	classificacao: ClassificacaoCombate = null,
+	resultado: String = "",
+	rodadas: int = 0
+) -> int:
 	var total: int = (
 		PONTUACAO_BASE
 		+ dano_causado
@@ -68,15 +72,37 @@ func pontuacao(classificacao: ClassificacaoCombate = null, resultado: String = "
 		- PENALIDADE_DESMAIO * aliados_desmaiados
 		+ bonus_recuperacao()
 	)
+
 	if classificacao != null:
 		total += classificacao.ajuste_por_resultado(resultado)
-	return maxi(PONTUACAO_MINIMA, total)
+
+	var multiplicador: float = 1.0
+	if classificacao != null:
+		multiplicador = classificacao.multiplicador_por_rodadas(
+			resultado,
+			rodadas
+		)
+
+	return maxi(
+		PONTUACAO_MINIMA,
+		roundi(float(total) * multiplicador)
+	)
 
 
 # Contrato de dados enviado à tela de resultados.
-func montar_resultado(classificacao: ClassificacaoCombate, resultado: String = "") -> Dictionary:
-	var pontos: int = pontuacao(classificacao, resultado)
+func montar_resultado(
+	classificacao: ClassificacaoCombate,
+	resultado: String = "",
+	rodadas: int = 0
+) -> Dictionary:
+	var pontos: int = pontuacao(classificacao, resultado, rodadas)
 	var rank: Dictionary = classificacao.classificar(pontos)
+
+	var multiplicador: float = classificacao.multiplicador_por_rodadas(
+		resultado,
+		rodadas
+	)
+
 	return {
 		"dano_causado": dano_causado,
 		"cura_efetiva": cura_efetiva,
@@ -84,6 +110,8 @@ func montar_resultado(classificacao: ClassificacaoCombate, resultado: String = "
 		"aliados_desmaiados": aliados_desmaiados,
 		"aliados_reanimados": aliados_reanimados,
 		"bonus_recuperacao": bonus_recuperacao(),
+		"rodadas": rodadas,
+		"multiplicador_rodadas": multiplicador,
 		"pontuacao": pontos,
 		"rank": rank["letra"],
 		"nome_classificacao": rank["nome"],

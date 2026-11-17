@@ -37,12 +37,14 @@ func _ready() -> void:
 
 	configurar_titulo()
 	update_visual(true)
-	# Mouse: a área clicável é o TextureRect de cada personagem.
+	# Mouse: cada slot já é o próprio TextureRect.
 	for i in range(slots.size()):
-		var imagem := slots[i].get_node_or_null("TextureRect") as TextureRect
+		var imagem := slots[i] as TextureRect
+
 		if imagem == null:
-			push_warning("EscolherPersonagem: TextureRect não encontrado no slot %d." % i)
+			push_warning("EscolherPersonagem: slot %d não é um TextureRect." % i)
 			continue
+
 		imagem.gui_input.connect(_on_slot_gui_input.bind(i))
 
 func configurar_titulo() -> void:

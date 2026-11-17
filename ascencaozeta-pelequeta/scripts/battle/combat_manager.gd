@@ -63,11 +63,13 @@ var resumo_resultado: Array[String] = []
 var estatisticas: EstatisticasCombate = EstatisticasCombate.new()
 var resultado_pontuacao: Dictionary = {}
 var _frame_confirmacao: int = -1
+var rodadas_combate: int = 0
 # Estado da ação atual
 var acao_em_progresso: bool = false
 var regioes_selecionadas: Array[String] = []
 var alvo_selecionado: Dictionary = {}
 var aguardando_leitura: bool = false
+
 
 func _ready() -> void:
 	_conectar_sinais_paineis()
@@ -89,6 +91,7 @@ func _inicializar_combate() -> void:
 	# Estatísticas novas a cada combate (nada vaza entre combates).
 	estatisticas = EstatisticasCombate.new()
 	resultado_pontuacao = {}
+	rodadas_combate = 0
 	_setup_exemplo()
 
 	if combatentes_jogador.is_empty() or combatentes_inimigo.is_empty():
@@ -322,7 +325,14 @@ func _encontrar_proximo_combatente() -> CombatenteData:
 	if ordem_turno.is_empty():
 		return null
 	while tentativas < max_tentativas:
+		var indice_anterior: int = indice_turno_atual
 		indice_turno_atual = (indice_turno_atual + 1) % ordem_turno.size()
+
+		# A primeira seleção inicia a primeira rodada.
+		# Voltar à posição zero inicia uma nova rodada.
+		if indice_anterior == -1 or indice_turno_atual == 0:
+			rodadas_combate += 1
+
 		var combatente = ordem_turno[indice_turno_atual]
 
 		# Verificar se está vivo (não morto e não desmaiado permanentemente)
@@ -1344,7 +1354,9 @@ func _finalizar_combate(resultado: String) -> void:
 	resumo_resultado = log_panel.obter_resumo(6)
 	# Calculado uma única vez (esta função só roda com combate_ativo).
 	resultado_pontuacao = estatisticas.montar_resultado(
-		ClassificacaoCombate.new(), resultado
+		ClassificacaoCombate.new(),
+		resultado,
+		rodadas_combate
 	)
 	log_panel.registrar_evento(
 		"═══ COMBATE FINALIZADO: %s ═══" % resultado,

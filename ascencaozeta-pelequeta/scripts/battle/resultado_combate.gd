@@ -30,11 +30,13 @@ const CAMPOS_ESTATISTICAS: Dictionary = {
 	"aliados_reanimados": "Reanimacoes",
 	"pontuacao": "Pontuacao"
 }
+@onready var secao_classificacao: Control = get_node_or_null(
+	"Centro/PainelPrincipal/Margem/Classificação"
+) as Control
 
-# Arraste no Inspector: o nó "Classificação" e o "Estatisticas" (VBoxContainer).
-@export var secao_classificacao: Control
-@export var secao_estatisticas: Control
-
+@onready var secao_estatisticas: Control = get_node_or_null(
+	"Centro/PainelPrincipal/Margem/Estatisticas"
+) as Control
 @onready var titulo: Label = _label("TituloResultado")
 @onready var subtitulo: Label = _label("Subtitulo")
 @onready var resumo: RichTextLabel = get_node_or_null("%Resumo") as RichTextLabel
@@ -45,7 +47,6 @@ const CAMPOS_ESTATISTICAS: Dictionary = {
 @onready var rank: Label = _label("Rank")
 @onready var nome_classificacao: Label = _label("NomeClassificacao")
 @onready var pontuacao_classificacao: Label = _label("PontuacaoClassificacao")
-@onready var botao_proximo: Button = get_node_or_null("%BotaoProximo") as Button
 @onready var botao_continuar: Button = get_node_or_null("%BotaoContinuar") as Button
 
 var _dados: Dictionary = {}
@@ -54,12 +55,11 @@ var _pagina_estatisticas: bool = false
 
 
 func _ready() -> void:
-	if botao_proximo != null:
-		botao_proximo.pressed.connect(_confirmar)
 	if botao_continuar != null:
 		botao_continuar.pressed.connect(_confirmar)
-	if botao_proximo == null and botao_continuar == null:
-		push_warning("[ResultadoCombate] Nenhum botão encontrado: só o teclado confirma.")
+	else:
+		push_warning("[ResultadoCombate] BotaoContinuar não encontrado.")
+
 	_atualizar()
 
 
@@ -146,14 +146,24 @@ func _juntar_linhas(linhas: Array) -> String:
 # ============================================================
 func _mostrar_pagina(estatisticas: bool) -> void:
 	_pagina_estatisticas = estatisticas
+
 	if secao_classificacao != null:
 		secao_classificacao.visible = not estatisticas
+
 	if secao_estatisticas != null:
 		secao_estatisticas.visible = estatisticas
-	var botao: Button = botao_continuar if estatisticas else botao_proximo
-	if botao != null:
-		botao.grab_focus()
 
+	if botao_continuar != null:
+		var possui_estatisticas: bool = not _dados.get("estatisticas", {}).is_empty()
+
+		if estatisticas:
+			botao_continuar.text = "Ok"
+		elif possui_estatisticas:
+			botao_continuar.text = "Próximo"
+		else:
+			botao_continuar.text = "Ok"
+
+		botao_continuar.grab_focus()
 
 # _input (e não _unhandled_input) para o Enter não ser consumido
 # por um botão com foco. Ignora o Enter segurado (eco).

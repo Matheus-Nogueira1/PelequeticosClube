@@ -11,21 +11,26 @@ class_name ClassificacaoCombate
 # ------------------------------------------------------------
 
 # Enquanto for false, nenhum rank é atribuído (a tela mostra "?").
-var limites_definidos: bool = false
+var limites_definidos: bool = true
 
 # Pontuação mínima para alcançar cada rank (abaixo de B é C).
 # Precisam estar em ordem crescente: B <= A <= S <= SS <= P.
-var minimo_b: int = 0
-var minimo_a: int = 0
-var minimo_s: int = 0
-var minimo_ss: int = 0
-var minimo_p: int = 0
+var minimo_b: int = 1500
+var minimo_a: int = 2000
+var minimo_s: int = 3000
+var minimo_ss: int = 4500
+var minimo_p: int = 5000
 
 # Ajuste somado à pontuação conforme o resultado do combate.
 # Para a Derrota, use um valor NEGATIVO.
-var ajuste_vitoria: int = 0
-var ajuste_derrota: int = 0
-var ajuste_fuga: int = 0
+var ajuste_vitoria: int = 500
+var ajuste_derrota: int = -1000
+var ajuste_fuga: int = -500
+
+# Multiplicador de pontuação para vitórias rápidas.
+# Combates com rodadas iguais ou superiores à referência ficam em 1.0x.
+var rodadas_referencia: int = 5
+var bonus_por_rodada_antecipada: float = 0.5
 
 # ------------------------------------------------------------
 # Daqui para baixo não precisa mexer
@@ -51,6 +56,17 @@ func ajuste_por_resultado(resultado: String) -> int:
 			return ajuste_fuga
 	return 0
 
+func multiplicador_por_rodadas(resultado: String, rodadas: int) -> float:
+	if resultado != "Vitória":
+		return 1.0
+
+	if rodadas_referencia <= 0 or rodadas >= rodadas_referencia:
+		return 1.0
+
+	var rodadas_economizadas: int = rodadas_referencia - rodadas
+	return 1.0 + (
+		float(rodadas_economizadas) * bonus_por_rodada_antecipada
+	)
 
 func classificar(pontuacao: int) -> Dictionary:
 	if not limites_definidos:
