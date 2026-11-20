@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://cn6caa2xtkuwc"]
+
+[ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_phj2d"]
+
+[node name="DetalheLinha" type="RichTextLabel" unique_id=712198396]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_phj2d")
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+theme_override_font_sizes/bold_italics_font_size = 10
+bbcode_enabled = true
+text = "Estus Fleskus"
+fit_content = true
+scroll_active = false

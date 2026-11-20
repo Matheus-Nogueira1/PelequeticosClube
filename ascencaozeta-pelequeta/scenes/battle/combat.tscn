@@ -22,7 +22,6 @@
 [ext_resource type="Texture2D" uid="uid://8x7ih6p7xxqo" path="res://assets/Inimigos/Dummy_Template_Dodge-Sheet.png" id="14_j6so4"]
 [ext_resource type="Texture2D" uid="uid://cb08borecgw6v" path="res://assets/Inimigos/Dummy_Template_Hit-Sheet.png" id="15_iphor"]
 [ext_resource type="Texture2D" uid="uid://bknmpatpexsxl" path="res://assets/Inimigos/Dummy_Template_Morrendo-Sheet.png" id="16_acp53"]
-[ext_resource type="LabelSettings" uid="uid://c4uyji3i1damp" path="res://fonts/Descrição.tres" id="20_omrhf"]
 [ext_resource type="PackedScene" uid="uid://difj18a205kan" path="res://scenes/battle/enemy_card.tscn" id="24_x1unb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f0agn"]
@@ -1103,7 +1102,6 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_osi8t")
 script = ExtResource("1_vcae8")
-metadata/_edit_lock_ = true
 
 [node name="CamadaResultado" type="CanvasLayer" parent="." unique_id=107115869]
 unique_name_in_owner = true
@@ -1114,273 +1112,384 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_right = 4.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_lock_ = true
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=702596601]
-layout_mode = 2
-theme_override_constants/separation = 2
-metadata/_edit_lock_ = true
-
-[node name="TopBar" type="PanelContainer" parent="MarginContainer/VBoxContainer" unique_id=1418944177]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
-size_flags_vertical = 3
-metadata/_edit_lock_ = true
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar" unique_id=1418944178]
-layout_mode = 2
-theme_override_constants/separation = 2
-metadata/_edit_lock_ = true
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer" unique_id=1367544077]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1367544077]
+custom_maximum_size = Vector2(310, 182)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 2
-metadata/_edit_lock_ = true
 
-[node name="PartyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1169267679]
+[node name="PartyPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=1169267679]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(92, 0)
+custom_minimum_size = Vector2(92, 182)
+custom_maximum_size = Vector2(92, 182)
 layout_mode = 2
 script = ExtResource("2_osi8t")
-metadata/_edit_lock_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/PartyPanel" unique_id=144047478]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel" unique_id=144047478]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=684244819]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=684244819]
 layout_mode = 2
-text = "party"
+text = "Party"
 
-[node name="MarcadorParty" type="Panel" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=28817273]
+[node name="PartyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=788364095]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="MarcadorParty" type="Panel" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=28817273]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="PartyScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=1184149443]
+[node name="PartyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=1184149443]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 script = ExtResource("4_yyqwn")
 metadata/_custom_type_script = "uid://hkqdbuk88uag"
 
-[node name="PartyCard" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/PartyPanel/VBoxContainer/PartyScroll" unique_id=1244372248 instance=ExtResource("5_x1unb")]
+[node name="PartyCard" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer/PartyScroll" unique_id=1244372248 instance=ExtResource("5_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="PartyIcones" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1804933668]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 0
-theme_override_constants/separation = 2
-
-[node name="Battlefield" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=468784180]
-unique_name_in_owner = true
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1603550241]
+custom_minimum_size = Vector2(126, 182)
+custom_maximum_size = Vector2(126, 182)
 layout_mode = 2
 size_flags_horizontal = 3
-metadata/_edit_lock_ = true
 
-[node name="BattleFieldContent" type="Control" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=98674895]
+[node name="DicePanel" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=104706448]
+custom_minimum_size = Vector2(0, 10)
+custom_maximum_size = Vector2(-1, 20)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Battlefield" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=468784180]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 90)
+custom_maximum_size = Vector2(-1, 90)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="BattleFieldContent" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield" unique_id=98674895]
 unique_name_in_owner = true
 layout_mode = 2
-metadata/_edit_lock_ = true
+size_flags_vertical = 3
 
-[node name="Background" type="TextureRect" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/BattleFieldContent" unique_id=215613320]
+[node name="Background" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield/BattleFieldContent" unique_id=215613320]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-metadata/_edit_lock_ = true
 
-[node name="Combatants" type="Node2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=208666540]
+[node name="Combatants" type="Node2D" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield" unique_id=208666540]
 position = Vector2(60, 70)
 
-[node name="PlayerVisual" type="Node2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants" unique_id=2078291229]
-position = Vector2(-6, 10)
+[node name="PlayerVisual" type="Node2D" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield/Combatants" unique_id=2078291229]
+position = Vector2(-11, -4)
 
-[node name="AnimationEscolhido" type="AnimatedSprite2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants/PlayerVisual" unique_id=1384800493]
+[node name="AnimationEscolhido" type="AnimatedSprite2D" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield/Combatants/PlayerVisual" unique_id=1384800493]
 z_index = 1
 y_sort_enabled = true
 sprite_frames = SubResource("SpriteFrames_ba8p4")
 animation = &"walk_up"
 
-[node name="Shadow" type="AnimatedSprite2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants/PlayerVisual" unique_id=501550323]
+[node name="Shadow" type="AnimatedSprite2D" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield/Combatants/PlayerVisual" unique_id=501550323]
 sprite_frames = SubResource("SpriteFrames_0nysw")
 animation = &"shadow"
 
-[node name="EnemyVisual" type="Node2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants" unique_id=1088173290]
-position = Vector2(44, -27)
+[node name="EnemyVisual" type="Node2D" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield/Combatants" unique_id=1088173290]
+position = Vector2(15, -40)
 
-[node name="AnimationDummy" type="AnimatedSprite2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants/EnemyVisual" unique_id=2037880957]
+[node name="AnimationDummy" type="AnimatedSprite2D" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield/Combatants/EnemyVisual" unique_id=2037880957]
 y_sort_enabled = true
 scale = Vector2(0.7, 0.7)
 sprite_frames = SubResource("SpriteFrames_7btmf")
 animation = &"Atacando"
 
-[node name="Shadow" type="AnimatedSprite2D" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/Combatants/EnemyVisual" unique_id=806172822]
+[node name="Shadow" type="AnimatedSprite2D" parent="MarginContainer/HBoxContainer/VBoxContainer/Battlefield/Combatants/EnemyVisual" unique_id=806172822]
 position = Vector2(1.1920929e-07, 4.285714)
 scale = Vector2(1.0833333, 1)
 sprite_frames = SubResource("SpriteFrames_s3ns4")
 animation = &"shadow"
 
-[node name="RegionalPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=2041982078]
+[node name="ControlContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=1453330173]
+custom_minimum_size = Vector2(0, 50)
+custom_maximum_size = Vector2(-1, 70)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RegionalPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer" unique_id=2041982078]
 unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 60)
+custom_maximum_size = Vector2(-1, 70)
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 8
 script = ExtResource("4_sa5k0")
-metadata/_edit_lock_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel" unique_id=1452319308]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel" unique_id=1452319308]
 layout_mode = 2
-theme_override_constants/separation = 2
+theme_override_constants/separation = 0
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer" unique_id=1375947462]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer" unique_id=1375947462]
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "Selecione regioes"
 
-[node name="RegionalGrid" type="GridContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer" unique_id=1596544836]
+[node name="RegionalGrid" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer" unique_id=1596544836]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/h_separation = 2
-theme_override_constants/v_separation = 2
+theme_override_constants/v_separation = 1
 columns = 2
 
-[node name="BotaoTorso" type="Button" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=885005066]
-custom_minimum_size = Vector2(0, 12)
+[node name="BotaoTorso" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=885005066]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 toggle_mode = true
 text = "Torso"
-clip_text = true
 
-[node name="BotaoBracoDireito" type="Button" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=1066451341]
-custom_minimum_size = Vector2(0, 12)
+[node name="BotaoBracoDireito" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=1066451341]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 toggle_mode = true
 text = "Braco Direito"
-clip_text = true
 
-[node name="BotaoBracoEsquerdo" type="Button" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=939240329]
-custom_minimum_size = Vector2(0, 12)
+[node name="BotaoBracoEsquerdo" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=939240329]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 toggle_mode = true
 text = "Braco Esquerdo"
-clip_text = true
 
-[node name="BotaoPernaDireita" type="Button" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=1766357764]
-custom_minimum_size = Vector2(0, 12)
+[node name="BotaoPernaDireita" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=1766357764]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 toggle_mode = true
 text = "Perna Direita"
-clip_text = true
 
-[node name="BotaoPernaEsquerda" type="Button" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=1441325651]
-custom_minimum_size = Vector2(0, 12)
+[node name="BotaoPernaEsquerda" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer/RegionalGrid" unique_id=1441325651]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 toggle_mode = true
 text = "Perna Esquerda"
-clip_text = true
 
-[node name="RegionalInfo" type="Label" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer" unique_id=1613176431]
+[node name="RegionalInfo" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer" unique_id=1613176431]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(10, 10)
+custom_minimum_size = Vector2(10, 5)
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "Clique para selecionar"
 autowrap_mode = 3
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer" unique_id=2059958757]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer" unique_id=2059958757]
 layout_mode = 2
-theme_override_constants/separation = 4
+theme_override_constants/separation = 2
 
-[node name="RegionalConfirmar" type="Button" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer/HBoxContainer" unique_id=70514055]
+[node name="RegionalConfirmar" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer/HBoxContainer" unique_id=70514055]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 text = "Confirmar"
-clip_text = true
 
-[node name="RegionalCancelar" type="Button" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/RegionalPanel/VBoxContainer/HBoxContainer" unique_id=782407226]
+[node name="RegionalCancelar" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/RegionalPanel/VBoxContainer/HBoxContainer" unique_id=782407226]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
 text = "Cancelar"
-clip_text = true
 
-[node name="ActionPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=424074914]
+[node name="ActionPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer" unique_id=424074914]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(132, 70)
+custom_maximum_size = Vector2(132, 70)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 script = ExtResource("5_8we11")
-metadata/_edit_lock_ = true
 
-[node name="ComunicacaoPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield" unique_id=2127077464]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel" unique_id=1869362331]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="GridPrincipal" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer" unique_id=776582532]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 80)
-custom_maximum_size = Vector2(132, -1)
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 2
+
+[node name="BotaoAtacar" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/GridPrincipal" unique_id=1516077252]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "Atacar"
+
+[node name="BotaoConhecimento" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/GridPrincipal" unique_id=25246819]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "Conhecimentos"
+
+[node name="BotaoHabilidade" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/GridPrincipal" unique_id=1610934904]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "Habilidades"
+
+[node name="BotaoItem" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/GridPrincipal" unique_id=1552577582]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "Usar Item"
+
+[node name="BotaoEsquivar" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/GridPrincipal" unique_id=1704703862]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "Esquivar"
+
+[node name="BotaoPassar" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/GridPrincipal" unique_id=1080796733]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 10
+text = "Passar Turno"
+
+[node name="TelaSubmenu" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer" unique_id=483340711]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+
+[node name="SubmenuTitulo" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=1537419226]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Habilidades"
+
+[node name="SubmenuScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=98990379]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+script = ExtResource("4_yyqwn")
+metadata/_custom_type_script = "uid://hkqdbuk88uag"
+
+[node name="SubmenuLista" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu/SubmenuScroll" unique_id=672750507]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AcaoConfirmar" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=462226978]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Confirmar"
+
+[node name="AcaoVoltar" type="Button" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=1806969825]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 12)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Voltar"
+
+[node name="ComunicacaoPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer" unique_id=2127077464]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 70)
+custom_maximum_size = Vector2(132, 70)
 layout_mode = 2
 size_flags_vertical = 8
 mouse_filter = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/ComunicacaoPanel" unique_id=482424735]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ComunicacaoPanel" unique_id=482424735]
 layout_mode = 2
 
-[node name="ComunicacaoLog" type="RichTextLabel" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/ComunicacaoPanel/VBoxContainer" unique_id=1241593587]
+[node name="ComunicacaoLog" type="RichTextLabel" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ComunicacaoPanel/VBoxContainer" unique_id=1241593587]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 8
+theme_override_font_sizes/bold_italics_font_size = 8
+theme_override_font_sizes/italics_font_size = 8
+theme_override_font_sizes/mono_font_size = 8
 bbcode_enabled = true
+text = "Escolhido ataca novamente"
 scroll_following = true
 script = ExtResource("6_hrcy2")
 
-[node name="DicaContinuar" type="Label" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/Battlefield/ComunicacaoPanel/VBoxContainer" unique_id=109655105]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-text = "Aperte E/Enter para confirmar"
-label_settings = ExtResource("20_omrhf")
-
-[node name="EnemyIcones" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1970800]
+[node name="DicaContinuar" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/ControlContainer/ComunicacaoPanel/VBoxContainer" unique_id=109655105]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_vertical = 0
-theme_override_constants/separation = 2
+size_flags_vertical = 1
+theme_override_font_sizes/font_size = 10
+text = "Aperte Enter para confirmar"
 
-[node name="EnemyPanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer" unique_id=1029187186]
+[node name="EnemyPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=1029187186]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(92, 0)
+custom_minimum_size = Vector2(92, 182)
+custom_maximum_size = Vector2(92, 182)
 layout_mode = 2
 script = ExtResource("3_4gnb8")
-metadata/_edit_lock_ = true
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/EnemyPanel" unique_id=1266867408]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel" unique_id=1266867408]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1437034192]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1437034192]
 layout_mode = 2
 text = "Sombras"
 horizontal_alignment = 2
 
-[node name="MarcadorEnemy" type="Panel" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=952539940]
+[node name="EnemyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2001851537]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="MarcadorEnemy" type="Panel" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=952539940]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
 
-[node name="EnemyScroll" type="ScrollContainer" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2111714629]
+[node name="EnemyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2111714629]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -1388,6 +1497,6 @@ horizontal_scroll_mode = 0
 script = ExtResource("4_yyqwn")
 metadata/_custom_type_script = "uid://hkqdbuk88uag"
 
-[node name="EnemyCard" parent="MarginContainer/VBoxContainer/TopBar/VBoxContainer/HBoxContainer/EnemyPanel/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
+[node name="EnemyCard" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2

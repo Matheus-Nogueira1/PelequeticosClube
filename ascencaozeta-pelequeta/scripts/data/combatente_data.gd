@@ -516,6 +516,7 @@ func para_dictionary() -> Dictionary:
 		"numero_desmaios_total": numero_desmaios_total,
 		"proteses": proteses,
 		"habilidade_sobrecarga_ativa": habilidade_sobrecarga_ativa,
+		"desmaiado": desmaiado,
 		"morto": morto
 	}
 ## Cria a partir de um Dictionary

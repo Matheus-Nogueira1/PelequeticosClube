@@ -64,6 +64,7 @@ var resumo_resultado: Array[String] = []
 var estatisticas: EstatisticasCombate = EstatisticasCombate.new()
 var resultado_pontuacao: Dictionary = {}
 var _frame_confirmacao: int = -1
+var painel_inimigos_ativo: bool = false  # Tab: painel que recebe Q e Espaço
 # Ordem de iniciativa no início do combate. Nunca é modificada:
 # serve só para dar a cada combatente uma posição fixa (contagem de rodadas).
 var ordem_inicial: Array[CombatenteData] = []
@@ -111,6 +112,7 @@ func _inicializar_combate() -> void:
 		for combatente in combatentes_jogador:
 			jogadores_dict.append(combatente.para_dictionary())
 		party_panel.atualizar_todos(jogadores_dict)
+	_atualizar_marcadores_painel()
 	if regional_selector:
 		regional_selector.desativar()
 
@@ -198,6 +200,7 @@ func _conectar_sinais_paineis() -> void:
 	if enemy_panel:
 		enemy_panel.inimigo_selecionado.connect(_on_inimigo_selecionado)
 		enemy_panel.selecao_alvo_cancelada.connect(_on_alvo_cancelado)
+		enemy_panel.modo_alvo_alterado.connect(_atualizar_marcadores_painel)
 
 
 func _buscar_sprite_animado(
@@ -1281,9 +1284,9 @@ func _definir_dica_leitura(ativa: bool, indice: int = 0, total: int = 0) -> void
 	if not ativa:
 		return
 	if indice < total - 1:
-		dica_continuar.text = "(%d/%d) E/Enter ou cliquer" % [indice + 1, total]
+		dica_continuar.text = "(%d/%d) Enter ou clique: avançar" % [indice + 1, total]
 	else:
-		dica_continuar.text = "E/Enter ou clique"
+		dica_continuar.text = "Enter ou clique: continuar"
 
 # Variante para ações que não terminam o turno (habilidade, item
 # inválido, Sobrecarga): lê a mensagem e devolve o ActionPanel.
@@ -1437,6 +1440,54 @@ func _conectar_alternancia_paineis() -> void:
 	regional_selector.visibility_changed.connect(_sincronizar_paineis_inferiores)
 	_sincronizar_paineis_inferiores()
 
+# ============================================================
+# NAVEGAÇÃO ENTRE CARDS (Q / Espaço / Tab)
+# Fica em _input para ser tratada antes da GUI: assim o Espaço
+# não aciona o botão focado (ui_accept) e o Tab não move o foco.
+# Só vale com o combate ativo; fora dele o Espaço continua sendo
+# confirmação normal (ex.: tela de resultados).
+# ============================================================
+func _input(event: InputEvent) -> void:
+	if not combate_ativo:
+		return
+	var anterior: bool = event.is_action_pressed("card_anterior", true)
+	var proximo: bool = event.is_action_pressed("card_proximo", true)
+	var alternar: bool = event.is_action_pressed("alternar_painel", true)
+	if not (anterior or proximo or alternar):
+		return
+
+	get_viewport().set_input_as_handled()
+	if event.is_echo():
+		return
+
+	if alternar:
+		_alternar_painel()
+	elif proximo:
+		_navegar_card(1)
+	else:
+		_navegar_card(-1)
+
+
+# Na escolha de alvo o painel de inimigos recebe a navegação sempre.
+func _navegar_card(passo: int) -> void:
+	if enemy_panel.modo_seletor_ativo or painel_inimigos_ativo:
+		enemy_panel.navegar(passo)
+	else:
+		party_panel.navegar(passo)
+
+
+func _alternar_painel() -> void:
+	if enemy_panel.modo_seletor_ativo:
+		return
+	painel_inimigos_ativo = not painel_inimigos_ativo
+	_atualizar_marcadores_painel()
+
+
+# Mostra um marcador por vez (o parâmetro vem do sinal modo_alvo_alterado).
+func _atualizar_marcadores_painel(_modo_alvo: bool = false) -> void:
+	var inimigos: bool = painel_inimigos_ativo or enemy_panel.modo_seletor_ativo
+	party_panel.definir_marcador(not inimigos)
+	enemy_panel.definir_marcador(inimigos)
 
 func _sincronizar_paineis_inferiores() -> void:
 	comunicacao_panel.visible = not (action_panel.visible or regional_selector.visible)

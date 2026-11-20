@@ -1,129 +1,211 @@
 extends PanelContainer
 class_name EnemyPanel
-const TAMANHO_FONTE: int = 8
-## PAINEL DE INIMIGOS
-## Mostra lista dos inimigos com:
-## - Nome de cada inimigo
-## - Estresse total com barra visual (░▓▓▓▓░░░)
-## - Botões para selecionar alvo em combate
-## - Atualização em tempo real quando sofrem dano
+
+# ============================================================
+# PAINEL DE INIMIGOS
+# A estrutura (card, coluna de ícones, marcador) vive em
+# combat.tscn e enemy_card.tscn. Este script só preenche o texto
+# e controla a seleção.
+# - Fora da escolha de alvo: clicar num ícone só mostra o card (consulta).
+# - Na escolha de alvo (ativar_seletor_alvo): clicar num ícone, ou
+#   Enter, confirma aquele inimigo como alvo.
+# ============================================================
 
 ## ===== SINAIS =====
-
-## Emitido quando um inimigo é selecionado como alvo
 signal inimigo_selecionado(inimigo: Dictionary)
-## Emitido quando um inimigo é deseleccionado
 signal inimigo_deseleccionado
-## Emitido quando o jogador cancela a escolha do alvo (Esc)
+## Emitido quando o jogador cancela a escolha do alvo (Esc ou clique no campo)
 signal selecao_alvo_cancelada
+## Emitido quando a escolha de alvo começa ou termina
+signal modo_alvo_alterado(ativo: bool)
 
-# UI
-@onready var vbox = VBoxContainer.new()
-@onready var label_titulo = Label.new()
-@onready var scroll_container = ScrollTeclado.new()
-@onready var lista_inimigos = VBoxContainer.new()
+const CENA_ICONE: PackedScene = preload("res://scenes/battle/icone_personagem.tscn")
+const VARIACAO_NORMAL: StringName = &"IconePersonagem"
+const VARIACAO_ALVO: StringName = &"IconeAlvo"
+
+# Preenchido no Inspector (chave = nome do inimigo: Dummy, Carcaça...).
+@export var texturas_icones: Dictionary[String, Texture2D] = {}
+
+@onready var coluna_icones: VBoxContainer = %EnemyIcones
+@onready var card: Control = %EnemyCard
+@onready var marcador: Control = %MarcadorEnemy
+@onready var texto_label: Label = card.get_node("%TextoLabel")
 
 var inimigos: Array[Dictionary] = []
-var botoes_inimigos: Dictionary = {}  # nome -> botão
+var botoes_inimigos: Dictionary = {}  # nome -> ícone (Button)
 var inimigo_selecionado_atual: Dictionary = {}
 var modo_seletor_ativo: bool = false
-
-
-func _ready() -> void:
-	_criar_layout()
-
-# ============================================================================
-# CRIAÇÃO DA UI
-# ============================================================================
-
-func _criar_layout() -> void:
-	"""Cria o layout do painel de inimigos"""
-	vbox.add_theme_constant_override("separation", 2)
-	vbox.mouse_filter = Control.MOUSE_FILTER_PASS
-	add_child(vbox)
-	
-	# Título
-	label_titulo.text = "Inimigos"
-	label_titulo.add_theme_font_size_override("font_size", 10)
-	label_titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	vbox.add_child(label_titulo)
-	
-	# Container de scroll para lista
-	scroll_container.clip_contents = true
-	scroll_container.mouse_filter = Control.MOUSE_FILTER_STOP
-	scroll_container.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	scroll_container.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	scroll_container.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	lista_inimigos.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	lista_inimigos.add_theme_constant_override("separation", 2)
-	lista_inimigos.mouse_filter = Control.MOUSE_FILTER_PASS
-	scroll_container.add_child(lista_inimigos)
-	scroll_container.follow_focus = true
-	vbox.add_child(scroll_container)
-	
-	# Começar desativado
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
+var exibido: String = ""
 
 # ============================================================================
 # GERENCIAMENTO DE INIMIGOS
 # ============================================================================
 
 func adicionar_inimigo(inimigo: Dictionary) -> void:
-	"""Adiciona um inimigo à lista"""
 	inimigos.append(inimigo)
-	_criar_botao_inimigo(inimigo)
+	botoes_inimigos[inimigo["nome"]] = _criar_icone(inimigo)
+	if exibido.is_empty():
+		_exibir(inimigo["nome"])
+
 
 func atualizar_inimigo(inimigo: Dictionary) -> void:
-	var chave = inimigo["nome"]
-	for i in range(inimigos.size()):
-		if inimigos[i]["nome"] == chave:
-			inimigos[i] = inimigo
-			break
-	if chave in botoes_inimigos:
-		var botao = botoes_inimigos[chave]
-		botao.text = _formatar_texto_inimigo(inimigo)
+	var chave: String = inimigo["nome"]
+	var indice: int = _indice_de(chave)
+	if indice == -1:
+		return
+	inimigos[indice] = inimigo
+	if chave == exibido:
+		texto_label.text = _formatar_texto_inimigo(inimigo)
+
 
 func remover_inimigo(inimigo: Dictionary) -> void:
 	"""Remove um inimigo da lista (quando derrotado)"""
-	var chave = inimigo["nome"]
-	if chave in botoes_inimigos:
-		botoes_inimigos[chave].queue_free()
+	var chave: String = inimigo["nome"]
+	var indice: int = _indice_de(chave)
+	if indice == -1:
+		return
+
+	inimigos.remove_at(indice)
+	if botoes_inimigos.has(chave):
+		(botoes_inimigos[chave] as Button).queue_free()
 		botoes_inimigos.erase(chave)
-	
-	inimigos = inimigos.filter(func(i): return i["nome"] != chave)
-	
 	if inimigo_selecionado_atual == inimigo:
 		inimigo_selecionado_atual.clear()
 
+	if chave == exibido:
+		exibido = ""
+		if inimigos.is_empty():
+			card.visible = false
+		else:
+			_exibir(inimigos[mini(indice, inimigos.size() - 1)]["nome"])
+
+
 func limpar_inimigos() -> void:
 	"""Remove todos os inimigos da lista"""
-	for botao in botoes_inimigos.values():
-		botao.queue_free()
+	for icone in botoes_inimigos.values():
+		(icone as Button).queue_free()
 	botoes_inimigos.clear()
 	inimigos.clear()
 	inimigo_selecionado_atual.clear()
+	exibido = ""
+	card.visible = false
+
+
+func atualizar_todos(inimigos_novos: Array[Dictionary]) -> void:
+	"""Atualiza toda a lista de inimigos"""
+	limpar_inimigos()
+	for inimigo in inimigos_novos:
+		adicionar_inimigo(inimigo)
 
 # ============================================================================
-# CRIAÇÃO DE BOTÕES
+# SELEÇÃO E ESCOLHA DE ALVO
 # ============================================================================
 
-func _criar_botao_inimigo(inimigo: Dictionary) -> void:
-	"""Cria um botão visual para um inimigo"""
-	var botao = Button.new()
-	
-	botao.alignment = HORIZONTAL_ALIGNMENT_LEFT
-	botao.vertical_icon_alignment = VERTICAL_ALIGNMENT_TOP
-	botao.text = _formatar_texto_inimigo(inimigo)
-	botao.custom_minimum_size = Vector2(0, 0)
-	botao.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	UiUtil.aplicar(botao, TAMANHO_FONTE)
-	botao.toggle_mode = true
-	botao.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	botao.focus_mode = Control.FOCUS_NONE
-	botao.pressed.connect(_on_botao_inimigo_pressionado.bind(inimigo))
-	
-	lista_inimigos.add_child(botao)
-	botoes_inimigos[inimigo["nome"]] = botao
+# Passa ao inimigo seguinte (+1) ou anterior (-1), de forma circular.
+func navegar(passo: int) -> void:
+	if inimigos.is_empty():
+		return
+	var indice: int = _indice_de(exibido)
+	if indice == -1:
+		indice = 0
+	else:
+		indice = posmod(indice + passo, inimigos.size())
+	_exibir(inimigos[indice]["nome"])
+
+
+func ativar_seletor_alvo() -> void:
+	if modo_seletor_ativo:
+		return
+	modo_seletor_ativo = true
+	_aplicar_variacao_a_todos(VARIACAO_ALVO)
+	modo_alvo_alterado.emit(true)
+
+
+func desativar_seletor_alvo() -> void:
+	"""Desativa o modo de seleção de alvo"""
+	if not modo_seletor_ativo:
+		return
+	modo_seletor_ativo = false
+	_aplicar_variacao_a_todos(VARIACAO_NORMAL)
+	modo_alvo_alterado.emit(false)
+
+
+# Esc ou clique no campo de batalha.
+func cancelar_selecao_alvo() -> void:
+	if not modo_seletor_ativo:
+		return
+	desativar_seletor_alvo()
+	selecao_alvo_cancelada.emit()
+
+
+func obter_inimigo_selecionado() -> Dictionary:
+	"""Retorna o inimigo atualmente selecionado"""
+	return inimigo_selecionado_atual
+
+
+func _on_icone_pressionado(nome: String) -> void:
+	_exibir(nome)
+	if modo_seletor_ativo:
+		_confirmar_alvo()
+
+
+# Confirma como alvo o inimigo que está no card.
+func _confirmar_alvo() -> void:
+	var indice: int = _indice_de(exibido)
+	if indice == -1:
+		return
+	inimigo_selecionado_atual = inimigos[indice]
+	inimigo_selecionado.emit(inimigos[indice])
+	desativar_seletor_alvo()
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not modo_seletor_ativo:
+		return
+	if event.is_action_pressed("ui_cancel"):
+		get_viewport().set_input_as_handled()
+		cancelar_selecao_alvo()
+	elif event.is_action_pressed("ui_accept") and not event.is_echo():
+		get_viewport().set_input_as_handled()
+		_confirmar_alvo()
+
+
+# Mostra ou esconde o marcador de "painel que recebe Q e Espaço".
+func definir_marcador(visivel: bool) -> void:
+	marcador.visible = visivel
+
+# ============================================================================
+# APRESENTAÇÃO
+# ============================================================================
+
+func _criar_icone(inimigo: Dictionary) -> Button:
+	var nome: String = inimigo["nome"]
+	var icone := CENA_ICONE.instantiate() as Button
+	icone.tooltip_text = nome
+	var textura: Texture2D = texturas_icones.get(nome, null)
+	if textura != null:
+		icone.icon = textura
+	icone.theme_type_variation = VARIACAO_ALVO if modo_seletor_ativo else VARIACAO_NORMAL
+	icone.pressed.connect(_on_icone_pressionado.bind(nome))
+	coluna_icones.add_child(icone)
+	return icone
+
+
+func _exibir(nome: String) -> void:
+	var indice: int = _indice_de(nome)
+	if indice == -1:
+		return
+	exibido = nome
+	card.visible = true
+	for chave in botoes_inimigos:
+		(botoes_inimigos[chave] as Button).set_pressed_no_signal(chave == nome)
+	texto_label.text = _formatar_texto_inimigo(inimigos[indice])
+
+
+func _aplicar_variacao_a_todos(variacao: StringName) -> void:
+	for icone in botoes_inimigos.values():
+		(icone as Button).theme_type_variation = variacao
+
 
 func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
 	var nome: String = inimigo["nome"]
@@ -153,109 +235,25 @@ func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
 		texto += "%s %d/%d\n" % [regiao, dados["atual"], dados["limite"]]
 	return texto
 
-func _criar_barra_saude(atual: int, maximo: int) -> String:
-	"""Cria uma barra de saúde em texto ASCII"""
-	var tamanho_barra = 10
-	var blocos_cheios = int((float(atual) / float(maximo)) * tamanho_barra)
-	blocos_cheios = clampi(blocos_cheios, 0, tamanho_barra)
-	
-	var barra = ""
-	for i in range(tamanho_barra):
-		if i < blocos_cheios:
-			barra += "█"
-		else:
-			barra += "░"
-	
-	return barra
 
 func _criar_barra_estresse(atual: int, maximo: int) -> String:
 	"""Cria uma barra de estresse em texto ASCII"""
 	var tamanho_barra = 10
 	var blocos_cheios = int((float(atual) / float(maximo)) * tamanho_barra)
 	blocos_cheios = clampi(blocos_cheios, 0, tamanho_barra)
-	
+
 	var barra = ""
 	for i in range(tamanho_barra):
 		if i < blocos_cheios:
 			barra += "▓"  # Blocos mais densos para estresse
 		else:
 			barra += "░"
-	
+
 	return barra
 
-# ============================================================================
-# SELEÇÃO DE ALVO
-# ============================================================================
 
-func ativar_seletor_alvo() -> void:
-	modo_seletor_ativo = true
-	mouse_filter = Control.MOUSE_FILTER_STOP
-	for botao in botoes_inimigos.values():
-		botao.focus_mode = Control.FOCUS_ALL
-		botao.mouse_filter = Control.MOUSE_FILTER_STOP
-	await get_tree().process_frame
-	if botoes_inimigos.size() > 0:
-		botoes_inimigos.values()[0].grab_focus()
-
-func desativar_seletor_alvo() -> void:
-	"""Desativa o modo de seleção de alvo"""
-	modo_seletor_ativo = false
-	mouse_filter = Control.MOUSE_FILTER_IGNORE
-	
-	# Desmarcar todos e travar mouse e teclado nos cards
-	for botao in botoes_inimigos.values():
-		botao.button_pressed = false
-		botao.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		botao.release_focus()
-		botao.focus_mode = Control.FOCUS_NONE
-
-func _on_botao_inimigo_pressionado(inimigo: Dictionary) -> void:
-	"""Chamado quando um botão de inimigo é pressionado"""
-	if not modo_seletor_ativo:
-		return
-	
-	# Desselecionar inimigo anterior
-	if inimigo_selecionado_atual.has("nome"):
-		var botao_anterior = botoes_inimigos.get(inimigo_selecionado_atual["nome"])
-		if botao_anterior:
-			botao_anterior.button_pressed = false
-	
-	# Selecionar novo inimigo
-	inimigo_selecionado_atual = inimigo
-	inimigo_selecionado.emit(inimigo)
-	
-	# Desativar seletor após seleção
-	desativar_seletor_alvo()
-
-func _unhandled_input(event: InputEvent) -> void:
-	# Esc cancela a escolha do alvo e devolve o jogador ao menu de ações.
-	if not modo_seletor_ativo:
-		return
-
-	if event.is_action_pressed("ui_cancel"):
-		get_viewport().set_input_as_handled()
-		cancelar_selecao_alvo()
-		desativar_seletor_alvo()
-		selecao_alvo_cancelada.emit()
-
-func obter_inimigo_selecionado() -> Dictionary:
-	"""Retorna o inimigo atualmente selecionado"""
-	return inimigo_selecionado_atual
-
-# ============================================================================
-# ATUALIZAÇÃO E SINCRONIZAÇÃO
-# ============================================================================
-
-func atualizar_todos(inimigos_novos: Array[Dictionary]) -> void:
-	"""Atualiza toda a lista de inimigos"""
-	limpar_inimigos()
-	
-	for inimigo in inimigos_novos:
-		adicionar_inimigo(inimigo)
-
-# Cancela a escolha do alvo (Esc ou clique no campo de batalha).
-func cancelar_selecao_alvo() -> void:
-	if not modo_seletor_ativo:
-		return
-	desativar_seletor_alvo()
-	selecao_alvo_cancelada.emit()
+func _indice_de(nome: String) -> int:
+	for i in range(inimigos.size()):
+		if inimigos[i]["nome"] == nome:
+			return i
+	return -1

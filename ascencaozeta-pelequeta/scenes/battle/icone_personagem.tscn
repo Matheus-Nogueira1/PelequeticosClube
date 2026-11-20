@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://bns4dlvevtx7l"]
 
+[ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_bi0bb"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]
 bg_color = Color(1, 1, 1, 0)
 border_width_left = 4
@@ -20,6 +22,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
+theme = ExtResource("1_bi0bb")
 theme_type_variation = &"IconePersonagem"
 toggle_mode = true
 clip_text = true
