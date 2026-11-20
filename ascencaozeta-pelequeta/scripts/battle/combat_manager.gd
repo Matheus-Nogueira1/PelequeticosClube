@@ -30,6 +30,7 @@ signal turno_passado
 signal leitura_confirmada
 
 # Painéis da cena
+@onready var camada_resultado: CanvasLayer = %CamadaResultado
 @onready var party_panel = %PartyPanel
 @onready var enemy_panel = %EnemyPanel
 @onready var battlefield = %Battlefield
@@ -63,7 +64,9 @@ var resumo_resultado: Array[String] = []
 var estatisticas: EstatisticasCombate = EstatisticasCombate.new()
 var resultado_pontuacao: Dictionary = {}
 var _frame_confirmacao: int = -1
-var rodadas_combate: int = 0
+# Ordem de iniciativa no início do combate. Nunca é modificada:
+# serve só para dar a cada combatente uma posição fixa (contagem de rodadas).
+var ordem_inicial: Array[CombatenteData] = []
 # Estado da ação atual
 var acao_em_progresso: bool = false
 var regioes_selecionadas: Array[String] = []
@@ -91,7 +94,6 @@ func _inicializar_combate() -> void:
 	# Estatísticas novas a cada combate (nada vaza entre combates).
 	estatisticas = EstatisticasCombate.new()
 	resultado_pontuacao = {}
-	rodadas_combate = 0
 	_setup_exemplo()
 
 	if combatentes_jogador.is_empty() or combatentes_inimigo.is_empty():
@@ -117,6 +119,7 @@ func _inicializar_combate() -> void:
 
 	# Ordenar by iniciativa
 	ordem_turno.sort_custom(func(a, b): return a.iniciativa > b.iniciativa)
+	ordem_inicial.assign(ordem_turno)
 
 	combate_ativo = true
 	log_panel.registrar_evento(
@@ -244,7 +247,9 @@ func _avancar_turno() -> void:
 	"""Move para o próximo combatente com P.A. disponível"""
 	if not combate_ativo:
 		return
-
+	# Fim do turno anterior: consolida a variedade dele (uma única vez).
+	if combatente_ativo != null:
+		estatisticas.finalizar_turno(combatente_ativo)
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
 	# Não limpar alvo_selecionado aqui - será limpo apenas quando mudar de turno de verdade
@@ -257,6 +262,10 @@ func _avancar_turno() -> void:
 		return
 	
 	combatente_ativo = combatente_proximo
+	# Início do turno: o cursor da iniciativa avançou (conta rodada)
+	# e o registro de variedade do aliado é aberto.
+	estatisticas.registrar_avanco_iniciativa(ordem_inicial.find(combatente_ativo))
+	estatisticas.iniciar_turno(combatente_ativo)
 	_atualizar_indicador_sobrecarga()
 	_restaurar_protecoes(combatente_ativo)
 	turno_iniciado.emit(combatente_ativo)
@@ -325,14 +334,7 @@ func _encontrar_proximo_combatente() -> CombatenteData:
 	if ordem_turno.is_empty():
 		return null
 	while tentativas < max_tentativas:
-		var indice_anterior: int = indice_turno_atual
 		indice_turno_atual = (indice_turno_atual + 1) % ordem_turno.size()
-
-		# A primeira seleção inicia a primeira rodada.
-		# Voltar à posição zero inicia uma nova rodada.
-		if indice_anterior == -1 or indice_turno_atual == 0:
-			rodadas_combate += 1
-
 		var combatente = ordem_turno[indice_turno_atual]
 
 		# Verificar se está vivo (não morto e não desmaiado permanentemente)
@@ -507,10 +509,12 @@ func _on_item_escolhido(nome_item: String) -> void:
 		)
 		await _devolver_acoes_apos_leitura()
 		return
-	# Cura efetiva = Estresse realmente removido.
-	estatisticas.registrar_cura(
-		estresse_antes_item - combatente_ativo.get_estresse_total()
-	)
+	# Cura efetiva = Estresse realmente removido. No Frasco Estus, o item
+	# só conta como ação se a cura efetiva for maior que zero.
+	var cura_item: int = estresse_antes_item - combatente_ativo.get_estresse_total()
+	estatisticas.registrar_cura(cura_item)
+	if cura_item > 0:
+		estatisticas.registrar_acao(combatente_ativo, EstatisticasCombate.CATEGORIA_ITEM)
 	ItemData.remover_item(combatente_ativo, nome_item)
 	log_panel.registrar_evento(String(resultado["mensagem"]), "sucesso")
 	party_panel.atualizar_personagem(combatente_ativo.para_dictionary())
@@ -1352,11 +1356,13 @@ func _finalizar_combate(resultado: String) -> void:
 	combate_ativo = false
 	# O resumo é capturado antes da linha de encerramento, que repetiria o título.
 	resumo_resultado = log_panel.obter_resumo(6)
+	# Se o combate acabou durante o turno de um aliado, consolida o estilo dele.
+	if combatente_ativo != null:
+		estatisticas.finalizar_turno(combatente_ativo)
 	# Calculado uma única vez (esta função só roda com combate_ativo).
 	resultado_pontuacao = estatisticas.montar_resultado(
 		ClassificacaoCombate.new(),
-		resultado,
-		rodadas_combate
+		resultado
 	)
 	log_panel.registrar_evento(
 		"═══ COMBATE FINALIZADO: %s ═══" % resultado,
@@ -1427,7 +1433,6 @@ func remover_status(combatente: Dictionary, status_nome: String) -> void:
 # O ActionPanel continua dono do próprio estado.
 # ============================================================
 func _conectar_alternancia_paineis() -> void:
-	comunicacao_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	action_panel.visibility_changed.connect(_sincronizar_paineis_inferiores)
 	regional_selector.visibility_changed.connect(_sincronizar_paineis_inferiores)
 	_sincronizar_paineis_inferiores()
@@ -1490,14 +1495,11 @@ func _mostrar_resultado(resultado: String) -> void:
 		instancia.queue_free()
 		return
 
-	var camada := CanvasLayer.new()
-	camada.layer = 10
-	add_child(camada)
-	camada.add_child(tela)
+	camada_resultado.add_child(tela)
 	tela.configurar(_montar_dados_resultado(resultado))
 
 	await tela.confirmado
-	camada.queue_free()
+	tela.queue_free()
 
 
 # Contrato de dados da tela. "almas" e "itens" ficam de fora

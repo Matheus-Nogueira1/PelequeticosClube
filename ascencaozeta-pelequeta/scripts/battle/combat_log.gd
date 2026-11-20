@@ -27,12 +27,9 @@ var historico: Array[Dictionary] = []
 # Fila do que será apresentado ao jogador, uma mensagem por vez.
 # Separada do histórico, que guarda tudo e alimenta o resumo final.
 var fila_apresentacao: Array[Dictionary] = []
+
 func _ready() -> void:
 	clear()
-	bbcode_enabled = true
-	scroll_following = true
-	add_theme_font_size_override("normal_font_size", 8)
-	add_theme_font_size_override("bold_font_size", 8)
 
 # ============================================================================
 # EVENTOS GERAIS

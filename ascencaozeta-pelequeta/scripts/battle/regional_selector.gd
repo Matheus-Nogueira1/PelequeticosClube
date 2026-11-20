@@ -26,79 +26,32 @@ var modo: String = "desativado"  # desativado, selecionar_ataque, selecionar_def
 var permite_multiplas_mesma_regiao: bool = false  # Sobrecarga ativa
 
 # UI
-@onready var vbox = VBoxContainer.new()
-@onready var label_titulo = Label.new()
-@onready var grid_regioes = GridContainer.new()
-@onready var label_info = Label.new()
+@onready var grid_regioes: GridContainer = %RegionalGrid
+@onready var label_info: Label = %RegionalInfo
+@onready var botao_confirmar: Button = %RegionalConfirmar
+@onready var botao_cancelar: Button = %RegionalCancelar
 var botoes_regiao: Array[Button] = []
 
 func _ready() -> void:
-	_criar_layout()
+	_conectar_botoes()
 	desativar()
 
-# ============================================================================
-# CRIAÇÃO DA UI
-# ============================================================================
 
-func _criar_layout() -> void:
-	"""Cria o layout do seletor de regiões"""
-	vbox.add_theme_constant_override("separation", 2)
-	add_child(vbox)
-
-	label_titulo.text = "Selecione Regiões"
-	label_titulo.add_theme_font_size_override("font_size", TAMANHO_FONTE + 1)
-	vbox.add_child(label_titulo)
-
-	grid_regioes.columns = 2
-	grid_regioes.add_theme_constant_override("h_separation", 2)
-	grid_regioes.add_theme_constant_override("v_separation", 2)
-
+# Liga os botões que já existem na cena (a estrutura vem do editor).
+func _conectar_botoes() -> void:
+	var filhos: Array[Node] = grid_regioes.get_children()
+	if filhos.size() != regioes.size():
+		push_error("[RegionalSelector] RegionalGrid deve ter %d botões." % regioes.size())
+		return
 	for i in range(regioes.size()):
-		var botao = _criar_botao_regiao(regioes[i], i)
-		botao.focus_mode = Control.FOCUS_ALL
+		var botao := filhos[i] as Button
 		botoes_regiao.append(botao)
-		grid_regioes.add_child(botao)
-
-	vbox.add_child(grid_regioes)
-
-	label_info.text = "Clique para selecionar"
-	label_info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label_info.add_theme_font_size_override("font_size", TAMANHO_FONTE)
-	vbox.add_child(label_info)
-
-	var hbox_botoes = HBoxContainer.new()
-	hbox_botoes.add_theme_constant_override("separation", 2)
-
-	var botao_confirmar = Button.new()
-	botao_confirmar.text = "✓ Confirmar"
-	botao_confirmar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	botao_confirmar.clip_text = true
+		botao.pressed.connect(_on_regiao_clicada.bindv([i, regioes[i]]))
+		UiUtil.compactar_botao(botao, TAMANHO_FONTE)
 	botao_confirmar.pressed.connect(_on_confirmar)
-	UiUtil.aplicar(botao_confirmar, TAMANHO_FONTE)
-	hbox_botoes.add_child(botao_confirmar)
-
-	var botao_cancelar = Button.new()
-	botao_cancelar.text = "✗ Cancelar"
-	botao_cancelar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	botao_cancelar.clip_text = true
 	botao_cancelar.pressed.connect(_on_cancelar)
-	UiUtil.aplicar(botao_cancelar, TAMANHO_FONTE)
-	hbox_botoes.add_child(botao_cancelar)
-
-	vbox.add_child(hbox_botoes)
-
-func _criar_botao_regiao(nome: String, indice: int) -> Button:
-	"""Helper para criar botão de região"""
-	var botao = Button.new()
-	botao.text = nome
-	botao.custom_minimum_size = Vector2(0, 12)
-	botao.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	botao.clip_text = true
-	botao.toggle_mode = true
-	botao.theme_type_variation = &"BotaoRegiao"
-	botao.pressed.connect(_on_regiao_clicada.bindv([indice, nome]))
-	UiUtil.aplicar(botao, TAMANHO_FONTE)
-	return botao
+	UiUtil.compactar_botao(botao_confirmar, TAMANHO_FONTE)
+	UiUtil.compactar_botao(botao_cancelar, TAMANHO_FONTE)
 
 # ============================================================================
 # ATIVAÇÃO/DESATIVAÇÃO

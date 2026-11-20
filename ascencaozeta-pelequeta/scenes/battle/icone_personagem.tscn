@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://bns4dlvevtx7l"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]
+bg_color = Color(1, 1, 1, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.49019608, 0.02745098, 0.039215688, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[node name="IconePersonagem" type="Button" unique_id=418416945]
+custom_minimum_size = Vector2(24, 24)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+focus_mode = 0
+theme_type_variation = &"IconePersonagem"
+toggle_mode = true
+clip_text = true
+icon_alignment = 1
+expand_icon = true
+
+[node name="MarcadorTurno" type="Panel" parent="." unique_id=2098126145]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
