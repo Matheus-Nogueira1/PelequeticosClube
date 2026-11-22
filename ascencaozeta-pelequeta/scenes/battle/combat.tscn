@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://8x7ih6p7xxqo" path="res://assets/Inimigos/Dummy_Template_Dodge-Sheet.png" id="14_j6so4"]
 [ext_resource type="Texture2D" uid="uid://cb08borecgw6v" path="res://assets/Inimigos/Dummy_Template_Hit-Sheet.png" id="15_iphor"]
 [ext_resource type="Texture2D" uid="uid://bknmpatpexsxl" path="res://assets/Inimigos/Dummy_Template_Morrendo-Sheet.png" id="16_acp53"]
+[ext_resource type="PackedScene" uid="uid://1sf3cl726lvy" path="res://scenes/battle/ficha_inimigo.tscn" id="24_8w46x"]
 [ext_resource type="PackedScene" uid="uid://difj18a205kan" path="res://scenes/battle/enemy_card.tscn" id="24_x1unb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_f0agn"]
@@ -1477,6 +1478,12 @@ layout_mode = 2
 text = "Sombras"
 horizontal_alignment = 2
 
+[node name="BotaoFicha" type="Button" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1475661764]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+text = "Ficha"
+
 [node name="EnemyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2001851537]
 unique_name_in_owner = true
 layout_mode = 2
@@ -1500,3 +1507,8 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="EnemyCard" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="CamadaFicha" type="CanvasLayer" parent="." unique_id=1830515864]
+
+[node name="FichaInimigo" parent="CamadaFicha" unique_id=477907791 instance=ExtResource("24_8w46x")]
+unique_name_in_owner = true

@@ -18,19 +18,19 @@ signal inimigo_deseleccionado
 signal selecao_alvo_cancelada
 ## Emitido quando a escolha de alvo começa ou termina
 signal modo_alvo_alterado(ativo: bool)
-
+## Emitido quando o jogador pede a ficha completa (botão da cena)
+signal ficha_solicitada
 const CENA_ICONE: PackedScene = preload("res://scenes/battle/icone_personagem.tscn")
 const VARIACAO_NORMAL: StringName = &"IconePersonagem"
 const VARIACAO_ALVO: StringName = &"IconeAlvo"
 
 # Preenchido no Inspector (chave = nome do inimigo: Dummy, Carcaça...).
 @export var texturas_icones: Dictionary[String, Texture2D] = {}
-
+@onready var botao_ficha: Button = get_node_or_null("%BotaoFicha") as Button
 @onready var coluna_icones: VBoxContainer = %EnemyIcones
 @onready var card: Control = %EnemyCard
 @onready var marcador: Control = %MarcadorEnemy
 @onready var texto_label: Label = card.get_node("%TextoLabel")
-
 var inimigos: Array[Dictionary] = []
 var botoes_inimigos: Dictionary = {}  # nome -> ícone (Button)
 var inimigo_selecionado_atual: Dictionary = {}
@@ -40,6 +40,17 @@ var exibido: String = ""
 # ============================================================================
 # GERENCIAMENTO DE INIMIGOS
 # ============================================================================
+func _ready() -> void:
+	if botao_ficha != null:
+		botao_ficha.pressed.connect(ficha_solicitada.emit)
+
+
+# Dicionário do inimigo que está no card (vazio se não houver).
+func obter_inimigo_exibido() -> Dictionary:
+	var indice: int = _indice_de(exibido)
+	if indice == -1:
+		return {}
+	return inimigos[indice]
 
 func adicionar_inimigo(inimigo: Dictionary) -> void:
 	inimigos.append(inimigo)

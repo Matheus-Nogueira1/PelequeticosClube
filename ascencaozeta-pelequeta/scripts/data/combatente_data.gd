@@ -120,7 +120,10 @@ var tem_covardia: bool = false                  # -2x Coragem em testes
 var tem_fragilidade: bool = false              # +1D6 dano recebido
 var tem_ataque_cardiaco: bool = false          # Risco de morte em próxima vez
 var morto: bool = false                         # Flag de morte permanente
-
+## Ficha de bestiário (opcionais; vazios = não aparecem na ficha)
+var descricao: String = ""
+var tamanho: String = ""
+var grau: int = 0
 
 ## ===== MÉTODOS =====
 
@@ -517,6 +520,9 @@ func para_dictionary() -> Dictionary:
 		"proteses": proteses,
 		"habilidade_sobrecarga_ativa": habilidade_sobrecarga_ativa,
 		"desmaiado": desmaiado,
+		"descricao": descricao,
+		"tamanho": tamanho,
+		"grau": grau,
 		"morto": morto
 	}
 ## Cria a partir de um Dictionary

@@ -5,6 +5,7 @@
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="3_hld0v"]
 [ext_resource type="LabelSettings" uid="uid://c4uyji3i1damp" path="res://fonts/Descrição.tres" id="3_il254"]
 [ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="5_hld0v"]
+[ext_resource type="PackedScene" uid="uid://vxt0d605rabb" path="res://scenes/testes/rolagem-dado.tscn" id="6_2elm4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6q2kx"]
 content_margin_left = 6.0
@@ -31,7 +32,7 @@ shadow_color = Color(0.46666667, 0, 0, 0.43137255)
 font = ExtResource("3_hld0v")
 font_size = 5
 
-[node name="ResultadoCombate" type="Control" unique_id=1743797320]
+[node name="ResultadoCombate" type="Control" unique_id=1743797320 node_paths=PackedStringArray("pagina_recompensa")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,6 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_1m5vr")
 script = ExtResource("1_il254")
+pagina_recompensa = NodePath("Centro/PainelPrincipal/Margem/PaginaRecompensa")
 
 [node name="FundoEscurecido" type="ColorRect" parent="." unique_id=398240641]
 layout_mode = 1
@@ -111,6 +113,53 @@ text = "P"
 unique_name_in_owner = true
 layout_mode = 2
 text = "10000"
+
+[node name="PaginaRecompensa" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=49886605]
+visible = false
+layout_mode = 2
+
+[node name="RecompensaTitulo" type="Label" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=231979216]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Rolagem de Itens"
+
+[node name="RecompensaBonus" type="Label" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=1926100254]
+unique_name_in_owner = true
+layout_mode = 2
+text = "d6+2"
+
+[node name="RecompensaDetalhe" type="Label" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=1838772758]
+unique_name_in_owner = true
+layout_mode = 2
+text = "6 - Pelecomaster
+5 - Pelequito
+4 - Pelecado
+3 - daquele jeito
+2 - Nada
+1 - Nada"
+
+[node name="RecompensaItens" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=1295349749]
+unique_name_in_owner = true
+layout_mode = 2
+text = "abababaablaalalalal"
+fit_content = true
+scroll_active = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=510655247]
+layout_mode = 2
+
+[node name="BotaoRolar" type="Button" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa/VBoxContainer" unique_id=1783765415]
+layout_mode = 2
+text = "Rolar"
+
+[node name="BotaoPular" type="Button" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa/VBoxContainer" unique_id=1151157602]
+layout_mode = 2
+text = "Pular"
+
+[node name="BotaoRecompensaOk" type="Button" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa/VBoxContainer" unique_id=663693113]
+visible = false
+layout_mode = 2
+text = "Continuar "
 
 [node name="Estatisticas" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=1720680864]
 visible = false
@@ -302,3 +351,7 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 8
 text = "Ok"
+
+[node name="DadoRecompensa" parent="Centro" unique_id=2129393194 instance=ExtResource("6_2elm4")]
+unique_name_in_owner = true
+visible = false

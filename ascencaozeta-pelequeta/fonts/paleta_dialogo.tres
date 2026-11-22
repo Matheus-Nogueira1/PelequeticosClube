@@ -5,9 +5,12 @@
 [resource]
 script = ExtResource("1_rmesq")
 cores = Dictionary[String, Color]({
+"botao_hover": Color(0.29803923, 0.05882353, 0.10980392, 1),
+"botao_pressed": Color(0.49019608, 0.02745098, 0.039215688, 1),
 "chama": Color(0.8156863, 0.39215687, 0, 1),
 "elizabeth": Color(0.6911666, 0.10883749, 0.60451126, 1),
 "escolhido": Color(1, 0.47843137, 0, 1),
+"fundo": Color(0.05882353, 0.019607844, 0.043137256, 1),
 "jp": Color(0.18431373, 0.7490196, 0.30980393, 1),
 "misterio": Color(0.65882355, 0.65882355, 0.6901961, 1),
 "mob": Color(0.8509804, 0.2901961, 0.22745098, 1),

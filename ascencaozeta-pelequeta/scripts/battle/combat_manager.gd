@@ -47,6 +47,7 @@ signal leitura_confirmada
 )
 @onready var campo_batalha: Control = %BattleFieldContent
 @onready var dica_continuar: Label = get_node_or_null("%DicaContinuar") as Label
+@onready var ficha_inimigo: FichaInimigo = %FichaInimigo
 var animacao_jogador: CombatenteAnimation
 var animacao_inimigo: CombatenteAnimation
 
@@ -73,7 +74,7 @@ var acao_em_progresso: bool = false
 var regioes_selecionadas: Array[String] = []
 var alvo_selecionado: Dictionary = {}
 var aguardando_leitura: bool = false
-
+var inimigos_derrotados: Array[String] = []
 
 func _ready() -> void:
 	_conectar_sinais_paineis()
@@ -95,6 +96,7 @@ func _inicializar_combate() -> void:
 	# Estatísticas novas a cada combate (nada vaza entre combates).
 	estatisticas = EstatisticasCombate.new()
 	resultado_pontuacao = {}
+	inimigos_derrotados.clear()
 	_setup_exemplo()
 
 	if combatentes_jogador.is_empty() or combatentes_inimigo.is_empty():
@@ -201,6 +203,7 @@ func _conectar_sinais_paineis() -> void:
 		enemy_panel.inimigo_selecionado.connect(_on_inimigo_selecionado)
 		enemy_panel.selecao_alvo_cancelada.connect(_on_alvo_cancelado)
 		enemy_panel.modo_alvo_alterado.connect(_atualizar_marcadores_painel)
+		enemy_panel.ficha_solicitada.connect(_alternar_ficha)
 
 
 func _buscar_sprite_animado(
@@ -1322,6 +1325,7 @@ func _derrotar_combatente(combatente: CombatenteData) -> void:
 		indice_turno_atual -= 1
 
 	if combatente.tipo == "inimigo":
+		inimigos_derrotados.append(combatente.nome)
 		combatentes_inimigo.erase(combatente)
 		enemy_panel.remover_inimigo(
 			combatente.para_dictionary()
@@ -1385,9 +1389,10 @@ func _voltar_ao_mapa(resultado: String) -> void:
 	enemy_panel.desativar_seletor_alvo()
 
 	await _apresentar_pendentes()
-	await _mostrar_resultado(resultado)
+	var itens_recebidos: Array[Dictionary] = await _mostrar_resultado(resultado)
 	var principal: CombatenteData = GrupoAtual.obter_personagem_principal()
 	if principal != null:
+		_entregar_itens(principal, itens_recebidos)
 		# O Estresse acumulado é mantido ao voltar ao mapa.
 		principal.limpar_efeitos_combate()
 		# Só na derrota o personagem descansa por completo.
@@ -1449,6 +1454,13 @@ func _conectar_alternancia_paineis() -> void:
 # ============================================================
 func _input(event: InputEvent) -> void:
 	if not combate_ativo:
+		return
+	if event.is_action_pressed("ver_ficha") and not event.is_echo():
+		get_viewport().set_input_as_handled()
+		_alternar_ficha()
+		return
+	# Com a ficha aberta, Q, Espaço e Tab não navegam nos cards.
+	if ficha_inimigo.visible:
 		return
 	var anterior: bool = event.is_action_pressed("card_anterior", true)
 	var proximo: bool = event.is_action_pressed("card_proximo", true)
@@ -1538,19 +1550,22 @@ func _reanimar_combatente(alvo: CombatenteData) -> bool:
 # TELA DE RESULTADOS
 # ============================================================
 # Abre a tela de resultados e espera o jogador confirmar.
-func _mostrar_resultado(resultado: String) -> void:
+func _mostrar_resultado(resultado: String) -> Array[Dictionary]:
+	var itens: Array[Dictionary] = []
 	var instancia := CENA_RESULTADO.instantiate()
 	var tela := instancia as ResultadoCombate
 	if tela == null:
 		push_error("[CombatManager] resultado_combate.tscn sem o script ResultadoCombate.")
 		instancia.queue_free()
-		return
+		return itens
 
 	camada_resultado.add_child(tela)
 	tela.configurar(_montar_dados_resultado(resultado))
 
 	await tela.confirmado
+	itens.append_array(tela.itens_obtidos)
 	tela.queue_free()
+	return itens
 
 
 # Contrato de dados da tela. "almas" e "itens" ficam de fora
@@ -1560,6 +1575,8 @@ func _montar_dados_resultado(resultado: String) -> Dictionary:
 		"resultado": resultado,
 		"resumo": resumo_resultado,
 		"estatisticas": resultado_pontuacao,
+		"recompensa_habilitada": resultado == "Vitória",
+		"inimigos_derrotados": inimigos_derrotados,
 		"fardos": _fardos_obtidos()
 	}
 
@@ -1580,3 +1597,23 @@ func _anunciar_ordem_iniciativa() -> void:
 		var combatente: CombatenteData = ordem_turno[i]
 		linhas.append("%d. %s (Velocidade %d)" % [i + 1, combatente.nome, combatente.iniciativa])
 	log_panel.registrar_evento("Ordem de atuação:\n" + "\n".join(linhas), "turno")
+
+# Abre ou fecha a ficha do inimigo que está no card.
+# Não abre durante a leitura de mensagens nem durante a rolagem dos dados.
+func _alternar_ficha() -> void:
+	if ficha_inimigo.visible:
+		ficha_inimigo.fechar()
+		return
+	if aguardando_leitura or dados_em_animacao:
+		return
+	var inimigo: Dictionary = enemy_panel.obter_inimigo_exibido()
+	if inimigo.is_empty():
+		return
+	ficha_inimigo.abrir(inimigo)
+
+# Entrega os itens ao personagem principal. O inventário é uma lista de
+# nomes: repetir o nome é a quantidade (sem tocar em ItemData.adicionar_item).
+func _entregar_itens(destino: CombatenteData, itens: Array[Dictionary]) -> void:
+	for item in itens:
+		for i in range(int(item.get("quantidade", 1))):
+			destino.inventario.append(String(item["nome"]))

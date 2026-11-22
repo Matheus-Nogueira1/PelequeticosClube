@@ -1,0 +1,159 @@
+[gd_scene format=3 uid="uid://1sf3cl726lvy"]
+
+[ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_2idga"]
+[ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="2_ynem0"]
+
+[node name="FichaInimigo" type="Control" unique_id=477907791]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_2idga")
+
+[node name="FundoCombate" type="ColorRect" parent="." unique_id=1121283006]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05882353, 0.019607844, 0.043137256, 1)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=603682109]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=149787047]
+custom_minimum_size = Vector2(300, 172)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=449417066]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer" unique_id=1929677974]
+layout_mode = 2
+
+[node name="ColunaAtributos" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=622547443]
+layout_mode = 2
+
+[node name="ValCar" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=1396841046]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Car: 1"
+
+[node name="ValFor" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=1402775876]
+unique_name_in_owner = true
+layout_mode = 2
+text = "For: 2"
+
+[node name="ValFug" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=1746586981]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Fug: 2"
+
+[node name="ValDet" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=710745218]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Det: 4"
+
+[node name="ValMente" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=1567734818]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Men: 4"
+
+[node name="ColunaTexto" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=210996992]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto" unique_id=639013672]
+layout_mode = 2
+
+[node name="FichaNome" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/HBoxContainer" unique_id=402263411]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dummy"
+
+[node name="FichaGrau" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/HBoxContainer" unique_id=2142723552]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Grau: 0"
+
+[node name="FichaFechar" type="Button" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/HBoxContainer" unique_id=924467371]
+unique_name_in_owner = true
+layout_mode = 2
+text = "X"
+
+[node name="FichaScroll" type="ScrollContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto" unique_id=749986580]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("2_ynem0")
+rolar_com_setas = true
+metadata/_custom_type_script = "uid://hkqdbuk88uag"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll" unique_id=279423780]
+layout_mode = 2
+
+[node name="FichaDescricao" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1964667943]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Um boneco de treino para os que não confiam em seu potencial."
+autowrap_mode = 3
+
+[node name="GridContainer" type="GridContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1133664449]
+layout_mode = 2
+columns = 2
+
+[node name="FichaDano" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer/GridContainer" unique_id=1690209893]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dan: 2"
+
+[node name="FichaProtecao" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer/GridContainer" unique_id=1390354111]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pro: 4"
+
+[node name="FichaVelocidade" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer/GridContainer" unique_id=361235946]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Vel: 2"
+
+[node name="FichaTamanho" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer/GridContainer" unique_id=840881362]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Casas: 1"
+
+[node name="FichaLimite" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=735815131]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Limite"
+
+[node name="FichaConhecimento" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1505216473]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Duelo, Reflexos, Bandidagem"
+autowrap_mode = 3
+
+[node name="FichaHabilidades" type="RichTextLabel" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=691593182]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+bbcode_enabled = true
+text = "Caminhar do carrasco: Peleco ativa a pelecagem maxima."
+fit_content = true
+scroll_active = false
+
+[node name="FichaRetrato" type="TextureRect" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=500650489]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5

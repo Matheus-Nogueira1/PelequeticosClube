@@ -6,6 +6,38 @@ class_name InimigoData
 extends RefCounted
 
 ## Template de inimigo
+static func criar_dummy() -> CombatenteData:
+	"""
+	Dummy - bonco de treino
+	"""
+	var dummy = CombatenteData.new("Dummy", "inimigo")
+	
+	# Atributos OBLIVIO (Carne em vez de Vitalidade!)
+	dummy.atributo_carne = 1       # Define limite base de estresse
+	dummy.atributo_forca = 1       # Dano
+	dummy.atributo_fuga = 1        # Velocidade
+	dummy.atributo_determinacao = 1    # Resistência psicológica
+	dummy.atributo_mente = 1
+	dummy._calcular_atributos_mutaveis()
+	
+	# Combate
+	dummy.estresse_por_regiao = {
+		"Torso": {"atual": 0, "limite": 6},       # Centro vital - maior limite
+		"Braço Direito": {"atual": 0, "limite": 2},
+		"Braço Esquerdo": {"atual": 0, "limite": 2},
+		"Perna Direita": {"atual": 0, "limite": 2},
+		"Perna Esquerda": {"atual": 0, "limite": 2}
+	}
+	
+	dummy.status = ["Não-morta", "Estático"] as Array[String]
+	dummy.habilidades.append(
+		"Contra-atacar"
+	) 
+	dummy.descricao = "Um boneco de treino para aqueles que ainda não reconhecem seu potencial."
+	dummy.grau = 0
+	return dummy
+
+## Template de inimigo
 static func criar_carcaca() -> CombatenteData:
 	"""A Carcaça - Criatura não-morta
 	
