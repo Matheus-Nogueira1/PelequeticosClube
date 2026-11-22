@@ -1094,6 +1094,24 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x1unb"]
+bg_color = Color(0.60038817, 0.60038817, 0.60038817, 0)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8w46x"]
+bg_color = Color(0.66301614, 0.66301614, 0.66301614, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sgeuo"]
+bg_color = Color(0.026054475, 0.0018093386, 0.004342412, 0)
+
 [node name="Control" type="Control" unique_id=1663544077]
 layout_mode = 3
 anchors_preset = 15
@@ -1478,12 +1496,6 @@ layout_mode = 2
 text = "Sombras"
 horizontal_alignment = 2
 
-[node name="BotaoFicha" type="Button" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1475661764]
-unique_name_in_owner = true
-layout_mode = 2
-focus_mode = 0
-text = "Ficha"
-
 [node name="EnemyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2001851537]
 unique_name_in_owner = true
 layout_mode = 2
@@ -1501,12 +1513,23 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 script = ExtResource("4_yyqwn")
 metadata/_custom_type_script = "uid://hkqdbuk88uag"
 
 [node name="EnemyCard" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="BotaoFicha" type="Button" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1475661764]
+unique_name_in_owner = true
+layout_mode = 2
+focus_mode = 0
+theme_override_font_sizes/font_size = 10
+theme_override_styles/normal = SubResource("StyleBoxFlat_x1unb")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_8w46x")
+theme_override_styles/hover = SubResource("StyleBoxFlat_sgeuo")
+text = "Ficha"
 
 [node name="CamadaFicha" type="CanvasLayer" parent="." unique_id=1830515864]
 

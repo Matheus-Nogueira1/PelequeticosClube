@@ -30,7 +30,11 @@ const VARIACAO_ALVO: StringName = &"IconeAlvo"
 @onready var coluna_icones: VBoxContainer = %EnemyIcones
 @onready var card: Control = %EnemyCard
 @onready var marcador: Control = %MarcadorEnemy
-@onready var texto_label: Label = card.get_node("%TextoLabel")
+@onready var nome_label: Label = card.get_node("%NomeLabel")
+@onready var estresse_label: Label = card.get_node("%EstresseLabel")
+@onready var barra_estresse: ProgressBar = card.get_node("%BarraEstresse")
+@onready var protecao_label: RichTextLabel = card.get_node("%ProtecaoLabel")
+@onready var linhas_regioes: Array[Node] = card.get_node("%Regioes").get_children()
 var inimigos: Array[Dictionary] = []
 var botoes_inimigos: Dictionary = {}  # nome -> ícone (Button)
 var inimigo_selecionado_atual: Dictionary = {}
@@ -66,7 +70,7 @@ func atualizar_inimigo(inimigo: Dictionary) -> void:
 		return
 	inimigos[indice] = inimigo
 	if chave == exibido:
-		texto_label.text = _formatar_texto_inimigo(inimigo)
+		_renderizar_card(inimigo)
 
 
 func remover_inimigo(inimigo: Dictionary) -> void:
@@ -210,58 +214,40 @@ func _exibir(nome: String) -> void:
 	card.visible = true
 	for chave in botoes_inimigos:
 		(botoes_inimigos[chave] as Button).set_pressed_no_signal(chave == nome)
-	texto_label.text = _formatar_texto_inimigo(inimigos[indice])
+	_renderizar_card(inimigos[indice])
 
 
 func _aplicar_variacao_a_todos(variacao: StringName) -> void:
 	for icone in botoes_inimigos.values():
 		(icone as Button).theme_type_variation = variacao
 
-
-func _formatar_texto_inimigo(inimigo: Dictionary) -> String:
-	var nome: String = inimigo["nome"]
+func _renderizar_card(inimigo: Dictionary) -> void:
 	var estresse_total := 0
 	var limite_total := 0
 	for regiao_data in inimigo["estresse_por_regiao"].values():
 		estresse_total += regiao_data["atual"]
 		limite_total += regiao_data["limite"]
 
+	nome_label.text = String(inimigo["nome"])
+	estresse_label.text = "ESTR %d/%d" % [estresse_total, limite_total]
+	barra_estresse.max_value = maxi(limite_total, 1)
+	barra_estresse.value = estresse_total
+
+	# Regra de ocultação mantida: antes do Duelo ou Rastro, nada de valores.
 	var analisado: bool = bool(inimigo.get("analisado_por_duelo", false))
-	var barra := _criar_barra_estresse(estresse_total, limite_total)
-	var texto := "%s\nESTR %d/%d\n%s\n" % [nome, estresse_total, limite_total, barra]
-
 	if not analisado:
-		texto += "PROT ???\n"
-		for regiao in CombatenteData.REGIOES:
-			texto += "%s ??/?\n" % regiao
-		return texto
+		protecao_label.text = "PROT ???"
+		for i in range(CombatenteData.REGIOES.size()):
+			(linhas_regioes[i] as RichTextLabel).text = "%s ??/?" % CombatenteData.REGIOES[i]
+		return
 
-	var protecao_base: int = inimigo["atributo_protecao"]
+	var base: int = inimigo["atributo_protecao"]
 	var reducao: int = int(inimigo.get("reducao_protecao_temporaria", 0))
-	var protecao_atual: int = max(0, protecao_base - reducao)
-	texto += "PROT %d/%d\n" % [protecao_atual, protecao_base]
-
-	for regiao in CombatenteData.REGIOES:
+	protecao_label.text = "PROT %d/%d" % [maxi(0, base - reducao), base]
+	for i in range(CombatenteData.REGIOES.size()):
+		var regiao: String = CombatenteData.REGIOES[i]
 		var dados: Dictionary = inimigo["estresse_por_regiao"][regiao]
-		texto += "%s %d/%d\n" % [regiao, dados["atual"], dados["limite"]]
-	return texto
-
-
-func _criar_barra_estresse(atual: int, maximo: int) -> String:
-	"""Cria uma barra de estresse em texto ASCII"""
-	var tamanho_barra = 10
-	var blocos_cheios = int((float(atual) / float(maximo)) * tamanho_barra)
-	blocos_cheios = clampi(blocos_cheios, 0, tamanho_barra)
-
-	var barra = ""
-	for i in range(tamanho_barra):
-		if i < blocos_cheios:
-			barra += "▓"  # Blocos mais densos para estresse
-		else:
-			barra += "░"
-
-	return barra
-
+		(linhas_regioes[i] as RichTextLabel).text = "%s %d/%d" % [regiao, dados["atual"], dados["limite"]]
 
 func _indice_de(nome: String) -> int:
 	for i in range(inimigos.size()):

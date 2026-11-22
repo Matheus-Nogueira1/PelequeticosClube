@@ -111,7 +111,7 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/line_spacing = 0
 text = "Car For Fug Det Men
-0/0 0/0 0/0 0/0 0/0"
+0;0 0;0 0;0 0;0 0;0"
 
 [node name="MutaveisLabel" type="Label" parent="VBoxContainer" unique_id=827626164]
 unique_name_in_owner = true
