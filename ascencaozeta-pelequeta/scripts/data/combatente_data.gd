@@ -41,7 +41,7 @@ var status: Array[String] = []
 var desmaiado: bool = false
 var reducao_protecao_temporaria: int = 0
 var bonus_duelo_protecao := 0
-var analisado_por_duelo := false
+var informacoes_reveladas: bool = false
 
 # Quem causou o último dano após quebrar a proteção
 var atacante_que_quebrou_protecao: String = ""
@@ -469,14 +469,14 @@ func recuperar_apos_combate() -> void:
 	reducao_protecao_temporaria = 0
 	bonus_duelo_protecao = 0
 	atacante_que_quebrou_protecao = ""
-	analisado_por_duelo = false
+	informacoes_reveladas = false
 
 ## Limpa só os efeitos temporários do combate, mantendo o Estresse acumulado
 func limpar_efeitos_combate() -> void:
 	reducao_protecao_temporaria = 0
 	bonus_duelo_protecao = 0
 	atacante_que_quebrou_protecao = ""
-	analisado_por_duelo = false
+	informacoes_reveladas = false
 	habilidade_sobrecarga_ativa = false
 
 ## Verifica se personagem está desmaiado (TODAS regiões no limite)
@@ -511,7 +511,7 @@ func para_dictionary() -> Dictionary:
 		"conhecimentos_especializados": conhecimentos_especializados,
 		"conhecimentos_origem": conhecimentos_origem.duplicate(true),
 		"conhecimentos_treino_permitido": conhecimentos_treino_permitido.duplicate(),
-		"analisado_por_duelo": analisado_por_duelo,
+		"informacoes_reveladas": informacoes_reveladas,
 		"habilidades": habilidades,
 		"inventario": inventario,
 		"fardos": fardos,

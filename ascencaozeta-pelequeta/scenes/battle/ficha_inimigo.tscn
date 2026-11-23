@@ -1,34 +1,25 @@
 [gd_scene format=3 uid="uid://1sf3cl726lvy"]
 
 [ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_2idga"]
+[ext_resource type="Script" uid="uid://7jmoe7c7hnep" path="res://scripts/battle/ficha_inimigo.gd" id="2_eouq0"]
 [ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="2_ynem0"]
 
-[node name="FichaInimigo" type="Control" unique_id=477907791]
+[node name="FichaInimigo" type="PanelContainer" unique_id=1327923879]
 visible = false
-layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_2idga")
+script = ExtResource("2_eouq0")
 
 [node name="FundoCombate" type="ColorRect" parent="." unique_id=1121283006]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 color = Color(0.05882353, 0.019607844, 0.043137256, 1)
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=603682109]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
+layout_mode = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=149787047]
 custom_minimum_size = Vector2(300, 172)
@@ -63,7 +54,7 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Det: 4"
 
-[node name="ValMente" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=1567734818]
+[node name="ValMen" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=1567734818]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Men: 4"
@@ -94,6 +85,7 @@ text = "X"
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
+horizontal_scroll_mode = 0
 script = ExtResource("2_ynem0")
 rolar_com_setas = true
 metadata/_custom_type_script = "uid://hkqdbuk88uag"

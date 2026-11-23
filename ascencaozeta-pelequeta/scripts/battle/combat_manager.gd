@@ -387,7 +387,7 @@ func _iniciar_conhecimento() -> void:
 	log_panel.registrar_evento("Menu de perícias aberto...", "acao", false)
 
 	# TODO: Mostrar menu de perícias disponíveis
-	action_panel.mostrar_menu_conhecimentoss(combatente_ativo.para_dictionary())
+	action_panel.mostrar_menu_conhecimentos(combatente_ativo.para_dictionary())
 
 func _iniciar_habilidade() -> void:
 	"""Inicia uso de habilidade especial"""
@@ -564,7 +564,7 @@ func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 				],
 				"info"
 			)
-			alvo.analisado_por_duelo = true
+			alvo.informacoes_reveladas = true
 			enemy_panel.atualizar_inimigo(
 				alvo.para_dictionary()
 			)
@@ -593,7 +593,7 @@ func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 				alvo.obter_protecao_atual(),
 				"critico"
 			)
-			alvo.analisado_por_duelo = true
+			alvo.informacoes_reveladas = true
 			enemy_panel.atualizar_inimigo(
 				alvo.para_dictionary()
 			)
@@ -623,7 +623,7 @@ func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 	)
 
 	if bool(resultado.get("sucesso", false)):
-		alvo.analisado_por_duelo = true
+		alvo.informacoes_reveladas = true
 		log_panel.registrar_evento(
 			"%s examinou %s. Proteção atual: %d" % [
 				combatente_ativo.nome,
@@ -1604,11 +1604,27 @@ func _alternar_ficha() -> void:
 	if ficha_inimigo.visible:
 		ficha_inimigo.fechar()
 		return
+
 	if aguardando_leitura or dados_em_animacao:
 		return
+
 	var inimigo: Dictionary = enemy_panel.obter_inimigo_exibido()
+
 	if inimigo.is_empty():
 		return
+
+	# A ficha completa só pode ser consultada após a análise.
+	var analisado: bool = bool(
+		inimigo.get("analisado_por_duelo", false)
+	)
+
+	if not analisado:
+		log_panel.registrar_evento(
+			"Você ainda não conhece informações suficientes sobre este inimigo.",
+			"info"
+		)
+		return
+
 	ficha_inimigo.abrir(inimigo)
 
 # Entrega os itens ao personagem principal. O inventário é uma lista de
