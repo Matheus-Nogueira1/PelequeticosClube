@@ -23,22 +23,6 @@ theme_override_font_sizes/font_size = 10
 text = "Dummy"
 horizontal_alignment = 2
 
-[node name="EstresseLabel" type="Label" parent="VBoxContainer" unique_id=1173317415]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 10
-text = "Estresse Total: 10/10"
-horizontal_alignment = 2
-
-[node name="BarraEstresse" type="ProgressBar" parent="VBoxContainer" unique_id=955483998]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(80, 10)
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_font_sizes/font_size = 10
-step = 1.0
-show_percentage = false
-
 [node name="RegioesLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=1667306562]
 unique_name_in_owner = true
 layout_mode = 2

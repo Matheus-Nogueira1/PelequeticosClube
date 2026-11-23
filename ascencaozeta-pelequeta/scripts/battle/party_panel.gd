@@ -23,14 +23,14 @@ const VARIACAO_DESMAIADO: StringName = &"IconeDesmaiado"
 @export var texturas_icones: Dictionary[String, Texture2D] = {}
 
 @onready var coluna_icones: HBoxContainer = %PartyIcones
-@onready var card: Control = %PartyCard
-@onready var marcador: Control = %MarcadorParty
+@onready var card: PanelContainer = %PartyCard
+@onready var marcador: Panel = %MarcadorParty
 @onready var label_nome: Label = card.get_node("%NomeLabel")
 @onready var label_pa: Label = card.get_node("%PaLabel")
 @onready var label_regioes: RichTextLabel = card.get_node("%RegioesLabel")
-@onready var label_fixos: Label = card.get_node("%FixosLabel")
-@onready var label_mutaveis: Label = card.get_node("%MutaveisLabel")
-@onready var label_status: Label = card.get_node("%StatusLabel")
+@onready var label_fixos: RichTextLabel = card.get_node("%FixosLabel")
+@onready var label_mutaveis: RichTextLabel = card.get_node("%MutaveisLabel")
+@onready var label_status: RichTextLabel = card.get_node("%StatusLabel")
 
 var personagens: Array[Dictionary] = []
 var icones: Dictionary = {}  # nome -> Button
@@ -207,6 +207,7 @@ func _atualizar_destaques() -> void:
 		card.remove_theme_stylebox_override("panel")
 
 
+
 func _renderizar_card(p: Dictionary) -> void:
 	var texto_nome: String = p["nome"]
 	if p.has("status") and not p["status"].is_empty():
@@ -220,20 +221,23 @@ func _renderizar_card(p: Dictionary) -> void:
 
 	label_regioes.text = _texto_regioes(p)
 
-	label_fixos.text = "Carne %d\nForça %d\nMente %d\nFuga %d\nDeterm. %d" % [
+	# Atributos fixos: cabeçalho e valores na mesma ordem.
+	label_fixos.text = "Car For Fug Det Men\n%d  %d  %d  %d  %d" % [
 		int(p.get("atributo_carne", 0)),
 		int(p.get("atributo_forca", 0)),
-		int(p.get("atributo_mente", 0)),
 		int(p.get("atributo_fuga", 0)),
-		int(p.get("atributo_determinacao", 0))
+		int(p.get("atributo_determinacao", 0)),
+		int(p.get("atributo_mente", 0))
 	]
 
-	# Proteção atual = base - redução temporária (mesmo cálculo do EnemyPanel).
+	# Proteção atual = base - redução temporária.
 	var protecao_base: int = int(p.get("atributo_protecao", 0))
 	var protecao_atual: int = maxi(
 		0, protecao_base - int(p.get("reducao_protecao_temporaria", 0))
 	)
-	label_mutaveis.text = "Fôlego %d\nDano %d\nCoragem %d\nProteção %d/%d\nVeloc. %d" % [
+
+	# Atributos mutáveis: cabeçalho e valores na mesma ordem.
+	label_mutaveis.text = "Fôl Dan Cor Pro Vel\n%d  %d  %d  %d/%d  %d" % [
 		int(p.get("atributo_folego", 0)),
 		int(p.get("atributo_dano", 0)),
 		int(p.get("atributo_coragem", 0)),
@@ -244,11 +248,11 @@ func _renderizar_card(p: Dictionary) -> void:
 
 	var especial: String = ""
 	if p.get("habilidade_sobrecarga_ativa", false):
-		especial += "⚡SOBRECARGA "
+		especial += "SOBRECARGA "
 	if p.has("proteses") and not p["proteses"].is_empty():
 		especial += "[PR: %s]" % ", ".join(p["proteses"].keys())
-	label_status.text = especial
 
+	label_status.text = especial
 
 func _texto_regioes(p: Dictionary) -> String:
 	var texto: String = ""

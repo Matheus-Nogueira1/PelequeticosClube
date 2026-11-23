@@ -28,11 +28,9 @@ const VARIACAO_ALVO: StringName = &"IconeAlvo"
 @export var texturas_icones: Dictionary[String, Texture2D] = {}
 @onready var botao_ficha: Button = get_node_or_null("%BotaoFicha") as Button
 @onready var coluna_icones: HBoxContainer = %EnemyIcones
-@onready var card: Control = %EnemyCard
-@onready var marcador: Control = %MarcadorEnemy
+@onready var card: PanelContainer = %EnemyCard
+@onready var marcador: Panel = %MarcadorEnemy
 @onready var nome_label: Label = card.get_node("%NomeLabel")
-@onready var estresse_label: Label = card.get_node("%EstresseLabel")
-@onready var barra_estresse: ProgressBar = card.get_node("%BarraEstresse")
 
 @onready var regioes_label: RichTextLabel = card.get_node("%RegioesLabel")
 @onready var fixos_label: RichTextLabel = card.get_node("%FixosLabel")
@@ -225,24 +223,9 @@ func _aplicar_variacao_a_todos(variacao: StringName) -> void:
 		(icone as Button).theme_type_variation = variacao
 
 
+
 func _renderizar_card(inimigo: Dictionary) -> void:
-	var estresse_total: int = 0
-	var limite_total: int = 0
-
-	var regioes: Dictionary = inimigo.get("estresse_por_regiao", {})
-
-	for regiao_data in regioes.values():
-		estresse_total += int(regiao_data.get("atual", 0))
-		limite_total += int(regiao_data.get("limite", 0))
-
 	nome_label.text = String(inimigo.get("nome", "Inimigo"))
-	estresse_label.text = "ESTR %d/%d" % [
-		estresse_total,
-		limite_total
-	]
-
-	barra_estresse.max_value = maxi(limite_total, 1)
-	barra_estresse.value = estresse_total
 
 	var analisado: bool = bool(
 		inimigo.get("informacoes_reveladas", false)
@@ -250,16 +233,15 @@ func _renderizar_card(inimigo: Dictionary) -> void:
 
 	if not analisado:
 		regioes_label.text = _texto_regioes_ocultas()
-		fixos_label.text = "ATRIBUTOS FIXOS\n???"
-		mutaveis_label.text = "ATRIBUTOS MUTÁVEIS\n???"
-		status_label.text = "STATUS\n???"
+		fixos_label.text = "[b]CAR FOR FUG DET MEN[/b]\n???"
+		mutaveis_label.text = "[b]FÔL DAN COR PRO VEL[/b]\n???"
+		status_label.text = "[b]STATUS[/b]\n???"
 		return
 
 	regioes_label.text = _texto_regioes(inimigo)
 	fixos_label.text = _texto_atributos_fixos(inimigo)
 	mutaveis_label.text = _texto_atributos_mutaveis(inimigo)
 	status_label.text = _texto_status(inimigo)
-
 
 func _texto_regioes_ocultas() -> String:
 	var texto: String = "[b]REGIÕES[/b]\n"
@@ -268,7 +250,6 @@ func _texto_regioes_ocultas() -> String:
 		texto += "%s ??/?\n" % regiao
 
 	return texto
-
 
 func _texto_regioes(inimigo: Dictionary) -> String:
 	var texto: String = "[b]REGIÕES[/b]\n"
@@ -296,21 +277,14 @@ func _texto_regioes(inimigo: Dictionary) -> String:
 
 	return texto
 
-
 func _texto_atributos_fixos(inimigo: Dictionary) -> String:
-	return "[b]ATRIBUTOS FIXOS[/b]\n" + \
-		"Carne: %d | Força: %d\n" % [
-			int(inimigo.get("atributo_carne", 0)),
-			int(inimigo.get("atributo_forca", 0))
-		] + \
-		"Mente: %d | Fuga: %d\n" % [
-			int(inimigo.get("atributo_mente", 0)),
-			int(inimigo.get("atributo_fuga", 0))
-		] + \
-		"Determinação: %d" % [
-			int(inimigo.get("atributo_determinacao", 0))
-		]
-
+	return "[b]CAR FOR FUG DET MEN[/b]\n%d  %d  %d  %d  %d" % [
+		int(inimigo.get("atributo_carne", 0)),
+		int(inimigo.get("atributo_forca", 0)),
+		int(inimigo.get("atributo_fuga", 0)),
+		int(inimigo.get("atributo_determinacao", 0)),
+		int(inimigo.get("atributo_mente", 0))
+	]
 
 func _texto_atributos_mutaveis(inimigo: Dictionary) -> String:
 	var protecao_base: int = int(
@@ -323,20 +297,14 @@ func _texto_atributos_mutaveis(inimigo: Dictionary) -> String:
 
 	var protecao_atual: int = maxi(0, protecao_base - reducao)
 
-	return "[b]ATRIBUTOS MUTÁVEIS[/b]\n" + \
-		"Fôlego: %d | Dano: %d\n" % [
-			int(inimigo.get("atributo_folego", 0)),
-			int(inimigo.get("atributo_dano", 0))
-		] + \
-		"Coragem: %d | Velocidade: %d\n" % [
-			int(inimigo.get("atributo_coragem", 0)),
-			int(inimigo.get("atributo_velocidade", 0))
-		] + \
-		"Proteção: %d/%d" % [
-			protecao_atual,
-			protecao_base
-		]
-
+	return "[b]FÔL DAN COR PRO VEL[/b]\n%d  %d  %d  %d/%d  %d" % [
+		int(inimigo.get("atributo_folego", 0)),
+		int(inimigo.get("atributo_dano", 0)),
+		int(inimigo.get("atributo_coragem", 0)),
+		protecao_atual,
+		protecao_base,
+		int(inimigo.get("atributo_velocidade", 0))
+	]
 
 func _texto_status(inimigo: Dictionary) -> String:
 	var linhas: Array[String] = []

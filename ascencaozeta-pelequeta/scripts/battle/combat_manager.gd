@@ -48,6 +48,7 @@ signal leitura_confirmada
 @onready var campo_batalha: Control = %BattleFieldContent
 @onready var dica_continuar: Label = get_node_or_null("%DicaContinuar") as Label
 @onready var ficha_inimigo: FichaInimigo = %FichaInimigo
+@onready var dice_container: Control = %DiceContainer
 var animacao_jogador: CombatenteAnimation
 var animacao_inimigo: CombatenteAnimation
 
@@ -598,6 +599,7 @@ func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 				alvo.para_dictionary()
 			)
 
+	await _apresentar_pendentes()
 	_finalizar_acao()
 
 func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
@@ -644,6 +646,7 @@ func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 			"info"
 		)
 
+	await _apresentar_pendentes()
 	_finalizar_acao()
 
 func _tentar_fugir() -> void:
@@ -850,11 +853,11 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 		)
 		return
 
-	enemy_panel.desativar_seletor_alvo()
 	log_panel.registrar_evento(
-		"%s atacou %s.." % [combatente_ativo.nome, alvo.nome],
+		"%s atacou %s." % [combatente_ativo.nome, alvo.nome],
 		"acao"
 	)
+	await _apresentar_pendentes()
 	_processar_ataque(
 		combatente_ativo,
 		alvo,
@@ -891,7 +894,7 @@ func _rolar_dados_visuais(regioes: Array[String], valores_fixos: Array[int] = []
 
 	var quantidade: int = resultados.size()
 
-	var espacamento: float = 23.0
+	var espacamento: float = 28.0
 	var largura_total: float = (quantidade - 1) * espacamento
 	var inicio_x: float = -largura_total / 2.0
 
@@ -908,12 +911,12 @@ func _rolar_dados_visuais(regioes: Array[String], valores_fixos: Array[int] = []
 			dados_em_animacao = false
 			return []
 
-		battlefield.add_child(dado)
+		dice_container.add_child(dado)
 		dado.position = Vector2(
-			battlefield.size.x / 2.0 + inicio_x + i * espacamento,
-			battlefield.size.y / 2.0 - 80.0
+			dice_container.size.x / 2.0 + inicio_x + i * espacamento,
+			dice_container.size.y / 2.0
 		)
-		dado.scale = Vector2(1.25, 1.25)
+		dado.scale = Vector2(0.8, 0.8)
 		dados_visuais.append(dado)
 
 	# Anima todos os dados; cada face corresponde ao resultado sorteado.
@@ -989,7 +992,6 @@ func _processar_ataque(
 				res_regiao["categoria"]
 			],
 			"ataque",
-			false
 		)
 		if res_regiao["categoria"] in ["Falha Regular", "Falha Crítica"]:
 			var estresse_gerado := 1
@@ -1024,6 +1026,7 @@ func _processar_ataque(
 	# Consequências das falhas do atacante, numa única mensagem.
 	if not linhas_falha.is_empty():
 		log_panel.registrar_evento("\n".join(linhas_falha), "aviso")
+	await _apresentar_pendentes()
 	# ============================================================
 	# APÓS TODAS AS FALHAS
 	# VERIFICA SE O ATACANTE AINDA CONSEGUE CONTINUAR
@@ -1615,7 +1618,7 @@ func _alternar_ficha() -> void:
 
 	# A ficha completa só pode ser consultada após a análise.
 	var analisado: bool = bool(
-		inimigo.get("analisado_por_duelo", false)
+		inimigo.get("informacoes_reveladas", false)
 	)
 
 	if not analisado:

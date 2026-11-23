@@ -43,7 +43,9 @@ func _ready() -> void:
 
 
 func abrir(inimigo: Dictionary) -> void:
-	var analisado: bool = bool(inimigo.get("analisado_por_duelo", false))
+	var analisado: bool = bool(
+		inimigo.get("informacoes_reveladas", false)
+	)
 
 	nome.text = String(inimigo.get("nome", ""))
 	var g: int = int(inimigo.get("grau", 0))

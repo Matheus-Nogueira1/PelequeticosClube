@@ -1121,6 +1121,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_osi8t")
 script = ExtResource("1_vcae8")
+metadata/_edit_vertical_guides_ = [-110.0]
 
 [node name="CamadaResultado" type="CanvasLayer" parent="." unique_id=107115869]
 unique_name_in_owner = true
@@ -1164,13 +1165,6 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="MarcadorParty" type="Panel" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=28817273]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
 [node name="PartyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=1184149443]
 unique_name_in_owner = true
 layout_mode = 2
@@ -1195,6 +1189,11 @@ custom_minimum_size = Vector2(0, 10)
 custom_maximum_size = Vector2(-1, 20)
 layout_mode = 2
 size_flags_vertical = 3
+
+[node name="DiceContainer" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer/DicePanel" unique_id=1036726248]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
 
 [node name="Battlefield" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=468784180]
 unique_name_in_owner = true
@@ -1499,14 +1498,8 @@ horizontal_alignment = 2
 [node name="EnemyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2001851537]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 8
 theme_override_constants/separation = 2
-
-[node name="MarcadorEnemy" type="Panel" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=952539940]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
 
 [node name="EnemyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2111714629]
 unique_name_in_owner = true
@@ -1531,7 +1524,44 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_8w46x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_sgeuo")
 text = "Ficha"
 
+[node name="CamadaMarcadores" type="CanvasLayer" parent="." unique_id=1116530318]
+layer = -1
+
+[node name="MarginContainer" type="MarginContainer" parent="CamadaMarcadores" unique_id=38375947]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_osi8t")
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 5
+
+[node name="MarcadorParty" type="Panel" parent="CamadaMarcadores/MarginContainer" unique_id=1197494831]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(92, 182)
+custom_maximum_size = Vector2(92, 182)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="MarcadorEnemy" type="Panel" parent="CamadaMarcadores/MarginContainer" unique_id=1764838163]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(92, 182)
+custom_maximum_size = Vector2(92, 182)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
 [node name="CamadaFicha" type="CanvasLayer" parent="." unique_id=1830515864]
+visible = false
 
 [node name="FichaInimigo" parent="CamadaFicha" unique_id=477907791 instance=ExtResource("24_8w46x")]
 unique_name_in_owner = true
+visible = false
