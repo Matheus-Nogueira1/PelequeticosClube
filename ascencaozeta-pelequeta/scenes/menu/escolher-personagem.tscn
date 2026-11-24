@@ -9,6 +9,7 @@
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="6_gipqf"]
 [ext_resource type="LabelSettings" uid="uid://ch5kik1mpjmso" path="res://fonts/Titulos.tres" id="7_jog0g"]
 [ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="8_ru14h"]
+[ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="9_w5vr7"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tjwpk"]
 bg_color = Color(0.05882353, 0.019607844, 0.043137256, 1)
@@ -93,13 +94,11 @@ texture = ExtResource("5_ayp0l")
 stretch_mode = 5
 
 [node name="CharacterName" type="Label" parent="." unique_id=1079664423]
+custom_minimum_size = Vector2(0, 100)
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -93.0
-offset_right = 87.0
-offset_bottom = 80.0
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 13.0
 grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("6_gipqf")
@@ -125,19 +124,20 @@ grow_vertical = 0
 scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_tjwpk")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="DescriptionPanel" unique_id=1183576361]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 20
-alignment = 1
+[node name="ScrollTeclado" type="ScrollContainer" parent="DescriptionPanel" unique_id=1393310454]
+layout_mode = 0
+offset_right = 302.0
+offset_bottom = 100.0
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("9_w5vr7")
+rolar_com_setas = true
+metadata/_custom_type_script = "uid://hkqdbuk88uag"
 
-[node name="Description" type="RichTextLabel" parent="DescriptionPanel/VBoxContainer" unique_id=313375948]
+[node name="Description" type="RichTextLabel" parent="DescriptionPanel/ScrollTeclado" unique_id=313375948]
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("8_ru14h")
 text = "Cleptomaníaco, Imperdoável e Inesquecível.

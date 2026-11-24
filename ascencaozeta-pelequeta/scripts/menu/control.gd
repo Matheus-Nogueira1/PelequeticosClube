@@ -3,7 +3,7 @@ extends Control
 @export var paleta: PaletaDialogo
 @onready var slots: Array[Node] = $CenterContainer/HBoxContainer.get_children()
 @onready var name_label: Label = $CharacterName
-@onready var description_label: RichTextLabel = $DescriptionPanel/VBoxContainer/Description
+@onready var description_label: RichTextLabel = $DescriptionPanel/ScrollTeclado/Description
 var _confirmado: bool = false
 # Ordem visual dos personagens na tela.
 var character_ids: Array[String] = [

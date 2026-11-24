@@ -53,7 +53,8 @@ signal leitura_confirmada
 @onready var caixa_ajuda: CaixaAjuda = get_node_or_null("%CaixaAjuda") as CaixaAjuda
 var animacao_jogador: CombatenteAnimation
 var animacao_inimigo: CombatenteAnimation
-
+var turno_inimigo_em_execucao: bool = false
+var conhecimentos_ia_usados_turno: Array[String] = []
 
 # Estado do combate
 var combatentes_jogador: Array[CombatenteData] = []
@@ -285,6 +286,12 @@ func _avancar_turno() -> void:
 	
 	# Ativar painel de ações se for personagem jogador
 	if combatente_ativo.tipo == "jogador":
+		party_panel.atualizar_personagem(
+			combatente_ativo.para_dictionary()
+		)
+		party_panel.indicar_personagem_ativo(
+			combatente_ativo.para_dictionary()
+		)
 		party_panel.indicar_personagem_ativo(combatente_ativo.para_dictionary())
 		enemy_panel.desativar_seletor_alvo()
 		# Limpar seleções apenas ao iniciar turno do jogador
@@ -306,11 +313,10 @@ func _avancar_turno() -> void:
 			"turno"
 		)
 		await _apresentar_pendentes()
+		await get_tree().create_timer(0.3).timeout
 		if not combate_ativo:
 			return
-		# TODO: IA para inimigos
-		await get_tree().create_timer(0.3).timeout
-		_executar_turno_inimigo()
+		await _executar_turno_inimigo()
 
 func _restaurar_protecoes(combatente: CombatenteData) -> void:
 	for alvo in combatentes_jogador:
@@ -359,14 +365,142 @@ func _encontrar_proximo_combatente() -> CombatenteData:
 	return null
 
 func _executar_turno_inimigo() -> void:
-	"""Executa turno automático do inimigo (placeholder)"""
-	print("[CombatManager] Turno do inimigo: %s" % combatente_ativo.nome)
+	"""Executa ações da IA até acabar o PA ou o inimigo não poder continuar."""
 
-	# TODO: Implementar IA
-	# Por enquanto, passa o turno
-	await get_tree().create_timer(0.2).timeout
-	turno_finalizado.emit(combatente_ativo)
-	_avancar_turno()
+	if combatente_ativo == null:
+		return
+
+	var inimigo: CombatenteData = combatente_ativo
+
+	if inimigo.tipo != "inimigo":
+		return
+
+	turno_inimigo_em_execucao = true
+	conhecimentos_ia_usados_turno.clear()
+
+	print("[CombatManager] Turno da IA: %s" % inimigo.nome)
+
+	while (
+		combate_ativo
+		and combatente_ativo == inimigo
+		and not inimigo.morto
+		and inimigo.esta_consciente()
+	):
+		if inimigo.pontos_acao_atuais <= 0:
+			break
+
+		var decisao: Dictionary = InimigoIA.decidir(
+			inimigo,
+			combatentes_jogador,
+			conhecimentos_ia_usados_turno
+		)
+
+		print(
+			"[IA] %s: %s | %s | PA: %d" % [
+				inimigo.nome,
+				decisao.get("tipo", "passar"),
+				decisao.get("motivo", ""),
+				inimigo.pontos_acao_atuais
+			]
+		)
+
+		var tipo_acao: String = String(
+			decisao.get("tipo", "passar")
+		)
+
+		if tipo_acao == "passar":
+			log_panel.registrar_evento(
+				"%s passou o turno. (%s)" % [
+					inimigo.nome,
+					decisao.get("motivo", "")
+				],
+				"turno"
+			)
+
+			await _apresentar_pendentes()
+			break
+
+		var alvo: CombatenteData = decisao.get("alvo")
+
+		if (
+			alvo == null
+			or alvo.morto
+			or not alvo.esta_consciente()
+			or not combatentes_jogador.has(alvo)
+		):
+			continue
+
+		match tipo_acao:
+			"atacar":
+				var regioes: Array[String] = decisao.get(
+					"regioes",
+					[] as Array[String]
+				)
+
+				if regioes.is_empty():
+					break
+
+				if not inimigo.consumir_pontos_acao(
+					InimigoIA.CUSTO_PA_ATAQUE
+				):
+					break
+
+				enemy_panel.atualizar_inimigo(
+					inimigo.para_dictionary()
+				)
+				log_panel.registrar_evento(
+					"%s atacou %s." % [
+						inimigo.nome,
+						alvo.nome
+					],
+					"acao"
+				)
+				await _apresentar_pendentes()
+				if not combate_ativo:
+					break
+				await _processar_ataque(
+					inimigo,
+					alvo,
+					regioes
+				)
+			"conhecimento":
+				var nome_conhecimento: String = String(
+					decisao.get("conhecimento", "")
+				)
+				if nome_conhecimento not in ["Duelo", "Rastro"]:
+					break
+				if not inimigo.consumir_pontos_acao(
+					InimigoIA.CUSTO_PA_CONHECIMENTO
+				):
+					break
+				conhecimentos_ia_usados_turno.append(
+					nome_conhecimento
+				)
+				enemy_panel.atualizar_inimigo(
+					inimigo.para_dictionary()
+				)
+				log_panel.registrar_evento(
+					"%s utilizou %s contra %s." % [
+						inimigo.nome,
+						nome_conhecimento,
+						alvo.nome
+					],
+					"acao"
+				)
+				await _apresentar_pendentes()
+				if not combate_ativo:
+					break
+				if nome_conhecimento == "Duelo":
+					await _executar_conhecimento_duelo(alvo)
+				else:
+					await _executar_conhecimento_rastro(alvo)
+			_:
+				break
+	turno_inimigo_em_execucao = false
+	if not combate_ativo:
+		return
+	turno_finalizado.emit(inimigo)
+	await _avancar_turno()
 
 # ============================================================================
 # AÇÕES DO COMBATENTE
@@ -586,9 +720,7 @@ func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 				"info"
 			)
 			alvo.informacoes_reveladas = true
-			enemy_panel.atualizar_inimigo(
-				alvo.para_dictionary()
-			)
+			_atualizar_painel_combatente(alvo)
 
 		"Sucesso Extremo":
 			alvo.reducao_protecao_temporaria += 1
@@ -615,12 +747,23 @@ func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 				"critico"
 			)
 			alvo.informacoes_reveladas = true
-			enemy_panel.atualizar_inimigo(
-				alvo.para_dictionary()
-			)
+			_atualizar_painel_combatente(alvo)
 
 	await _apresentar_pendentes()
-	_finalizar_acao()
+	await _finalizar_acao()
+
+func _atualizar_painel_combatente(combatente: CombatenteData) -> void:
+	if combatente == null:
+		return
+
+	if combatente.tipo == "jogador":
+		party_panel.atualizar_personagem(
+			combatente.para_dictionary()
+		)
+	else:
+		enemy_panel.atualizar_inimigo(
+			combatente.para_dictionary()
+		)
 
 func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 	"""Rastro: igual ao Duelo, mas só revela as informações do inimigo."""
@@ -654,9 +797,7 @@ func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 			],
 			"info"
 		)
-		enemy_panel.atualizar_inimigo(
-			alvo.para_dictionary()
-		)
+		_atualizar_painel_combatente(alvo)
 	else:
 		log_panel.registrar_evento(
 			"%s não percebeu nada de útil em %s." % [
@@ -667,7 +808,7 @@ func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 		)
 
 	await _apresentar_pendentes()
-	_finalizar_acao()
+	await _finalizar_acao()
 
 func _tentar_fugir() -> void:
 	"""Bandidagem: em sucesso foge da batalha e volta ao mapa."""
@@ -1045,7 +1186,7 @@ func _processar_ataque(
 	if resultados_dados.is_empty():
 		push_error("[CombatManager] Não foi possível concluir a rolagem dos dados.")
 		_limpar_dados_visuais()
-		_finalizar_acao()
+		await _finalizar_acao()
 		return
 
 	# A lógica utiliza exatamente os resultados mostrados na animação.
@@ -1121,15 +1262,13 @@ func _processar_ataque(
 		if atacante.morto:
 			await _derrotar_combatente(atacante)
 		else:
-			party_panel.atualizar_personagem(
-				atacante.para_dictionary()
-			)
+			_atualizar_painel_combatente(atacante)
 			_verificar_fim_combate()
 
 		if not combate_ativo:
 			return
 
-		_finalizar_acao()
+		await _finalizar_acao()
 		return
 
 	# ============================================================
@@ -1210,7 +1349,7 @@ func _processar_ataque(
 
 			if resultado_localizacao < 1 or resultado_localizacao > 6:
 				push_error("[CombatManager] Falha ao determinar a localização do golpe.")
-				_finalizar_acao()
+				await _finalizar_acao()
 				return
 
 			var regiao_atingida: String = _obter_regiao_atingida(
@@ -1219,7 +1358,7 @@ func _processar_ataque(
 
 			if regiao_atingida.is_empty():
 				push_error("[CombatManager] Região atingida inválida.")
-				_finalizar_acao()
+				await _finalizar_acao()
 				return
 
 			log_panel.registrar_evento(
@@ -1283,9 +1422,9 @@ func _processar_ataque(
 		"info",
 		false
 	)
-	party_panel.atualizar_personagem(atacante.para_dictionary())
+	_atualizar_painel_combatente(atacante)
 	if alvo.tipo == "jogador":
-		party_panel.atualizar_personagem(alvo.para_dictionary())
+		_atualizar_painel_combatente(alvo)
 	var inimigos_atualizado: Array[Dictionary] = []
 	for inimigo in combatentes_inimigo:
 		enemy_panel.atualizar_inimigo(
@@ -1294,11 +1433,13 @@ func _processar_ataque(
 
 	if alvo.morto:
 		await _derrotar_combatente(alvo)
+	elif alvo.tipo == "jogador" and not alvo.esta_consciente():
+		_verificar_fim_combate()
 
 	if not combate_ativo:
 		return
 
-	_finalizar_acao()
+	await _finalizar_acao()
 	return
 
 # Animação do atacante: só roda depois da rolagem visual.
@@ -1328,10 +1469,17 @@ func _finalizar_acao() -> void:
 	await _aguardar_leitura()
 	if not combate_ativo:
 		return
-	_retomar_ou_encerrar_turno()
+	await _retomar_ou_encerrar_turno()
 
 func _retomar_ou_encerrar_turno() -> void:
 	if not combate_ativo or combatente_ativo == null:
+		return
+
+	# Durante o turno inimigo, o loop da IA decide a próxima ação.
+	if (
+		combatente_ativo.tipo == "inimigo"
+		and turno_inimigo_em_execucao
+	):
 		return
 
 	if (
@@ -1347,7 +1495,7 @@ func _retomar_ou_encerrar_turno() -> void:
 
 	action_panel.desabilitar_acoes()
 	turno_finalizado.emit(combatente_ativo)
-	_avancar_turno()
+	await _avancar_turno()
 
 func _avaliar_categoria_resultado(dado: int) -> String:
 	"""Categoriza o resultado do dado conforme OBLIVIO"""

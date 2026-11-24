@@ -42,7 +42,8 @@ var desmaiado: bool = false
 var reducao_protecao_temporaria: int = 0
 var bonus_duelo_protecao := 0
 var informacoes_reveladas: bool = false
-
+## Perfil tático da IA. Só é utilizado por inimigos.
+var perfil_ia: String = "agressivo"
 # Quem causou o último dano após quebrar a proteção
 var atacante_que_quebrou_protecao: String = ""
 
