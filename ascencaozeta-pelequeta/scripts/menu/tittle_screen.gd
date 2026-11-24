@@ -1,6 +1,6 @@
 
 extends Control
-
+@onready var menu_music: AudioStreamPlayer = $MenuMusic
 @onready var fade_overlay: ColorRect = $Fade
 @onready var transicao_verde: ColorRect = $TransicaoVerde
 
@@ -9,6 +9,7 @@ var botoes_menu: Array[Button] = []
 
 
 func _ready() -> void:
+	menu_music.play()
 	# Mantém o background original intacto.
 	$bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -17,6 +18,7 @@ func _ready() -> void:
 	criar_botao("OPTIONS", Rect2(36, 73, 53, 17), _on_options_btn_pressed)
 	criar_botao("CREDITS", Rect2(36, 105, 53, 17), _on_credits_btn_pressed)
 	criar_botao("EXIT", Rect2(36, 137, 53, 17), _on_quit_btn_pressed)
+	AudioManager.tocar_musica(&"menu")
 	# Teclado: começa com o primeiro botão destacado.
 	botoes_menu[0].grab_focus()
 
@@ -88,9 +90,9 @@ func criar_botao(nome: String, area: Rect2, acao: Callable) -> void:
 func _on_start_btn_pressed() -> void:
 	if transicao_em_andamento:
 		return
-
+	
 	transicao_em_andamento = true
-
+	AudioManager.tocar_musica(&"ciclo")
 	for botao in botoes_menu:
 		botao.disabled = true
 
@@ -104,8 +106,11 @@ func _on_start_btn_pressed() -> void:
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_SINE)
 	tween.set_ease(Tween.EASE_IN_OUT)
-	tween.tween_property(
+	tween.parallel().tween_property(
 		fade_overlay, "modulate:a", 1.0, 1.2
+	)
+	tween.parallel().tween_property(
+		menu_music, "volume_db", -40.0, 1.2
 	)
 	await tween.finished
 	get_tree().change_scene_to_file(

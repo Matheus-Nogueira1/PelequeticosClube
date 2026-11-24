@@ -3,8 +3,9 @@ extends ColorRect
 # Revela o mapa de forma gradual ao entrar na cena.
 @export var duracao: float = 1.2
 
-
 func _ready() -> void:
+	AudioManager.tocar_musica(&"ciclo")
+
 	visible = true
 	modulate.a = 1.0
 	var tween := create_tween()

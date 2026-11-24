@@ -1629,3 +1629,4 @@ visible = false
 
 [node name="CaixaAjuda" parent="." unique_id=615491577 instance=ExtResource("37_ew100")]
 unique_name_in_owner = true
+visible = false

@@ -14,11 +14,10 @@ var introducao_em_andamento: bool = false
 
 
 func _ready() -> void:
+	AudioManager.tocar_musica(&"elizabeth")
 	inicializar_mapa()
-
 	if mapa_inicializado and executar_introducao:
 		await executar_introducao_firekeeper()
-
 
 func inicializar_mapa() -> void:
 	if jogador == null:

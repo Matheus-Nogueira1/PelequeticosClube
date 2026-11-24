@@ -32,6 +32,7 @@ func _ao_jogador_entrar(body: Node2D) -> void:
 		return
 
 	combate_iniciado = true
+	AudioManager.tocar_musica(&"bau")
 	if body.has_method("travar"):
 		body.travar(true)
 

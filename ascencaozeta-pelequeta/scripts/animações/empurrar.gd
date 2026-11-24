@@ -260,6 +260,9 @@ func iniciar_empurrao():
 	await falling_player.animation_finished
 	await queda.finished
 
+	# A queda terminou: inicia a música da cabana.
+	AudioManager.tocar_musica(&"elizabeth")
+
 	# Queda contínua: o personagem balança enquanto o diálogo inicial toca.
 	var balanco := _balancar_queda(falling_player)
 	var id_personagem: String = "escolhido"

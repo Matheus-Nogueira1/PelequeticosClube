@@ -4,7 +4,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_syiot"]
 content_margin_top = 2.0
-content_margin_right = 2.0
+content_margin_right = 5.0
 
 [node name="EnemyCard" type="PanelContainer" unique_id=1352577537]
 anchors_preset = 15

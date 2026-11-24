@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://g3f0ktuyb8wd" path="res://scripts/menu/tittle_screen.gd" id="1_u7h56"]
 [ext_resource type="Texture2D" uid="uid://dvfqehyaa7ogf" path="res://assets/menu/Menu_Template.png" id="2_1s7fx"]
+[ext_resource type="AudioStream" uid="uid://dakpspoijb2hn" path="res://music/CINEMATICS/ClementPanchout_Shadows-MENUzETicoTRISTETICO.wav" id="3_e0arn"]
 
 [node name="TittleScreen" type="Control" unique_id=326066292]
 texture_filter = 1
@@ -56,3 +57,8 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0.07450981, 0.15686275, 0.15686275, 1)
+
+[node name="MenuMusic" type="AudioStreamPlayer" parent="." unique_id=912530414]
+stream = ExtResource("3_e0arn")
+volume_db = -3.0
+autoplay = true

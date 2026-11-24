@@ -1513,6 +1513,8 @@ func _finalizar_combate(resultado: String) -> void:
 	if not combate_ativo:
 		return
 	combate_ativo = false
+	# A música muda assim que o combate termina.
+	AudioManager.tocar_musica(&"ciclo")
 	# O resumo é capturado antes da linha de encerramento, que repetiria o título.
 	resumo_resultado = log_panel.obter_resumo(6)
 	# Se o combate acabou durante o turno de um aliado, consolida o estilo dele.
