@@ -106,9 +106,12 @@
 --------------------------------------------------
 * Sprite de NPC's | **EM ANDAMENTO** 🔄
 * Sprite de Inimigos | **EM ANDAMENTO** 🔄
+* Sprites Gosma |
 * Assets de decoração | **PENDENTE** ⚠️
 * Assets de UI | **PENDENTE** ⚠️
-
+* Rework do JP | **PENDENTE** ⚠️
+* Animações Escolhido
+  
 ### Observações:
 * Priorizar bugs e problemas que impedem o funcionamento correto do jogo.
 * Dar prioridade visual à Bastilha e à tela de combate.
