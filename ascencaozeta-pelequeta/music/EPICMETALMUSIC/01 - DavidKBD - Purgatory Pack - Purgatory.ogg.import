@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b7m1mh3f7aq4s"
+path="res://.godot/imported/01 - DavidKBD - Purgatory Pack - Purgatory.ogg-09bb9b8c6c5c9981db1f45f262218b57.oggvorbisstr"
+
+[deps]
+
+source_file="res://music/EPICMETALMUSIC/01 - DavidKBD - Purgatory Pack - Purgatory.ogg"
+dest_files=["res://.godot/imported/01 - DavidKBD - Purgatory Pack - Purgatory.ogg-09bb9b8c6c5c9981db1f45f262218b57.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

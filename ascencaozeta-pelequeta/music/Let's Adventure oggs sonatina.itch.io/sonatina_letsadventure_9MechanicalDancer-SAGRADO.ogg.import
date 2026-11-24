@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dnpc3pukvb3r7"
+path="res://.godot/imported/sonatina_letsadventure_9MechanicalDancer-SAGRADO.ogg-b3804523a302b4597b99a4f0da164d38.oggvorbisstr"
+
+[deps]
+
+source_file="res://music/Let's Adventure oggs sonatina.itch.io/sonatina_letsadventure_9MechanicalDancer-SAGRADO.ogg"
+dest_files=["res://.godot/imported/sonatina_letsadventure_9MechanicalDancer-SAGRADO.ogg-b3804523a302b4597b99a4f0da164d38.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

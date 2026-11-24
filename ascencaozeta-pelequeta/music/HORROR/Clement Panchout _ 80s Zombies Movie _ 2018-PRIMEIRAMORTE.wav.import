@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c8o7fqbxh2et8"
+path="res://.godot/imported/Clement Panchout _ 80s Zombies Movie _ 2018-PRIMEIRAMORTE.wav-6e555e68f27000219733a5ee58bd2506.sample"
+
+[deps]
+
+source_file="res://music/HORROR/Clement Panchout _ 80s Zombies Movie _ 2018-PRIMEIRAMORTE.wav"
+dest_files=["res://.godot/imported/Clement Panchout _ 80s Zombies Movie _ 2018-PRIMEIRAMORTE.wav-6e555e68f27000219733a5ee58bd2506.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

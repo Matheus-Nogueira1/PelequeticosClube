@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://v8t0s7lbwdtp"
+path="res://.godot/imported/32 - DavidKBD - Purgatory Pack - MiniLoop 24.ogg-c245890ca4eeb46b9b4a0c8d7eb275b0.oggvorbisstr"
+
+[deps]
+
+source_file="res://music/EPICMETALMUSIC/32 - DavidKBD - Purgatory Pack - MiniLoop 24.ogg"
+dest_files=["res://.godot/imported/32 - DavidKBD - Purgatory Pack - MiniLoop 24.ogg-c245890ca4eeb46b9b4a0c8d7eb275b0.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

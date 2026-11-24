@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://c2bgrhe15f0cu"
+path="res://.godot/imported/03 - DavidKBD - Purgatory Pack - Sacrifice.ogg-6424ad17843620c76213bf4de4262784.oggvorbisstr"
+
+[deps]
+
+source_file="res://music/EPICMETALMUSIC/03 - DavidKBD - Purgatory Pack - Sacrifice.ogg"
+dest_files=["res://.godot/imported/03 - DavidKBD - Purgatory Pack - Sacrifice.ogg-6424ad17843620c76213bf4de4262784.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

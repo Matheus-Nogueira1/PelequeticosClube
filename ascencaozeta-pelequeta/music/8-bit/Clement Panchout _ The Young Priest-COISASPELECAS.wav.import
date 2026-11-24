@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://33mk2kedhnvl"
+path="res://.godot/imported/Clement Panchout _ The Young Priest-COISASPELECAS.wav-6621119c50ad9587bad5ae764c7a6ea8.sample"
+
+[deps]
+
+source_file="res://music/8-bit/Clement Panchout _ The Young Priest-COISASPELECAS.wav"
+dest_files=["res://.godot/imported/Clement Panchout _ The Young Priest-COISASPELECAS.wav-6621119c50ad9587bad5ae764c7a6ea8.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

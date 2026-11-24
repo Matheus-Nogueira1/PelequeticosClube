@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://b8nyhbyvqa37q"
+path="res://.godot/imported/Retro_ Spooky Soundscape_ The Whispering Shadows Dungeon _Clement Panchout 2016-PALACIO.wav-c0d5e990a2380d476788dcbe1b888eb5.sample"
+
+[deps]
+
+source_file="res://music/HORROR/Retro_ Spooky Soundscape_ The Whispering Shadows Dungeon _Clement Panchout 2016-PALACIO.wav"
+dest_files=["res://.godot/imported/Retro_ Spooky Soundscape_ The Whispering Shadows Dungeon _Clement Panchout 2016-PALACIO.wav-c0d5e990a2380d476788dcbe1b888eb5.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

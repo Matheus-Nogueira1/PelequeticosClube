@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://5jqnbbhqsxys"
+path="res://.godot/imported/Clement Panchout _ The Rite.wav-ebd608a088f2098cab0515d86ce3002f.sample"
+
+[deps]
+
+source_file="res://music/8-bit/Clement Panchout _ The Rite.wav"
+dest_files=["res://.godot/imported/Clement Panchout _ The Rite.wav-ebd608a088f2098cab0515d86ce3002f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

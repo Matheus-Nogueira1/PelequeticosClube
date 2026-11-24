@@ -19,7 +19,6 @@
 [ext_resource type="Texture2D" uid="uid://qso8t6ev6f6" path="res://assets/UI/battle/Fundos/Fundo_Bastilha.png" id="8_0nysw"]
 [ext_resource type="Texture2D" uid="uid://cs2esuc3nagul" path="res://assets/Player/ESCOLHIDO/EscolhidoDIreita_Template_Iluminar-Sheet.png" id="8_x1unb"]
 [ext_resource type="Texture2D" uid="uid://bu2h18wttrcw0" path="res://assets/Player/ESCOLHIDO/EscolhidoEsquerda_Template_Iluminar-Sheet.png" id="9_8w46x"]
-[ext_resource type="Script" uid="uid://cdg6pkjjgs0vc" path="res://scripts/ui/botao_ajuda.gd" id="9_robps"]
 [ext_resource type="Texture2D" uid="uid://co67ag0p13g8i" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_Morrendo-Sheet.png" id="10_sgeuo"]
 [ext_resource type="Texture2D" uid="uid://tsbf2a0vcf6q" path="res://assets/Player/ESCOLHIDO/Walk_Escolhido_Template.png" id="11_ckv1f"]
 [ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/Player/Base/Shadow.png" id="12_enfrm"]
@@ -1228,7 +1227,6 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="PartyCard" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer/PartyScroll" unique_id=1244372248 instance=ExtResource("5_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
-script = ExtResource("9_robps")
 
 [node name="VSeparator2" type="VSeparator" parent="MarginContainer/HBoxContainer" unique_id=1423463754]
 custom_maximum_size = Vector2(0, -1)
@@ -1612,7 +1610,6 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="EnemyCard" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
-script = ExtResource("9_robps")
 
 [node name="BotaoFicha" type="Button" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1475661764]
 unique_name_in_owner = true

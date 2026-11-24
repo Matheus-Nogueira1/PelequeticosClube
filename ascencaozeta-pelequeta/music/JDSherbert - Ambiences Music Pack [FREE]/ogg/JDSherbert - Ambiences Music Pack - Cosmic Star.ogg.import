@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://dgd4stmmdws8p"
+path="res://.godot/imported/JDSherbert - Ambiences Music Pack - Cosmic Star.ogg-71e47e823fda54d1cba686410cf5f018.oggvorbisstr"
+
+[deps]
+
+source_file="res://music/JDSherbert - Ambiences Music Pack [FREE]/ogg/JDSherbert - Ambiences Music Pack - Cosmic Star.ogg"
+dest_files=["res://.godot/imported/JDSherbert - Ambiences Music Pack - Cosmic Star.ogg-71e47e823fda54d1cba686410cf5f018.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

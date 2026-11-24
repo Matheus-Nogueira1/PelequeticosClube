@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://4ibmgh866ocu"
+path="res://.godot/imported/Clement Panchout _ Dark _ 2004-ROLAGEMDAMORTE.wav-4c29bb3c4e39da37bffa28c620a7df64.sample"
+
+[deps]
+
+source_file="res://music/HORROR/Clement Panchout _ Dark _ 2004-ROLAGEMDAMORTE.wav"
+dest_files=["res://.godot/imported/Clement Panchout _ Dark _ 2004-ROLAGEMDAMORTE.wav-4c29bb3c4e39da37bffa28c620a7df64.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

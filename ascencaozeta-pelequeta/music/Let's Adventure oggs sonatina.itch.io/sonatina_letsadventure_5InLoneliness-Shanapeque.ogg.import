@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://b5bparupd2jnk"
+path="res://.godot/imported/sonatina_letsadventure_5InLoneliness-Shanapeque.ogg-520fbf486dd9f86b5e5a7efd5cefee3a.oggvorbisstr"
+
+[deps]
+
+source_file="res://music/Let's Adventure oggs sonatina.itch.io/sonatina_letsadventure_5InLoneliness-Shanapeque.ogg"
+dest_files=["res://.godot/imported/sonatina_letsadventure_5InLoneliness-Shanapeque.ogg-520fbf486dd9f86b5e5a7efd5cefee3a.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

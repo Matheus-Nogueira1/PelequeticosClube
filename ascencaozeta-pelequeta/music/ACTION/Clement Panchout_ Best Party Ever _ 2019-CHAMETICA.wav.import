@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cfiofx0mnydbc"
+path="res://.godot/imported/Clement Panchout_ Best Party Ever _ 2019-CHAMETICA.wav-5c2daee68fae78923badf3cbc89f5d49.sample"
+
+[deps]
+
+source_file="res://music/ACTION/Clement Panchout_ Best Party Ever _ 2019-CHAMETICA.wav"
+dest_files=["res://.godot/imported/Clement Panchout_ Best Party Ever _ 2019-CHAMETICA.wav-5c2daee68fae78923badf3cbc89f5d49.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://bfw10w3qsyyfg"
+path="res://.godot/imported/16-Bit Sim Strategy Hospital _Clement Panchout.wav-46414bbd8c6364f2e19c11e8e9230664.sample"
+
+[deps]
+
+source_file="res://music/8-bit/16-Bit Sim Strategy Hospital _Clement Panchout.wav"
+dest_files=["res://.godot/imported/16-Bit Sim Strategy Hospital _Clement Panchout.wav-46414bbd8c6364f2e19c11e8e9230664.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

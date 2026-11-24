@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://cd8mhdvrgoqgd"
+path="res://.godot/imported/2023 _ Clement Panchout - Unrecord-EPICBATTLEPASS.wav-13dbfc7ffb46fbb0f03737baa989444f.sample"
+
+[deps]
+
+source_file="res://music/ACTION/2023 _ Clement Panchout - Unrecord-EPICBATTLEPASS.wav"
+dest_files=["res://.godot/imported/2023 _ Clement Panchout - Unrecord-EPICBATTLEPASS.wav-13dbfc7ffb46fbb0f03737baa989444f.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

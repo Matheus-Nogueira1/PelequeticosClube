@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://1rowdfnvd4ud"
+path="res://.godot/imported/Clement Panchout _ I want to believe _ 2004-ESCURIDAO.wav-db0513b3a27b658e4c9776b147eea28d.sample"
+
+[deps]
+
+source_file="res://music/HORROR/Clement Panchout _ I want to believe _ 2004-ESCURIDAO.wav"
+dest_files=["res://.godot/imported/Clement Panchout _ I want to believe _ 2004-ESCURIDAO.wav-db0513b3a27b658e4c9776b147eea28d.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

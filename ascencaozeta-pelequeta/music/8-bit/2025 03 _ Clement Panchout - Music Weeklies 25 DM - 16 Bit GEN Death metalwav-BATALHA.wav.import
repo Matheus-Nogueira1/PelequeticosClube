@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://c6aguf4cgpvhj"
+path="res://.godot/imported/2025 03 _ Clement Panchout - Music Weeklies 25 DM - 16 Bit GEN Death metalwav-BATALHA.wav-e3847a0f3fee25508b10bab76cf74542.sample"
+
+[deps]
+
+source_file="res://music/8-bit/2025 03 _ Clement Panchout - Music Weeklies 25 DM - 16 Bit GEN Death metalwav-BATALHA.wav"
+dest_files=["res://.godot/imported/2025 03 _ Clement Panchout - Music Weeklies 25 DM - 16 Bit GEN Death metalwav-BATALHA.wav-e3847a0f3fee25508b10bab76cf74542.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

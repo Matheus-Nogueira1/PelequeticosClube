@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://y3o2nq5vpniy"
+path="res://.godot/imported/Clement Panchout_ Forest Of A Thousand Masks-CEBOLETICO.wav-61846cb8f0da8b82883951b9b7314c27.sample"
+
+[deps]
+
+source_file="res://music/CINEMATICS/Clement Panchout_ Forest Of A Thousand Masks-CEBOLETICO.wav"
+dest_files=["res://.godot/imported/Clement Panchout_ Forest Of A Thousand Masks-CEBOLETICO.wav-61846cb8f0da8b82883951b9b7314c27.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2

@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://cqw0uyckgjduy"
+path="res://.godot/imported/JDSherbert - Ambiences Music Pack - Desert Sirocco - NEVASCA.ogg-6fc44386550a2c60c9b28adaee907a50.oggvorbisstr"
+
+[deps]
+
+source_file="res://music/JDSherbert - Ambiences Music Pack [FREE]/ogg/JDSherbert - Ambiences Music Pack - Desert Sirocco - NEVASCA.ogg"
+dest_files=["res://.godot/imported/JDSherbert - Ambiences Music Pack - Desert Sirocco - NEVASCA.ogg-6fc44386550a2c60c9b28adaee907a50.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

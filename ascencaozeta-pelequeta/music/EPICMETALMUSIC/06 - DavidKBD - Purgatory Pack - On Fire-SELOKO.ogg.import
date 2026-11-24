@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://ch0npbsnkccwd"
+path="res://.godot/imported/06 - DavidKBD - Purgatory Pack - On Fire-SELOKO.ogg-b55ed7490e05e029894edd9eaf3e3824.oggvorbisstr"
+
+[deps]
+
+source_file="res://music/EPICMETALMUSIC/06 - DavidKBD - Purgatory Pack - On Fire-SELOKO.ogg"
+dest_files=["res://.godot/imported/06 - DavidKBD - Purgatory Pack - On Fire-SELOKO.ogg-b55ed7490e05e029894edd9eaf3e3824.oggvorbisstr"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

@@ -1,0 +1,18 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://bv7smdy5wu865"
+valid=false
+
+[deps]
+
+source_file="res://music/__MACOSX/Let's Adventure oggs sonatina.itch.io/._sonatina_letsadventure_8InExtremis.ogg"
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

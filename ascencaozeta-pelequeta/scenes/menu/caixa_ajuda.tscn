@@ -1,3 +1,78 @@
 [gd_scene format=3 uid="uid://bnxw77i8xt6ph"]
 
+[ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_tqo66"]
+[ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="2_4hvsg"]
+
 [node name="CaixaAjuda" type="CanvasLayer" unique_id=615491577]
+layer = 20
+
+[node name="Raiz" type="Control" parent="." unique_id=1543068052]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_tqo66")
+
+[node name="Fundo" type="ColorRect" parent="Raiz" unique_id=2074848696]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.5)
+
+[node name="Centro" type="CenterContainer" parent="Raiz" unique_id=1859594239]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Janela" type="Panel" parent="Raiz/Centro" unique_id=711334476]
+custom_minimum_size = Vector2(250, 150)
+layout_mode = 2
+
+[node name="Margem" type="MarginContainer" parent="Raiz/Centro/Janela" unique_id=228398152]
+layout_mode = 0
+
+[node name="Coluna" type="VBoxContainer" parent="Raiz/Centro/Janela/Margem" unique_id=336319664]
+layout_mode = 2
+
+[node name="Cabecalho" type="HBoxContainer" parent="Raiz/Centro/Janela/Margem/Coluna" unique_id=760059977]
+layout_mode = 2
+
+[node name="Titulo" type="Label" parent="Raiz/Centro/Janela/Margem/Coluna/Cabecalho" unique_id=560667908]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 11
+text = "Titulo"
+
+[node name="BotaoFechar" type="Button" parent="Raiz/Centro/Janela/Margem/Coluna/Cabecalho" unique_id=1346947594]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(14, 14)
+layout_mode = 2
+text = "X"
+
+[node name="HSeparator" type="HSeparator" parent="Raiz/Centro/Janela/Margem/Coluna" unique_id=752883985]
+layout_mode = 2
+
+[node name="Paineis" type="VBoxContainer" parent="Raiz/Centro/Janela/Margem/Coluna" unique_id=708487622]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollTeclado" type="ScrollContainer" parent="Raiz/Centro/Janela/Margem/Coluna/Paineis" unique_id=1059287273]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("2_4hvsg")
+metadata/_custom_type_script = "uid://hkqdbuk88uag"
+metadata/titulo = "cabecalho"
