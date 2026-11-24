@@ -4,19 +4,31 @@
 [ext_resource type="Script" uid="uid://7jmoe7c7hnep" path="res://scripts/battle/ficha_inimigo.gd" id="2_eouq0"]
 [ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="2_ynem0"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]
+bg_color = Color(0.06100855, 0.025840001, 0.03876, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
 [node name="FichaInimigo" type="PanelContainer" unique_id=1327923879]
 custom_maximum_size = Vector2(300, 170)
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 11.0
+offset_right = -10.0
+offset_bottom = -11.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_2idga")
 script = ExtResource("2_eouq0")
-
-[node name="FundoCombate" type="ColorRect" parent="." unique_id=1121283006]
-layout_mode = 2
-color = Color(0.05882353, 0.019607844, 0.043137256, 1)
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=603682109]
 layout_mode = 2
@@ -24,6 +36,7 @@ layout_mode = 2
 [node name="PanelContainer" type="PanelContainer" parent="CenterContainer" unique_id=149787047]
 custom_minimum_size = Vector2(300, 172)
 layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="MarginContainer" type="MarginContainer" parent="CenterContainer/PanelContainer" unique_id=449417066]
 layout_mode = 2
@@ -37,6 +50,7 @@ layout_mode = 2
 
 [node name="ColunaAtributos" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=622547443]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="ValCar" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=1396841046]
 unique_name_in_owner = true
@@ -97,11 +111,14 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll" unique_id=279423780]
 layout_mode = 2
 
-[node name="FichaDescricao" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1964667943]
+[node name="FichaDescricao" type="RichTextLabel" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1468443069]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
 text = "Um boneco de treino para os que não confiam em seu potencial."
-autowrap_mode = 3
+fit_content = true
 
 [node name="GridContainer" type="GridContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1133664449]
 layout_mode = 2
@@ -130,11 +147,13 @@ text = "Casas: 1"
 [node name="FichaLimite" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=735815131]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "Limite"
 
 [node name="FichaConhecimento" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1505216473]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "Duelo, Reflexos, Bandidagem"
 autowrap_mode = 3
 
@@ -142,6 +161,8 @@ autowrap_mode = 3
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
 bbcode_enabled = true
 text = "Caminhar do carrasco: Peleco ativa a pelecagem maxima."
 fit_content = true

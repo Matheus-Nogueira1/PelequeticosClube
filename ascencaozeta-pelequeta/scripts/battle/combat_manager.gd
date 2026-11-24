@@ -269,6 +269,7 @@ func _avancar_turno() -> void:
 		return
 	
 	combatente_ativo = combatente_proximo
+	combatente_ativo.restaurar_pontos_acao()
 	# Início do turno: o cursor da iniciativa avançou (conta rodada)
 	# e o registro de variedade do aliado é aberto.
 	estatisticas.registrar_avanco_iniciativa(ordem_inicial.find(combatente_ativo))
@@ -368,14 +369,20 @@ func _executar_turno_inimigo() -> void:
 
 func _iniciar_ataque() -> void:
 	"""Inicia sequência de ataque: seleciona regiões → seleciona alvo → rola dados"""
-	if acao_em_progresso or combatente_ativo.tipo != "jogador":
+	if acao_em_progresso or combatente_ativo == null:
 		return
-
+	if combatente_ativo.tipo != "jogador":
+		return
+	if combatente_ativo.pontos_acao_atuais < 2:
+		log_panel.registrar_evento(
+			"PA insuficiente: o ataque padrão custa 2 PA.",
+			"aviso"
+		)
+		await _devolver_acoes_apos_leitura()
+		return
 	acao_em_progresso = true
 	action_panel.desabilitar_acoes()
 	log_panel.registrar_evento("Selecione as regiões de ataque...", "acao", false)
-
-	# Ativar seletor de corpo com validação de Próteses/Regiões Perdidas/Sobrecarga
 	regional_selector.ativar_para_ataque(combatente_ativo)
 	regional_selector.modo = "selecionar_ataque"
 
@@ -490,7 +497,13 @@ func _on_item_escolhido(nome_item: String) -> void:
 		log_panel.registrar_evento("Item indisponível.", "aviso")
 		await _devolver_acoes_apos_leitura()
 		return
-
+	if combatente_ativo.pontos_acao_atuais < 1:
+		log_panel.registrar_evento(
+			"PA insuficiente: usar um item custa 1 PA.",
+			"aviso"
+		)
+		await _devolver_acoes_apos_leitura()
+		return
 	# Beta: o Frasco Estus age na região com mais estresse.
 	var regiao_alvo := ""
 	var maior_estresse := 0
@@ -515,6 +528,8 @@ func _on_item_escolhido(nome_item: String) -> void:
 			"aviso"
 		)
 		await _devolver_acoes_apos_leitura()
+		return
+	if not combatente_ativo.consumir_pontos_acao(1):
 		return
 	# Cura efetiva = Estresse realmente removido. No Frasco Estus, o item
 	# só conta como ação se a cura efetiva for maior que zero.
@@ -653,6 +668,18 @@ func _tentar_fugir() -> void:
 	"""Bandidagem: em sucesso foge da batalha e volta ao mapa."""
 	if acao_em_progresso:
 		return
+	if combatente_ativo.pontos_acao_atuais < 1:
+		log_panel.registrar_evento(
+			"PA insuficiente: usar um conhecimento custa 1 PA.",
+			"aviso"
+		)
+		await _devolver_acoes_apos_leitura()
+		return
+	if not combatente_ativo.consumir_pontos_acao(1):
+		return
+	party_panel.atualizar_personagem(
+		combatente_ativo.para_dictionary()
+	)
 	acao_em_progresso = true
 	# Bloqueia o ActionPanel antes da rolagem (ele ficava ativo durante a animação).
 	action_panel.desabilitar_acoes()
@@ -819,6 +846,23 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 		var conhecimento_usado := conhecimento_pendente
 		conhecimento_pendente = ""
 
+		if combatente_ativo.pontos_acao_atuais < 1:
+			log_panel.registrar_evento(
+				"PA insuficiente: usar um conhecimento custa 1 PA.",
+				"aviso"
+			)
+			acao_em_progresso = false
+			enemy_panel.desativar_seletor_alvo()
+			await _devolver_acoes_apos_leitura()
+			return
+
+		if not combatente_ativo.consumir_pontos_acao(1):
+			return
+
+		party_panel.atualizar_personagem(
+			combatente_ativo.para_dictionary()
+		)
+
 		if conhecimento_usado == "Rastro":
 			_executar_conhecimento_rastro(alvo)
 		else:
@@ -852,7 +896,23 @@ func _on_inimigo_selecionado(inimigo_dict: Dictionary) -> void:
 			false
 		)
 		return
+	if combatente_ativo.pontos_acao_atuais < 2:
+		log_panel.registrar_evento(
+			"PA insuficiente: o ataque padrão custa 2 PA.",
+			"aviso"
+		)
+		regioes_selecionadas.clear()
+		acao_em_progresso = false
+		enemy_panel.desativar_seletor_alvo()
+		await _devolver_acoes_apos_leitura()
+		return
 
+	if not combatente_ativo.consumir_pontos_acao(2):
+		return
+
+	party_panel.atualizar_personagem(
+		combatente_ativo.para_dictionary()
+	)
 	log_panel.registrar_evento(
 		"%s atacou %s." % [combatente_ativo.nome, alvo.nome],
 		"acao"
@@ -894,7 +954,7 @@ func _rolar_dados_visuais(regioes: Array[String], valores_fixos: Array[int] = []
 
 	var quantidade: int = resultados.size()
 
-	var espacamento: float = 28.0
+	var espacamento: float = 20.0
 	var largura_total: float = (quantidade - 1) * espacamento
 	var inicio_x: float = -largura_total / 2.0
 
@@ -916,7 +976,7 @@ func _rolar_dados_visuais(regioes: Array[String], valores_fixos: Array[int] = []
 			dice_container.size.x / 2.0 + inicio_x + i * espacamento,
 			dice_container.size.y / 2.0
 		)
-		dado.scale = Vector2(0.8, 0.8)
+		dado.scale = Vector2(1, 1)
 		dados_visuais.append(dado)
 
 	# Anima todos os dados; cada face corresponde ao resultado sorteado.
@@ -927,6 +987,21 @@ func _rolar_dados_visuais(regioes: Array[String], valores_fixos: Array[int] = []
 	await get_tree().create_timer(0.8).timeout
 	dados_em_animacao = false
 	return resultados
+
+func _obter_regiao_atingida(resultado_d6: int) -> String:
+	match resultado_d6:
+		1, 2:
+			return "Torso"
+		3:
+			return "Braço Direito"
+		4:
+			return "Braço Esquerdo"
+		5:
+			return "Perna Direita"
+		6:
+			return "Perna Esquerda"
+		_:
+			return ""
 
 func _rolar_dado_conhecimento(nome: String) -> int:
 	"""Anima 1 dado e devolve o valor bruto (0 se a rolagem falhar)."""
@@ -1123,19 +1198,67 @@ func _processar_ataque(
 			)
 			await _apresentar_pendentes()
 
+			# A Proteção foi quebrada. Sorteia a região atingida pelo ataque.
+			var resultado_localizacao: int = await _rolar_dado_conhecimento(
+				"Localização do golpe"
+			)
+
+			if resultado_localizacao < 1 or resultado_localizacao > 6:
+				push_error("[CombatManager] Falha ao determinar a localização do golpe.")
+				_finalizar_acao()
+				return
+
+			var regiao_atingida: String = _obter_regiao_atingida(
+				resultado_localizacao
+			)
+
+			if regiao_atingida.is_empty():
+				push_error("[CombatManager] Região atingida inválida.")
+				_finalizar_acao()
+				return
+
+			log_panel.registrar_evento(
+				"Localização do golpe: D6 %d → %s." % [
+					resultado_localizacao,
+					regiao_atingida
+				],
+				"ataque"
+			)
+
+			await _apresentar_pendentes()
+
 			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
 			await _animar_dano(alvo)
-			var torso_antes: int = alvo.estresse_por_regiao["Torso"]["atual"]
+
+			# Aplica o dano na região sorteada.
+			# O excedente de membros continua transbordando para o Torso.
+			var estresse_antes: int = alvo.get_estresse_total()
+
 			var resultado_estresse = _aplicar_estresse_registrado(
 				alvo,
-				"Torso",
+				regiao_atingida,
 				dano_total
 			)
-			var dano_efetivo: int = alvo.estresse_por_regiao["Torso"]["atual"] - torso_antes
+
+			var dano_efetivo: int = (
+				alvo.get_estresse_total() - estresse_antes
+			)
+
 			log_panel.registrar_evento(
-				"%s sofreu %d pontos de dano." % [alvo.nome, dano_efetivo],
+				"%s sofreu %d pontos de dano em %s." % [
+					alvo.nome,
+					dano_efetivo,
+					regiao_atingida
+				],
 				"dano"
 			)
+
+			if resultado_estresse.has("regiao_esgotada"):
+				log_panel.registrar_evento(
+					String(resultado_estresse["mensagem"]),
+					"aviso"
+				)
+
 			if resultado_estresse.has("resultado_fardo"):
 				log_panel.registrar_evento(
 					resultado_estresse["resultado_fardo"]["mensagem"],
@@ -1196,11 +1319,29 @@ func _finalizar_acao() -> void:
 	acao_em_progresso = false
 	regioes_selecionadas.clear()
 	enemy_panel.desativar_seletor_alvo()
-	# O jogador confirma a leitura da comunicação antes de o controle voltar.
+	# Aguarda o jogador ler as mensagens da ação.
 	await _aguardar_leitura()
 	if not combate_ativo:
 		return
-	action_panel.habilitar_acoes()
+	_retomar_ou_encerrar_turno()
+
+func _retomar_ou_encerrar_turno() -> void:
+	if not combate_ativo or combatente_ativo == null:
+		return
+
+	if (
+		combatente_ativo.tipo == "jogador"
+		and combatente_ativo.esta_consciente()
+		and combatente_ativo.pontos_acao_atuais > 0
+	):
+		action_panel.ativar_para(
+			combatente_ativo.para_dictionary(),
+			combatente_ativo
+		)
+		return
+
+	action_panel.desabilitar_acoes()
+	turno_finalizado.emit(combatente_ativo)
 	_avancar_turno()
 
 func _avaliar_categoria_resultado(dado: int) -> String:
@@ -1298,8 +1439,9 @@ func _definir_dica_leitura(ativa: bool, indice: int = 0, total: int = 0) -> void
 # inválido, Sobrecarga): lê a mensagem e devolve o ActionPanel.
 func _devolver_acoes_apos_leitura() -> void:
 	await _aguardar_leitura()
-	if combate_ativo:
-		action_panel.habilitar_acoes()
+	if not combate_ativo:
+		return
+	_retomar_ou_encerrar_turno()
 
 # ============================================================================
 # SISTEMA DE COMBATENTES
@@ -1626,6 +1768,7 @@ func _alternar_ficha() -> void:
 			"Você ainda não conhece informações suficientes sobre este inimigo.",
 			"info"
 		)
+		await _devolver_acoes_apos_leitura()
 		return
 
 	ficha_inimigo.abrir(inimigo)

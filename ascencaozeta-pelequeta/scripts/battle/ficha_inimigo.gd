@@ -5,20 +5,17 @@ class_name FichaInimigo
 # FICHA COMPLETA DO INIMIGO
 # Toda a estrutura vive em ficha_inimigo.tscn. Este script só
 # preenche os campos a partir do Dictionary do inimigo e fecha.
-# Informações mecânicas ficam como ??? até o inimigo ser analisado
-# (a mesma regra do card do EnemyPanel).
+# Só aparece após inimigo analisado
 # ============================================================
 
 signal fechada
-
-const OCULTO: String = "???"
 
 # Preencha no Inspector (chave = nome do inimigo).
 @export var retratos: Dictionary[String, Texture2D] = {}
 
 @onready var nome: Label = %FichaNome
 @onready var grau: Label = %FichaGrau
-@onready var descricao: Label = %FichaDescricao
+@onready var descricao: RichTextLabel = %FichaDescricao
 @onready var val_car: Label = %ValCar
 @onready var val_for: Label = %ValFor
 @onready var val_fug: Label = %ValFug
@@ -43,9 +40,6 @@ func _ready() -> void:
 
 
 func abrir(inimigo: Dictionary) -> void:
-	var analisado: bool = bool(
-		inimigo.get("informacoes_reveladas", false)
-	)
 
 	nome.text = String(inimigo.get("nome", ""))
 	var g: int = int(inimigo.get("grau", 0))
@@ -60,24 +54,25 @@ func abrir(inimigo: Dictionary) -> void:
 	tamanho.visible = not texto_tamanho.is_empty()
 	tamanho.text = "Tamanho: %s" % texto_tamanho
 
-	val_car.text = _numero(inimigo, "atributo_carne", analisado)
-	val_for.text = _numero(inimigo, "atributo_forca", analisado)
-	val_fug.text = _numero(inimigo, "atributo_fuga", analisado)
-	val_det.text = _numero(inimigo, "atributo_determinacao", analisado)
-	val_men.text = _numero(inimigo, "atributo_mente", analisado)
+	val_car.text = _numero(inimigo, "atributo_carne")
+	val_for.text = _numero(inimigo, "atributo_forca")
+	val_fug.text = _numero(inimigo, "atributo_fuga")
+	val_det.text = _numero(inimigo, "atributo_determinacao")
+	val_men.text = _numero(inimigo, "atributo_mente")
 
-	dano.text = "Dano: %s" % _numero(inimigo, "atributo_dano", analisado)
-	velocidade.text = "Velocidade: %s" % _numero(inimigo, "atributo_velocidade", analisado)
-	if analisado:
-		var base: int = int(inimigo.get("atributo_protecao", 0))
-		var atual: int = maxi(0, base - int(inimigo.get("reducao_protecao_temporaria", 0)))
-		protecao.text = "Proteção: %d/%d" % [atual, base]
-	else:
-		protecao.text = "Proteção: %s" % OCULTO
+	dano.text = "Dano: %s" % _numero(inimigo, "atributo_dano")
+	velocidade.text = "Velocidade: %s" % _numero(inimigo, "atributo_velocidade")
 
-	limite.text = _texto_limite(inimigo, analisado)
-	conhecimento.text = "Conhecimento especializado: %s" % _texto_conhecimento(inimigo, analisado)
-	habilidades.text = _texto_habilidades(inimigo, analisado)
+	var base: int = int(inimigo.get("atributo_protecao", 0))
+	var atual: int = maxi(
+		0,
+		base - int(inimigo.get("reducao_protecao_temporaria", 0))
+	)
+	protecao.text = "Proteção: %d/%d" % [atual, base]
+
+	limite.text = _texto_limite(inimigo)
+	conhecimento.text = "Conhecimento especializado: %s" % _texto_conhecimento(inimigo)
+	habilidades.text = _texto_habilidades(inimigo)
 
 	retrato.texture = retratos.get(nome.text, null)
 	retrato.visible = retrato.texture != null
@@ -102,45 +97,52 @@ func _input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		fechar()
 
+func _numero(inimigo: Dictionary, chave: String) -> String:
+	return str(int(inimigo.get(chave, 0)))
 
-func _numero(inimigo: Dictionary, chave: String, analisado: bool) -> String:
-	return str(int(inimigo.get(chave, 0))) if analisado else OCULTO
 
-
-func _texto_limite(inimigo: Dictionary, analisado: bool) -> String:
+func _texto_limite(inimigo: Dictionary) -> String:
 	var total: int = 0
 	var maximo: int = 0
-	for dados in inimigo["estresse_por_regiao"].values():
+	var regioes: Dictionary = inimigo.get("estresse_por_regiao", {})
+
+	for dados in regioes.values():
 		total += int(dados["atual"])
 		maximo += int(dados["limite"])
+
 	var texto: String = "Estresse: %d/%d" % [total, maximo]
+
 	for regiao in CombatenteData.REGIOES:
-		if analisado:
-			var d: Dictionary = inimigo["estresse_por_regiao"][regiao]
-			texto += "\n%s %d/%d" % [regiao, d["atual"], d["limite"]]
-		else:
-			texto += "\n%s ??/?" % regiao
+		var dados: Dictionary = regioes.get(regiao, {})
+		texto += "\n%s %d/%d" % [
+			regiao,
+			int(dados.get("atual", 0)),
+			int(dados.get("limite", 0))
+		]
 	return texto
 
-
-func _texto_conhecimento(inimigo: Dictionary, analisado: bool) -> String:
-	if not analisado:
-		return OCULTO
+func _texto_conhecimento(inimigo: Dictionary) -> String:
 	var lista: Array = inimigo.get("conhecimentos_especializados", [])
 	return "Nenhum" if lista.is_empty() else ", ".join(lista)
 
-
-func _texto_habilidades(inimigo: Dictionary, analisado: bool) -> String:
-	if not analisado:
-		return "[b]Habilidades:[/b] %s" % OCULTO
+func _texto_habilidades(inimigo: Dictionary) -> String:
 	var lista: Array = inimigo.get("habilidades", [])
+
 	if lista.is_empty():
 		return "[b]Habilidades:[/b] Nenhuma"
+
 	var texto: String = "[b]Habilidades:[/b]"
+
 	for nome_habilidade in lista:
 		var hab = _habilidades_db.get_habilidade(String(nome_habilidade))
+
 		if hab == null:
 			texto += "\n%s" % nome_habilidade
 		else:
-			texto += "\n[b]%s[/b] (%s)\n%s" % [hab.nome, hab.descricao, hab.efeito]
+			texto += "\n[b]%s[/b] (%s)\n%s" % [
+				hab.nome,
+				hab.descricao,
+				hab.efeito
+			]
+
 	return texto

@@ -1153,19 +1153,34 @@ custom_maximum_size = Vector2(92, 182)
 layout_mode = 2
 script = ExtResource("2_osi8t")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel" unique_id=144047478]
+[node name="MarcadorParty" type="Panel" parent="MarginContainer/HBoxContainer/PartyPanel" unique_id=2134595772]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(92, 182)
+custom_maximum_size = Vector2(92, 182)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/PartyPanel" unique_id=550311878]
+layout_mode = 2
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel/MarginContainer" unique_id=144047478]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=684244819]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/PartyPanel/MarginContainer/VBoxContainer" unique_id=684244819]
 layout_mode = 2
+size_flags_vertical = 1
 text = "Party"
 
-[node name="PartyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=788364095]
+[node name="PartyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel/MarginContainer/VBoxContainer" unique_id=788364095]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="PartyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=1184149443]
+[node name="PartyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/PartyPanel/MarginContainer/VBoxContainer" unique_id=1184149443]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -1174,7 +1189,7 @@ vertical_scroll_mode = 3
 script = ExtResource("4_yyqwn")
 metadata/_custom_type_script = "uid://hkqdbuk88uag"
 
-[node name="PartyCard" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer/PartyScroll" unique_id=1244372248 instance=ExtResource("5_x1unb")]
+[node name="PartyCard" parent="MarginContainer/HBoxContainer/PartyPanel/MarginContainer/VBoxContainer/PartyScroll" unique_id=1244372248 instance=ExtResource("5_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
 
@@ -1193,6 +1208,7 @@ size_flags_vertical = 3
 [node name="DiceContainer" type="Control" parent="MarginContainer/HBoxContainer/VBoxContainer/DicePanel" unique_id=1036726248]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_vertical = 8
 mouse_filter = 2
 
 [node name="Battlefield" type="PanelContainer" parent="MarginContainer/HBoxContainer/VBoxContainer" unique_id=468784180]
@@ -1487,21 +1503,36 @@ custom_maximum_size = Vector2(92, 182)
 layout_mode = 2
 script = ExtResource("3_4gnb8")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel" unique_id=1266867408]
+[node name="MarcadorEnemy" type="Panel" parent="MarginContainer/HBoxContainer/EnemyPanel" unique_id=866428200]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(92, 182)
+custom_maximum_size = Vector2(92, 182)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme = ExtResource("1_osi8t")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer/EnemyPanel" unique_id=1117642239]
+layout_mode = 2
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/MarginContainer" unique_id=1266867408]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1437034192]
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/EnemyPanel/MarginContainer/VBoxContainer" unique_id=1437034192]
 layout_mode = 2
 text = "Sombras"
 horizontal_alignment = 2
 
-[node name="EnemyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2001851537]
+[node name="EnemyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/MarginContainer/VBoxContainer" unique_id=2001851537]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 8
 theme_override_constants/separation = 2
 
-[node name="EnemyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2111714629]
+[node name="EnemyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/MarginContainer/VBoxContainer" unique_id=2111714629]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
@@ -1510,11 +1541,11 @@ vertical_scroll_mode = 3
 script = ExtResource("4_yyqwn")
 metadata/_custom_type_script = "uid://hkqdbuk88uag"
 
-[node name="EnemyCard" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
+[node name="EnemyCard" parent="MarginContainer/HBoxContainer/EnemyPanel/MarginContainer/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
 
-[node name="BotaoFicha" type="Button" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1475661764]
+[node name="BotaoFicha" type="Button" parent="MarginContainer/HBoxContainer/EnemyPanel/MarginContainer/VBoxContainer" unique_id=1475661764]
 unique_name_in_owner = true
 layout_mode = 2
 focus_mode = 0
@@ -1524,43 +1555,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_8w46x")
 theme_override_styles/hover = SubResource("StyleBoxFlat_sgeuo")
 text = "Ficha"
 
-[node name="CamadaMarcadores" type="CanvasLayer" parent="." unique_id=1116530318]
-layer = -1
-
-[node name="MarginContainer" type="MarginContainer" parent="CamadaMarcadores" unique_id=38375947]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme = ExtResource("1_osi8t")
-theme_override_constants/margin_left = 3
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 3
-theme_override_constants/margin_bottom = 5
-
-[node name="MarcadorParty" type="Panel" parent="CamadaMarcadores/MarginContainer" unique_id=1197494831]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(92, 182)
-custom_maximum_size = Vector2(92, 182)
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
-[node name="MarcadorEnemy" type="Panel" parent="CamadaMarcadores/MarginContainer" unique_id=1764838163]
-unique_name_in_owner = true
-visible = false
-custom_minimum_size = Vector2(92, 182)
-custom_maximum_size = Vector2(92, 182)
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-
 [node name="CamadaFicha" type="CanvasLayer" parent="." unique_id=1830515864]
-visible = false
 
 [node name="FichaInimigo" parent="CamadaFicha" unique_id=477907791 instance=ExtResource("24_8w46x")]
 unique_name_in_owner = true

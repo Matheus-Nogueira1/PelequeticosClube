@@ -54,7 +54,6 @@ corner_radius_bottom_left = 1
 
 [resource]
 default_font = ExtResource("1_ob7co")
-default_font_size = 14
 BotaoRegiao/base_type = &"Button"
 BotaoRegiao/styles/focus = SubResource("StyleBoxFlat_iaivs")
 BotaoRegiao/styles/hover_pressed = SubResource("StyleBoxFlat_omrhf")

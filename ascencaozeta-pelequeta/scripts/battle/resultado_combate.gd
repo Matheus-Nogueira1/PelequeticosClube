@@ -64,7 +64,7 @@ var itens_obtidos: Array[Dictionary] = []
 @onready var recompensa_itens: RichTextLabel = get_node_or_null("%RecompensaItens") as RichTextLabel
 @onready var botao_rolar: Button = get_node_or_null("%BotaoRolar") as Button
 @onready var botao_pular: Button = get_node_or_null("%BotaoPular") as Button
-@onready var botao_recompensa_ok: Button = get_node_or_null("%BotaoRecompensaOk") as Button
+@onready var botao_recompensa_ok: Button = get_node_or_null("%BotaoRecompensaOk") as Button	
 @onready var dado: RolagemD6 = get_node_or_null("%DadoRecompensa") as RolagemD6
 
 var _pagina: int = Pagina.CLASSIFICACAO

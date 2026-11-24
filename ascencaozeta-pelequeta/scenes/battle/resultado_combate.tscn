@@ -6,22 +6,26 @@
 [ext_resource type="LabelSettings" uid="uid://c4uyji3i1damp" path="res://fonts/Descrição.tres" id="3_il254"]
 [ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="5_hld0v"]
 [ext_resource type="PackedScene" uid="uid://vxt0d605rabb" path="res://scenes/testes/rolagem-dado.tscn" id="6_2elm4"]
+[ext_resource type="StyleBox" uid="uid://ba47awknelvda" path="res://themes/Oblivioflat.tres" id="6_ah0u3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6q2kx"]
 content_margin_left = 6.0
 content_margin_top = 6.0
 content_margin_right = 6.0
 content_margin_bottom = 6.0
-bg_color = Color(0.06100855, 0.025840001, 0.03876, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
+bg_color = Color(0.0627451, 0.02745098, 0.039215688, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
 border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 
 [sub_resource type="LabelSettings" id="LabelSettings_2elm4"]
 font = ExtResource("3_hld0v")
-font_size = 10
 font_color = Color(1, 0.47843137, 0, 1)
 outline_size = 2
 outline_color = Color(0.5411765, 0, 0, 1)
@@ -30,7 +34,116 @@ shadow_color = Color(0.46666667, 0, 0, 0.43137255)
 
 [sub_resource type="LabelSettings" id="LabelSettings_ah0u3"]
 font = ExtResource("3_hld0v")
-font_size = 5
+font_size = 25
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iaivs"]
+draw_center = false
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.7607843, 0.043137256, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omrhf"]
+bg_color = Color(0.59607846, 0.043137256, 0.05882353, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bp8bq"]
+bg_color = Color(0.59607846, 0.043137256, 0.05882353, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uev7f"]
+bg_color = Color(0.2971768, 0.058990076, 0.109204955, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ujig"]
+bg_color = Color(0.59648657, 0.04212573, 0.057633832, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icaiv"]
+bg_color = Color(0.05882353, 0.019607844, 0.043137256, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2uid"]
+bg_color = Color(0.49019608, 0.02745098, 0.039215688, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43l7w"]
+bg_color = Color(0.0627451, 0.02745098, 0.039215688, 0.6901961)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8hjk4"]
+
+[sub_resource type="Theme" id="Theme_k4cbf"]
+default_font = ExtResource("3_hld0v")
+default_font_size = 10
+BotaoRegiao/base_type = &"Button"
+BotaoRegiao/styles/focus = SubResource("StyleBoxFlat_iaivs")
+BotaoRegiao/styles/hover_pressed = SubResource("StyleBoxFlat_omrhf")
+BotaoRegiao/styles/normal = ExtResource("6_ah0u3")
+BotaoRegiao/styles/pressed = SubResource("StyleBoxFlat_bp8bq")
+Button/styles/hover = SubResource("StyleBoxFlat_uev7f")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_1ujig")
+Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_icaiv")
+Button/styles/normal = ExtResource("6_ah0u3")
+Button/styles/pressed = SubResource("StyleBoxFlat_m2uid")
+IconeAlvo/base_type = &"Button"
+IconeDesmaiado/base_type = &"Button"
+IconePersonagem/base_type = &"Button"
+Panel/styles/panel = SubResource("StyleBoxFlat_43l7w")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_8hjk4")
+TabBar/styles/button_pressed = null
+
+[sub_resource type="Theme" id="Theme_iuhjb"]
+default_font = ExtResource("3_hld0v")
+default_font_size = 10
+BotaoRegiao/base_type = &"Button"
+BotaoRegiao/styles/focus = SubResource("StyleBoxFlat_iaivs")
+BotaoRegiao/styles/hover_pressed = SubResource("StyleBoxFlat_omrhf")
+BotaoRegiao/styles/normal = ExtResource("6_ah0u3")
+BotaoRegiao/styles/pressed = SubResource("StyleBoxFlat_bp8bq")
+Button/styles/hover = SubResource("StyleBoxFlat_uev7f")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_1ujig")
+Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_icaiv")
+Button/styles/normal = ExtResource("6_ah0u3")
+Button/styles/pressed = SubResource("StyleBoxFlat_m2uid")
+IconeAlvo/base_type = &"Button"
+IconeDesmaiado/base_type = &"Button"
+IconePersonagem/base_type = &"Button"
+Panel/styles/panel = SubResource("StyleBoxFlat_43l7w")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_8hjk4")
+TabBar/styles/button_pressed = null
+
+[sub_resource type="Theme" id="Theme_f0ixj"]
+default_font = ExtResource("3_hld0v")
+default_font_size = 10
+BotaoRegiao/base_type = &"Button"
+BotaoRegiao/styles/focus = SubResource("StyleBoxFlat_iaivs")
+BotaoRegiao/styles/hover_pressed = SubResource("StyleBoxFlat_omrhf")
+BotaoRegiao/styles/normal = ExtResource("6_ah0u3")
+BotaoRegiao/styles/pressed = SubResource("StyleBoxFlat_bp8bq")
+Button/styles/hover = SubResource("StyleBoxFlat_uev7f")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_1ujig")
+Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_icaiv")
+Button/styles/normal = ExtResource("6_ah0u3")
+Button/styles/pressed = SubResource("StyleBoxFlat_m2uid")
+IconeAlvo/base_type = &"Button"
+IconeDesmaiado/base_type = &"Button"
+IconePersonagem/base_type = &"Button"
+Panel/styles/panel = SubResource("StyleBoxFlat_43l7w")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_8hjk4")
+TabBar/styles/button_pressed = null
 
 [node name="ResultadoCombate" type="Control" unique_id=1743797320 node_paths=PackedStringArray("pagina_recompensa")]
 layout_mode = 3
@@ -41,16 +154,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_1m5vr")
 script = ExtResource("1_il254")
-pagina_recompensa = NodePath("Centro/PainelPrincipal/Margem/PaginaRecompensa")
-
-[node name="FundoEscurecido" type="ColorRect" parent="." unique_id=398240641]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(1, 1, 1, 0)
+pagina_recompensa = NodePath("Centro/PainelPrincipal/Margem/Recompensa/Principal/PaginaRecompensa")
 
 [node name="Centro" type="CenterContainer" parent="." unique_id=1519784979]
 layout_mode = 1
@@ -62,15 +166,26 @@ grow_vertical = 2
 
 [node name="PainelPrincipal" type="PanelContainer" parent="Centro" unique_id=293333491]
 custom_minimum_size = Vector2(250, 150)
+custom_maximum_size = Vector2(250, 150)
 layout_mode = 2
 theme = ExtResource("1_1m5vr")
 theme_override_styles/panel = SubResource("StyleBoxFlat_6q2kx")
 
-[node name="Margem" type="MarginContainer" parent="Centro/PainelPrincipal" unique_id=1171690250]
-custom_minimum_size = Vector2(6, 6)
+[node name="BotaoContinuar" type="Button" parent="Centro/PainelPrincipal" unique_id=140466228]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 12
+text = "Continuar"
+
+[node name="Margem" type="MarginContainer" parent="Centro/PainelPrincipal" unique_id=1171690250]
+layout_mode = 2
+theme_override_constants/margin_bottom = 15
 
 [node name="Classificação" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=2095879267]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
@@ -99,6 +214,7 @@ size_flags_vertical = 4
 
 [node name="TituloRank" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao" unique_id=1669576952]
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Rank"
 
 [node name="DetalhesPontuacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao" unique_id=1399447676]
@@ -107,62 +223,114 @@ layout_mode = 2
 [node name="Rank" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=146034132]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "P"
 
 [node name="PontuacaoClassificacao" type="Label" parent="Centro/PainelPrincipal/Margem/Classificação/PainelClassificacao/DetalhesPontuacao" unique_id=2044573188]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 25
 text = "10000"
 
-[node name="PaginaRecompensa" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=49886605]
+[node name="Recompensa" type="PanelContainer" parent="Centro/PainelPrincipal/Margem" unique_id=529729461]
 visible = false
 layout_mode = 2
 
-[node name="RecompensaTitulo" type="Label" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=231979216]
-unique_name_in_owner = true
+[node name="Principal" type="HBoxContainer" parent="Centro/PainelPrincipal/Margem/Recompensa" unique_id=1071907959]
+custom_maximum_size = Vector2(250, 90)
 layout_mode = 2
-text = "Rolagem de Itens"
 
-[node name="RecompensaBonus" type="Label" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=1926100254]
-unique_name_in_owner = true
+[node name="PaginaRecompensa" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal" unique_id=49886605]
+custom_maximum_size = Vector2(120, -1)
 layout_mode = 2
-text = "d6+2"
 
-[node name="RecompensaDetalhe" type="Label" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=1838772758]
+[node name="RecompensaTitulo" type="Label" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal/PaginaRecompensa" unique_id=231979216]
 unique_name_in_owner = true
 layout_mode = 2
-text = "6 - Pelecomaster
-5 - Pelequito
-4 - Pelecado
-3 - daquele jeito
+text = "Tabela de Drop:"
+horizontal_alignment = 1
+
+[node name="RecompensaBonus" type="Label" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal/PaginaRecompensa" unique_id=1926100254]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Bônus de Pontuação: +2"
+
+[node name="RecompensaDetalhe" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal/PaginaRecompensa" unique_id=222653075]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/line_separation = 1
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+text = "6 - Item Raro + Equipamento
+5 - Equipamento
+4 - Item Raro
+3 - Item Básico
 2 - Nada
 1 - Nada"
-
-[node name="RecompensaItens" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=1295349749]
-unique_name_in_owner = true
-layout_mode = 2
-text = "abababaablaalalalal"
-fit_content = true
 scroll_active = false
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa" unique_id=510655247]
+[node name="DiceContainer" type="PanelContainer" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal" unique_id=1115699582]
+custom_minimum_size = Vector2(20, 50)
+custom_maximum_size = Vector2(20, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 
-[node name="BotaoRolar" type="Button" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa/VBoxContainer" unique_id=1783765415]
+[node name="DadoRecompensa" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal/DiceContainer" unique_id=2129393194 instance=ExtResource("6_2elm4")]
+unique_name_in_owner = true
+visible = false
+position = Vector2(10, 32)
+
+[node name="Recompensas" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal" unique_id=1561845173]
+custom_maximum_size = Vector2(110, -1)
 layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal/Recompensas" unique_id=1253182090]
+layout_mode = 2
+size_flags_vertical = 1
+text = "Itens ganhos:"
+horizontal_alignment = 1
+
+[node name="RecompensaItens" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Recompensa/Principal/Recompensas" unique_id=1295349749]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_font_sizes/normal_font_size = 10
+theme_override_font_sizes/bold_font_size = 10
+bbcode_enabled = true
+text = "Armadura de couro
+Ração
+etc..."
+scroll_active = false
+
+[node name="Botoes" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Recompensa" unique_id=510655247]
+layout_mode = 2
+size_flags_vertical = 8
+
+[node name="BotaoRolar" type="Button" parent="Centro/PainelPrincipal/Margem/Recompensa/Botoes" unique_id=1783765415]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 10
 text = "Rolar"
 
-[node name="BotaoPular" type="Button" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa/VBoxContainer" unique_id=1151157602]
+[node name="BotaoPular" type="Button" parent="Centro/PainelPrincipal/Margem/Recompensa/Botoes" unique_id=1151157602]
+custom_minimum_size = Vector2(80, 0)
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 10
 text = "Pular"
 
-[node name="BotaoRecompensaOk" type="Button" parent="Centro/PainelPrincipal/Margem/PaginaRecompensa/VBoxContainer" unique_id=663693113]
+[node name="BotaoRecompensaOk" type="Button" parent="Centro/PainelPrincipal/Margem/Recompensa/Botoes" unique_id=663693113]
 visible = false
 layout_mode = 2
 text = "Continuar "
 
 [node name="Estatisticas" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=1720680864]
-visible = false
 layout_mode = 2
 
 [node name="Estatisticas" type="GridContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=482564248]
@@ -180,10 +348,12 @@ size_flags_vertical = 3
 [node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/DanoCausado" unique_id=1891351935]
 layout_mode = 2
 text = "Dano Causado"
+label_settings = ExtResource("3_il254")
 
 [node name="DanoCausado" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/DanoCausado" unique_id=1920180867]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "111111111111"
 
 [node name="CuraEfetiva" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=2000701569]
@@ -195,10 +365,12 @@ size_flags_vertical = 3
 [node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/CuraEfetiva" unique_id=1328611106]
 layout_mode = 2
 text = "Cura Efetivada"
+label_settings = ExtResource("3_il254")
 
 [node name="CuraEfetivada" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/CuraEfetiva" unique_id=2106774681]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "11111111111"
 
 [node name="DanoRecebido" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=1636563433]
@@ -210,10 +382,12 @@ size_flags_vertical = 3
 [node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/DanoRecebido" unique_id=949307816]
 layout_mode = 2
 text = "Dano Recebido"
+label_settings = ExtResource("3_il254")
 
 [node name="DanoRecebido" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/DanoRecebido" unique_id=416243447]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "111111111111"
 
 [node name="AliadosDesmaiados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=1677625679]
@@ -225,10 +399,12 @@ size_flags_vertical = 3
 [node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/AliadosDesmaiados" unique_id=404471980]
 layout_mode = 2
 text = "Desmaios"
+label_settings = ExtResource("3_il254")
 
 [node name="Desmaios" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/AliadosDesmaiados" unique_id=1564464421]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "1111111111111"
 
 [node name="AliadosReanimados" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=463541814]
@@ -240,10 +416,12 @@ size_flags_vertical = 3
 [node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/AliadosReanimados" unique_id=2141367723]
 layout_mode = 2
 text = "Reanimações"
+label_settings = ExtResource("3_il254")
 
 [node name="Reanimacoes" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/AliadosReanimados" unique_id=1130678011]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "11111111111"
 
 [node name="Pontuacao" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas" unique_id=463895986]
@@ -256,10 +434,12 @@ theme = ExtResource("1_1m5vr")
 [node name="Titulo" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/Pontuacao" unique_id=1851852866]
 layout_mode = 2
 text = "Pontuação"
+label_settings = ExtResource("3_il254")
 
 [node name="Pontuacao" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/Estatisticas/Pontuacao" unique_id=2035044424]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_font_sizes/font_size = 10
 text = "11111111111111"
 
 [node name="SeparadorTopo3" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=213398506]
@@ -267,63 +447,64 @@ layout_mode = 2
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=396089815]
 custom_minimum_size = Vector2(0, 50)
+custom_maximum_size = Vector2(-1, 50)
 layout_mode = 2
 size_flags_vertical = 3
 script = ExtResource("5_hld0v")
 
 [node name="Relatorio" type="HBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2" unique_id=286323610]
+custom_maximum_size = Vector2(-1, 50)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1598323854]
+[node name="Acontecimentos" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1598323854]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SecaoAcontecimentos" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer" unique_id=1161286405]
+[node name="SecaoAcontecimentos" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/Acontecimentos" unique_id=1161286405]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
 text = "Acontecimentos"
 label_settings = ExtResource("3_il254")
 
-[node name="Resumo" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer" unique_id=887013464]
+[node name="Resumo" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/Acontecimentos" unique_id=887013464]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_vertical = 3
-theme = ExtResource("1_1m5vr")
+theme = SubResource("Theme_k4cbf")
+bbcode_enabled = true
 text = "Explodiu tudo
 e etc
 tlgd"
-fit_content = true
-scroll_active = false
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1459733838]
+[node name="Recompensas" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1459733838]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SecaoRecompensas" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer2" unique_id=1448420922]
+[node name="SecaoRecompensas" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/Recompensas" unique_id=1448420922]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Recompensas"
 label_settings = ExtResource("3_il254")
 
-[node name="Recompensas" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer2" unique_id=252691253]
+[node name="Recompensas" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/Recompensas" unique_id=252691253]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
-theme = ExtResource("1_1m5vr")
+theme = SubResource("Theme_iuhjb")
 text = "Ganhou municao
 recurso
 arma
 armadura
 etc"
-fit_content = true
-scroll_active = false
 
-[node name="VBoxContainer3" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1270614505]
+[node name="Fardos" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio" unique_id=1270614505]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SecaoFardos" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer3" unique_id=357088394]
+[node name="SecaoFardos" type="Label" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/Fardos" unique_id=357088394]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -331,27 +512,16 @@ size_flags_vertical = 1
 text = "Fardos"
 label_settings = ExtResource("3_il254")
 
-[node name="Fardos" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/VBoxContainer3" unique_id=1049645284]
+[node name="Fardos" type="RichTextLabel" parent="Centro/PainelPrincipal/Margem/Estatisticas/ScrollContainer2/Relatorio/Fardos" unique_id=1049645284]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_1m5vr")
+theme = SubResource("Theme_f0ixj")
 text = "Perda da perna
 entre outros
 tlgd"
-fit_content = true
-scroll_active = false
 
 [node name="SeparadorTopo4" type="HSeparator" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=2084922192]
 layout_mode = 2
-
-[node name="BotaoContinuar" type="Button" parent="Centro/PainelPrincipal/Margem" unique_id=140466228]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 8
-text = "Ok"
-
-[node name="DadoRecompensa" parent="Centro" unique_id=2129393194 instance=ExtResource("6_2elm4")]
-unique_name_in_owner = true
-visible = false
