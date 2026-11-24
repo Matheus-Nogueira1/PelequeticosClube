@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://1pi1e308ovsg" path="res://scripts/battle/action_panel.gd" id="5_8we11"]
 [ext_resource type="Texture2D" uid="uid://cai0vi4ym2yiq" path="res://assets/UI/battle/Party.png" id="5_ba8p4"]
 [ext_resource type="Texture2D" uid="uid://bjilkfjygvfjq" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_Dodge-Sheet.png" id="5_omrhf"]
+[ext_resource type="Texture2D" uid="uid://bh6i5n3hhodbj" path="res://assets/UI/battle/Card_Aliado.png" id="5_s3ns4"]
 [ext_resource type="PackedScene" uid="uid://b8iv0l27ch5rq" path="res://scenes/battle/party_card.tscn" id="5_x1unb"]
 [ext_resource type="Script" uid="uid://uhm4r7mxh3le" path="res://scripts/battle/combat_log.gd" id="6_hrcy2"]
 [ext_resource type="Texture2D" uid="uid://bavb5mrvwapwp" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_Hit-Sheet.png" id="6_iaivs"]
@@ -18,6 +19,7 @@
 [ext_resource type="Texture2D" uid="uid://qso8t6ev6f6" path="res://assets/UI/battle/Fundos/Fundo_Bastilha.png" id="8_0nysw"]
 [ext_resource type="Texture2D" uid="uid://cs2esuc3nagul" path="res://assets/Player/ESCOLHIDO/EscolhidoDIreita_Template_Iluminar-Sheet.png" id="8_x1unb"]
 [ext_resource type="Texture2D" uid="uid://bu2h18wttrcw0" path="res://assets/Player/ESCOLHIDO/EscolhidoEsquerda_Template_Iluminar-Sheet.png" id="9_8w46x"]
+[ext_resource type="Script" uid="uid://cdg6pkjjgs0vc" path="res://scripts/ui/botao_ajuda.gd" id="9_robps"]
 [ext_resource type="Texture2D" uid="uid://co67ag0p13g8i" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_Morrendo-Sheet.png" id="10_sgeuo"]
 [ext_resource type="Texture2D" uid="uid://tsbf2a0vcf6q" path="res://assets/Player/ESCOLHIDO/Walk_Escolhido_Template.png" id="11_ckv1f"]
 [ext_resource type="Texture2D" uid="uid://cwl6wl4ks11dx" path="res://assets/Player/Base/Shadow.png" id="12_enfrm"]
@@ -34,6 +36,8 @@
 [ext_resource type="Texture2D" uid="uid://cspuyemn5671l" path="res://assets/UI/battle/botoes/Botao_Esquivar.png" id="25_ba8p4"]
 [ext_resource type="Texture2D" uid="uid://dvjkaqfqgt0c1" path="res://assets/UI/battle/botoes/Botao_Passar.png" id="26_0nysw"]
 [ext_resource type="Texture2D" uid="uid://cw3fox00dj3ld" path="res://assets/UI/battle/Enemies.png" id="31_0nysw"]
+[ext_resource type="Texture2D" uid="uid://3d7qqtjxxsed" path="res://assets/UI/battle/Card_Inimigo.png" id="33_ew100"]
+[ext_resource type="PackedScene" uid="uid://bnxw77i8xt6ph" path="res://scenes/menu/caixa_ajuda.tscn" id="37_ew100"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ba8p4"]
 content_margin_top = 2.0
@@ -1165,7 +1169,8 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_right = 4.0
+offset_right = 1.0
+offset_bottom = -5.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 5
@@ -1187,10 +1192,10 @@ custom_maximum_size = Vector2(85, 182)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ba8p4")
 script = ExtResource("2_osi8t")
+fundo_icones = ExtResource("5_s3ns4")
 
 [node name="MarcadorParty" type="Panel" parent="MarginContainer/HBoxContainer/PartyPanel" unique_id=2134595772]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_vertical = 3
 mouse_filter = 2
@@ -1207,7 +1212,9 @@ stretch_mode = 3
 [node name="PartyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=788364095]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/separation = 2
+alignment = 1
 
 [node name="PartyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer" unique_id=1184149443]
 unique_name_in_owner = true
@@ -1221,6 +1228,7 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="PartyCard" parent="MarginContainer/HBoxContainer/PartyPanel/VBoxContainer/PartyScroll" unique_id=1244372248 instance=ExtResource("5_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
+script = ExtResource("9_robps")
 
 [node name="VSeparator2" type="VSeparator" parent="MarginContainer/HBoxContainer" unique_id=1423463754]
 custom_maximum_size = Vector2(0, -1)
@@ -1567,10 +1575,10 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0nysw")
 script = ExtResource("3_4gnb8")
+fundo_icones = ExtResource("33_ew100")
 
 [node name="MarcadorEnemy" type="Panel" parent="MarginContainer/HBoxContainer/EnemyPanel" unique_id=866428200]
 unique_name_in_owner = true
-visible = false
 custom_minimum_size = Vector2(92, 182)
 custom_maximum_size = Vector2(92, 182)
 layout_mode = 2
@@ -1589,7 +1597,7 @@ stretch_mode = 3
 [node name="EnemyIcones" type="HBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2001851537]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 4
 theme_override_constants/separation = 2
 
 [node name="EnemyScroll" type="ScrollContainer" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=2111714629]
@@ -1604,6 +1612,7 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="EnemyCard" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
+script = ExtResource("9_robps")
 
 [node name="BotaoFicha" type="Button" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer" unique_id=1475661764]
 unique_name_in_owner = true
@@ -1620,3 +1629,6 @@ text = "Ficha"
 [node name="FichaInimigo" parent="CamadaFicha" unique_id=477907791 instance=ExtResource("24_8w46x")]
 unique_name_in_owner = true
 visible = false
+
+[node name="CaixaAjuda" parent="." unique_id=615491577 instance=ExtResource("37_ew100")]
+unique_name_in_owner = true

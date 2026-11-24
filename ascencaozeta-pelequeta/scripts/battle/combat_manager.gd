@@ -49,6 +49,8 @@ signal leitura_confirmada
 @onready var dica_continuar: Label = get_node_or_null("%DicaContinuar") as Label
 @onready var ficha_inimigo: FichaInimigo = %FichaInimigo
 @onready var dice_container: Control = %DiceContainer
+@export var ajuda_automatica: bool = true
+@onready var caixa_ajuda: CaixaAjuda = get_node_or_null("%CaixaAjuda") as CaixaAjuda
 var animacao_jogador: CombatenteAnimation
 var animacao_inimigo: CombatenteAnimation
 
@@ -79,6 +81,7 @@ var inimigos_derrotados: Array[String] = []
 
 func _ready() -> void:
 	_conectar_sinais_paineis()
+	_conectar_botoes_ajuda()
 	_conectar_alternancia_paineis()
 	_conectar_cliques_campo()
 	_inicializar_animacoes()
@@ -140,6 +143,8 @@ func _inicializar_combate() -> void:
 	# Começar primeiro turno
 	# O primeiro turno só começa depois da apresentação inicial.
 	await _apresentar_pendentes()
+	# O primeiro turno só começa depois da ajuda inicial (se houver).
+	await _mostrar_ajuda_inicial()
 	_avancar_turno()
 
 
@@ -1380,6 +1385,8 @@ func _on_campo_gui_input(event: InputEvent) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if caixa_ajuda != null and caixa_ajuda.esta_aberta():
+		return
 	if aguardando_leitura and event.is_action_pressed("ui_accept") and not event.is_echo():
 		get_viewport().set_input_as_handled()
 		_confirmar_leitura()
@@ -1598,6 +1605,15 @@ func _conectar_alternancia_paineis() -> void:
 # confirmação normal (ex.: tela de resultados).
 # ============================================================
 func _input(event: InputEvent) -> void:
+	# Ajuda aberta: o combate fica totalmente parado.
+	if caixa_ajuda != null and caixa_ajuda.esta_aberta():
+		return
+	if InputMap.has_action("abrir_ajuda") and event.is_action_pressed("abrir_ajuda") \
+			and not event.is_echo():
+		get_viewport().set_input_as_handled()
+		if _pode_abrir_ajuda():
+			caixa_ajuda.abrir("combate")
+		return
 	if not combate_ativo:
 		return
 	if event.is_action_pressed("ver_ficha") and not event.is_echo():
@@ -1779,3 +1795,52 @@ func _entregar_itens(destino: CombatenteData, itens: Array[Dictionary]) -> void:
 	for item in itens:
 		for i in range(int(item.get("quantidade", 1))):
 			destino.inventario.append(String(item["nome"]))
+
+# ============================================================
+# AJUDA CONTEXTUAL
+# A janela só abre no turno do jogador esperando comando.
+# Enquanto estiver aberta, _input e _unhandled_input não agem,
+# e o fundo da janela bloqueia os cliques.
+# ============================================================
+func _conectar_botoes_ajuda() -> void:
+	for botao in get_tree().get_nodes_in_group("botao_ajuda"):
+		if botao is BotaoAjuda:
+			botao.solicitado.connect(_on_ajuda_solicitada)
+
+
+func _on_ajuda_solicitada(painel: String, ancora: String) -> void:
+	if _pode_abrir_ajuda():
+		caixa_ajuda.abrir(painel, ancora)
+
+
+func _pode_abrir_ajuda() -> bool:
+	if caixa_ajuda == null or caixa_ajuda.esta_aberta():
+		return false
+	if not combate_ativo or aguardando_leitura or dados_em_animacao or acao_em_progresso:
+		return false
+	if combatente_ativo == null or combatente_ativo.tipo != "jogador":
+		return false
+	if not action_panel.visible or enemy_panel.modo_seletor_ativo:
+		return false
+	# Ficha de inimigo (se existir na sua cena).
+	var ficha := get_node_or_null("%FichaInimigo") as Control
+	return ficha == null or not ficha.visible
+
+
+# Ajuda de combate do primeiro combate. Veja a limitação do salvamento.
+func _mostrar_ajuda_inicial() -> void:
+	if caixa_ajuda == null or not ajuda_automatica or _ajuda_combate_ja_vista():
+		return
+	caixa_ajuda.abrir("combate")
+	await caixa_ajuda.fechada
+	_registrar_ajuda_combate_vista()
+
+
+func _ajuda_combate_ja_vista() -> bool:
+	# TODO (salvamento): consultar o dado persistente do salvamento atual.
+	return false
+
+
+func _registrar_ajuda_combate_vista() -> void:
+	# TODO (salvamento): gravar no salvamento que a ajuda de combate foi vista.
+	pass

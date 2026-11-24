@@ -105,7 +105,7 @@ func _conectar_botoes() -> void:
 		botao_confirmar,
 		botao_voltar
 	]:
-		UiUtil.compactar_botao(botao, TAMANHO_FONTE)
+		UiUtil.compactar_botao(botao, TAMANHO_FONTE, true)
 
 
 ## ============================================================
@@ -123,7 +123,7 @@ func _criar_botao(
 	btn.tooltip_text = p_tooltip_text
 	btn.pressed.connect(callback)
 
-	UiUtil.aplicar(btn, TAMANHO_FONTE)
+	UiUtil.aplicar(btn, TAMANHO_FONTE, true)
 
 	return btn
 

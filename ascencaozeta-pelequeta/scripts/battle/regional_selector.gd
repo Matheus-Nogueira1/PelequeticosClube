@@ -47,11 +47,11 @@ func _conectar_botoes() -> void:
 		var botao := filhos[i] as Button
 		botoes_regiao.append(botao)
 		botao.pressed.connect(_on_regiao_clicada.bindv([i, regioes[i]]))
-		UiUtil.compactar_botao(botao, TAMANHO_FONTE)
+		UiUtil.compactar_botao(botao, TAMANHO_FONTE, true)
 	botao_confirmar.pressed.connect(_on_confirmar)
 	botao_cancelar.pressed.connect(_on_cancelar)
-	UiUtil.compactar_botao(botao_confirmar, TAMANHO_FONTE)
-	UiUtil.compactar_botao(botao_cancelar, TAMANHO_FONTE)
+	UiUtil.compactar_botao(botao_confirmar, TAMANHO_FONTE, true)
+	UiUtil.compactar_botao(botao_cancelar, TAMANHO_FONTE, true)
 
 # ============================================================================
 # ATIVAÇÃO/DESATIVAÇÃO

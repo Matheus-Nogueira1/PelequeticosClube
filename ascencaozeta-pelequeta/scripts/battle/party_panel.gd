@@ -21,7 +21,7 @@ const VARIACAO_DESMAIADO: StringName = &"IconeDesmaiado"
 # Preenchidos no Inspector.
 @export var estilo_turno_ativo: StyleBox
 @export var texturas_icones: Dictionary[String, Texture2D] = {}
-
+@export var fundo_icones: Texture2D
 @onready var coluna_icones: HBoxContainer = %PartyIcones
 @onready var card: PanelContainer = %PartyCard
 @onready var marcador: Panel = %MarcadorParty
@@ -172,6 +172,7 @@ func definir_marcador(visivel: bool) -> void:
 func _criar_icone(personagem: Dictionary) -> Button:
 	var nome: String = personagem["nome"]
 	var icone := CENA_ICONE.instantiate() as Button
+	_aplicar_fundo_icone(icone)
 	icone.tooltip_text = nome
 	var textura: Texture2D = texturas_icones.get(
 		PersonagensData.normalizar_id(nome), null
@@ -182,6 +183,18 @@ func _criar_icone(personagem: Dictionary) -> Button:
 	coluna_icones.add_child(icone)
 	return icone
 
+func _aplicar_fundo_icone(icone: Button) -> void:
+	if fundo_icones == null:
+		return
+
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = fundo_icones
+	estilo.draw_center = true
+
+	icone.add_theme_stylebox_override("normal", estilo)
+	icone.add_theme_stylebox_override("hover", estilo)
+	icone.add_theme_stylebox_override("pressed", estilo)
+	icone.add_theme_stylebox_override("hover_pressed", estilo)
 
 # Aliado desmaiado fica escurecido (variação de tema); continua selecionável.
 func _atualizar_icone(personagem: Dictionary) -> void:

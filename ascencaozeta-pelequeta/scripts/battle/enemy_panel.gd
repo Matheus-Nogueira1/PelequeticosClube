@@ -26,6 +26,7 @@ const VARIACAO_ALVO: StringName = &"IconeAlvo"
 
 # Preenchido no Inspector (chave = nome do inimigo: Dummy, Carcaça...).
 @export var texturas_icones: Dictionary[String, Texture2D] = {}
+@export var fundo_icones: Texture2D
 @onready var botao_ficha: Button = get_node_or_null("%BotaoFicha") as Button
 @onready var coluna_icones: HBoxContainer = %EnemyIcones
 @onready var card: PanelContainer = %EnemyCard
@@ -197,6 +198,7 @@ func definir_marcador(visivel: bool) -> void:
 func _criar_icone(inimigo: Dictionary) -> Button:
 	var nome: String = inimigo["nome"]
 	var icone := CENA_ICONE.instantiate() as Button
+	_aplicar_fundo_icone(icone)
 	icone.tooltip_text = nome
 	var textura: Texture2D = texturas_icones.get(nome, null)
 	if textura != null:
@@ -206,6 +208,18 @@ func _criar_icone(inimigo: Dictionary) -> Button:
 	coluna_icones.add_child(icone)
 	return icone
 
+func _aplicar_fundo_icone(icone: Button) -> void:
+	if fundo_icones == null:
+		return
+
+	var estilo := StyleBoxTexture.new()
+	estilo.texture = fundo_icones
+	estilo.draw_center = true
+
+	icone.add_theme_stylebox_override("normal", estilo)
+	icone.add_theme_stylebox_override("hover", estilo)
+	icone.add_theme_stylebox_override("pressed", estilo)
+	icone.add_theme_stylebox_override("hover_pressed", estilo)
 
 func _exibir(nome: String) -> void:
 	var indice: int = _indice_de(nome)
