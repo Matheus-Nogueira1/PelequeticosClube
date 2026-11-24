@@ -49,6 +49,8 @@ theme_override_constants/margin_bottom = 5
 layout_mode = 2
 
 [node name="ColunaAtributos" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=622547443]
+custom_minimum_size = Vector2(50, 172)
+custom_maximum_size = Vector2(50, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -77,7 +79,29 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Men: 4"
 
+[node name="FichaDano" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=1428701987]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Dan: 2"
+
+[node name="FichaProtecao" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=799311055]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Pro: 4"
+
+[node name="FichaVelocidade" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=581251005]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Vel: 2"
+
+[node name="FichaTamanho" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaAtributos" unique_id=738701088]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Casas: 1"
+
 [node name="ColunaTexto" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=210996992]
+custom_minimum_size = Vector2(150, 172)
+custom_maximum_size = Vector2(150, 172)
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -109,6 +133,8 @@ rolar_com_setas = true
 metadata/_custom_type_script = "uid://hkqdbuk88uag"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll" unique_id=279423780]
+custom_minimum_size = Vector2(150, 0)
+custom_maximum_size = Vector2(150, -1)
 layout_mode = 2
 
 [node name="FichaDescricao" type="RichTextLabel" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1468443069]
@@ -119,30 +145,6 @@ theme_override_font_sizes/bold_font_size = 10
 bbcode_enabled = true
 text = "Um boneco de treino para os que não confiam em seu potencial."
 fit_content = true
-
-[node name="GridContainer" type="GridContainer" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=1133664449]
-layout_mode = 2
-columns = 2
-
-[node name="FichaDano" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer/GridContainer" unique_id=1690209893]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Dan: 2"
-
-[node name="FichaProtecao" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer/GridContainer" unique_id=1390354111]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Pro: 4"
-
-[node name="FichaVelocidade" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer/GridContainer" unique_id=361235946]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Vel: 2"
-
-[node name="FichaTamanho" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer/GridContainer" unique_id=840881362]
-unique_name_in_owner = true
-layout_mode = 2
-text = "Casas: 1"
 
 [node name="FichaLimite" type="Label" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer/ColunaTexto/FichaScroll/VBoxContainer" unique_id=735815131]
 unique_name_in_owner = true
@@ -170,7 +172,8 @@ scroll_active = false
 
 [node name="FichaRetrato" type="TextureRect" parent="CenterContainer/PanelContainer/MarginContainer/HBoxContainer" unique_id=500650489]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(64, 64)
+custom_minimum_size = Vector2(100, 172)
+custom_maximum_size = Vector2(100, 172)
 layout_mode = 2
 expand_mode = 1
 stretch_mode = 5

@@ -69,6 +69,10 @@ Panel/styles/panel = SubResource("StyleBoxFlat_43l7w")
 PanelContainer/styles/panel = SubResource("StyleBoxEmpty_8hjk4")
 TabBar/styles/button_pressed = null
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0nysw"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+
 [node name="PartyCard" type="PanelContainer" unique_id=1244372248]
 anchors_preset = 15
 anchor_right = 1.0
@@ -78,6 +82,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = SubResource("Theme_e40rn")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_0nysw")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=679070431]
 layout_mode = 2

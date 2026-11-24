@@ -185,7 +185,6 @@ layout_mode = 2
 theme_override_constants/margin_bottom = 15
 
 [node name="Classificação" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=2095879267]
-visible = false
 layout_mode = 2
 theme_override_constants/separation = 4
 alignment = 1
@@ -331,6 +330,7 @@ layout_mode = 2
 text = "Continuar "
 
 [node name="Estatisticas" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=1720680864]
+visible = false
 layout_mode = 2
 
 [node name="Estatisticas" type="GridContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=482564248]

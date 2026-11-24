@@ -2,6 +2,10 @@
 
 [ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_syiot"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_syiot"]
+content_margin_top = 2.0
+content_margin_right = 2.0
+
 [node name="EnemyCard" type="PanelContainer" unique_id=1352577537]
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,26 +15,20 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxEmpty_syiot")
 
-[node name="MarginContainer" type="MarginContainer" parent="." unique_id=576594259]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=440220157]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=440220157]
 layout_mode = 2
 theme_override_constants/separation = 2
 
-[node name="NomeLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1322459920]
+[node name="NomeLabel" type="Label" parent="VBoxContainer" unique_id=1322459920]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 10
 text = "Dummy"
 horizontal_alignment = 2
 
-[node name="PaLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1871012650]
+[node name="PaLabel" type="Label" parent="VBoxContainer" unique_id=1871012650]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 1, 1, 1)
@@ -38,7 +36,7 @@ theme_override_font_sizes/font_size = 10
 text = "PA 3/3"
 horizontal_alignment = 2
 
-[node name="RegioesLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=1667306562]
+[node name="RegioesLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=1667306562]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.84705883, 0, 1)
@@ -54,7 +52,7 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 2
 
-[node name="FixosLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=271212895]
+[node name="FixosLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=271212895]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.5053218, 0, 1)
@@ -68,7 +66,7 @@ scroll_active = false
 autowrap_mode = 2
 horizontal_alignment = 2
 
-[node name="MutaveisLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=2088660434]
+[node name="MutaveisLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=2088660434]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.5053218, 0, 1)
@@ -82,7 +80,7 @@ scroll_active = false
 autowrap_mode = 2
 horizontal_alignment = 2
 
-[node name="StatusLabel" type="RichTextLabel" parent="MarginContainer/VBoxContainer" unique_id=215198186]
+[node name="StatusLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=215198186]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/default_color = Color(1, 0.105882354, 0.12156863, 1)
