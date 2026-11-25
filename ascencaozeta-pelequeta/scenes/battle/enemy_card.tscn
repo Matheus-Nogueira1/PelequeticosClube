@@ -1,20 +1,55 @@
 [gd_scene format=3 uid="uid://difj18a205kan"]
 
+[ext_resource type="Theme" uid="uid://1spwl11gojx3" path="res://themes/Combate.tres" id="1_hcf34"]
 [ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_syiot"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_syiot"]
+content_margin_left = 5.0
 content_margin_top = 2.0
 content_margin_right = 5.0
 
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_mxf8n"]
+color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+grow_begin = 4.0
+grow_end = 4.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hkypq"]
+bg_color = Color(0.0627451, 0.02745098, 0.039215688, 0.6901961)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i10ex"]
+bg_color = Color(0.0627451, 0.02745098, 0.039215688, 0.6901961)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
 [node name="EnemyCard" type="PanelContainer" unique_id=1352577537]
-anchors_preset = 15
+custom_minimum_size = Vector2(85, 0)
+custom_maximum_size = Vector2(85, -1)
+anchors_preset = 11
+anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_left = -58.0
+grow_horizontal = 0
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_syiot")
+theme = ExtResource("1_hcf34")
 theme_override_styles/panel = SubResource("StyleBoxEmpty_syiot")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=440220157]
@@ -28,18 +63,36 @@ theme_override_font_sizes/font_size = 10
 text = "Dummy"
 horizontal_alignment = 2
 
-[node name="PaLabel" type="Label" parent="VBoxContainer" unique_id=1871012650]
-unique_name_in_owner = true
+[node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=528500265]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 1, 1, 1)
+theme_override_constants/separation = 0
+theme_override_styles/separator = SubResource("StyleBoxLine_mxf8n")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=39790310]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="PaLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=28292735]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.43529412, 0.6039216, 0.6156863, 1)
+theme_override_constants/shadow_offset_y = 0
 theme_override_font_sizes/font_size = 10
 text = "PA 3/3"
 horizontal_alignment = 2
 
+[node name="ProLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1841412360]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 10
+text = "PRO 3/3"
+
 [node name="RegioesLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=1667306562]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/default_color = Color(1, 0.84705883, 0, 1)
+theme_override_colors/default_color = Color(0.7058824, 0.6039216, 0.34509805, 1)
 theme_override_font_sizes/normal_font_size = 10
 theme_override_font_sizes/bold_font_size = 10
 bbcode_enabled = true
@@ -52,38 +105,332 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 2
 
-[node name="FixosLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=271212895]
-unique_name_in_owner = true
+[node name="HSeparator2" type="HSeparator" parent="VBoxContainer" unique_id=277191302]
 layout_mode = 2
-theme_override_colors/default_color = Color(1, 0.5053218, 0, 1)
-theme_override_font_sizes/normal_font_size = 10
-theme_override_font_sizes/bold_font_size = 10
-bbcode_enabled = true
-text = "Car For Fug Det Men
-0;0 0;0 0;0 0;0 0;0"
-fit_content = true
-scroll_active = false
-autowrap_mode = 2
-horizontal_alignment = 2
+theme_override_constants/separation = 0
+theme_override_styles/separator = SubResource("StyleBoxLine_mxf8n")
 
-[node name="MutaveisLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=2088660434]
+[node name="FixosLabel" type="HBoxContainer" parent="VBoxContainer" unique_id=1549913545]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
-theme_override_colors/default_color = Color(1, 0.5053218, 0, 1)
-theme_override_font_sizes/normal_font_size = 10
-theme_override_font_sizes/bold_font_size = 10
-bbcode_enabled = true
-text = "Dan Pro Vel 
-0   0   0  "
-fit_content = true
-scroll_active = false
-autowrap_mode = 2
-horizontal_alignment = 2
+theme_override_constants/separation = 0
+
+[node name="CarCell" type="VBoxContainer" parent="VBoxContainer/FixosLabel" unique_id=1221115413]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/FixosLabel/CarCell" unique_id=1699984553]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "CAR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/FixosLabel/CarCell" unique_id=1883981790]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
+
+[node name="ValorCar" type="Label" parent="VBoxContainer/FixosLabel/CarCell/ValorPanel" unique_id=418474495]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "1"
+horizontal_alignment = 1
+
+[node name="ForCell" type="VBoxContainer" parent="VBoxContainer/FixosLabel" unique_id=1701798986]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/FixosLabel/ForCell" unique_id=948328507]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "FOR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/FixosLabel/ForCell" unique_id=1858458985]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
+
+[node name="ValorFor" type="Label" parent="VBoxContainer/FixosLabel/ForCell/ValorPanel" unique_id=1614706703]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "1"
+horizontal_alignment = 1
+
+[node name="FugCell" type="VBoxContainer" parent="VBoxContainer/FixosLabel" unique_id=1036813188]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/FixosLabel/FugCell" unique_id=250505182]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "FUG"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/FixosLabel/FugCell" unique_id=1654626487]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
+
+[node name="ValorFug" type="Label" parent="VBoxContainer/FixosLabel/FugCell/ValorPanel" unique_id=882945056]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "10"
+horizontal_alignment = 1
+
+[node name="DetCell" type="VBoxContainer" parent="VBoxContainer/FixosLabel" unique_id=245268219]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/FixosLabel/DetCell" unique_id=1659324217]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "DET"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/FixosLabel/DetCell" unique_id=518991447]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
+
+[node name="ValorDet" type="Label" parent="VBoxContainer/FixosLabel/DetCell/ValorPanel" unique_id=958554389]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "1"
+horizontal_alignment = 1
+
+[node name="MenCell" type="VBoxContainer" parent="VBoxContainer/FixosLabel" unique_id=995161938]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/FixosLabel/MenCell" unique_id=1050452764]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "MEN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/FixosLabel/MenCell" unique_id=1813169541]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
+
+[node name="ValorMen" type="Label" parent="VBoxContainer/FixosLabel/MenCell/ValorPanel" unique_id=1327263660]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "1"
+horizontal_alignment = 1
+
+[node name="MutaveisLabel" type="HBoxContainer" parent="VBoxContainer" unique_id=588618834]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+theme_override_constants/separation = 0
+
+[node name="ProCell" type="VBoxContainer" parent="VBoxContainer/MutaveisLabel" unique_id=801841020]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/MutaveisLabel/ProCell" unique_id=1336065721]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "PRO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/MutaveisLabel/ProCell" unique_id=2113785715]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
+
+[node name="ValorPro" type="Label" parent="VBoxContainer/MutaveisLabel/ProCell/ValorPanel" unique_id=637693660]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "1"
+horizontal_alignment = 1
+
+[node name="FolCell" type="VBoxContainer" parent="VBoxContainer/MutaveisLabel" unique_id=1393661350]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/MutaveisLabel/FolCell" unique_id=1771018791]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "FOL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/MutaveisLabel/FolCell" unique_id=1958000734]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
+
+[node name="ValorFol" type="Label" parent="VBoxContainer/MutaveisLabel/FolCell/ValorPanel" unique_id=19292938]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "1"
+horizontal_alignment = 1
+
+[node name="DanCell" type="VBoxContainer" parent="VBoxContainer/MutaveisLabel" unique_id=1018787300]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/MutaveisLabel/DanCell" unique_id=1664841657]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "DAN"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/MutaveisLabel/DanCell" unique_id=23173199]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
+
+[node name="ValorDan" type="Label" parent="VBoxContainer/MutaveisLabel/DanCell/ValorPanel" unique_id=1416181846]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "10"
+horizontal_alignment = 1
+
+[node name="CorCell" type="VBoxContainer" parent="VBoxContainer/MutaveisLabel" unique_id=1400526515]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/MutaveisLabel/CorCell" unique_id=864264604]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "COR"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/MutaveisLabel/CorCell" unique_id=1464400311]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
+
+[node name="ValorCor" type="Label" parent="VBoxContainer/MutaveisLabel/CorCell/ValorPanel" unique_id=1799311297]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "1"
+horizontal_alignment = 1
+
+[node name="VelCell" type="VBoxContainer" parent="VBoxContainer/MutaveisLabel" unique_id=17671419]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="NomeLabel" type="Label" parent="VBoxContainer/MutaveisLabel/VelCell" unique_id=1698894909]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+theme_override_font_sizes/font_size = 8
+text = "VEL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ValorPanel" type="PanelContainer" parent="VBoxContainer/MutaveisLabel/VelCell" unique_id=1721474420]
+custom_minimum_size = Vector2(12, 10)
+custom_maximum_size = Vector2(12, -1)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = ExtResource("1_syiot")
+theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
+
+[node name="ValorVel" type="Label" parent="VBoxContainer/MutaveisLabel/VelCell/ValorPanel" unique_id=1912639687]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
+text = "1"
+horizontal_alignment = 1
+
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer" unique_id=2086722290]
+layout_mode = 2
+theme_override_constants/separation = 0
+theme_override_styles/separator = SubResource("StyleBoxLine_mxf8n")
 
 [node name="StatusLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=215198186]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_colors/default_color = Color(1, 0.105882354, 0.12156863, 1)
+theme_override_colors/default_color = Color(0.7058824, 0.3529412, 0.3764706, 1)
 theme_override_font_sizes/normal_font_size = 10
 theme_override_font_sizes/bold_font_size = 10
 bbcode_enabled = true

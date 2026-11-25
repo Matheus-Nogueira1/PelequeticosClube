@@ -125,9 +125,12 @@ scale = Vector2(0.5, 0.5)
 theme_override_styles/panel = SubResource("StyleBoxFlat_tjwpk")
 
 [node name="ScrollTeclado" type="ScrollContainer" parent="DescriptionPanel" unique_id=1393310454]
-layout_mode = 0
-offset_right = 302.0
-offset_bottom = 100.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 script = ExtResource("9_w5vr7")
@@ -142,5 +145,7 @@ size_flags_vertical = 3
 theme = ExtResource("8_ru14h")
 text = "Cleptomaníaco, Imperdoável e Inesquecível.
 Um borrão indistinguível guiado por uma motivação que nunca lhe pertenceu. Causado por uma origem tomada a força e fadado a destinos impossíveis de alcançar. Foi escolhido para totalizar a vontade dos maculados, contudo tornou-se imperdoável para todos que o antepuseram."
+fit_content = true
+scroll_active = false
 tab_size = 0
 justification_flags = 160

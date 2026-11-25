@@ -1,5 +1,15 @@
 [gd_scene format=3 uid="uid://bns4dlvevtx7l"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6cyuh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_xg5fw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_cmd22"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6onyx"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_irsdn"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]
 bg_color = Color(1, 1, 1, 0)
 border_width_left = 4
@@ -21,6 +31,11 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
 theme_type_variation = &"IconePersonagem"
+theme_override_styles/normal = SubResource("StyleBoxEmpty_6cyuh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_xg5fw")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_cmd22")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_6onyx")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_irsdn")
 toggle_mode = true
 clip_text = true
 icon_alignment = 1

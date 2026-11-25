@@ -752,19 +752,6 @@ func _executar_conhecimento_duelo(alvo: CombatenteData) -> void:
 	await _apresentar_pendentes()
 	await _finalizar_acao()
 
-func _atualizar_painel_combatente(combatente: CombatenteData) -> void:
-	if combatente == null:
-		return
-
-	if combatente.tipo == "jogador":
-		party_panel.atualizar_personagem(
-			combatente.para_dictionary()
-		)
-	else:
-		enemy_panel.atualizar_inimigo(
-			combatente.para_dictionary()
-		)
-
 func _executar_conhecimento_rastro(alvo: CombatenteData) -> void:
 	"""Rastro: igual ao Duelo, mas só revela as informações do inimigo."""
 	if alvo == null:
@@ -1878,6 +1865,20 @@ func _mostrar_resultado(resultado: String) -> Array[Dictionary]:
 	tela.queue_free()
 	return itens
 
+func _atualizar_painel_combatente(
+	combatente: CombatenteData
+) -> void:
+	if combatente == null:
+		return
+
+	if combatente.tipo == "jogador":
+		party_panel.atualizar_personagem(
+			combatente.para_dictionary()
+		)
+	else:
+		enemy_panel.atualizar_inimigo(
+			combatente.para_dictionary()
+		)
 
 # Contrato de dados da tela. "almas" e "itens" ficam de fora
 # até existirem sistemas definidos para eles.
