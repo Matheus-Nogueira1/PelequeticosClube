@@ -79,7 +79,7 @@ content_margin_right = 5.0
 [sub_resource type="StyleBoxLine" id="StyleBoxLine_g4v7s"]
 color = Color(0.41568628, 0.09803922, 0.16470589, 1)
 grow_begin = 4.0
-grow_end = 0.0
+grow_end = 4.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g4v7s"]
 bg_color = Color(0.0627451, 0.02745098, 0.039215688, 0.6901961)
@@ -94,6 +94,7 @@ corner_radius_bottom_right = 5
 corner_radius_bottom_left = 5
 
 [node name="PartyCard" type="PanelContainer" unique_id=1244372248]
+custom_minimum_size = Vector2(85, 0)
 custom_maximum_size = Vector2(85, -1)
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -183,6 +184,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorCar" type="Label" parent="VBoxContainer/FixosLabel/CarCell/ValorPanel" unique_id=1030726850]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -213,6 +215,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorFor" type="Label" parent="VBoxContainer/FixosLabel/ForCell/ValorPanel" unique_id=1276942499]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -243,6 +246,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorFug" type="Label" parent="VBoxContainer/FixosLabel/FugCell/ValorPanel" unique_id=1287818596]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -273,6 +277,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorDet" type="Label" parent="VBoxContainer/FixosLabel/DetCell/ValorPanel" unique_id=1254850475]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -303,6 +308,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorMen" type="Label" parent="VBoxContainer/FixosLabel/MenCell/ValorPanel" unique_id=658960584]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -339,6 +345,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorPro" type="Label" parent="VBoxContainer/MutaveisLabel/ProCell/ValorPanel" unique_id=94211372]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -369,6 +376,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorFol" type="Label" parent="VBoxContainer/MutaveisLabel/FolCell/ValorPanel" unique_id=1562813389]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -399,6 +407,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorDan" type="Label" parent="VBoxContainer/MutaveisLabel/DanCell/ValorPanel" unique_id=45419281]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -429,6 +438,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorCor" type="Label" parent="VBoxContainer/MutaveisLabel/CorCell/ValorPanel" unique_id=1728368578]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -459,6 +469,7 @@ theme = ExtResource("3_e40rn")
 theme_override_styles/panel = SubResource("StyleBoxFlat_g4v7s")
 
 [node name="ValorVel" type="Label" parent="VBoxContainer/MutaveisLabel/VelCell/ValorPanel" unique_id=751573202]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -471,6 +482,7 @@ theme_override_constants/separation = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_g4v7s")
 
 [node name="ScrollTeclado" type="ScrollContainer" parent="VBoxContainer" unique_id=36472658]
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0

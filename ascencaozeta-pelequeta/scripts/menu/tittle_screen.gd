@@ -1,6 +1,4 @@
-
 extends Control
-@onready var menu_music: AudioStreamPlayer = $MenuMusic
 @onready var fade_overlay: ColorRect = $Fade
 @onready var transicao_verde: ColorRect = $TransicaoVerde
 
@@ -9,7 +7,6 @@ var botoes_menu: Array[Button] = []
 
 
 func _ready() -> void:
-	menu_music.play()
 	# Mantém o background original intacto.
 	$bg.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -108,9 +105,6 @@ func _on_start_btn_pressed() -> void:
 	tween.set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(
 		fade_overlay, "modulate:a", 1.0, 1.2
-	)
-	tween.parallel().tween_property(
-		menu_music, "volume_db", -40.0, 1.2
 	)
 	await tween.finished
 	get_tree().change_scene_to_file(

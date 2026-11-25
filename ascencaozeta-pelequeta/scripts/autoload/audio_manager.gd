@@ -3,7 +3,7 @@ extends Node
 
 const VOLUME_PADRAO: float = -6.0
 const VOLUME_SILENCIO: float = -80.0
-const DURACAO_TRANSICAO: float = 3.5
+const DURACAO_TRANSICAO: float = 2.5
 
 const MUSICA_MENU: AudioStream = preload(
 	"res://music/CINEMATICS/ClementPanchout_Shadows-MENUzETicoTRISTETICO.wav"
@@ -27,7 +27,6 @@ var music_player: AudioStreamPlayer
 var music_tween: Tween
 var solicitacao_atual: int = 0
 
-
 func _ready() -> void:
 	music_player = AudioStreamPlayer.new()
 	music_player.name = "MusicPlayer"
@@ -36,11 +35,34 @@ func _ready() -> void:
 
 	add_child(music_player)
 
+func _unhandled_key_input(event: InputEvent) -> void:
+	if event.is_action_pressed("volume_aumentar") and not event.is_echo():
+		_alterar_volume_master(0.05)
+		get_viewport().set_input_as_handled()
+
+	elif event.is_action_pressed("volume_diminuir") and not event.is_echo():
+		_alterar_volume_master(-0.05)
+		get_viewport().set_input_as_handled()
+
+
+func _alterar_volume_master(incremento: float) -> void:
+	var indice_master := AudioServer.get_bus_index("Master")
+
+	if indice_master < 0:
+		push_warning("[AudioManager] Barramento Master não encontrado.")
+		return
+
+	var volume_atual := AudioServer.get_bus_volume_linear(indice_master)
+	var novo_volume := clampf(volume_atual + incremento, 0.0, 1.0)
+
+	AudioServer.set_bus_volume_linear(indice_master, novo_volume)
 
 func tocar_musica(nome: StringName) -> void:
 	var faixa: AudioStream
 
 	match nome:
+		&"menu":
+			faixa = MUSICA_MENU
 		&"ciclo":
 			faixa = MUSICA_CICLO
 		&"elizabeth":

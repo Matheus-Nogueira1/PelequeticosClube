@@ -73,6 +73,7 @@ layout_mode = 2
 size_flags_horizontal = 8
 
 [node name="PaLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=28292735]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_colors/font_color = Color(0.43529412, 0.6039216, 0.6156863, 1)
@@ -140,6 +141,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
 
 [node name="ValorCar" type="Label" parent="VBoxContainer/FixosLabel/CarCell/ValorPanel" unique_id=418474495]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -170,6 +172,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
 
 [node name="ValorFor" type="Label" parent="VBoxContainer/FixosLabel/ForCell/ValorPanel" unique_id=1614706703]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -200,6 +203,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
 
 [node name="ValorFug" type="Label" parent="VBoxContainer/FixosLabel/FugCell/ValorPanel" unique_id=882945056]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -230,6 +234,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
 
 [node name="ValorDet" type="Label" parent="VBoxContainer/FixosLabel/DetCell/ValorPanel" unique_id=958554389]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -260,6 +265,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_hkypq")
 
 [node name="ValorMen" type="Label" parent="VBoxContainer/FixosLabel/MenCell/ValorPanel" unique_id=1327263660]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -296,6 +302,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
 
 [node name="ValorPro" type="Label" parent="VBoxContainer/MutaveisLabel/ProCell/ValorPanel" unique_id=637693660]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -326,6 +333,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
 
 [node name="ValorFol" type="Label" parent="VBoxContainer/MutaveisLabel/FolCell/ValorPanel" unique_id=19292938]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -356,6 +364,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
 
 [node name="ValorDan" type="Label" parent="VBoxContainer/MutaveisLabel/DanCell/ValorPanel" unique_id=1416181846]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -386,6 +395,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
 
 [node name="ValorCor" type="Label" parent="VBoxContainer/MutaveisLabel/CorCell/ValorPanel" unique_id=1799311297]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)
@@ -416,6 +426,7 @@ theme = ExtResource("1_syiot")
 theme_override_styles/panel = SubResource("StyleBoxFlat_i10ex")
 
 [node name="ValorVel" type="Label" parent="VBoxContainer/MutaveisLabel/VelCell/ValorPanel" unique_id=1912639687]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.72156864, 0.4745098, 0.29411766, 1)

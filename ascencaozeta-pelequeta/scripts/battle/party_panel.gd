@@ -28,8 +28,19 @@ const VARIACAO_DESMAIADO: StringName = &"IconeDesmaiado"
 @onready var label_nome: Label = card.get_node("%NomeLabel")
 @onready var label_pa: Label = card.get_node("%PaLabel")
 @onready var label_regioes: RichTextLabel = card.get_node("%RegioesLabel")
-@onready var label_fixos: RichTextLabel = card.get_node("%FixosLabel")
-@onready var label_mutaveis: RichTextLabel = card.get_node("%MutaveisLabel")
+@onready var label_pro: Label = card.get_node("%ProLabel")
+
+@onready var valor_car: Label = card.get_node("%ValorCar")
+@onready var valor_for: Label = card.get_node("%ValorFor")
+@onready var valor_fug: Label = card.get_node("%ValorFug")
+@onready var valor_det: Label = card.get_node("%ValorDet")
+@onready var valor_men: Label = card.get_node("%ValorMen")
+
+@onready var valor_pro: Label = card.get_node("%ValorPro")
+@onready var valor_fol: Label = card.get_node("%ValorFol")
+@onready var valor_dan: Label = card.get_node("%ValorDan")
+@onready var valor_cor: Label = card.get_node("%ValorCor")
+@onready var valor_vel: Label = card.get_node("%ValorVel")
 @onready var label_status: RichTextLabel = card.get_node("%StatusLabel")
 
 var personagens: Array[Dictionary] = []
@@ -219,49 +230,63 @@ func _atualizar_destaques() -> void:
 	else:
 		card.remove_theme_stylebox_override("panel")
 
-
-
 func _renderizar_card(p: Dictionary) -> void:
 	var texto_nome: String = p["nome"]
+
 	if p.has("status") and not p["status"].is_empty():
 		texto_nome += " [%s]" % ", ".join(p["status"])
+
 	label_nome.text = texto_nome
 
+	# Pontos de ação.
 	label_pa.text = "PA %d/%d" % [
 		int(p.get("pontos_acao_atuais", 0)),
 		int(p.get("pontos_acao_maximos", 0))
 	]
 
-	label_regioes.text = _texto_regioes(p)
-
-	# Atributos fixos: cabeçalho e valores na mesma ordem.
-	label_fixos.text = "Car For Fug Det Men\n%d  %d  %d  %d  %d" % [
-		int(p.get("atributo_carne", 0)),
-		int(p.get("atributo_forca", 0)),
-		int(p.get("atributo_fuga", 0)),
-		int(p.get("atributo_determinacao", 0)),
-		int(p.get("atributo_mente", 0))
-	]
-
-	# Proteção atual = base - redução temporária.
-	var protecao_base: int = int(p.get("atributo_protecao", 0))
-	var protecao_atual: int = maxi(
-		0, protecao_base - int(p.get("reducao_protecao_temporaria", 0))
+	# Proteção atual e máxima.
+	var protecao_maxima: int = int(
+		p.get("atributo_protecao", 0)
 	)
 
-	# Atributos mutáveis: cabeçalho e valores na mesma ordem.
-	label_mutaveis.text = "Fôl Dan Cor Pro Vel\n%d  %d  %d  %d/%d  %d" % [
-		int(p.get("atributo_folego", 0)),
-		int(p.get("atributo_dano", 0)),
-		int(p.get("atributo_coragem", 0)),
+	var reducao_protecao: int = int(
+		p.get("reducao_protecao_temporaria", 0)
+	)
+
+	var protecao_atual: int = maxi(
+		0,
+		protecao_maxima - reducao_protecao
+	)
+
+	label_pro.text = "PRO %d/%d" % [
 		protecao_atual,
-		protecao_base,
-		int(p.get("atributo_velocidade", 0))
+		protecao_maxima
 	]
 
+	# Regiões e Estresse.
+	label_regioes.text = _texto_regioes(p)
+
+	# Atributos fixos.
+	valor_car.text = str(int(p.get("atributo_carne", 0)))
+	valor_for.text = str(int(p.get("atributo_forca", 0)))
+	valor_fug.text = str(int(p.get("atributo_fuga", 0)))
+	valor_det.text = str(int(p.get("atributo_determinacao", 0)))
+	valor_men.text = str(int(p.get("atributo_mente", 0)))
+
+	# Atributos mutáveis.
+	# ValorPro mostra somente a proteção máxima.
+	valor_pro.text = str(protecao_maxima)
+	valor_fol.text = str(int(p.get("atributo_folego", 0)))
+	valor_dan.text = str(int(p.get("atributo_dano", 0)))
+	valor_cor.text = str(int(p.get("atributo_coragem", 0)))
+	valor_vel.text = str(int(p.get("atributo_velocidade", 0)))
+
+	# Status e condições especiais.
 	var especial: String = ""
+
 	if p.get("habilidade_sobrecarga_ativa", false):
 		especial += "SOBRECARGA "
+
 	if p.has("proteses") and not p["proteses"].is_empty():
 		especial += "[PR: %s]" % ", ".join(p["proteses"].keys())
 
@@ -277,7 +302,7 @@ func _texto_regioes(p: Dictionary) -> String:
 		var limite: int = dados["limite"]
 		var linha: String = "%s %d/%d" % [regiao, atual, limite]
 		if limite == 0:
-			linha = "%s PERDIDO" % regiao
+			linha = "[color=red]%s 0/0[/color]" % regiao
 		elif atual >= limite:
 			linha = "[color=red]%s[/color]" % linha
 		elif float(atual) / float(limite) > 0.7:
