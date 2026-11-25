@@ -7,11 +7,13 @@
 [ext_resource type="Texture2D" uid="uid://bbj83tcsss14s" path="res://assets/world/Pan.png" id="5_yje51"]
 [ext_resource type="Texture2D" uid="uid://d0dped4wv2xiq" path="res://assets/world/Meat.png" id="6_ibf32"]
 [ext_resource type="Texture2D" uid="uid://v3r2qydmoih8" path="res://assets/world/mainlevbuild.png" id="7_r56jl"]
+[ext_resource type="Script" uid="uid://c1ieb0guk32j2" path="res://scripts/objetos/objeto_interativo.gd" id="8_xky23"]
 [ext_resource type="PackedScene" uid="uid://pupmbn2fmc7k" path="res://scenes/personagens/escolhido.tscn" id="8_yqtqu"]
 [ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="9_63qcu"]
 [ext_resource type="PackedScene" uid="uid://cckmocpmkwsuy" path="res://scenes/menu/rolagem-dado.tscn" id="10_8p1a1"]
 [ext_resource type="PackedScene" uid="uid://dqlkhnmctas0" path="res://scenes/npc's/elizabeth.tscn" id="11_fmova"]
 [ext_resource type="PackedScene" uid="uid://dx72kckk1qgbn" path="res://scenes/inimigos/dummy.tscn" id="12_q1eat"]
+[ext_resource type="LabelSettings" uid="uid://ch5kik1mpjmso" path="res://fonts/Titulos.tres" id="14_i5aww"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_om33r"]
 texture = ExtResource("2_qblg1")
@@ -2428,6 +2430,12 @@ sources/4 = SubResource("TileSetAtlasSource_mec70")
 sources/5 = SubResource("TileSetAtlasSource_mbqut")
 sources/6 = SubResource("TileSetAtlasSource_baouo")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(29, 51)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yf5fn"]
+size = Vector2(39, 46)
+
 [node name="Cabana" type="Node2D" unique_id=44442164]
 modulate = Color(2.2241454, 2.2241454, 2.2241454, 1)
 y_sort_enabled = true
@@ -2452,6 +2460,27 @@ tile_set = SubResource("TileSet_5wp78")
 modulate = Color(0.1882353, 0.1882353, 0.1882353, 1)
 tile_map_data = PackedByteArray("AAD//wYAAwAAAAgAAAD//wgAAwAAAAgAAAD//woABQAFAAIAAAATAAQAAQAAAAkAAAATAAUAAQAAAAoAAAATAAYAAQAAAAsAAAATAAcAAQAAAAwAAAAUAAQAAQABAAkAAAAUAAUAAQABAAoAAAAUAAYAAQABAAsAAAAUAAcAAQABAAwAAAAAAAYAAQAJABwAAAAAAAcAAQAJAB0AAAAAAAgAAQAJAB4AAAABAAYAAQALABwAAAABAAcAAQALAB0AAAAQAAQAAQABABgAAAARAAQAAQACABgAAAA=")
 tile_set = SubResource("TileSet_5wp78")
+
+[node name="Cama" type="Area2D" parent="Decoracao" unique_id=954803759]
+position = Vector2(319, 94)
+script = ExtResource("8_xky23")
+dialogo_id = "cama"
+tocar_levantar = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Decoracao/Cama" unique_id=1932476360]
+position = Vector2(0.5, 1.5)
+shape = SubResource("RectangleShape2D_g4v7s")
+
+[node name="Escada" type="Area2D" parent="Decoracao" unique_id=1602385850 node_paths=PackedStringArray("tela_fim")]
+position = Vector2(228, 402)
+script = ExtResource("8_xky23")
+tipo = 1
+dialogo_id = "escada_fim"
+tela_fim = NodePath("../../FimDemo/Preto")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Decoracao/Escada" unique_id=86343763]
+position = Vector2(9.5, 13)
+shape = SubResource("RectangleShape2D_yf5fn")
 
 [node name="Escolhido" parent="." unique_id=188751351 groups=["player"] instance=ExtResource("8_yqtqu")]
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
@@ -2488,6 +2517,8 @@ caminho_dica_interacao = NodePath("../Escolhido/Camera2D/CanvasLayer/CaixaDialog
 modulate = Color(0.3764706, 0.3764706, 0.3764706, 1)
 position = Vector2(316, 175)
 scale = Vector2(0.8, 0.8)
+cena_combate = "res://scenes/battle/combat.tscn"
+caminho_area_interacao = NodePath("InteractionArea")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1066443925]
 
@@ -2500,3 +2531,33 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 color = Color(0, 0, 0, 1)
+
+[node name="FimDemo" type="CanvasLayer" parent="." unique_id=1832176699]
+layer = 30
+follow_viewport_enabled = true
+
+[node name="Preto" type="ColorRect" parent="FimDemo" unique_id=78834048]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Label" type="Label" parent="FimDemo/Preto" unique_id=339738058]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "Continua....."
+label_settings = ExtResource("14_i5aww")
+
+[node name="RetornoFuga" type="Marker2D" parent="." unique_id=69591179]
+position = Vector2(207, 186)

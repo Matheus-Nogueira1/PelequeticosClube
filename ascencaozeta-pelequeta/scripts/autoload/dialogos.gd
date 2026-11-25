@@ -143,6 +143,33 @@ const CONVERSAS: Dictionary = {
 			"text": "Se aproxime. Toque a escuridão dentro de mim. Alimente-se dessas almas sem soberania"
 		}
 	],
+	# ESPANTALHO / FIREKEEPER (demonstração)
+	"dummy_conversa": [
+		{"speaker": "{jogador}", "text": "Ei... você consegue me ouvir?"},
+		{"speaker": "Testemunha", "text": "O espantalho permanece imóvel. Nenhuma resposta, mas algo nele parece escutar."}
+	],
+	"dummy_transicao": [
+		{"speaker": "Testemunha", "text": "O espantalho desaba. A palha se espalha pelo chão."},
+		{"speaker": "Testemunha", "text": "Então algo se move por dentro dele. Uma luz vermelha e fraca acende onde deveriam estar os olhos."},
+		{"speaker": "Espantalho", "text": "Você bateu em quem não podia revidar. Agora saberá o que isso custa."}
+	],
+	"elizabeth_vitoria": [
+		{"speaker": "Elizabeth", "text": "Você voltou. A chama ainda queima, então o boneco caiu."},
+		{"speaker": "Elizabeth", "text": "Descanse. O abismo ainda tem muito a lhe mostrar."}
+	],
+	"elizabeth_derrota": [
+		{"speaker": "Elizabeth", "text": "A escuridão levou o melhor de você desta vez."},
+		{"speaker": "Elizabeth", "text": "Mas a chama não se apaga tão fácil. Levante-se.", "options": [
+			{"text": "Tentar novamente", "close_dialogue": true}
+		]}
+	],
+	"cama": [
+		{"speaker": "Testemunha", "text": "Uma cama simples, ainda morna. Alguém dormiu aqui há pouco."},
+		{"speaker": "Testemunha", "text": "Você se deita por um instante... e se levanta, mais firme."}
+	],
+	"escada_fim": [
+		{"speaker": "Testemunha", "text": "Os degraus descem até um lugar que a luz da chama não alcança."}
+	],
 #BASTILHA INTERAÇÔES
 	# Parede falsa 1
 	"parede_estranha": [

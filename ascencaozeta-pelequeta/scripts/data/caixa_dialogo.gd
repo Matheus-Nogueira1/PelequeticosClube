@@ -571,6 +571,8 @@ func fechar_dialogo() -> void:
 	dialogo_encerrado.emit()
 
 func _travar_jogador(travar: bool) -> void:
+	if Global.demo_encerrada:
+		return
 	# Trava ou libera o movimento de quem estiver no grupo "player".
 	for jogador in get_tree().get_nodes_in_group("player"):
 		if jogador.has_method("travar"):

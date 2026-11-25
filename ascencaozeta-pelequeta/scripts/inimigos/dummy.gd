@@ -16,6 +16,10 @@ var combate_iniciado: bool = false
 @onready var flash: ColorRect = get_node_or_null("EfeitoEncontro/Flash") as ColorRect
 
 func _ready() -> void:
+	# Já derrotado nesta partida: não reaparece na cabana.
+	if Global.dummy_derrotado:
+		queue_free()
+		return
 	if area_interacao == null:
 		push_error("[Dummy] InteractionArea não encontrada.")
 		return

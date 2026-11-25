@@ -10,6 +10,14 @@ const CENA_DADO_D6: PackedScene = preload(
 const CENA_RESULTADO: PackedScene = preload(
 	"res://scenes/battle/resultado_combate.tscn"
 )
+const DIALOGO_CONVERSA: String = "dummy_conversa"
+const DIALOGO_TRANSICAO: String = "dummy_transicao"
+const DIALOGO_DERROTA: String = "elizabeth_derrota"
+const DIALOGO_VITORIA: String = "elizabeth_vitoria"
+
+@onready var caixa_dialogo: Control = get_node_or_null("%CaixaDialogo") as Control
+@onready var botao_conversar: Button = get_node_or_null("%BotaoConversar") as Button
+var conversa_usada: bool = false
 var dados_visuais: Array[RolagemD6] = []
 var dados_em_animacao: bool = false
 # Tipos de ações conforme OBLIVIO
@@ -82,6 +90,7 @@ var inimigos_derrotados: Array[String] = []
 
 func _ready() -> void:
 	_conectar_sinais_paineis()
+	_conectar_conversa()
 	_conectar_botoes_ajuda()
 	_conectar_alternancia_paineis()
 	_conectar_cliques_campo()
@@ -173,7 +182,7 @@ func _setup_exemplo() -> void:
 	# Criar o Dummy reutilizando temporariamente os dados da Carcaça.
 	var dummy: CombatenteData = InimigoData.criar_dummy()
 	dummy.nome = "Dummy"
-
+	dummy.dois_estagios = true
 	combatentes_inimigo.append(dummy)
 
 	# Unificar os participantes para calcular a iniciativa.
@@ -418,11 +427,10 @@ func _executar_turno_inimigo() -> void:
 		if inimigo.pontos_acao_atuais <= 0:
 			break
 
-		var decisao: Dictionary = InimigoIA.decidir(
-			inimigo,
-			combatentes_jogador,
-			conhecimentos_ia_usados_turno
-		)
+		var decisao: Dictionary = {"tipo": "passar", "alvo": null, "regioes": [] as Array[String],
+		"probabilidade": 0.0, "motivo": "fase passiva"}
+		if FaseInimigo.pode_atacar(inimigo):
+			decisao = InimigoIA.decidir(inimigo, combatentes_jogador, conhecimentos_ia_usados_turno)
 
 		print(
 			"[IA] %s: %s | %s | PA: %d" % [
@@ -1766,6 +1774,9 @@ func _devolver_acoes_apos_leitura() -> void:
 # SISTEMA DE COMBATENTES
 # ============================================================================
 func _derrotar_combatente(combatente: CombatenteData) -> void:
+	# Primeira "morte" de um inimigo de dois estágios: transição, não derrota.
+	if await _tentar_transicao_fase(combatente):
+		return
 	if not ordem_turno.has(combatente):
 		return
 
@@ -1866,7 +1877,18 @@ func _voltar_ao_mapa(resultado: String) -> void:
 		# Só na derrota o personagem descansa por completo.
 		if resultado == "Derrota":
 			principal.recuperar_apos_combate()
-
+	match resultado:
+		"Derrota":
+			# Firekeeper fala e oferece "Tentar novamente" (opção do diálogo).
+			await _executar_dialogo(DIALOGO_DERROTA)
+			_reiniciar_encontro()
+			return
+		"Vitória":
+			await _executar_dialogo(DIALOGO_VITORIA)
+			Global.retorno_combate = "vitoria"
+			Global.dummy_derrotado = true
+		"Fuga":
+			Global.retorno_combate = "fuga"
 	var erro := get_tree().change_scene_to_file(CENA_MAPA)
 	if erro != OK:
 		push_error("[CombatManager] Não foi possível voltar ao mapa. Erro: %s" % erro)
@@ -1923,6 +1945,14 @@ func _conectar_alternancia_paineis() -> void:
 func _input(event: InputEvent) -> void:
 	# Ajuda aberta: o combate fica totalmente parado.
 	if caixa_ajuda != null and caixa_ajuda.esta_aberta():
+		return
+	# Diálogo aberto: Q, Espaço, Tab e Enter são do diálogo, não do combate.
+	if _dialogo_aberto():
+		return
+	if InputMap.has_action("conversar") and event.is_action_pressed("conversar") \
+			and not event.is_echo():
+		get_viewport().set_input_as_handled()
+		_on_conversar()
 		return
 	if InputMap.has_action("abrir_ajuda") and event.is_action_pressed("abrir_ajuda") \
 			and not event.is_echo():
@@ -2140,7 +2170,7 @@ func _conectar_botoes_ajuda() -> void:
 func _on_ajuda_solicitada(painel: String, ancora: String) -> void:
 	if _pode_abrir_ajuda():
 		caixa_ajuda.abrir(painel, ancora)
-
+	
 
 func _pode_abrir_ajuda() -> bool:
 	if caixa_ajuda == null or caixa_ajuda.esta_aberta():
@@ -2151,6 +2181,7 @@ func _pode_abrir_ajuda() -> bool:
 		return false
 	if not action_panel.visible or enemy_panel.modo_seletor_ativo:
 		return false
+	
 	# Ficha de inimigo (se existir na sua cena).
 	var ficha := get_node_or_null("%FichaInimigo") as Control
 	return ficha == null or not ficha.visible
@@ -2173,3 +2204,74 @@ func _ajuda_combate_ja_vista() -> bool:
 func _registrar_ajuda_combate_vista() -> void:
 	# TODO (salvamento): gravar no salvamento que a ajuda de combate foi vista.
 	pass
+
+# ============================================================
+# FASES, DIÁLOGO NO COMBATE E CONVERSA
+# ============================================================
+func _tentar_transicao_fase(c: CombatenteData) -> bool:
+	if c.tipo != "inimigo" or not FaseInimigo.deve_transicionar(c):
+		return false
+	FaseInimigo.transicionar(c)
+	enemy_panel.atualizar_inimigo(c.para_dictionary())
+	# O jogador lê o que aconteceu no golpe antes do diálogo.
+	await _apresentar_pendentes()
+	await _executar_dialogo(DIALOGO_TRANSICAO)
+	return true
+
+
+func _dialogo_aberto() -> bool:
+	return caixa_dialogo != null and bool(caixa_dialogo.get("ativo"))
+
+
+# Apresenta um diálogo pela caixa oficial e espera o fim.
+# Sem caixa ou sem diálogo, segue adiante para não travar o fluxo.
+func _executar_dialogo(id_dialogo: String) -> void:
+	if caixa_dialogo == null or Dialogos.get_conversa(id_dialogo).is_empty():
+		push_warning("[CombatManager] Diálogo '%s' indisponível." % id_dialogo)
+		return
+	action_panel.desabilitar_acoes()
+	caixa_dialogo.configurar_dialogo(
+		GrupoAtual.obter_personagem_principal(), id_dialogo, false
+	)
+	await caixa_dialogo.dialogo_encerrado
+
+
+func _conectar_conversa() -> void:
+	if botao_conversar != null:
+		botao_conversar.pressed.connect(_on_conversar)
+	action_panel.visibility_changed.connect(_atualizar_botao_conversar)
+	enemy_panel.modo_alvo_alterado.connect(func(_ativo: bool) -> void: _atualizar_botao_conversar())
+	_atualizar_botao_conversar()
+
+
+func _pode_conversar() -> bool:
+	return (
+		combate_ativo and not conversa_usada and not aguardando_leitura
+		and not dados_em_animacao and not acao_em_progresso
+		and not _dialogo_aberto()
+		and combatente_ativo != null and combatente_ativo.tipo == "jogador"
+		and action_panel.visible and not enemy_panel.modo_seletor_ativo
+	)
+
+
+func _atualizar_botao_conversar() -> void:
+	if botao_conversar != null:
+		botao_conversar.disabled = not _pode_conversar()
+
+
+# Conversar é gratuito: não gasta PA nem encerra o turno. Uma vez por combate.
+func _on_conversar() -> void:
+	if not _pode_conversar():
+		return
+	conversa_usada = true
+	acao_em_progresso = true
+	await _executar_dialogo(DIALOGO_CONVERSA)
+	acao_em_progresso = false
+	_atualizar_botao_conversar()
+	if combate_ativo and combatente_ativo != null:
+		action_panel.ativar_para(combatente_ativo.para_dictionary(), combatente_ativo)
+
+
+func _reiniciar_encontro() -> void:
+	AudioManager.tocar_musica(&"bau")
+	get_tree().reload_current_scene()

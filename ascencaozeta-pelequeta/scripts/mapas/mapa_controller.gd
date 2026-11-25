@@ -16,8 +16,55 @@ var introducao_em_andamento: bool = false
 func _ready() -> void:
 	AudioManager.tocar_musica(&"elizabeth")
 	inicializar_mapa()
-	if mapa_inicializado and executar_introducao:
+	if not mapa_inicializado:
+		return
+	# Voltando de um combate: sem a introdução de "Levantar".
+	var retorno: String = Global.retorno_combate
+	Global.retorno_combate = ""
+	if retorno != "":
+		await _entrada_pos_combate(retorno)
+	elif executar_introducao:
 		await executar_introducao_firekeeper()
+
+# Volta da batalha: fade-in e, na vitória, a Firekeeper fala e anima.
+# Na fuga, o jogador reaparece em RetornoFuga (um Marker2D da cena).
+func _entrada_pos_combate(retorno: String) -> void:
+	var tela_preta := get_node_or_null("CanvasLayer/BlackScreen") as ColorRect
+	jogador.set("pode_andar", false)
+
+	if retorno == "fuga":
+		var ponto := get_node_or_null("RetornoFuga") as Node2D
+		if ponto != null:
+			jogador.global_position = ponto.global_position
+		else:
+			push_warning("Mapa %s: RetornoFuga não encontrado." % nome_mapa)
+
+	if tela_preta != null:
+		tela_preta.visible = true
+		tela_preta.modulate.a = 1.0
+		var fade := create_tween()
+		fade.tween_property(tela_preta, "modulate:a", 0.0, 1.0)
+		await fade.finished
+		tela_preta.visible = false
+
+	if retorno == "vitoria":
+		await _sequencia_vitoria()
+	jogador.set("pode_andar", true)
+
+
+func _sequencia_vitoria() -> void:
+	for npc in get_tree().get_nodes_in_group("npcs"):
+		if npc.get("npc_id") == "Elizabeth":
+			var sprite := npc.get_node_or_null("Walk") as AnimatedSprite2D
+			if sprite != null and sprite.sprite_frames.has_animation("Interagir"):
+				sprite.sprite_frames.set_animation_loop("Interagir", false)
+				sprite.play("Interagir")
+			break
+	if caixa_dialogo != null and not Dialogos.get_conversa("firekeeper_vitoria").is_empty():
+		caixa_dialogo.configurar_dialogo(
+			GrupoAtual.obter_personagem_principal(), "firekeeper_vitoria", false
+		)
+		await caixa_dialogo.dialogo_encerrado
 
 func inicializar_mapa() -> void:
 	if jogador == null:

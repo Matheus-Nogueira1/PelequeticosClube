@@ -30,7 +30,9 @@ var atributo_dano: int = 1               # Intensidade de dano
 var atributo_coragem: int = 1            # Firmeza e resiliência emocional
 var atributo_protecao: int = 1           # Dificuldade de ser acertado
 var atributo_velocidade: int = 1         # Velocidade de movimento
-
+## Inimigo de dois estágios (ver FaseInimigo). fase_ia só vale com dois_estagios.
+var dois_estagios: bool = false
+var fase_ia: String = "passiva"
 
 ## Dados de combate
 var arma_equipada: String = ""
