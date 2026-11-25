@@ -1130,6 +1130,10 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_robps"]
+content_margin_top = 2.0
+content_margin_bottom = 2.0
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_iphor"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0nysw"]
@@ -1189,12 +1193,6 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_ba8p4")
 script = ExtResource("2_osi8t")
 estilo_turno_ativo = ExtResource("5_robps")
 fundo_icones = ExtResource("5_s3ns4")
-
-[node name="MarcadorParty" type="Panel" parent="MarginContainer/HBoxContainer/PartyPanel" unique_id=2134595772]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel" unique_id=144047478]
 layout_mode = 2
@@ -1307,20 +1305,24 @@ layout_mode = 2
 size_flags_vertical = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_g4v7s")
 
-[node name="ControlContainer" type="PanelContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer" unique_id=1453330173]
-custom_minimum_size = Vector2(120, 50)
-custom_maximum_size = Vector2(120, 68)
+[node name="ControlContainer" type="Panel" parent="MarginContainer/HBoxContainer/Background/VBoxContainer" unique_id=1403850486]
+custom_minimum_size = Vector2(132, 68)
+custom_maximum_size = Vector2(132, 68)
 layout_mode = 2
-size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_e40rn")
 
 [node name="RegionalPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer" unique_id=2041982078]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(0, 60)
-custom_maximum_size = Vector2(-1, 70)
-layout_mode = 2
+custom_minimum_size = Vector2(120, 60)
+custom_maximum_size = Vector2(120, 60)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 script = ExtResource("4_sa5k0")
 
@@ -1403,9 +1405,16 @@ text = "Cancelar"
 
 [node name="ActionPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer" unique_id=424074914]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(132, 70)
-custom_maximum_size = Vector2(132, 70)
-layout_mode = 2
+custom_minimum_size = Vector2(120, 66)
+custom_maximum_size = Vector2(120, 66)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_right = -6.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 script = ExtResource("5_8we11")
@@ -1416,6 +1425,7 @@ theme_override_constants/separation = 2
 
 [node name="GridPrincipal" type="GridContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer" unique_id=776582532]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 10
 theme_override_constants/h_separation = 2
@@ -1485,8 +1495,9 @@ icon_alignment = 1
 
 [node name="TelaSubmenu" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer" unique_id=483340711]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 2
 
 [node name="SubmenuTitulo" type="Label" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=1537419226]
 unique_name_in_owner = true
@@ -1506,35 +1517,48 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="SubmenuLista" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu/SubmenuScroll" unique_id=672750507]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-alignment = 1
+size_flags_vertical = 0
 
-[node name="AcaoConfirmar" type="Button" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=462226978]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 12)
+[node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=1636464165]
+custom_minimum_size = Vector2(1, 12)
+custom_maximum_size = Vector2(-1, 12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_constants/separation = 4
+
+[node name="AcaoConfirmar" type="Button" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu/VBoxContainer" unique_id=462226978]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 8
 text = "Confirmar"
 
-[node name="AcaoVoltar" type="Button" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=1806969825]
+[node name="AcaoVoltar" type="Button" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu/VBoxContainer" unique_id=1806969825]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 8
 text = "Voltar"
 
 [node name="ComunicacaoPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer" unique_id=2127077464]
 unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(0, 70)
-custom_maximum_size = Vector2(132, 70)
-layout_mode = 2
+custom_minimum_size = Vector2(120, 68)
+custom_maximum_size = Vector2(120, 68)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 8
 mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_robps")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ComunicacaoPanel" unique_id=482424735]
 layout_mode = 2
+theme_override_constants/separation = 0
 
 [node name="ComunicacaoLog" type="RichTextLabel" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ComunicacaoPanel/VBoxContainer" unique_id=1241593587]
 unique_name_in_owner = true
@@ -1574,15 +1598,6 @@ script = ExtResource("3_4gnb8")
 fundo_icones = ExtResource("33_ew100")
 estilo_turno_ativo = ExtResource("5_robps")
 
-[node name="MarcadorEnemy" type="Panel" parent="MarginContainer/HBoxContainer/EnemyPanel" unique_id=866428200]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(92, 182)
-custom_maximum_size = Vector2(92, 182)
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 2
-theme = ExtResource("1_osi8t")
-
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/EnemyPanel" unique_id=1266867408]
 layout_mode = 2
 theme_override_constants/separation = 0
@@ -1610,6 +1625,25 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="EnemyCard" parent="MarginContainer/HBoxContainer/EnemyPanel/VBoxContainer/EnemyScroll" unique_id=1680091678 instance=ExtResource("24_x1unb")]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="MarcadorParty" type="Panel" parent="MarginContainer" unique_id=2134595772]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(85, 182)
+custom_maximum_size = Vector2(85, 182)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+mouse_filter = 2
+
+[node name="MarcadorEnemy" type="Panel" parent="MarginContainer" unique_id=866428200]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(85, 182)
+custom_maximum_size = Vector2(85, 182)
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 3
+mouse_filter = 2
+theme = ExtResource("1_osi8t")
 
 [node name="CamadaFicha" type="CanvasLayer" parent="." unique_id=1830515864]
 

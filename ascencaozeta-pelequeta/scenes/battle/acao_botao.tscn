@@ -3,7 +3,8 @@
 [ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_1stya"]
 
 [node name="AcaoBotao" type="Button" unique_id=419319389]
-custom_minimum_size = Vector2(0, 12)
+custom_minimum_size = Vector2(120, 12)
+custom_maximum_size = Vector2(120, -1)
 offset_right = 34.0
 offset_bottom = 14.0
 size_flags_horizontal = 3

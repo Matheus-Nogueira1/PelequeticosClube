@@ -1,7 +1,7 @@
 
 extends Node
 
-const VOLUME_PADRAO: float = -12.0
+const VOLUME_PADRAO: float = -6.0
 const VOLUME_SILENCIO: float = -80.0
 const DURACAO_TRANSICAO: float = 2.5
 

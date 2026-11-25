@@ -118,7 +118,8 @@ func _criar_botao(
 	callback: Callable
 ) -> Button:
 	var btn := CENA_BOTAO.instantiate() as Button
-
+	btn.custom_minimum_size = Vector2(0, 18)
+	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	btn.text = texto
 	btn.tooltip_text = p_tooltip_text
 	btn.pressed.connect(callback)
@@ -171,15 +172,10 @@ func _criar_botao_voltar(callback: Callable) -> Button:
 
 	return botao_voltar
 
-
-## A lista também é fixa na cena.
-## Apenas ajusta a altura e retorna ao início da rolagem.
-func _criar_scroll_lista(altura_minima: int = 50) -> VBoxContainer:
-	scroll_submenu.custom_minimum_size = Vector2(0, altura_minima)
+func _criar_scroll_lista() -> VBoxContainer:
 	scroll_submenu.scroll_vertical = 0
 
 	return lista_submenu
-
 
 ## Configura o botão fixo de confirmação.
 func _preparar_confirmar(
@@ -324,7 +320,7 @@ func abrir_menu_conhecimentos() -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela("Conhecimentos")
 
-	var lista := _criar_scroll_lista(70)
+	var lista := _criar_scroll_lista()
 	var encontrou_conhecimento := false
 
 	for conhecimento in combatente_ref.conhecimentos_especializados:
@@ -375,7 +371,7 @@ func abrir_menu_habilidades() -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela("Habilidades")
 
-	var lista := _criar_scroll_lista(50)
+	var lista := _criar_scroll_lista()
 	var habilidades_disponiveis := _obter_habilidades_conhecidas()
 
 	if habilidades_disponiveis.is_empty() and not combatente_ref.possui_sobrecarga:
@@ -486,7 +482,7 @@ func _abrir_detalhes_habilidade(habilidade) -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela(habilidade.nome)
 
-	var detalhes := _criar_scroll_lista(70)
+	var detalhes := _criar_scroll_lista()
 
 	_adicionar_linha_detalhe(
 		detalhes,
@@ -541,7 +537,7 @@ func _abrir_detalhes_sobrecarga() -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela("Sobrecarga (Ir Além)")
 
-	var detalhes := _criar_scroll_lista(50)
+	var detalhes := _criar_scroll_lista()
 
 	_adicionar_linha_detalhe(
 		detalhes,
@@ -673,7 +669,7 @@ func abrir_menu_itens() -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela("Itens")
 
-	var lista := _criar_scroll_lista(40)
+	var lista := _criar_scroll_lista()
 	var consumiveis: Array[Dictionary] = ItemData.listar_consumiveis(
 		combatente_ref
 	)
@@ -716,7 +712,7 @@ func _abrir_detalhes_item(entrada: Dictionary) -> void:
 	_limpar_tela_contextual()
 	_criar_titulo_tela(item.nome)
 
-	var detalhes := _criar_scroll_lista(40)
+	var detalhes := _criar_scroll_lista()
 
 	_adicionar_linha_detalhe(
 		detalhes,

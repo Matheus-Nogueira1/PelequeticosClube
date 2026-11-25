@@ -122,7 +122,6 @@ func limpar_inimigos() -> void:
 	inimigo_selecionado_atual.clear()
 	exibido = ""
 	inimigo_ativo_atual.clear()
-	DestaqueTurno.remover(card)
 	card.visible = false
 
 
@@ -168,15 +167,12 @@ func remover_destaque_turno() -> void:
 func obter_inimigo_ativo() -> Dictionary:
 	return inimigo_ativo_atual
 
-
-# O marcador de turno dos ícones fica SEMPRE visível. Aqui só o card
-# exibido recebe o destaque, quando ele é o do turno.
 func _atualizar_destaques() -> void:
 	var ativo: String = inimigo_ativo_atual.get("nome", "")
 	if not ativo.is_empty() and exibido == ativo:
-		DestaqueTurno.aplicar(card, estilo_turno_ativo)
+		DestaqueTurno.aplicar(self, estilo_turno_ativo)
 	else:
-		DestaqueTurno.remover(card)
+		DestaqueTurno.remover(self)
 
 func ativar_seletor_alvo() -> void:
 	if modo_seletor_ativo:
@@ -234,10 +230,15 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		_confirmar_alvo()
 
+func definir_marcador(selecionado: bool) -> void:
+	marcador.visible = true
 
-# Mostra ou esconde o marcador de "painel que recebe Q e Espaço".
-func definir_marcador(visivel: bool) -> void:
-	marcador.visible = visivel
+	var estilo := StyleBoxFlat.new()
+	estilo.draw_center = false
+	estilo.set_border_width_all(3 if selecionado else 1)
+	estilo.border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+
+	marcador.add_theme_stylebox_override("panel", estilo)
 
 # ============================================================================
 # APRESENTAÇÃO

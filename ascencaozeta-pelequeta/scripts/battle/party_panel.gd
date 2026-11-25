@@ -94,11 +94,10 @@ func remover_personagem(personagem: Dictionary) -> void:
 		icones.erase(chave)
 	if personagem_ativo_atual.get("nome", "") == chave:
 		personagem_ativo_atual.clear()
-
+		DestaqueTurno.remover(self)
 	if chave == exibido:
 		exibido = ""
 		if personagens.is_empty():
-			DestaqueTurno.remover(card)
 			card.visible = false
 		else:
 			_exibir(personagens[mini(indice, personagens.size() - 1)]["nome"])
@@ -109,6 +108,7 @@ func limpar_personagens() -> void:
 		(icone as Button).queue_free()
 	icones.clear()
 	personagens.clear()
+	DestaqueTurno.remover(self)
 	personagem_ativo_atual.clear()
 	exibido = ""
 	card.visible = false
@@ -172,10 +172,15 @@ func remover_destaque_turno() -> void:
 func obter_personagem_ativo() -> Dictionary:
 	return personagem_ativo_atual
 
+func definir_marcador(selecionado: bool) -> void:
+	marcador.visible = true
 
-# Mostra ou esconde o marcador de "painel que recebe Q e Espaço".
-func definir_marcador(visivel: bool) -> void:
-	marcador.visible = visivel
+	var estilo := StyleBoxFlat.new()
+	estilo.draw_center = false
+	estilo.set_border_width_all(3 if selecionado else 1)
+	estilo.border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+
+	marcador.add_theme_stylebox_override("panel", estilo)
 
 # ============================================================================
 # APRESENTAÇÃO
@@ -218,15 +223,12 @@ func _atualizar_icone(personagem: Dictionary) -> void:
 	else:
 		icone.theme_type_variation = VARIACAO_NORMAL
 
-
-# O marcador de turno dos ícones fica SEMPRE visível (decisão de design).
-# Aqui só o card exibido recebe o destaque, quando ele é o do turno.
 func _atualizar_destaques() -> void:
 	var ativo: String = personagem_ativo_atual.get("nome", "")
 	if not ativo.is_empty() and exibido == ativo:
-		DestaqueTurno.aplicar(card, estilo_turno_ativo)
+		DestaqueTurno.aplicar(self, estilo_turno_ativo)
 	else:
-		DestaqueTurno.remover(card)
+		DestaqueTurno.remover(self)
 
 func _renderizar_card(p: Dictionary) -> void:
 	var texto_nome: String = p["nome"]

@@ -1794,10 +1794,9 @@ func _alternar_painel() -> void:
 	painel_inimigos_ativo = not painel_inimigos_ativo
 	_atualizar_marcadores_painel()
 
-
-# Mostra um marcador por vez (o parâmetro vem do sinal modo_alvo_alterado).
 func _atualizar_marcadores_painel(_modo_alvo: bool = false) -> void:
 	var inimigos: bool = painel_inimigos_ativo or enemy_panel.modo_seletor_ativo
+
 	party_panel.definir_marcador(not inimigos)
 	enemy_panel.definir_marcador(inimigos)
 

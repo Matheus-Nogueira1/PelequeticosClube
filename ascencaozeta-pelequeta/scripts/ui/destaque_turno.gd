@@ -57,10 +57,17 @@ static func remover(card: Control) -> void:
 	if card.has_meta(META_ORIGINAL):
 		card.remove_meta(META_ORIGINAL)
 
-
 static func _cancelar_tween(card: Control) -> void:
-	var tween: Variant = card.get_meta(META_TWEEN, null)
+	if card == null:
+		return
+
+	# Não tenta recuperar um metadado inexistente.
+	if not card.has_meta(META_TWEEN):
+		return
+
+	var tween: Variant = card.get_meta(META_TWEEN)
+
 	if tween is Tween and (tween as Tween).is_valid():
 		(tween as Tween).kill()
-	if card.has_meta(META_TWEEN):
-		card.remove_meta(META_TWEEN)
+
+	card.remove_meta(META_TWEEN)
