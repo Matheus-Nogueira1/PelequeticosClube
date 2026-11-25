@@ -97,14 +97,10 @@ func _conectar_botoes() -> void:
 	botao_passar.pressed.connect(_on_passar_turno)
 	botao_esquivar.pressed.connect(_on_esquivar_pressionado)
 	for botao in [
-		botao_atacar,
-		botao_conhecimento,
-		botao_habilidade,
-		botao_item,
-		botao_passar,
 		botao_confirmar,
 		botao_voltar
 	]:
+		UiUtil.compactar_botao(botao, TAMANHO_FONTE, true)
 		UiUtil.compactar_botao(botao, TAMANHO_FONTE, true)
 
 
@@ -118,7 +114,7 @@ func _criar_botao(
 	callback: Callable
 ) -> Button:
 	var btn := CENA_BOTAO.instantiate() as Button
-	btn.custom_minimum_size = Vector2(0, 18)
+	btn.custom_minimum_size = Vector2(0, 12)
 	btn.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	btn.text = texto
 	btn.tooltip_text = p_tooltip_text

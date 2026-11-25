@@ -26,16 +26,19 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uev7f"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6cyuh"]
 bg_color = Color(0.2971768, 0.058990076, 0.109204955, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1ujig"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xg5fw"]
 bg_color = Color(0.59648657, 0.04212573, 0.057633832, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_icaiv"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmd22"]
 bg_color = Color(0.05882353, 0.019607844, 0.043137256, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_m2uid"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ral3v"]
+bg_color = Color(0.29748532, 0.06100855, 0.11207495, 0.69000006)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6onyx"]
 bg_color = Color(0.49019608, 0.02745098, 0.039215688, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43l7w"]
@@ -56,11 +59,14 @@ BotaoRegiao/styles/focus = SubResource("StyleBoxFlat_iaivs")
 BotaoRegiao/styles/hover_pressed = SubResource("StyleBoxFlat_omrhf")
 BotaoRegiao/styles/normal = ExtResource("1_6cyuh")
 BotaoRegiao/styles/pressed = SubResource("StyleBoxFlat_bp8bq")
-Button/styles/hover = SubResource("StyleBoxFlat_uev7f")
-Button/styles/hover_pressed = SubResource("StyleBoxFlat_1ujig")
-Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_icaiv")
-Button/styles/normal = ExtResource("1_6cyuh")
-Button/styles/pressed = SubResource("StyleBoxFlat_m2uid")
+Button/colors/icon_focus_color = Color(0.78031605, 0.03876, 0.06100855, 1)
+Button/colors/icon_hover_color = Color(0.78039217, 0.039215688, 0.0627451, 1)
+Button/icons/icon = null
+Button/styles/hover = SubResource("StyleBoxFlat_6cyuh")
+Button/styles/hover_pressed = SubResource("StyleBoxFlat_xg5fw")
+Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_cmd22")
+Button/styles/normal = SubResource("StyleBoxFlat_ral3v")
+Button/styles/pressed = SubResource("StyleBoxFlat_6onyx")
 IconeAlvo/base_type = &"Button"
 IconeDesmaiado/base_type = &"Button"
 IconePersonagem/base_type = &"Button"

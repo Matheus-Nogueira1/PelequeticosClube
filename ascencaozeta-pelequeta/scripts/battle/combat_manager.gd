@@ -1825,6 +1825,8 @@ func _finalizar_combate(resultado: String) -> void:
 	if not combate_ativo:
 		return
 	combate_ativo = false
+	for combatente in combatentes_jogador + combatentes_inimigo:
+		combatente.limpar_esquiva()
 	# A música muda assim que o combate termina.
 	AudioManager.tocar_musica(&"ciclo")
 	# O resumo é capturado antes da linha de encerramento, que repetiria o título.

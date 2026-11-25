@@ -35,6 +35,8 @@
 [ext_resource type="PackedScene" uid="uid://difj18a205kan" path="res://scenes/battle/enemy_card.tscn" id="24_x1unb"]
 [ext_resource type="Texture2D" uid="uid://cspuyemn5671l" path="res://assets/UI/battle/botoes/Botao_Esquivar.png" id="25_ba8p4"]
 [ext_resource type="Texture2D" uid="uid://dvjkaqfqgt0c1" path="res://assets/UI/battle/botoes/Botao_Passar.png" id="26_0nysw"]
+[ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="26_f0jy4"]
+[ext_resource type="Theme" uid="uid://1spwl11gojx3" path="res://themes/Combate.tres" id="26_iidyj"]
 [ext_resource type="Texture2D" uid="uid://cw3fox00dj3ld" path="res://assets/UI/battle/Enemies.png" id="31_0nysw"]
 [ext_resource type="Texture2D" uid="uid://3d7qqtjxxsed" path="res://assets/UI/battle/Card_Inimigo.png" id="33_ew100"]
 [ext_resource type="PackedScene" uid="uid://bnxw77i8xt6ph" path="res://scenes/menu/caixa_ajuda.tscn" id="37_ew100"]
@@ -1130,6 +1132,98 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f0jy4"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.1, 0.1, 0.1, 0.3)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ral3v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_re782"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0.225, 0.225, 0.225, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ral3v"]
+bg_color = Color(0.29748532, 0.06100855, 0.11207495, 0.69000006)
+border_color = Color(0.8001019, 0.8001019, 0.8001019, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iso5b"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.6)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_43l7w"]
+bg_color = Color(0.0627451, 0.02745098, 0.039215688, 0.6901961)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8hjk4"]
+
+[sub_resource type="Theme" id="Theme_re782"]
+default_font = ExtResource("26_f0jy4")
+default_font_size = 10
+BotaoRegiao/base_type = &"Button"
+BotaoRegiao/styles/focus = null
+BotaoRegiao/styles/hover_pressed = null
+BotaoRegiao/styles/normal = null
+BotaoRegiao/styles/pressed = null
+Button/colors/font_color = Color(0.875, 0.875, 0.875, 1)
+Button/colors/font_disabled_color = Color(0.875, 0.875, 0.875, 0.5)
+Button/colors/font_focus_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_color = Color(0.95, 0.95, 0.95, 1)
+Button/colors/font_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/font_outline_color = Color(0, 0, 0, 1)
+Button/colors/font_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_disabled_color = Color(1, 1, 1, 0.4)
+Button/colors/icon_focus_color = Color(0.78031605, 0.03876, 0.06100855, 1)
+Button/colors/icon_hover_color = Color(0.78039217, 0.039215688, 0.0627451, 1)
+Button/colors/icon_hover_pressed_color = Color(1, 1, 1, 1)
+Button/colors/icon_normal_color = Color(1, 1, 1, 1)
+Button/colors/icon_pressed_color = Color(1, 1, 1, 1)
+Button/constants/align_to_largest_stylebox = 0
+Button/constants/h_separation = 4
+Button/constants/icon_max_width = 0
+Button/constants/outline_size = 0
+Button/icons/icon = null
+Button/styles/disabled = SubResource("StyleBoxFlat_f0jy4")
+Button/styles/focus = SubResource("StyleBoxEmpty_ral3v")
+Button/styles/hover = SubResource("StyleBoxFlat_re782")
+Button/styles/hover_pressed = null
+Button/styles/hover_pressed_mirrored = null
+Button/styles/normal = SubResource("StyleBoxFlat_ral3v")
+Button/styles/pressed = SubResource("StyleBoxFlat_iso5b")
+IconeAlvo/base_type = &"Button"
+IconeDesmaiado/base_type = &"Button"
+IconePersonagem/base_type = &"Button"
+Panel/styles/panel = SubResource("StyleBoxFlat_43l7w")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_8hjk4")
+TabBar/styles/button_pressed = null
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_robps"]
 content_margin_top = 2.0
 content_margin_bottom = 2.0
@@ -1425,9 +1519,9 @@ theme_override_constants/separation = 2
 
 [node name="GridPrincipal" type="GridContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer" unique_id=776582532]
 unique_name_in_owner = true
-visible = false
 layout_mode = 2
 size_flags_vertical = 10
+theme = SubResource("Theme_re782")
 theme_override_constants/h_separation = 2
 theme_override_constants/v_separation = 2
 columns = 2
@@ -1437,6 +1531,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("26_iidyj")
 theme_override_font_sizes/font_size = 10
 icon = ExtResource("21_8w46x")
 flat = true
@@ -1458,6 +1553,7 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("26_iidyj")
 theme_override_font_sizes/font_size = 10
 icon = ExtResource("23_iphor")
 flat = true
@@ -1495,6 +1591,7 @@ icon_alignment = 1
 
 [node name="TelaSubmenu" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer" unique_id=483340711]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 2
