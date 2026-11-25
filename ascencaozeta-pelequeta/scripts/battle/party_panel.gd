@@ -19,13 +19,14 @@ const VARIACAO_NORMAL: StringName = &"IconePersonagem"
 const VARIACAO_DESMAIADO: StringName = &"IconeDesmaiado"
 
 # Preenchidos no Inspector.
+@export var paleta: PaletaDialogo
 @export var estilo_turno_ativo: StyleBox
 @export var texturas_icones: Dictionary[String, Texture2D] = {}
 @export var fundo_icones: Texture2D
 @onready var coluna_icones: HBoxContainer = %PartyIcones
 @onready var card: PanelContainer = %PartyCard
 @onready var marcador: Panel = %MarcadorParty
-@onready var label_nome: Label = card.get_node("%NomeLabel")
+@onready var label_nome: Control = card.get_node("%NomeLabel")
 @onready var label_pa: Label = card.get_node("%PaLabel")
 @onready var label_regioes: RichTextLabel = card.get_node("%RegioesLabel")
 @onready var label_pro: Label = card.get_node("%ProLabel")
@@ -230,13 +231,30 @@ func _atualizar_destaques() -> void:
 	else:
 		DestaqueTurno.remover(self)
 
+# Nome do aliado na cor da paleta (a mesma da tela de escolha de personagem).
+# RichTextLabel: só o nome fica colorido (o status segue a cor padrão).
+# Label: o texto inteiro usa a cor, pois um Label só tem uma cor.
+func _definir_nome(nome: String, status: String) -> void:
+	var cor: Color = Color.WHITE
+	if paleta != null:
+		cor = paleta.cor_do_falante(paleta.resolver_chave(nome))
+
+	if label_nome is RichTextLabel:
+		var texto: String = "[color=#%s]%s[/color]" % [cor.to_html(false), nome]
+		if not status.is_empty():
+			# [lb] e [rb] são os colchetes literais do BBCode.
+			texto += " [lb]%s[rb]" % status
+		(label_nome as RichTextLabel).text = texto
+	elif label_nome is Label:
+		var rotulo := label_nome as Label
+		rotulo.text = nome if status.is_empty() else "%s [%s]" % [nome, status]
+		rotulo.add_theme_color_override("font_color", cor)
+
 func _renderizar_card(p: Dictionary) -> void:
-	var texto_nome: String = p["nome"]
-
+	var status_texto: String = ""
 	if p.has("status") and not p["status"].is_empty():
-		texto_nome += " [%s]" % ", ".join(p["status"])
-
-	label_nome.text = texto_nome
+		status_texto = ", ".join(p["status"])
+	_definir_nome(p["nome"], status_texto)
 
 	# Pontos de ação.
 	label_pa.text = "PA %d/%d" % [

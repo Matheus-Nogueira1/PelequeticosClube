@@ -4,12 +4,8 @@
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_xg5fw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iaivs"]
+bg_color = Color(0.29803923, 0.05882353, 0.10980392, 1)
 draw_center = false
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 0.7607843, 0.043137256, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_omrhf"]
 bg_color = Color(0.59607846, 0.043137256, 0.05882353, 1)
@@ -26,7 +22,8 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0jy4"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ral3v"]
+bg_color = Color(0.29803923, 0.05882353, 0.10980392, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6cyuh"]
 bg_color = Color(0.2971768, 0.058990076, 0.109204955, 1)
@@ -37,7 +34,7 @@ bg_color = Color(0.59648657, 0.04212573, 0.057633832, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cmd22"]
 bg_color = Color(0.05882353, 0.019607844, 0.043137256, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ral3v"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_irsdn"]
 bg_color = Color(0.29748532, 0.06100855, 0.11207495, 0.69000006)
 border_color = Color(0.8001019, 0.8001019, 0.8001019, 0)
 
@@ -65,11 +62,11 @@ BotaoRegiao/styles/pressed = SubResource("StyleBoxFlat_bp8bq")
 Button/colors/icon_focus_color = Color(0.78031605, 0.03876, 0.06100855, 1)
 Button/colors/icon_hover_color = Color(0.78039217, 0.039215688, 0.0627451, 1)
 Button/icons/icon = null
-Button/styles/focus = SubResource("StyleBoxEmpty_f0jy4")
+Button/styles/focus = SubResource("StyleBoxFlat_ral3v")
 Button/styles/hover = SubResource("StyleBoxFlat_6cyuh")
 Button/styles/hover_pressed = SubResource("StyleBoxFlat_xg5fw")
 Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_cmd22")
-Button/styles/normal = SubResource("StyleBoxFlat_ral3v")
+Button/styles/normal = SubResource("StyleBoxFlat_irsdn")
 Button/styles/pressed = SubResource("StyleBoxFlat_6onyx")
 IconeAlvo/base_type = &"Button"
 IconeDesmaiado/base_type = &"Button"

@@ -11,6 +11,7 @@
 [ext_resource type="Script" uid="uid://1pi1e308ovsg" path="res://scripts/battle/action_panel.gd" id="5_8we11"]
 [ext_resource type="Texture2D" uid="uid://cai0vi4ym2yiq" path="res://assets/UI/battle/Party.png" id="5_ba8p4"]
 [ext_resource type="Texture2D" uid="uid://bjilkfjygvfjq" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_Dodge-Sheet.png" id="5_omrhf"]
+[ext_resource type="Resource" uid="uid://mo1727c788of" path="res://fonts/paleta_dialogo.tres" id="5_re782"]
 [ext_resource type="StyleBox" uid="uid://dsy0em0drk0nw" path="res://themes/card_turno_ativo.tres" id="5_robps"]
 [ext_resource type="Texture2D" uid="uid://bh6i5n3hhodbj" path="res://assets/UI/battle/Card_Aliado.png" id="5_s3ns4"]
 [ext_resource type="PackedScene" uid="uid://b8iv0l27ch5rq" path="res://scenes/battle/party_card.tscn" id="5_x1unb"]
@@ -40,6 +41,7 @@
 [ext_resource type="Texture2D" uid="uid://cw3fox00dj3ld" path="res://assets/UI/battle/Enemies.png" id="31_0nysw"]
 [ext_resource type="Texture2D" uid="uid://3d7qqtjxxsed" path="res://assets/UI/battle/Card_Inimigo.png" id="33_ew100"]
 [ext_resource type="PackedScene" uid="uid://bnxw77i8xt6ph" path="res://scenes/menu/caixa_ajuda.tscn" id="37_ew100"]
+[ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="41_ral3v"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ba8p4"]
 content_margin_top = 2.0
@@ -1285,6 +1287,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_ba8p4")
 script = ExtResource("2_osi8t")
+paleta = ExtResource("5_re782")
 estilo_turno_ativo = ExtResource("5_robps")
 fundo_icones = ExtResource("5_s3ns4")
 
@@ -1752,3 +1755,14 @@ visible = false
 [node name="CaixaAjuda" parent="." unique_id=615491577 instance=ExtResource("37_ew100")]
 unique_name_in_owner = true
 visible = false
+
+[node name="CamadaDialogo" type="CanvasLayer" parent="." unique_id=1748757544]
+layer = 12
+offset = Vector2(80, 80)
+scale = Vector2(0.5, 0.5)
+transform = Transform2D(0.5, 0, 0, 0.5, 80, 80)
+
+[node name="CaixaDialogo" parent="CamadaDialogo" unique_id=1996844437 instance=ExtResource("41_ral3v")]
+unique_name_in_owner = true
+iniciar_intro_automaticamente = false
+fechar_para_selecao = false

@@ -8,7 +8,7 @@ const ANIMACAO_ATAQUE: StringName = &"Atacando"
 const ANIMACAO_ESQUIVA: StringName = &"Dodge"
 const ANIMACAO_DANO: StringName = &"Hit"
 const ANIMACAO_MORTE: StringName = &"Morrendo"
-
+const ANIMACAO_IDLE: StringName = &"Idle"
 var sprite: AnimatedSprite2D
 var morto: bool = false
 
@@ -18,70 +18,56 @@ func configurar(sprite_animado: AnimatedSprite2D) -> void:
 
 	if sprite == null:
 		push_error("[CombatantAnimation] AnimatedSprite2D não foi encontrado.")
+	if sprite.sprite_frames.has_animation(ANIMACAO_IDLE):
+		sprite.play(ANIMACAO_IDLE)
+	else:
+		push_warning(
+			"[CombatenteAnimation] Animação Idle inexistente."
+		)
 
-
-func tocar_animacao(nome: StringName) -> void:
+func _tocar_e_retornar_idle(nome: StringName) -> void:
 	if sprite == null or morto:
 		return
 
 	if not sprite.sprite_frames.has_animation(nome):
 		push_warning(
-			"[CombatantAnimation] Animação inexistente: %s" % String(nome)
+			"[CombatenteAnimation] Animação inexistente: %s" % String(nome)
 		)
 		return
 
+	if nome == ANIMACAO_IDLE:
+		return
+
+	var loop_anterior: bool = sprite.sprite_frames.get_animation_loop(nome)
+
+	# Garante que a animação termine e emita animation_finished.
+	sprite.sprite_frames.set_animation_loop(nome, false)
 	sprite.play(nome)
+
+	await sprite.animation_finished
+
+	# Restaura a configuração original da animação.
+	if is_instance_valid(sprite):
+		sprite.sprite_frames.set_animation_loop(nome, loop_anterior)
+
+		# Não interrompe uma animação de morte ou outra animação
+		# que tenha substituído a atual.
+		if not morto and sprite.animation == nome:
+			sprite.play(ANIMACAO_IDLE)
+
+func tocar_animacao(nome: StringName) -> void:
+	await _tocar_e_retornar_idle(nome)
 
 
 func tocar_ataque() -> void:
-	if sprite == null or morto:
-		return
-
-	if not sprite.sprite_frames.has_animation(ANIMACAO_ATAQUE):
-		push_warning(
-			"[CombatantAnimation] Animação Atacando inexistente."
-		)
-		return
-
-	# O ataque deve tocar apenas uma vez.
-	sprite.sprite_frames.set_animation_loop(ANIMACAO_ATAQUE, false)
-	sprite.play(ANIMACAO_ATAQUE)
-
-	# Espera a animação terminar antes de continuar o combate.
-	await sprite.animation_finished
-
-	# Não interrompe uma animação de morte que tenha começado nesse intervalo.
-	if not morto:
-		sprite.stop()
+	await _tocar_e_retornar_idle(ANIMACAO_ATAQUE)
 
 
 func tocar_esquiva() -> void:
-	if sprite == null or morto:
-		return
-
-	if not sprite.sprite_frames.has_animation(ANIMACAO_ESQUIVA):
-		push_warning("[CombatenteAnimation] Animação Dodge inexistente.")
-		return
-
-	# Toca uma vez e espera o fim, como tocar_ataque().
-	sprite.sprite_frames.set_animation_loop(ANIMACAO_ESQUIVA, false)
-	sprite.play(ANIMACAO_ESQUIVA)
-	await sprite.animation_finished
-
+	await _tocar_e_retornar_idle(ANIMACAO_ESQUIVA)
 
 func tocar_dano() -> void:
-	if sprite == null or morto:
-		return
-
-	if not sprite.sprite_frames.has_animation(ANIMACAO_DANO):
-		push_warning("[CombatenteAnimation] Animação Hit inexistente.")
-		return
-
-	# Toca uma vez e espera o fim, como ataque e esquiva.
-	sprite.sprite_frames.set_animation_loop(ANIMACAO_DANO, false)
-	sprite.play(ANIMACAO_DANO)
-	await sprite.animation_finished
-
+	await _tocar_e_retornar_idle(ANIMACAO_DANO)
 
 func tocar_morte() -> void:
 	if sprite == null or morto:

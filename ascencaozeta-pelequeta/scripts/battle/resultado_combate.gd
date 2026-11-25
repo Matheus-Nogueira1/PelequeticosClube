@@ -57,7 +57,10 @@ enum Pagina { CLASSIFICACAO, RECOMPENSA, ESTATISTICAS }
 
 # Itens ganhos nas rolagens (lidos pelo CombatManager depois do "confirmado").
 var itens_obtidos: Array[Dictionary] = []
-
+# Cores do título por resultado (ajuste no Inspector).
+@export var cor_vitoria: Color = Color("5fe0d0")
+@export var cor_derrota: Color = Color("d92626")
+@export var cor_fuga: Color = Color("ffc20b")
 @onready var recompensa_titulo: Label = _label("RecompensaTitulo")
 @onready var recompensa_bonus: Label = _label("RecompensaBonus")
 @onready var recompensa_detalhe: Label = _label("RecompensaDetalhe")
@@ -74,6 +77,9 @@ var _rolou: bool = false
 var _rolando: bool = false
 
 func _ready() -> void:
+		# O LabelSettings do título é compartilhado: a cor muda só em uma CÓPIA.
+	if titulo != null and titulo.label_settings != null:
+		titulo.label_settings = titulo.label_settings.duplicate()
 	if botao_continuar != null:
 		botao_continuar.pressed.connect(_avancar)
 	else:
@@ -98,6 +104,21 @@ func configurar(dados: Dictionary) -> void:
 func _label(nome: String) -> Label:
 	return get_node_or_null("%" + nome) as Label
 
+func _aplicar_cor_resultado(resultado: String) -> void:
+	var cor: Color = Color.WHITE
+	match resultado:
+		"Vitória":
+			cor = cor_vitoria
+		"Derrota":
+			cor = cor_derrota
+		"Fuga":
+			cor = cor_fuga
+	if titulo == null:
+		return
+	# LabelSettings tem prioridade sobre os overrides de tema.
+	if titulo.label_settings != null:
+		titulo.label_settings.font_color = cor
+	titulo.add_theme_color_override("font_color", cor)
 
 # ============================================================
 # PREENCHIMENTO
@@ -108,6 +129,7 @@ func _atualizar() -> void:
 
 	if titulo != null:
 		titulo.text = String(_dados.get("resultado", "")).to_upper()
+		_aplicar_cor_resultado(String(_dados.get("resultado", "")))
 	if subtitulo != null:
 		subtitulo.visible = _dados.has("subtitulo")
 		if subtitulo.visible:

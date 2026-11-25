@@ -36,3 +36,9 @@ static func compactar_botao(
 		compacto.content_margin_left = 3
 		compacto.content_margin_right = 3
 		botao.add_theme_stylebox_override(nome_estilo, compacto)
+	if usar_hover_como_foco:
+		var estilo_hover: StyleBox = botao.get_theme_stylebox("hover")
+		botao.add_theme_stylebox_override(
+			"focus",
+			estilo_hover.duplicate()
+		)

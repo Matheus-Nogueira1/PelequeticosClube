@@ -13,11 +13,10 @@ const CENA_RESULTADO: PackedScene = preload(
 const DIALOGO_CONVERSA: String = "dummy_conversa"
 const DIALOGO_TRANSICAO: String = "dummy_transicao"
 const DIALOGO_DERROTA: String = "elizabeth_derrota"
-const DIALOGO_VITORIA: String = "elizabeth_vitoria"
 
 @onready var caixa_dialogo: Control = get_node_or_null("%CaixaDialogo") as Control
-@onready var botao_conversar: Button = get_node_or_null("%BotaoConversar") as Button
 var conversa_usada: bool = false
+var aguardando_interacao_comunicacao: bool = false
 var dados_visuais: Array[RolagemD6] = []
 var dados_em_animacao: bool = false
 # Tipos de ações conforme OBLIVIO
@@ -36,7 +35,7 @@ signal combate_finalizado(vencedor: String)
 signal estado_atualizado
 signal turno_passado
 signal leitura_confirmada
-
+signal interacao_comunicacao_confirmada
 # Painéis da cena
 @onready var camada_resultado: CanvasLayer = %CamadaResultado
 @onready var party_panel = %PartyPanel
@@ -90,7 +89,6 @@ var inimigos_derrotados: Array[String] = []
 
 func _ready() -> void:
 	_conectar_sinais_paineis()
-	_conectar_conversa()
 	_conectar_botoes_ajuda()
 	_conectar_alternancia_paineis()
 	_conectar_cliques_campo()
@@ -157,6 +155,59 @@ func _inicializar_combate() -> void:
 	await _mostrar_ajuda_inicial()
 	_avancar_turno()
 
+# ============================================================
+# INTERAÇÃO PELO PAINEL DE COMUNICAÇÃO
+# A conversa acontece na primeira oportunidade do jogador.
+# Não consome PA e não encerra o turno.
+# ============================================================
+
+func _aguardar_interacao_comunicacao() -> void:
+	if conversa_usada:
+		return
+
+	if not combate_ativo or combatente_ativo == null:
+		return
+
+	if combatente_ativo.tipo != "jogador":
+		return
+
+	if not comunicacao_panel.visible:
+		return
+
+	if aguardando_leitura or dados_em_animacao or acao_em_progresso:
+		return
+
+	if caixa_dialogo == null:
+		push_warning("[CombatManager] CaixaDialogo não encontrada.")
+		return
+
+	if Dialogos.get_conversa(DIALOGO_CONVERSA).is_empty():
+		push_warning("[CombatManager] Diálogo de conversa não encontrado.")
+		return
+
+	if not InputMap.has_action("conversar"):
+		push_warning("[CombatManager] A ação 'conversar' não está configurada.")
+		return
+
+	if dica_continuar == null:
+		push_warning("[CombatManager] DicaContinuar não encontrada.")
+		return
+
+	aguardando_interacao_comunicacao = true
+
+	dica_continuar.text = "C — Interagir"
+	dica_continuar.show()
+
+	# Aguarda a interação do jogador no painel de comunicação.
+	await interacao_comunicacao_confirmada
+
+	aguardando_interacao_comunicacao = false
+	dica_continuar.hide()
+
+	conversa_usada = true
+
+	# Abre a caixa de diálogo existente.
+	await _executar_dialogo(DIALOGO_CONVERSA)
 
 func _setup_exemplo() -> void:
 	"""Prepara o encontro inicial: personagem selecionado contra Dummy."""
@@ -1733,6 +1784,7 @@ func _apresentar_pendentes() -> void:
 		await leitura_confirmada
 	_definir_dica_leitura(false)
 	log_panel.limpar_apresentacao()
+	await _aguardar_interacao_comunicacao()
 
 func _confirmar_leitura() -> void:
 	if not aguardando_leitura:
@@ -1884,7 +1936,6 @@ func _voltar_ao_mapa(resultado: String) -> void:
 			_reiniciar_encontro()
 			return
 		"Vitória":
-			await _executar_dialogo(DIALOGO_VITORIA)
 			Global.retorno_combate = "vitoria"
 			Global.dummy_derrotado = true
 		"Fuga":
@@ -1946,13 +1997,17 @@ func _input(event: InputEvent) -> void:
 	# Ajuda aberta: o combate fica totalmente parado.
 	if caixa_ajuda != null and caixa_ajuda.esta_aberta():
 		return
-	# Diálogo aberto: Q, Espaço, Tab e Enter são do diálogo, não do combate.
 	if _dialogo_aberto():
 		return
-	if InputMap.has_action("conversar") and event.is_action_pressed("conversar") \
-			and not event.is_echo():
-		get_viewport().set_input_as_handled()
-		_on_conversar()
+
+	# Durante a interação, nenhuma tecla de navegação do combate
+	# pode interferir. Somente C confirma a conversa.
+	if aguardando_interacao_comunicacao:
+		if InputMap.has_action("conversar") \
+				and event.is_action_pressed("conversar") \
+				and not event.is_echo():
+			get_viewport().set_input_as_handled()
+			interacao_comunicacao_confirmada.emit()
 		return
 	if InputMap.has_action("abrir_ajuda") and event.is_action_pressed("abrir_ajuda") \
 			and not event.is_echo():
@@ -2235,15 +2290,6 @@ func _executar_dialogo(id_dialogo: String) -> void:
 	)
 	await caixa_dialogo.dialogo_encerrado
 
-
-func _conectar_conversa() -> void:
-	if botao_conversar != null:
-		botao_conversar.pressed.connect(_on_conversar)
-	action_panel.visibility_changed.connect(_atualizar_botao_conversar)
-	enemy_panel.modo_alvo_alterado.connect(func(_ativo: bool) -> void: _atualizar_botao_conversar())
-	_atualizar_botao_conversar()
-
-
 func _pode_conversar() -> bool:
 	return (
 		combate_ativo and not conversa_usada and not aguardando_leitura
@@ -2252,24 +2298,6 @@ func _pode_conversar() -> bool:
 		and combatente_ativo != null and combatente_ativo.tipo == "jogador"
 		and action_panel.visible and not enemy_panel.modo_seletor_ativo
 	)
-
-
-func _atualizar_botao_conversar() -> void:
-	if botao_conversar != null:
-		botao_conversar.disabled = not _pode_conversar()
-
-
-# Conversar é gratuito: não gasta PA nem encerra o turno. Uma vez por combate.
-func _on_conversar() -> void:
-	if not _pode_conversar():
-		return
-	conversa_usada = true
-	acao_em_progresso = true
-	await _executar_dialogo(DIALOGO_CONVERSA)
-	acao_em_progresso = false
-	_atualizar_botao_conversar()
-	if combate_ativo and combatente_ativo != null:
-		action_panel.ativar_para(combatente_ativo.para_dictionary(), combatente_ativo)
 
 
 func _reiniciar_encontro() -> void:

@@ -213,24 +213,34 @@ func retirar_pendentes() -> Array[Dictionary]:
 	fila_apresentacao.clear()
 	return pendentes
 
-# Mostra uma única mensagem com efeito de digitação.
-# Termina quando o texto está completo (ou quando pular_escrita é ativado).
 func mostrar_mensagem(mensagem: String, tipo: String = "normal") -> void:
-	clear()
-	append_text("[color=%s]%s[/color]" % [_get_cor_por_tipo(tipo), mensagem])
-	visible_characters = 0
+	var caracteres_anteriores: int = get_parsed_text().length()
+
+	if caracteres_anteriores > 0:
+		append_text("\n")
+
+	append_text(
+		"[color=%s]%s[/color]" % [
+			_get_cor_por_tipo(tipo),
+			mensagem
+		]
+	)
+
+	var plano: String = get_parsed_text()
+
+	visible_characters = caracteres_anteriores
 	escrevendo = true
 	pular_escrita = false
 
-	# O texto sem BBCode define o ritmo e as pausas da digitação.
-	var plano: String = get_parsed_text()
-	for i in range(plano.length()):
+	for i in range(caracteres_anteriores, plano.length()):
 		if pular_escrita:
 			break
+
 		visible_characters = i + 1
 
 		var pausa: float = VELOCIDADE_ESCRITA
 		var caractere: String = plano.substr(i, 1)
+
 		if caractere == "." or caractere == "!" or caractere == "?":
 			pausa += 0.20
 		elif caractere == "," or caractere == ":" or caractere == ";":
@@ -241,6 +251,8 @@ func mostrar_mensagem(mensagem: String, tipo: String = "normal") -> void:
 	visible_characters = -1
 	escrevendo = false
 	pular_escrita = false
+
+	scroll_to_line(get_line_count() - 1)
 
 # Limpa só o que está na tela. Histórico e fila não são afetados.
 func limpar_apresentacao() -> void:
