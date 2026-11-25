@@ -1517,6 +1517,7 @@ metadata/_custom_type_script = "uid://hkqdbuk88uag"
 [node name="SubmenuLista" type="VBoxContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu/SubmenuScroll" unique_id=672750507]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 0
 
 [node name="VBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer/Background/VBoxContainer/ControlContainer/ActionPanel/VBoxContainer/TelaSubmenu" unique_id=1636464165]

@@ -22,7 +22,7 @@ signal acao_habilidade
 signal acao_item
 signal turno_passado
 signal habilidade_sobrecarga
-
+signal acao_esquivar
 signal conhecimento_escolhida(nome_conhecimento: String)
 signal habilidade_escolhida(nome_habilidade: String)
 signal item_escolhido(nome_item: String)
@@ -42,7 +42,7 @@ const TAMANHO_FONTE: int = 10
 ## ============================================================
 
 @onready var grid_principal: GridContainer = %GridPrincipal
-
+@onready var botao_esquivar: Button = %BotaoEsquivar
 @onready var botao_atacar: Button = %BotaoAtacar
 @onready var botao_conhecimento: Button = %BotaoConhecimento
 @onready var botao_habilidade: Button = %BotaoHabilidade
@@ -95,7 +95,7 @@ func _conectar_botoes() -> void:
 	botao_habilidade.pressed.connect(_on_habilidade_pressionada)
 	botao_item.pressed.connect(_on_item_pressionado)
 	botao_passar.pressed.connect(_on_passar_turno)
-
+	botao_esquivar.pressed.connect(_on_esquivar_pressionado)
 	for botao in [
 		botao_atacar,
 		botao_conhecimento,
@@ -229,7 +229,7 @@ func _focar_botao() -> void:
 
 func habilitar_acoes() -> void:
 	acoes_habilitadas = true
-
+	botao_esquivar.disabled = false
 	_mostrar_menu_principal()
 
 	botao_atacar.disabled = false
@@ -244,7 +244,7 @@ func habilitar_acoes() -> void:
 
 func desabilitar_acoes() -> void:
 	acoes_habilitadas = false
-
+	botao_esquivar.disabled = true
 	_limpar_tela_contextual()
 
 	botao_atacar.disabled = true
@@ -304,6 +304,9 @@ func _on_passar_turno() -> void:
 func _on_botao_duelo_pressed() -> void:
 	conhecimento_escolhida.emit("Duelo")
 
+func _on_esquivar_pressionado() -> void:
+	desabilitar_acoes()
+	acao_esquivar.emit()
 
 ## ============================================================
 ## CONHECIMENTOS
@@ -455,22 +458,23 @@ func _preencher_lista_habilidades(
 
 		lista.add_child(btn_sobrecarga)
 
-
 func _criar_botao_habilidade(habilidade) -> Button:
-	var texto := "%s | %s | %d PA" % [
+	var texto := "%s (%d PA)" % [
 		habilidade.nome,
-		HabilidadeData.tipo_habilidade_para_texto(
-			habilidade.tipo_habilidade
-		),
 		habilidade.custo_pa
 	]
 
 	return _criar_botao(
 		texto,
-		"Ver detalhes de %s" % habilidade.nome,
+		"Ver detalhes de %s | %s | %d PA" % [
+			habilidade.nome,
+			HabilidadeData.tipo_habilidade_para_texto(
+				habilidade.tipo_habilidade
+			),
+			habilidade.custo_pa
+		],
 		_abrir_detalhes_habilidade.bind(habilidade)
 	)
-
 
 ## ============================================================
 ## DETALHES DE HABILIDADES

@@ -115,7 +115,9 @@ var limite_estresse_maximo_reducao: int = 0    # Redução permanente por Mal da
 var proteses: Dictionary = {}                   # Próteses por região
 var habilidade_sobrecarga_ativa: bool = false  # Ir Além - permite arriscar múltiplas vezes mesma região
 var possui_sobrecarga: bool = false             # Tem a habilidade (só o JP)
-
+var esquiva_ativa: bool = false
+var esquiva_bem_sucedida: bool = false
+var esquiva_rodada: int = -1
 ## Flags de efeitos de Fardos
 var tem_covardia: bool = false                  # -2x Coragem em testes
 var tem_fragilidade: bool = false              # +1D6 dano recebido
@@ -479,6 +481,7 @@ func limpar_efeitos_combate() -> void:
 	atacante_que_quebrou_protecao = ""
 	informacoes_reveladas = false
 	habilidade_sobrecarga_ativa = false
+	limpar_esquiva()
 
 ## Verifica se personagem está desmaiado (TODAS regiões no limite)
 func verificar_desmaio() -> bool:
@@ -524,6 +527,9 @@ func para_dictionary() -> Dictionary:
 		"descricao": descricao,
 		"tamanho": tamanho,
 		"grau": grau,
+		"esquiva_ativa": esquiva_ativa,
+		"esquiva_bem_sucedida": esquiva_bem_sucedida,
+		"esquiva_rodada": esquiva_rodada,
 		"morto": morto
 	}
 ## Cria a partir de um Dictionary
@@ -566,7 +572,12 @@ static func de_dictionary(dados: Dictionary) -> CombatenteData:
 		combatente.defesa_base = dados["defesa_base"]
 	if dados.has("iniciativa"):
 		combatente.iniciativa = dados["iniciativa"]
-	
+	if dados.has("esquiva_ativa"):
+		combatente.esquiva_ativa = dados["esquiva_ativa"]
+	if dados.has("esquiva_bem_sucedida"):
+		combatente.esquiva_bem_sucedida = dados["esquiva_bem_sucedida"]
+	if dados.has("esquiva_rodada"):
+		combatente.esquiva_rodada = dados["esquiva_rodada"]
 	if dados.has("estresse_por_regiao"):
 		combatente.estresse_por_regiao = dados["estresse_por_regiao"]
 	
@@ -668,3 +679,8 @@ func recuperar_protese(regiao: String, quantidade: int) -> void:
 	var protese = obter_protese(regiao)
 	if protese:
 		protese.recuperar_estresse(quantidade)
+
+func limpar_esquiva() -> void:
+	esquiva_ativa = false
+	esquiva_bem_sucedida = false
+	esquiva_rodada = -1

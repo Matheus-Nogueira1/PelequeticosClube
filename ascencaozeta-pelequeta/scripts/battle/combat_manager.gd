@@ -171,7 +171,7 @@ func _setup_exemplo() -> void:
 	fardos_iniciais = escolhido.fardos.size()
 
 	# Criar o Dummy reutilizando temporariamente os dados da Carcaça.
-	var dummy: CombatenteData = InimigoData.criar_carcaca()
+	var dummy: CombatenteData = InimigoData.criar_dummy()
 	dummy.nome = "Dummy"
 
 	combatentes_inimigo.append(dummy)
@@ -200,7 +200,7 @@ func _conectar_sinais_paineis() -> void:
 		action_panel.turno_passado.connect(_on_turno_passado)
 		action_panel.habilidade_sobrecarga.connect(_ativar_sobrecarga)
 		action_panel.item_escolhido.connect(_on_item_escolhido)
-
+		action_panel.acao_esquivar.connect(_iniciar_esquiva)
 	if regional_selector:
 		regional_selector.regiao_selecionada.connect(_on_regiao_selecionada)
 		regional_selector.selecao_confirmada.connect(_on_regioes_confirmadas)
@@ -279,6 +279,7 @@ func _avancar_turno() -> void:
 	# Início do turno: o cursor da iniciativa avançou (conta rodada)
 	# e o registro de variedade do aliado é aberto.
 	estatisticas.registrar_avanco_iniciativa(ordem_inicial.find(combatente_ativo))
+	_limpar_esquivas_expiradas()
 	estatisticas.iniciar_turno(combatente_ativo)
 	_atualizar_indicador_sobrecarga()
 	_restaurar_protecoes(combatente_ativo)
@@ -319,6 +320,32 @@ func _avancar_turno() -> void:
 		if not combate_ativo:
 			return
 		await _executar_turno_inimigo()
+
+func _limpar_esquivas_expiradas() -> void:
+	var todos_combatentes: Array[CombatenteData] = (
+		combatentes_jogador + combatentes_inimigo
+	)
+
+	for combatente in todos_combatentes:
+		if not combatente.esquiva_ativa:
+			continue
+
+		if combatente.esquiva_rodada < estatisticas.rodadas:
+			combatente.limpar_esquiva()
+
+			if combatente.tipo == "jogador":
+				party_panel.atualizar_personagem(
+					combatente.para_dictionary()
+				)
+			else:
+				enemy_panel.atualizar_inimigo(
+					combatente.para_dictionary()
+				)
+
+			log_panel.registrar_evento(
+				"A esquiva preparada por %s expirou." % combatente.nome,
+				"info"
+			)
 
 func _restaurar_protecoes(combatente: CombatenteData) -> void:
 	for alvo in combatentes_jogador:
@@ -526,6 +553,101 @@ func _iniciar_ataque() -> void:
 	log_panel.registrar_evento("Selecione as regiões de ataque...", "acao", false)
 	regional_selector.ativar_para_ataque(combatente_ativo)
 	regional_selector.modo = "selecionar_ataque"
+
+func _iniciar_esquiva() -> void:
+	if acao_em_progresso or combatente_ativo == null:
+		return
+
+	if combatente_ativo.tipo != "jogador":
+		return
+
+	if combatente_ativo.esquiva_ativa:
+		log_panel.registrar_evento(
+			"%s já preparou uma esquiva nesta rodada." % combatente_ativo.nome,
+			"aviso"
+		)
+		await _devolver_acoes_apos_leitura()
+		return
+
+	if not combatente_ativo.consumir_pontos_acao(2):
+		log_panel.registrar_evento(
+			"PA insuficiente: esquivar custa 2 PA.",
+			"aviso"
+		)
+		await _devolver_acoes_apos_leitura()
+		return
+
+	acao_em_progresso = true
+
+	party_panel.atualizar_personagem(
+		combatente_ativo.para_dictionary()
+	)
+
+	log_panel.registrar_evento(
+		"%s preparou uma esquiva!" % combatente_ativo.nome,
+		"acao"
+	)
+
+	var rolagem := RolagemDadosD6.new()
+
+	var resultado: Dictionary = rolagem.rolar_teste_conhecimento_d6(
+		combatente_ativo,
+		"Reflexos"
+	)
+
+	rolagem.free()
+
+	if resultado.is_empty():
+		push_error("[CombatManager] Não foi possível realizar o teste de Reflexos.")
+		acao_em_progresso = false
+		await _devolver_acoes_apos_leitura()
+		return
+
+	# Mostra exatamente o resultado sorteado pelo teste.
+	var regioes_teste: Array[String] = ["Reflexos"]
+	var valores_dado: Array[int] = [int(resultado["dado"])]
+
+	await _rolar_dados_visuais(
+		regioes_teste,
+		valores_dado
+	)
+
+	combatente_ativo.esquiva_ativa = true
+	combatente_ativo.esquiva_bem_sucedida = bool(resultado["sucesso"])
+	combatente_ativo.esquiva_rodada = estatisticas.rodadas
+
+	var texto_bonus := ""
+
+	if int(resultado["bonus_total"]) > 0:
+		texto_bonus = " + %d de bônus" % int(resultado["bonus_total"])
+
+	log_panel.registrar_evento(
+		"Reflexos: D6 %d%s = %d." % [
+			int(resultado["dado"]),
+			texto_bonus,
+			int(resultado["total"])
+		],
+		"info"
+	)
+
+	if combatente_ativo.esquiva_bem_sucedida:
+		log_panel.registrar_evento(
+			"Esquiva preparada com sucesso! O próximo ataque inimigo que superar sua Proteção será evitado.",
+			"sucesso"
+		)
+	else:
+		log_panel.registrar_evento(
+			"Falha no teste de Reflexos! O próximo ataque inimigo que superar sua Proteção terá o dano reduzido pela metade.",
+			"aviso"
+		)
+
+	party_panel.atualizar_personagem(
+		combatente_ativo.para_dictionary()
+	)
+
+	acao_em_progresso = false
+
+	await _devolver_acoes_apos_leitura()
 
 func _iniciar_conhecimento() -> void:
 	"""Inicia uso de perícia"""
@@ -1323,7 +1445,18 @@ func _processar_ataque(
 					dano_arma += valor
 				await _rolar_dados_dano_visuais(atacante.arma_equipada, dados_arma)
 			var dano_total: int = dano_atributo + dano_arma
+			if alvo.esquiva_ativa and atacante.tipo == "inimigo":
+				if alvo.esquiva_bem_sucedida:
+					# Anular o dano e executar a animação de esquiva.
+					pass
+				else:
+					# Reduzir dano pela metade.
+					dano_total = maxi(
+						1,
+						floori(float(dano_total) / 2.0)
+					)
 
+				alvo.limpar_esquiva()
 			# Só depois da rolagem: dano base e dano da arma.
 			log_panel.registrar_evento(
 				"Dano base: %d | Dano da arma: %d" % [dano_atributo, dano_arma],
@@ -1332,71 +1465,113 @@ func _processar_ataque(
 			await _apresentar_pendentes()
 
 			# A Proteção foi quebrada. Sorteia a região atingida pelo ataque.
-			var resultado_localizacao: int = await _rolar_dado_conhecimento(
-				"Localização do golpe"
-			)
+			# Verifica se o alvo possui uma esquiva preparada.
+			var ataque_esquivado := false
 
-			if resultado_localizacao < 1 or resultado_localizacao > 6:
-				push_error("[CombatManager] Falha ao determinar a localização do golpe.")
-				await _finalizar_acao()
-				return
+			if atacante.tipo == "inimigo" and alvo.esquiva_ativa:
+				if alvo.esquiva_bem_sucedida:
+					ataque_esquivado = true
 
-			var regiao_atingida: String = _obter_regiao_atingida(
-				resultado_localizacao
-			)
+					log_panel.registrar_evento(
+						"%s esquivou completamente do ataque de %s!" % [
+							alvo.nome,
+							atacante.nome
+						],
+						"sucesso"
+					)
 
-			if regiao_atingida.is_empty():
-				push_error("[CombatManager] Região atingida inválida.")
-				await _finalizar_acao()
-				return
+					await _animar_esquiva(alvo)
 
-			log_panel.registrar_evento(
-				"Localização do golpe: D6 %d → %s." % [
-					resultado_localizacao,
-					regiao_atingida
-				],
-				"ataque"
-			)
+				else:
+					var dano_original := dano_total
 
-			await _apresentar_pendentes()
+					dano_total = maxi(
+						1,
+						floori(float(dano_total) / 2.0)
+					)
 
+					log_panel.registrar_evento(
+						"%s falhou na esquiva e recebeu dano reduzido: %d → %d." % [
+							alvo.nome,
+							dano_original,
+							dano_total
+						],
+						"aviso"
+					)
+
+				# A esquiva é consumida após o primeiro ataque
+				# inimigo que supera a Proteção.
+				alvo.limpar_esquiva()
+
+			# Se a esquiva teve sucesso, não existe localização
+			# nem aplicação de dano.
+			if not ataque_esquivado:
+				var resultado_localizacao: int = await _rolar_dado_conhecimento(
+					"Localização do golpe"
+				)
+
+				if resultado_localizacao < 1 or resultado_localizacao > 6:
+					push_error("[CombatManager] Falha ao determinar a localização do golpe.")
+					await _finalizar_acao()
+					return
+
+				var regiao_atingida: String = _obter_regiao_atingida(
+					resultado_localizacao
+				)
+
+				if regiao_atingida.is_empty():
+					push_error("[CombatManager] Região atingida inválida.")
+					await _finalizar_acao()
+					return
+
+				log_panel.registrar_evento(
+					"Localização do golpe: D6 %d → %s." % [
+						resultado_localizacao,
+						regiao_atingida
+					],
+					"ataque"
+				)
+
+				await _apresentar_pendentes()
+
+				await _animar_dano(alvo)
+
+				var estresse_antes: int = alvo.get_estresse_total()
+
+				var resultado_estresse = _aplicar_estresse_registrado(
+					alvo,
+					regiao_atingida,
+					dano_total
+				)
+
+				var dano_efetivo: int = (
+					alvo.get_estresse_total() - estresse_antes
+				)
+
+				log_panel.registrar_evento(
+					"%s sofreu %d pontos de dano em %s." % [
+						alvo.nome,
+						dano_efetivo,
+						regiao_atingida
+					],
+					"dano"
+				)
+
+				if resultado_estresse.has("regiao_esgotada"):
+					log_panel.registrar_evento(
+						String(resultado_estresse["mensagem"]),
+						"aviso"
+					)
+
+				if resultado_estresse.has("resultado_fardo"):
+					log_panel.registrar_evento(
+						resultado_estresse["resultado_fardo"]["mensagem"],
+						"critico"
+					)
+
+			# A Proteção é restaurada após a resolução do ataque,
+			# mesmo quando a esquiva evita o dano.
 			alvo.reducao_protecao_temporaria = alvo.atributo_protecao
-			await _animar_dano(alvo)
-
-			# Aplica o dano na região sorteada.
-			# O excedente de membros continua transbordando para o Torso.
-			var estresse_antes: int = alvo.get_estresse_total()
-
-			var resultado_estresse = _aplicar_estresse_registrado(
-				alvo,
-				regiao_atingida,
-				dano_total
-			)
-
-			var dano_efetivo: int = (
-				alvo.get_estresse_total() - estresse_antes
-			)
-
-			log_panel.registrar_evento(
-				"%s sofreu %d pontos de dano em %s." % [
-					alvo.nome,
-					dano_efetivo,
-					regiao_atingida
-				],
-				"dano"
-			)
-
-			if resultado_estresse.has("regiao_esgotada"):
-				log_panel.registrar_evento(
-					String(resultado_estresse["mensagem"]),
-					"aviso"
-				)
-
-			if resultado_estresse.has("resultado_fardo"):
-				log_panel.registrar_evento(
-					resultado_estresse["resultado_fardo"]["mensagem"],
-					"critico"
-				)
 	# ============================================================
 	# RESUMO
 	# ============================================================

@@ -13,9 +13,9 @@ static func criar_dummy() -> CombatenteData:
 	var dummy = CombatenteData.new("Dummy", "inimigo")
 	
 	# Atributos OBLIVIO (Carne em vez de Vitalidade!)
-	dummy.atributo_carne = 1       # Define limite base de estresse
+	dummy.atributo_carne = 2       # Define limite base de estresse
 	dummy.atributo_forca = 1       # Dano
-	dummy.atributo_fuga = 1        # Velocidade
+	dummy.atributo_fuga = 2        # Velocidade
 	dummy.atributo_determinacao = 1    # Resistência psicológica
 	dummy.atributo_mente = 1
 	dummy._calcular_atributos_mutaveis()
