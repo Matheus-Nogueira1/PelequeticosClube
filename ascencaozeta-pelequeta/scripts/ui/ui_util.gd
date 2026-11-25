@@ -5,12 +5,14 @@ extends RefCounted
 static func aplicar(
 	botao: Button,
 	tamanho_fonte: int = 8,
+	usar_hover_como_foco: bool = false
 ) -> void:
 	botao.ready.connect(
 		func() -> void:
 			compactar_botao(
 				botao,
 				tamanho_fonte,
+				usar_hover_como_foco
 			),
 		CONNECT_ONE_SHOT
 	)
@@ -18,11 +20,13 @@ static func aplicar(
 static func compactar_botao(
 	botao: Button,
 	tamanho_fonte: int = 8,
+	usar_hover_como_foco: bool = false
 ) -> void:
 	if botao == null or not is_instance_valid(botao):
 		return
 	botao.add_theme_font_size_override("font_size", tamanho_fonte)
 	for nome_estilo in ["normal", "hover", "pressed", "hover_pressed", "disabled", "focus"]:
+
 		if not botao.has_theme_stylebox(nome_estilo):
 			continue
 		var base: StyleBox = botao.get_theme_stylebox(nome_estilo)

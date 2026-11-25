@@ -26,6 +26,8 @@ corner_radius_top_right = 1
 corner_radius_bottom_right = 1
 corner_radius_bottom_left = 1
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f0jy4"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6cyuh"]
 bg_color = Color(0.2971768, 0.058990076, 0.109204955, 1)
 
@@ -37,6 +39,7 @@ bg_color = Color(0.05882353, 0.019607844, 0.043137256, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ral3v"]
 bg_color = Color(0.29748532, 0.06100855, 0.11207495, 0.69000006)
+border_color = Color(0.8001019, 0.8001019, 0.8001019, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6onyx"]
 bg_color = Color(0.49019608, 0.02745098, 0.039215688, 1)
@@ -62,6 +65,7 @@ BotaoRegiao/styles/pressed = SubResource("StyleBoxFlat_bp8bq")
 Button/colors/icon_focus_color = Color(0.78031605, 0.03876, 0.06100855, 1)
 Button/colors/icon_hover_color = Color(0.78039217, 0.039215688, 0.0627451, 1)
 Button/icons/icon = null
+Button/styles/focus = SubResource("StyleBoxEmpty_f0jy4")
 Button/styles/hover = SubResource("StyleBoxFlat_6cyuh")
 Button/styles/hover_pressed = SubResource("StyleBoxFlat_xg5fw")
 Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_cmd22")
