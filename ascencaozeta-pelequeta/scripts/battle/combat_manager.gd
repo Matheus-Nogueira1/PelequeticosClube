@@ -390,7 +390,7 @@ func _limpar_esquivas_expiradas() -> void:
 		if not combatente.esquiva_ativa:
 			continue
 
-		if combatente.esquiva_rodada < estatisticas.rodadas:
+		if combatente == combatente_ativo:
 			combatente.limpar_esquiva()
 
 			if combatente.tipo == "jogador":
@@ -1504,18 +1504,6 @@ func _processar_ataque(
 					dano_arma += valor
 				await _rolar_dados_dano_visuais(atacante.arma_equipada, dados_arma)
 			var dano_total: int = dano_atributo + dano_arma
-			if alvo.esquiva_ativa and atacante.tipo == "inimigo":
-				if alvo.esquiva_bem_sucedida:
-					# Anular o dano e executar a animação de esquiva.
-					pass
-				else:
-					# Reduzir dano pela metade.
-					dano_total = maxi(
-						1,
-						floori(float(dano_total) / 2.0)
-					)
-
-				alvo.limpar_esquiva()
 			# Só depois da rolagem: dano base e dano da arma.
 			log_panel.registrar_evento(
 				"Dano base: %d | Dano da arma: %d" % [dano_atributo, dano_arma],

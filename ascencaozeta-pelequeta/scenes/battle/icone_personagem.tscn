@@ -26,6 +26,7 @@ grow_horizontal = 2
 grow_vertical = 2
 focus_mode = 0
 theme_type_variation = &"IconePersonagem"
+theme_override_constants/icon_max_width = 16
 theme_override_styles/normal = SubResource("StyleBoxEmpty_6cyuh")
 theme_override_styles/pressed = SubResource("StyleBoxEmpty_xg5fw")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_cmd22")
@@ -34,7 +35,6 @@ theme_override_styles/focus = SubResource("StyleBoxEmpty_irsdn")
 toggle_mode = true
 clip_text = true
 icon_alignment = 1
-expand_icon = true
 
 [node name="MarcadorTurno" type="Panel" parent="." unique_id=2098126145]
 unique_name_in_owner = true

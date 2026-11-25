@@ -221,6 +221,7 @@ radius = 5.0
 radius = 15.0
 
 [node name="World" type="Node2D" unique_id=1027781910]
+z_as_relative = false
 y_sort_enabled = true
 
 [node name="grass" type="TileMapLayer" parent="." unique_id=2037851953]
@@ -236,12 +237,14 @@ tile_map_data = PackedByteArray("AAADAAoAAgAEAAUAAAABAAEAAgACAAUAAAAQAAIAAgAIAAU
 tile_set = SubResource("TileSet_vh468")
 
 [node name="objetics" type="TileMapLayer" parent="." unique_id=1700088769]
+z_as_relative = false
 y_sort_enabled = true
 use_parent_material = true
 tile_map_data = PackedByteArray("AAAPAAYAAgAKAAUAAAACAAEAAgAAAAMAAAACAAoAAgAAAAMAAAAIAAkAAgAAAAMAAAARAAIAAgAAAAMAAAASAAoAAgAGAAMAAAARAAoAAgACAAUAAAAHAAkAAgAAAAUAAAAHAAIAAgAAAAYAAAAMAAoAAgAAAAYAAAABAAoAAgAAAAYAAAAOAAcAAgAAAAYAAAA=")
 tile_set = SubResource("TileSet_vh468")
 
 [node name="Player" type="Node2D" parent="objetics" unique_id=1422707646 groups=["player"]]
+z_as_relative = false
 y_sort_enabled = true
 position = Vector2(107, 107)
 scale = Vector2(0.7, 0.7)

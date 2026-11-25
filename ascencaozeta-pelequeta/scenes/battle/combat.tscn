@@ -38,10 +38,10 @@
 [ext_resource type="Texture2D" uid="uid://cspuyemn5671l" path="res://assets/UI/battle/botoes/Botao_Esquivar.png" id="25_ba8p4"]
 [ext_resource type="Texture2D" uid="uid://dvjkaqfqgt0c1" path="res://assets/UI/battle/botoes/Botao_Passar.png" id="26_0nysw"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="26_f0jy4"]
-[ext_resource type="Theme" uid="uid://1spwl11gojx3" path="res://themes/Combate.tres" id="26_iidyj"]
 [ext_resource type="Texture2D" uid="uid://cw3fox00dj3ld" path="res://assets/UI/battle/Enemies.png" id="31_0nysw"]
 [ext_resource type="Texture2D" uid="uid://3d7qqtjxxsed" path="res://assets/UI/battle/Card_Inimigo.png" id="33_ew100"]
 [ext_resource type="PackedScene" uid="uid://bnxw77i8xt6ph" path="res://scenes/menu/caixa_ajuda.tscn" id="37_ew100"]
+[ext_resource type="Texture2D" uid="uid://bh2ecmdadclqf" path="res://assets/UI/battle/dummy.png" id="37_iso5b"]
 [ext_resource type="PackedScene" uid="uid://c5sihykxqh5xb" path="res://scenes/menu/caixa-dialogo.tscn" id="41_ral3v"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ba8p4"]
@@ -1538,7 +1538,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("26_iidyj")
 theme_override_font_sizes/font_size = 10
 icon = ExtResource("21_8w46x")
 flat = true
@@ -1560,7 +1559,6 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 12)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("26_iidyj")
 theme_override_font_sizes/font_size = 10
 icon = ExtResource("23_iphor")
 flat = true
@@ -1700,6 +1698,9 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/panel = SubResource("StyleBoxEmpty_0nysw")
 script = ExtResource("3_4gnb8")
+texturas_icones = Dictionary[String, Texture2D]({
+"Dummy": ExtResource("37_iso5b")
+})
 fundo_icones = ExtResource("33_ew100")
 estilo_turno_ativo = ExtResource("5_robps")
 
@@ -1762,9 +1763,9 @@ visible = false
 
 [node name="CamadaDialogo" type="CanvasLayer" parent="." unique_id=1748757544]
 layer = 12
-offset = Vector2(80, 80)
-scale = Vector2(0.5, 0.5)
-transform = Transform2D(0.5, 0, 0, 0.5, 80, 80)
+offset = Vector2(88, 88)
+scale = Vector2(0.45, 0.45)
+transform = Transform2D(0.45, 0, 0, 0.45, 88, 88)
 
 [node name="CaixaDialogo" parent="CamadaDialogo" unique_id=1996844437 instance=ExtResource("41_ral3v")]
 unique_name_in_owner = true

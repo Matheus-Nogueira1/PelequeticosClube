@@ -340,23 +340,19 @@ func _avancar() -> void:
 		return
 	match _pagina:
 		Pagina.CLASSIFICACAO:
-			if _indice_recompensa < _fila_inimigos.size():
-				_abrir_recompensa()
-			elif _tem_estatisticas():
+			if _tem_estatisticas():
 				_mostrar_pagina(Pagina.ESTATISTICAS)
 			else:
 				_encerrar()
+
 		Pagina.RECOMPENSA:
-			if not _rolou:
-				return
-			_indice_recompensa += 1
-			if _indice_recompensa < _fila_inimigos.size():
-				_abrir_recompensa()
-			elif _tem_estatisticas():
+			if _tem_estatisticas():
 				_mostrar_pagina(Pagina.ESTATISTICAS)
 			else:
 				_encerrar()
+
 		Pagina.ESTATISTICAS:
+			_encerrar()
 			_encerrar()
 
 

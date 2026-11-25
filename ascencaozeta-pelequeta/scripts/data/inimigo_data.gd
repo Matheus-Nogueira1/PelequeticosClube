@@ -22,7 +22,7 @@ static func criar_dummy() -> CombatenteData:
 	
 	# Combate
 	dummy.estresse_por_regiao = {
-		"Torso": {"atual": 0, "limite": 6},       # Centro vital - maior limite
+		"Torso": {"atual": 0, "limite": 3},       # Centro vital - maior limite
 		"Braço Direito": {"atual": 0, "limite": 2},
 		"Braço Esquerdo": {"atual": 0, "limite": 2},
 		"Perna Direita": {"atual": 0, "limite": 2},
