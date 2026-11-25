@@ -330,7 +330,6 @@ layout_mode = 2
 text = "Continuar "
 
 [node name="Estatisticas" type="VBoxContainer" parent="Centro/PainelPrincipal/Margem" unique_id=1720680864]
-visible = false
 layout_mode = 2
 
 [node name="Estatisticas" type="GridContainer" parent="Centro/PainelPrincipal/Margem/Estatisticas" unique_id=482564248]

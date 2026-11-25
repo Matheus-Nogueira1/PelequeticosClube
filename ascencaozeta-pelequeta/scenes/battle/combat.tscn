@@ -17,6 +17,7 @@
 [ext_resource type="PackedScene" uid="uid://b8iv0l27ch5rq" path="res://scenes/battle/party_card.tscn" id="5_x1unb"]
 [ext_resource type="Script" uid="uid://uhm4r7mxh3le" path="res://scripts/battle/combat_log.gd" id="6_hrcy2"]
 [ext_resource type="Texture2D" uid="uid://bavb5mrvwapwp" path="res://assets/Player/ESCOLHIDO/Escolhido_Template_Hit-Sheet.png" id="6_iaivs"]
+[ext_resource type="Texture2D" uid="uid://dqnn4l3g6c821" path="res://assets/UI/battle/PortraitEscolhido_Template_Bravo.png" id="7_iso5b"]
 [ext_resource type="Texture2D" uid="uid://ijgsxipmph8u" path="res://assets/Player/ESCOLHIDO/EscolhidoBaixo_Template_Iluminar-Sheet.png" id="7_yyqwn"]
 [ext_resource type="Texture2D" uid="uid://qso8t6ev6f6" path="res://assets/UI/battle/Fundos/Fundo_Bastilha.png" id="8_0nysw"]
 [ext_resource type="Texture2D" uid="uid://cs2esuc3nagul" path="res://assets/Player/ESCOLHIDO/EscolhidoDIreita_Template_Iluminar-Sheet.png" id="8_x1unb"]
@@ -1289,6 +1290,9 @@ theme_override_styles/panel = SubResource("StyleBoxEmpty_ba8p4")
 script = ExtResource("2_osi8t")
 paleta = ExtResource("5_re782")
 estilo_turno_ativo = ExtResource("5_robps")
+texturas_icones = Dictionary[String, Texture2D]({
+"escolhido": ExtResource("7_iso5b")
+})
 fundo_icones = ExtResource("5_s3ns4")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer/PartyPanel" unique_id=144047478]

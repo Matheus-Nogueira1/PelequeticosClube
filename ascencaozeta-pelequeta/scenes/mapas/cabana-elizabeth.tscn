@@ -2534,10 +2534,9 @@ color = Color(0, 0, 0, 1)
 
 [node name="FimDemo" type="CanvasLayer" parent="." unique_id=1832176699]
 layer = 30
-follow_viewport_enabled = true
+visible = false
 
 [node name="Preto" type="ColorRect" parent="FimDemo" unique_id=78834048]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0

@@ -51,20 +51,21 @@ func _entrada_pos_combate(retorno: String) -> void:
 		await _sequencia_vitoria()
 	jogador.set("pode_andar", true)
 
-
 func _sequencia_vitoria() -> void:
-	for npc in get_tree().get_nodes_in_group("npcs"):
-		if npc.get("npc_id") == "Elizabeth":
-			var sprite := npc.get_node_or_null("Walk") as AnimatedSprite2D
-			if sprite != null and sprite.sprite_frames.has_animation("Interagir"):
-				sprite.sprite_frames.set_animation_loop("Interagir", false)
-				sprite.play("Interagir")
-			break
-	if caixa_dialogo != null and not Dialogos.get_conversa("firekeeper_vitoria").is_empty():
-		caixa_dialogo.configurar_dialogo(
-			GrupoAtual.obter_personagem_principal(), "firekeeper_vitoria", false
-		)
-		await caixa_dialogo.dialogo_encerrado
+	if caixa_dialogo == null:
+		return
+
+	if Dialogos.get_conversa("elizabeth_vitoria").is_empty():
+		push_warning("Diálogo elizabeth_vitoria não encontrado.")
+		return
+
+	caixa_dialogo.configurar_dialogo(
+		GrupoAtual.obter_personagem_principal(),
+		"elizabeth_vitoria",
+		false
+	)
+
+	await caixa_dialogo.dialogo_encerrado
 
 func inicializar_mapa() -> void:
 	if jogador == null:

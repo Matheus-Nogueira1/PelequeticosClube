@@ -8,22 +8,46 @@ const ANIMACAO_ATAQUE: StringName = &"Atacando"
 const ANIMACAO_ESQUIVA: StringName = &"Dodge"
 const ANIMACAO_DANO: StringName = &"Hit"
 const ANIMACAO_MORTE: StringName = &"Morrendo"
-const ANIMACAO_IDLE: StringName = &"Idle"
 var sprite: AnimatedSprite2D
 var morto: bool = false
-
+var animacao_idle: StringName = &""
 
 func configurar(sprite_animado: AnimatedSprite2D) -> void:
 	sprite = sprite_animado
 
 	if sprite == null:
 		push_error("[CombatantAnimation] AnimatedSprite2D não foi encontrado.")
-	if sprite.sprite_frames.has_animation(ANIMACAO_IDLE):
-		sprite.play(ANIMACAO_IDLE)
-	else:
-		push_warning(
-			"[CombatenteAnimation] Animação Idle inexistente."
+		return
+
+	if sprite.sprite_frames == null:
+		push_error("[CombatantAnimation] SpriteFrames não configurado.")
+		return
+
+	# Usa a animação inicial configurada no próprio AnimatedSprite2D.
+	animacao_idle = sprite.animation
+
+	if not sprite.sprite_frames.has_animation(animacao_idle):
+		push_error(
+			"[CombatenteAnimation] Animação inicial inválida: %s"
+			% String(animacao_idle)
 		)
+		return
+
+	_definir_idle()
+
+func _definir_idle() -> void:
+	if sprite == null or not is_instance_valid(sprite):
+		return
+
+	if animacao_idle.is_empty():
+		return
+
+	if not sprite.sprite_frames.has_animation(animacao_idle):
+		return
+
+	sprite.stop()
+	sprite.animation = animacao_idle
+	sprite.frame = 0
 
 func _tocar_e_retornar_idle(nome: StringName) -> void:
 	if sprite == null or morto:
@@ -33,9 +57,6 @@ func _tocar_e_retornar_idle(nome: StringName) -> void:
 		push_warning(
 			"[CombatenteAnimation] Animação inexistente: %s" % String(nome)
 		)
-		return
-
-	if nome == ANIMACAO_IDLE:
 		return
 
 	var loop_anterior: bool = sprite.sprite_frames.get_animation_loop(nome)
@@ -53,7 +74,7 @@ func _tocar_e_retornar_idle(nome: StringName) -> void:
 		# Não interrompe uma animação de morte ou outra animação
 		# que tenha substituído a atual.
 		if not morto and sprite.animation == nome:
-			sprite.play(ANIMACAO_IDLE)
+			_definir_idle()
 
 func tocar_animacao(nome: StringName) -> void:
 	await _tocar_e_retornar_idle(nome)

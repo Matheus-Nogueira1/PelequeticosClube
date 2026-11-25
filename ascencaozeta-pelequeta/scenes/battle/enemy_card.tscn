@@ -448,6 +448,7 @@ custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
 script = ExtResource("3_mxf8n")
 rolar_com_setas = true
 metadata/_custom_type_script = "uid://hkqdbuk88uag"

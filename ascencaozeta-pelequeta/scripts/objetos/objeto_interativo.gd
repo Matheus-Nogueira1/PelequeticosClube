@@ -24,8 +24,21 @@ var _ocupado: bool = false
 func _ready() -> void:
 	body_entered.connect(_ao_entrar)
 	body_exited.connect(_ao_sair)
-	if tela_fim != null:
-		tela_fim.visible = false
+	if tela_fim == null:
+		var mapa := get_tree().current_scene
+		if mapa != null:
+			tela_fim = mapa.get_node_or_null("FimDemo/Preto") as Control
+
+	if tela_fim == null:
+		push_error("[ObjetoInterativo] Tela final não configurada na escada.")
+		return
+
+	tela_fim.visible = true
+	tela_fim.modulate.a = 0.0
+
+	var fade := create_tween()
+	fade.tween_property(tela_fim, "modulate:a", 1.0, duracao_fade)
+	await fade.finished
 
 
 func _ao_entrar(body: Node2D) -> void:
@@ -98,20 +111,39 @@ func _animar_levantar() -> void:
 	walk.visible = true
 	_jogador.call("travar", false)
 
-
 func _encerrar_demo(caixa: Node) -> void:
+	# A música começa no momento em que o jogador interage com a escada.
+	AudioManager.tocar_musica(&"ciclo")
+
+	# Primeiro apresenta o diálogo da escada.
 	await _mostrar_dialogo(caixa)
-	# A partir daqui não há volta: o jogador fica travado e nada mais interage.
+
+	# Evita encerrar sem uma tela final válida.
+	if tela_fim == null or not is_instance_valid(tela_fim):
+		push_error("[ObjetoInterativo] Não foi possível exibir a tela final.")
+		_ocupado = false
+		return
+
+	# A partir daqui não há volta.
 	Global.demo_encerrada = true
+
 	if _jogador != null:
 		_jogador.call("travar", true)
-	if tela_fim != null:
-		tela_fim.visible = true
-		tela_fim.modulate.a = 0.0
-		var fade := create_tween()
-		fade.tween_property(tela_fim, "modulate:a", 1.0, duracao_fade)
-		await fade.finished
 
+	tela_fim.visible = true
+	tela_fim.modulate.a = 0.0
+
+	var fade := create_tween()
+	fade.set_trans(Tween.TRANS_SINE)
+	fade.set_ease(Tween.EASE_IN_OUT)
+	fade.tween_property(
+		tela_fim,
+		"modulate:a",
+		1.0,
+		duracao_fade
+	)
+
+	await fade.finished
 
 func _caixa() -> Node:
 	for caixa in get_tree().get_nodes_in_group("dialogue_box"):
