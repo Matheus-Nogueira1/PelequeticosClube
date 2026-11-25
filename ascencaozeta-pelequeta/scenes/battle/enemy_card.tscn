@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://1spwl11gojx3" path="res://themes/Combate.tres" id="1_hcf34"]
 [ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="1_syiot"]
+[ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="3_mxf8n"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_syiot"]
 content_margin_left = 5.0
@@ -59,6 +60,7 @@ theme_override_constants/separation = 2
 [node name="NomeLabel" type="Label" parent="VBoxContainer" unique_id=1322459920]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_font_sizes/font_size = 10
 text = "Dummy"
 horizontal_alignment = 2
@@ -70,7 +72,7 @@ theme_override_styles/separator = SubResource("StyleBoxLine_mxf8n")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=39790310]
 layout_mode = 2
-size_flags_horizontal = 8
+size_flags_horizontal = 4
 
 [node name="PaLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=28292735]
 unique_name_in_owner = true
@@ -93,6 +95,7 @@ text = "PRO 3/3"
 [node name="RegioesLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=1667306562]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/default_color = Color(0.7058824, 0.6039216, 0.34509805, 1)
 theme_override_font_sizes/normal_font_size = 10
 theme_override_font_sizes/bold_font_size = 10
@@ -115,6 +118,7 @@ theme_override_styles/separator = SubResource("StyleBoxLine_mxf8n")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/separation = 0
 
 [node name="CarCell" type="VBoxContainer" parent="VBoxContainer/FixosLabel" unique_id=1221115413]
@@ -276,6 +280,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/separation = 0
 
 [node name="ProCell" type="VBoxContainer" parent="VBoxContainer/MutaveisLabel" unique_id=801841020]
@@ -438,12 +443,23 @@ layout_mode = 2
 theme_override_constants/separation = 0
 theme_override_styles/separator = SubResource("StyleBoxLine_mxf8n")
 
-[node name="StatusLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=215198186]
+[node name="ScrollTeclado" type="ScrollContainer" parent="VBoxContainer" unique_id=1683506800]
+custom_minimum_size = Vector2(70, 0)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+script = ExtResource("3_mxf8n")
+rolar_com_setas = true
+metadata/_custom_type_script = "uid://hkqdbuk88uag"
+
+[node name="StatusLabel" type="RichTextLabel" parent="VBoxContainer/ScrollTeclado" unique_id=215198186]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.7058824, 0.3529412, 0.3764706, 1)
-theme_override_font_sizes/normal_font_size = 10
-theme_override_font_sizes/bold_font_size = 10
+theme_override_font_sizes/normal_font_size = 8
+theme_override_font_sizes/bold_font_size = 8
 bbcode_enabled = true
 text = "Status: Pelecado"
 fit_content = true

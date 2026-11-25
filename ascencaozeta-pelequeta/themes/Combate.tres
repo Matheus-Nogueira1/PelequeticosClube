@@ -1,6 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://1spwl11gojx3"]
 
-[ext_resource type="StyleBox" uid="uid://ba47awknelvda" path="res://themes/Oblivioflat.tres" id="1_6cyuh"]
+[ext_resource type="StyleBox" uid="uid://dsy0em0drk0nw" path="res://themes/card_turno_ativo.tres" id="1_6cyuh"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_xg5fw"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iaivs"]
@@ -45,10 +45,6 @@ border_width_top = 1
 border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0.41568628, 0.09803922, 0.16470589, 1)
-corner_radius_top_left = 1
-corner_radius_top_right = 1
-corner_radius_bottom_right = 1
-corner_radius_bottom_left = 1
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8hjk4"]
 

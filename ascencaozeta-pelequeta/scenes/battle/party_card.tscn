@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b8iv0l27ch5rq"]
 
-[ext_resource type="StyleBox" uid="uid://ba47awknelvda" path="res://themes/Oblivioflat.tres" id="1_6oy02"]
+[ext_resource type="StyleBox" uid="uid://dsy0em0drk0nw" path="res://themes/card_turno_ativo.tres" id="1_e40rn"]
 [ext_resource type="FontFile" uid="uid://bekpl1ntck7o" path="res://fonts/monogram-extended.ttf" id="2_ec484"]
 [ext_resource type="Theme" uid="uid://bje8hbpvfk2ru" path="res://themes/oblivio_theme.tres" id="3_e40rn"]
 [ext_resource type="Script" uid="uid://hkqdbuk88uag" path="res://scripts/ui/scroll_teclado.gd" id="4_gs7cg"]
@@ -60,12 +60,12 @@ default_font_size = 10
 BotaoRegiao/base_type = &"Button"
 BotaoRegiao/styles/focus = SubResource("StyleBoxFlat_iaivs")
 BotaoRegiao/styles/hover_pressed = SubResource("StyleBoxFlat_omrhf")
-BotaoRegiao/styles/normal = ExtResource("1_6oy02")
+BotaoRegiao/styles/normal = ExtResource("1_e40rn")
 BotaoRegiao/styles/pressed = SubResource("StyleBoxFlat_bp8bq")
 Button/styles/hover = SubResource("StyleBoxFlat_uev7f")
 Button/styles/hover_pressed = SubResource("StyleBoxFlat_1ujig")
 Button/styles/hover_pressed_mirrored = SubResource("StyleBoxFlat_icaiv")
-Button/styles/normal = ExtResource("1_6oy02")
+Button/styles/normal = ExtResource("1_e40rn")
 Button/styles/pressed = SubResource("StyleBoxFlat_m2uid")
 Panel/styles/panel = SubResource("StyleBoxFlat_43l7w")
 PanelContainer/styles/panel = SubResource("StyleBoxEmpty_8hjk4")
@@ -113,6 +113,7 @@ theme_override_constants/separation = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "Peleco"
+horizontal_alignment = 1
 autowrap_mode = 3
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=607816812]
@@ -122,6 +123,7 @@ theme_override_styles/separator = SubResource("StyleBoxLine_g4v7s")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=378190642]
 layout_mode = 2
+size_flags_horizontal = 4
 
 [node name="PaLabel" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=71271088]
 unique_name_in_owner = true
@@ -139,6 +141,7 @@ text = "PRO 3/3"
 [node name="RegioesLabel" type="RichTextLabel" parent="VBoxContainer" unique_id=999114921]
 unique_name_in_owner = true
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/default_color = Color(0.7058824, 0.6039216, 0.34509805, 1)
 bbcode_enabled = true
 text = "Torso			1/1
@@ -158,6 +161,7 @@ theme_override_styles/separator = SubResource("StyleBoxLine_g4v7s")
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/separation = 0
 
 [node name="CarCell" type="VBoxContainer" parent="VBoxContainer/FixosLabel" unique_id=1545141254]
@@ -319,6 +323,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
+size_flags_horizontal = 4
 theme_override_constants/separation = 0
 
 [node name="ProCell" type="VBoxContainer" parent="VBoxContainer/MutaveisLabel" unique_id=572034927]
@@ -496,6 +501,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/default_color = Color(0.7058824, 0.3529412, 0.3764706, 1)
+theme_override_font_sizes/normal_font_size = 8
+theme_override_font_sizes/bold_font_size = 8
 bbcode_enabled = true
 text = "Pelecado"
 fit_content = true

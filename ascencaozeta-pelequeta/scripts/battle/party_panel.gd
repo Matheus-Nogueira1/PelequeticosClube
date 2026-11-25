@@ -98,6 +98,7 @@ func remover_personagem(personagem: Dictionary) -> void:
 	if chave == exibido:
 		exibido = ""
 		if personagens.is_empty():
+			DestaqueTurno.remover(card)
 			card.visible = false
 		else:
 			_exibir(personagens[mini(indice, personagens.size() - 1)]["nome"])
@@ -218,17 +219,14 @@ func _atualizar_icone(personagem: Dictionary) -> void:
 		icone.theme_type_variation = VARIACAO_NORMAL
 
 
-# Marcador do ícone do turno e estilo do card quando ele é o exibido.
+# O marcador de turno dos ícones fica SEMPRE visível (decisão de design).
+# Aqui só o card exibido recebe o destaque, quando ele é o do turno.
 func _atualizar_destaques() -> void:
 	var ativo: String = personagem_ativo_atual.get("nome", "")
-	for nome in icones:
-		var marca := (icones[nome] as Button).get_node_or_null("%MarcadorTurno") as Control
-		if marca != null:
-			marca.visible = (nome == ativo)
-	if estilo_turno_ativo != null and not ativo.is_empty() and exibido == ativo:
-		card.add_theme_stylebox_override("panel", estilo_turno_ativo)
+	if not ativo.is_empty() and exibido == ativo:
+		DestaqueTurno.aplicar(card, estilo_turno_ativo)
 	else:
-		card.remove_theme_stylebox_override("panel")
+		DestaqueTurno.remover(card)
 
 func _renderizar_card(p: Dictionary) -> void:
 	var texto_nome: String = p["nome"]
@@ -283,7 +281,6 @@ func _renderizar_card(p: Dictionary) -> void:
 
 	# Status e condições especiais.
 	var especial: String = ""
-
 	if p.get("habilidade_sobrecarga_ativa", false):
 		especial += "SOBRECARGA "
 

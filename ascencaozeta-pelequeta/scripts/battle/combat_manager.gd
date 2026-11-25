@@ -294,6 +294,7 @@ func _avancar_turno() -> void:
 		)
 		party_panel.indicar_personagem_ativo(combatente_ativo.para_dictionary())
 		enemy_panel.desativar_seletor_alvo()
+		enemy_panel.remover_destaque_turno()
 		# Limpar seleções apenas ao iniciar turno do jogador
 		alvo_selecionado.clear()
 		log_panel.registrar_evento(
@@ -307,6 +308,7 @@ func _avancar_turno() -> void:
 		action_panel.ativar_para(combatente_ativo.para_dictionary(), combatente_ativo)
 	else:
 		party_panel.remover_destaque_turno()
+		enemy_panel.indicar_inimigo_ativo(combatente_ativo.para_dictionary())
 		action_panel.desabilitar_acoes()
 		log_panel.registrar_evento(
 			"Turno de %s." % combatente_ativo.nome,

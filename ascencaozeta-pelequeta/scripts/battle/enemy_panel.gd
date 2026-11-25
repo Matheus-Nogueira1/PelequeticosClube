@@ -27,6 +27,8 @@ const VARIACAO_ALVO: StringName = &"IconeAlvo"
 # Preenchido no Inspector (chave = nome do inimigo: Dummy, Carcaça...).
 @export var texturas_icones: Dictionary[String, Texture2D] = {}
 @export var fundo_icones: Texture2D
+@export var estilo_turno_ativo: StyleBox
+var inimigo_ativo_atual: Dictionary = {}
 @onready var botao_ficha: Button = get_node_or_null("%BotaoFicha") as Button
 @onready var coluna_icones: HBoxContainer = %EnemyIcones
 @onready var card: PanelContainer = %EnemyCard
@@ -101,7 +103,8 @@ func remover_inimigo(inimigo: Dictionary) -> void:
 		botoes_inimigos.erase(chave)
 	if inimigo_selecionado_atual == inimigo:
 		inimigo_selecionado_atual.clear()
-
+	if inimigo_ativo_atual.get("nome", "") == chave:
+		inimigo_ativo_atual.clear()
 	if chave == exibido:
 		exibido = ""
 		if inimigos.is_empty():
@@ -118,6 +121,8 @@ func limpar_inimigos() -> void:
 	inimigos.clear()
 	inimigo_selecionado_atual.clear()
 	exibido = ""
+	inimigo_ativo_atual.clear()
+	DestaqueTurno.remover(card)
 	card.visible = false
 
 
@@ -142,6 +147,36 @@ func navegar(passo: int) -> void:
 		indice = posmod(indice + passo, inimigos.size())
 	_exibir(inimigos[indice]["nome"])
 
+# ============================================================================
+# TURNO ATIVO
+# ============================================================================
+
+func indicar_inimigo_ativo(inimigo: Dictionary) -> void:
+	"""Destaca o inimigo do turno e passa o card para ele"""
+	inimigo_ativo_atual = inimigo
+	if _indice_de(String(inimigo["nome"])) != -1:
+		_exibir(inimigo["nome"])
+	else:
+		_atualizar_destaques()
+
+
+func remover_destaque_turno() -> void:
+	inimigo_ativo_atual.clear()
+	_atualizar_destaques()
+
+
+func obter_inimigo_ativo() -> Dictionary:
+	return inimigo_ativo_atual
+
+
+# O marcador de turno dos ícones fica SEMPRE visível. Aqui só o card
+# exibido recebe o destaque, quando ele é o do turno.
+func _atualizar_destaques() -> void:
+	var ativo: String = inimigo_ativo_atual.get("nome", "")
+	if not ativo.is_empty() and exibido == ativo:
+		DestaqueTurno.aplicar(card, estilo_turno_ativo)
+	else:
+		DestaqueTurno.remover(card)
 
 func ativar_seletor_alvo() -> void:
 	if modo_seletor_ativo:
@@ -243,7 +278,7 @@ func _exibir(nome: String) -> void:
 	for chave in botoes_inimigos:
 		(botoes_inimigos[chave] as Button).set_pressed_no_signal(chave == nome)
 	_renderizar_card(inimigos[indice])
-
+	_atualizar_destaques()
 
 func _aplicar_variacao_a_todos(variacao: StringName) -> void:
 	for icone in botoes_inimigos.values():
@@ -322,7 +357,7 @@ func _renderizar_card(inimigo: Dictionary) -> void:
 	status_label.text = _texto_status(inimigo)
 
 func _texto_regioes_ocultas() -> String:
-	var texto: String = "[b]REGIÕES[/b]\n"
+	var texto: String = ""
 
 	for regiao in CombatenteData.REGIOES:
 		texto += "%s ??/?\n" % regiao
@@ -330,7 +365,7 @@ func _texto_regioes_ocultas() -> String:
 	return texto
 
 func _texto_regioes(inimigo: Dictionary) -> String:
-	var texto: String = "[b]REGIÕES[/b]\n"
+	var texto: String = ""
 	var regioes: Dictionary = inimigo.get("estresse_por_regiao", {})
 
 	for regiao in CombatenteData.REGIOES:

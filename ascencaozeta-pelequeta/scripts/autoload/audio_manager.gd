@@ -1,7 +1,7 @@
 
 extends Node
 
-const VOLUME_PADRAO: float = -6.0
+const VOLUME_PADRAO: float = -12.0
 const VOLUME_SILENCIO: float = -80.0
 const DURACAO_TRANSICAO: float = 2.5
 
@@ -26,6 +26,10 @@ const MUSICA_BAU: AudioStream = preload(
 var music_player: AudioStreamPlayer
 var music_tween: Tween
 var solicitacao_atual: int = 0
+const VELOCIDADE_VOLUME: float = 0.5
+
+var aumentar_volume_pressionado: bool = false
+var diminuir_volume_pressionado: bool = false
 
 func _ready() -> void:
 	music_player = AudioStreamPlayer.new()
@@ -35,15 +39,27 @@ func _ready() -> void:
 
 	add_child(music_player)
 
-func _unhandled_key_input(event: InputEvent) -> void:
-	if event.is_action_pressed("volume_aumentar") and not event.is_echo():
-		_alterar_volume_master(0.05)
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("volume_aumentar"):
+		aumentar_volume_pressionado = true
 		get_viewport().set_input_as_handled()
 
-	elif event.is_action_pressed("volume_diminuir") and not event.is_echo():
-		_alterar_volume_master(-0.05)
+	elif event.is_action_released("volume_aumentar"):
+		aumentar_volume_pressionado = false
+
+	elif event.is_action_pressed("volume_diminuir"):
+		diminuir_volume_pressionado = true
 		get_viewport().set_input_as_handled()
 
+	elif event.is_action_released("volume_diminuir"):
+		diminuir_volume_pressionado = false
+
+func _process(delta: float) -> void:
+	if aumentar_volume_pressionado:
+		_alterar_volume_master(VELOCIDADE_VOLUME * delta)
+
+	elif diminuir_volume_pressionado:
+		_alterar_volume_master(-VELOCIDADE_VOLUME * delta)
 
 func _alterar_volume_master(incremento: float) -> void:
 	var indice_master := AudioServer.get_bus_index("Master")
