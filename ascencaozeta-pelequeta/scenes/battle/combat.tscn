@@ -1763,9 +1763,6 @@ visible = false
 
 [node name="CamadaDialogo" type="CanvasLayer" parent="." unique_id=1748757544]
 layer = 12
-offset = Vector2(88, 88)
-scale = Vector2(0.45, 0.45)
-transform = Transform2D(0.45, 0, 0, 0.45, 88, 88)
 
 [node name="CaixaDialogo" parent="CamadaDialogo" unique_id=1996844437 instance=ExtResource("41_ral3v")]
 unique_name_in_owner = true
